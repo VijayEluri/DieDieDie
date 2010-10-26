@@ -24,10 +24,12 @@ public class Player implements InputProviderListener
 {
     private boolean setUp = false, canJump = false;
     public String name;    
-    private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 8.5f,
-                  MAX_ACCEL = 4f, jumpSpeed = -8.5f, moveSpeed = 0.9f;
+    private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
+                  MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f;
     private int health;
-    // separate vars indicating vertical and horizontal collisions
+    public final float TERMINAL_VEL = 10;
+    final float INCR = 0.01f;
+    // vars indicating vertical and horizontal collisions
     boolean yCollision = false, xCollision = false;
     
     // Control commands
@@ -165,7 +167,7 @@ public class Player implements InputProviderListener
     {
         if(facing != dir)
         {
-            System.out.println("change of direction");
+            //System.out.println("change of direction");
             accelX = 0;  
             facing = dir;
         }
@@ -249,7 +251,6 @@ public class Player implements InputProviderListener
         else
         {
             decelerate();
-            
         }
         
         //save old coordinates in case the new positions == collision
@@ -270,10 +271,14 @@ public class Player implements InputProviderListener
             
             if(yPos >= oldY)
             {
+                // fell 
                 canJump = true;
             }
-            yPos = oldY;
             ySpeed = 0;
+            yPos = oldY;
+            
+            
+            alignToObstacle();
         } 
         else
         {
@@ -296,18 +301,64 @@ public class Player implements InputProviderListener
         {
             setStandingAnim();
         }
-        
-        System.out.println("accelX==" + accelX + ", " + "xSpeed==" 
-                            + xSpeed + ", xPos==" + xPos);
+        printSpeed();
+        printPosition();
     }
     
     
+    /*
+     * Closely aligns the Player to an object following a collision.
+     * This is done to stop it looking like the player is 'hovering'
+     * before landing due to having a high falling speed.
+     */ 
+    private void alignToObstacle()
+    {
+        // finally, put the Player as close to the obstacle as possible
+        while(!level.collides(getCurrentFrameRect()))
+        {
+            // here 'canJump' is used to discern the direction of the
+            // collision; i.e. a 'true' value indicates (hopefully) 
+            // that the player *fell* into this collision rather than
+            // headbutted it... so to speak.
+            
+            if(canJump)
+            {
+                yPos += INCR;
+            }
+            else
+            {
+                yPos -= INCR;
+            }
+            //System.out.println("moving... " + yPos);
+        }
+        if(canJump)
+        {
+            yPos -= INCR;
+        }
+        else
+        {
+            yPos += INCR;
+        }
+    }
+    
+    public void printSpeed()
+    {
+        System.out.println("accelX==" + accelX + ", " + "xSpeed==" 
+                            + xSpeed + ", ySpeed==" + ySpeed);
+    }
+    
+    public void printPosition()
+    {
+        System.out.println("xPos==" + xPos + ", yPos==" + yPos); 
+    }
     
     public void jump()
     {
         if(canJump)
         {
+            System.out.println("jump!");
             ySpeed = jumpSpeed;
+            //accelY = jumpSpeed;
             canJump = false;
         }
     }
@@ -329,8 +380,14 @@ public class Player implements InputProviderListener
     {
         if(ySpeed < maxYSpeed)
         {
-            ySpeed += level.gravity;
+            ySpeed += level.gravity;  
+        }        
+        /*accelY += ACCEL_RATE;
+        if(accelY > MAX_ACCEL)
+        {
+            accelY = MAX_ACCEL;
         }
+        ySpeed = accelY + moveSpeed;*/
     }
     /**
      * Draw method. Public due to implementation requirement.

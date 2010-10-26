@@ -30,8 +30,9 @@ public class DieDieDie extends BasicGame
     // object to send input to the Player object
     private InputProvider inputProv = null;
     
-    //private float gravity = 4;
-    public static final float GRAVITY = 0.49f;
+    // higher == more gravity
+    public static final float GRAVITY = 0.20f;
+    
     private static int xSize = 640, ySize = 480;
 	private Level level1 = null, currentLevel = null;	
     private final String TILE_SETS_PATH = "data", 
