@@ -11,24 +11,38 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.command.BasicCommand;
+import org.newdawn.slick.command.Command;
+import org.newdawn.slick.command.InputProvider;
+import org.newdawn.slick.command.InputProviderListener;
+import org.newdawn.slick.command.KeyControl;
 
 /**
  * ..where *YOU* are the HERO! (aka 'twat')
  */ 
-public class Player
+public class Player implements InputProviderListener
 {
     private boolean setUp = false, canJump = false;
     public String name;    
-    private float accelX = 0f, ACCEL_RATE = 0.04f, maxYSpeed = 8.5f,
+    private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 8.5f,
                   MAX_ACCEL = 4f, jumpSpeed = -8.5f, moveSpeed = 0.9f;
     private int health;
     // separate vars indicating vertical and horizontal collisions
     boolean yCollision = false, xCollision = false;
-
+    
+    // Control commands
+    private Command jump;
+    private Command left; 
+    private Command right;
+    
+    private boolean leftMoveDown = false, rightMoveDown = false;
     
     // current position vars 
     private float xPos, yPos, xSpeed, ySpeed;
     private Direction facing = Direction.LEFT; 
+    
+    // running: indicates the user is holding a directional button
+    private boolean running = false;
     
     // animation vars
     public static final int ANIM_DURATION = 100; 
@@ -80,7 +94,82 @@ public class Player
         }
     }
     
+    /**
+     * Links the game's InputProvider to the Player obkect
+     */ 
+    protected void associateInputProvider(InputProvider prov)
+    {
+        prov.addListener(this); 
+        jump = new BasicCommand("jump");
+        left = new BasicCommand("left");
+        right = new BasicCommand("right");
+        
+        prov.bindCommand(new KeyControl(Input.KEY_LEFT), left);
+        prov.bindCommand(new KeyControl(Input.KEY_RIGHT), right);
+        prov.bindCommand(new KeyControl(Input.KEY_UP), jump);
+        
+    }
     
+    /**
+     * Defines the routines carried out for when each command is 
+     * released.
+     */ 
+    public void controlReleased(Command com)
+    {
+        //System.out.println("released: " + com);
+        
+        if(com.equals(left))
+        {
+            leftMoveDown = false;
+        }
+        else if(com.equals(right))
+        {
+            rightMoveDown = false;
+        }
+        
+        // both released now?
+        if(!leftMoveDown && !rightMoveDown)
+        {
+            running = false;
+        }
+    }
+    
+    /**
+     * Defines the routines carried out for when each command is pressed.
+     */ 
+    public void controlPressed(Command com)
+    {
+        System.out.println("pressed: " + com);
+        
+        if(com.equals(left))
+        {
+            leftMoveDown = true;
+            setDirection(Direction.LEFT);
+            running = true;
+        }
+        else if(com.equals(right))
+        {
+            rightMoveDown = true;
+            setDirection(Direction.RIGHT);
+            running = true;
+        }
+        else if(com.equals(jump))
+        {
+            jump();
+        }
+        
+        
+    }
+    
+    private void setDirection(Direction dir)
+    {
+        if(facing != dir)
+        {
+            System.out.println("change of direction");
+            accelX = 0;  
+            facing = dir;
+        }
+    }
     
     /**
      * Returns the x position
@@ -112,34 +201,21 @@ public class Player
     }
     
       
-    
     /**
-     * Adjusts the player's speed
+     * Adjusts the player's walking speed
      */ 
     public boolean move(Direction dir)
     {   
-        if(facing != dir)
-        {
-            accelX = 0;  
-            facing = dir;   
-        }
         // player directional movements     
         if(dir.equals(Direction.RIGHT))
         {
-            if(accelX < MAX_ACCEL)
-            {
-                accelX += ACCEL_RATE;
-            }
+            accelerate();
             currentAnimation = rightWalk;
-                        
             xSpeed = moveSpeed + accelX;
         }
         else if(dir.equals(Direction.LEFT))
         {
-            if(accelX < MAX_ACCEL)
-            {
-                accelX += ACCEL_RATE;
-            }
+            accelerate();
             currentAnimation = leftWalk;
             xSpeed = -(moveSpeed + accelX);
         }
@@ -147,11 +223,12 @@ public class Player
         return true;
     }
     
-    public void decreaseAcceleration()
+    private void accelerate()
     {
-        if(accelX > 0)
+        accelX += ACCEL_RATE;
+        if(accelX > MAX_ACCEL)
         {
-            accelX -= ACCEL_RATE;
+            accelX = MAX_ACCEL;
         }
     }
     
@@ -159,9 +236,21 @@ public class Player
     {
         xSpeed *= level.groundFric;
     }
+    
     public void update()
     {
-        
+        applyGravity();
+        applyFriction();
+                
+        if(running)
+        {
+            move(facing);
+        }
+        else
+        {
+            decelerate();
+            
+        }
         
         //save old coordinates in case the new positions == collision
         final float oldX = xPos;
@@ -201,16 +290,18 @@ public class Player
             xPos = oldX;
             xSpeed = 0;
             accelX = 0;
+        }        
+        
+        if(accelX == 0)
+        {
+            setStandingAnim();
         }
         
-        applyGravity();
-        applyFriction();
-        
-        /*System.out.println("accelX==" + accelX + ", " + "xSpeed==" 
-                            + xSpeed + ", xPos==" + xPos);*/
+        System.out.println("accelX==" + accelX + ", " + "xSpeed==" 
+                            + xSpeed + ", xPos==" + xPos);
     }
     
-   
+    
     
     public void jump()
     {
@@ -221,7 +312,15 @@ public class Player
         }
     }
     
-    
+    private void decelerate()
+    {
+        accelX -= ACCEL_RATE;
+        
+        if(accelX < 0)
+        {
+            accelX = 0;
+        }
+    }
     
     /**
      * Applies gravity to the player's position.
@@ -337,7 +436,4 @@ public class Player
         }
         return images;
     }
-
-
-
 }

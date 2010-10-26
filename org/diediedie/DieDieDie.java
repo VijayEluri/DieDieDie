@@ -13,23 +13,27 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.*;
+import org.newdawn.slick.command.BasicCommand;
+import org.newdawn.slick.command.Command;
+import org.newdawn.slick.command.InputProvider;
+import org.newdawn.slick.command.InputProviderListener;
 
 
 /**
  * DieDieDie AKA Captain EXCITEMENT
  */ 
-public class DieDieDie extends BasicGame
+public class DieDieDie extends BasicGame 
 {   
     private final float playerXLevel1 = 30;
 	private final float playerYLevel1 = 100;
     
+    // object to send input to the Player object
+    private InputProvider inputProv = null;
+    
     //private float gravity = 4;
     public static final float GRAVITY = 0.49f;
-    
     private static int xSize = 640, ySize = 480;
-    
 	private Level level1 = null, currentLevel = null;	
-        
     private final String TILE_SETS_PATH = "data", 
                          LEVEL_1_PATH = "data/level1.tmx",
                          LEVEL_ONE_NAME = "Level 1";
@@ -50,7 +54,8 @@ public class DieDieDie extends BasicGame
 	public void init(GameContainer container) throws SlickException 
     {
 		container.setVSync(true);    
-        
+        inputProv = new InputProvider(container.getInput());
+
         // load all the levels
 		level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
                             playerXLevel1, playerYLevel1, Direction.LEFT,
@@ -62,11 +67,12 @@ public class DieDieDie extends BasicGame
         // load player and associate with the level data
         player = new Player(currentLevel);
         
-        
+        // hook up the player to the input provider
+        player.associateInputProvider(inputProv);
 	}
     
     
-    
+ 
     /*
      * Utility method to load a Level into the current game. This just
      * acts as a nice wrapper for the lavel path.
@@ -93,26 +99,6 @@ public class DieDieDie extends BasicGame
      */ 
 	public void update(GameContainer container, int delta) 
     { 
-        player.setStandingAnim();
-        
-        // left and right movement
-		if(container.getInput().isKeyDown(Input.KEY_LEFT)) 
-        { 
-            player.move(Direction.LEFT);
-        }
-		else if(container.getInput().isKeyDown(Input.KEY_RIGHT)) 
-        { 
-            player.move(Direction.RIGHT);
-        }
-        else
-        {
-            player.decreaseAcceleration();
-        }
-        // jump
-        if(container.getInput().isKeyDown(Input.KEY_UP))
-        {
-            player.jump();
-        }
         player.update();
 	}
     

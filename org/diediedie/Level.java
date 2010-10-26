@@ -19,7 +19,7 @@ public class Level extends TiledMap
     public float playerX, playerY;
     
     // friction. lower number == more friction
-    public static final float groundFric = 0.6f;
+    public static final float groundFric = 0.9f;
     public float gravity;
     
     // initial direction player faces 
