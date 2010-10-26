@@ -7,6 +7,7 @@ import java.lang.Math.*;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.Image;
@@ -16,6 +17,7 @@ import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
+import org.newdawn.slick.command.MouseButtonControl;
 
 /**
  * ..where *YOU* are the HERO! (aka 'twat')
@@ -26,7 +28,9 @@ public class Player implements InputProviderListener
     public String name;    
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f;
-    private int health;
+    private int health, bowCharge = 0;
+    private final int MAX_CHARGE = 10;
+    
     public final float TERMINAL_VEL = 10;
     final float INCR = 0.01f;
     // vars indicating vertical and horizontal collisions
@@ -36,8 +40,11 @@ public class Player implements InputProviderListener
     private Command jump;
     private Command left; 
     private Command right;
+    private Command pullArrow;
     
-    private boolean leftMoveDown = false, rightMoveDown = false;
+    
+    private boolean leftMoveDown = false, rightMoveDown = false,
+                    arrowCharging = false;
     
     // current position vars 
     private float xPos, yPos, xSpeed, ySpeed;
@@ -48,6 +55,10 @@ public class Player implements InputProviderListener
     
     // animation vars
     public static final int ANIM_DURATION = 100; 
+    
+    // fire an arrow - which button?
+    private int BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;
+    
     private String[] leftWalkPaths = 
     {
         "data/STICKMAN_LEFT_WALK_1.png", 
@@ -99,20 +110,63 @@ public class Player implements InputProviderListener
     /**
      * Links the game's InputProvider to the Player obkect
      */ 
-    protected void associateInputProvider(InputProvider prov)
+    protected void associateInputProvider(InputProvider prov, Input in)
     {
         prov.addListener(this); 
+        
         jump = new BasicCommand("jump");
         left = new BasicCommand("left");
         right = new BasicCommand("right");
+        //pullArrow = new BasicCommand("pullArrow");
         
         prov.bindCommand(new KeyControl(Input.KEY_LEFT), left);
         prov.bindCommand(new KeyControl(Input.KEY_RIGHT), right);
         prov.bindCommand(new KeyControl(Input.KEY_UP), jump);
+
+        
+        in.addMouseListener(new MouseListener()
+        {
+            public void	mousePressed(int button, int x, int y) 
+            {
+                if(button == BOW_BUTTON)
+                {
+                    //System.out.println("left mouse Pressed");    
+                    startArrowCharge();
+                }
+            }
+            public void	mouseReleased(int button, int x, int y)
+            {
+                if(button == BOW_BUTTON)
+                {
+                    //System.out.println("left mouse released");
+                    releaseArrow();
+                }
+            }
+            public boolean isAcceptingInput() 
+            {
+                return true;
+            } 
+            public void	mouseMoved(int oldx, int oldy, int newx, int newy) 
+            {
+
+    
+            }
+            public void	mouseWheelMoved(int change) {}            
+            
+            // boiler plate code
+            public void	mouseClicked(int button, int x, int y, int clicks) {}
+            public void	mouseDragged(int oldx, int oldy, int newx, int newy) {} 
+            public void	inputEnded(){} 
+            public void	inputStarted(){} 
+            public void setInput(Input input) {} 
+        });
         
     }
+ 
+  
     
-    /**
+ 
+        /**
      * Defines the routines carried out for when each command is 
      * released.
      */ 
@@ -134,7 +188,13 @@ public class Player implements InputProviderListener
         {
             running = false;
         }
+        /*else if(com.equals(pullArrow))
+        {
+            releaseArrow();
+        }*/
     }
+    
+    
     
     /**
      * Defines the routines carried out for when each command is pressed.
@@ -143,6 +203,7 @@ public class Player implements InputProviderListener
     {
         System.out.println("pressed: " + com);
         
+        // left/right movement
         if(com.equals(left))
         {
             leftMoveDown = true;
@@ -155,19 +216,48 @@ public class Player implements InputProviderListener
             setDirection(Direction.RIGHT);
             running = true;
         }
+        // jumping
         else if(com.equals(jump))
         {
             jump();
         }
-        
-        
+        // start to fire arrow
+        /*else if(com.equals(pullArrow))
+        {
+            startArrowCharge();
+        }*/
     }
     
+    /*
+     * Starts the player aiming an arrow towards the
+     * Mouse Pointer
+     */ 
+    private void startArrowCharge()
+    {
+        System.out.println("Charging arrow");
+        arrowCharging = true;
+    }
+    
+    private void chargeArrow()
+    {
+        if(bowCharge < MAX_CHARGE)
+        {
+            bowCharge++;
+        }
+    }
+    
+    private void releaseArrow()
+    {
+        arrowCharging = false;
+        
+        System.out.println("released arrow");
+        
+        bowCharge = 0;
+    }
     private void setDirection(Direction dir)
     {
         if(facing != dir)
         {
-            //System.out.println("change of direction");
             accelX = 0;  
             facing = dir;
         }
@@ -277,7 +367,6 @@ public class Player implements InputProviderListener
             ySpeed = 0;
             yPos = oldY;
             
-            
             alignToObstacle();
         } 
         else
@@ -301,8 +390,8 @@ public class Player implements InputProviderListener
         {
             setStandingAnim();
         }
-        printSpeed();
-        printPosition();
+       // printSpeed();
+       // printPosition();
     }
     
     
@@ -381,13 +470,7 @@ public class Player implements InputProviderListener
         if(ySpeed < maxYSpeed)
         {
             ySpeed += level.gravity;  
-        }        
-        /*accelY += ACCEL_RATE;
-        if(accelY > MAX_ACCEL)
-        {
-            accelY = MAX_ACCEL;
         }
-        ySpeed = accelY + moveSpeed;*/
     }
     /**
      * Draw method. Public due to implementation requirement.
@@ -395,21 +478,10 @@ public class Player implements InputProviderListener
     public void draw(Graphics g)
     {
         g.drawAnimation(currentAnim(), getX(), getY());
-        //g.draw(getCurrentFrameRect());
+        // draw arrows
+        
     }
-    
-    public void stopAnim()
-    {
-        currentAnimation.stop();
-    }
-    
-    public void startAnim()
-    {
-        currentAnimation.start();
-    }
-    
-  
-    
+        
     /**
      * Returns the currently set animation.
      */ 

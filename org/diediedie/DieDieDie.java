@@ -49,6 +49,7 @@ public class DieDieDie extends BasicGame
 		super("DieDieDie");
 	}
     
+    
     /**
      * Initialises the game. Of course.
      */ 
@@ -68,8 +69,9 @@ public class DieDieDie extends BasicGame
         // load player and associate with the level data
         player = new Player(currentLevel);
         
+
         // hook up the player to the input provider
-        player.associateInputProvider(inputProv);
+        player.associateInputProvider(inputProv, container.getInput());
 	}
     
     
