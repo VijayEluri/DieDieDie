@@ -117,7 +117,7 @@ public class Arrow
         
         startX = (float)(startX + xTravelled * 
                             Math.sin(Math.toRadians(angle)));
-        startY = (float)(startY - xTravelled * 
+        startY = (float)(startY - yTravelled * 
                             Math.cos(Math.toRadians(angle)));          
         calculateEndPos();
     }
