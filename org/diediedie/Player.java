@@ -50,6 +50,8 @@ public class Player implements InputProviderListener
     private float xPos, yPos, xSpeed, ySpeed;
     private Direction facing = Direction.LEFT; 
     
+    private int mouseX, mouseY;
+    
     // running: indicates the user is holding a directional button
     private boolean running = false;
     
@@ -129,7 +131,7 @@ public class Player implements InputProviderListener
                 if(button == BOW_BUTTON)
                 {
                     //System.out.println("left mouse Pressed");    
-                    startArrowCharge();
+                    readyArrow();
                 }
             }
             public void	mouseReleased(int button, int x, int y)
@@ -146,7 +148,9 @@ public class Player implements InputProviderListener
             } 
             public void	mouseMoved(int oldx, int oldy, int newx, int newy) 
             {
-
+                // keep track of the mouse position
+                mouseX = newx;
+                mouseY = newy;
     
             }
             public void	mouseWheelMoved(int change) {}            
@@ -160,11 +164,8 @@ public class Player implements InputProviderListener
         });
         
     }
- 
-  
     
- 
-        /**
+    /**
      * Defines the routines carried out for when each command is 
      * released.
      */ 
@@ -201,7 +202,17 @@ public class Player implements InputProviderListener
     {
         System.out.println("pressed: " + com);
         
+        
+        
+        
         // left/right movement
+        
+        /*if(arrowCharging)
+        {
+            System.out.println("can't move, charging arrow");
+            return;
+        }*/
+        
         if(com.equals(left))
         {
             leftMoveDown = true;
@@ -219,22 +230,16 @@ public class Player implements InputProviderListener
         {
             jump();
         }
-        // start to fire arrow
-        /*else if(com.equals(pullArrow))
-        {
-            startArrowCharge();
-        }*/
     }
     
     /*
      * Starts the player aiming an arrow towards the
      * Mouse Pointer
      */ 
-    private void startArrowCharge()
+    private void readyArrow()
     {
         System.out.println("Readying arrow");
         currentArrow = new Arrow(xPos, yPos);
-        
         arrowCharging = true;
     }
     
@@ -244,7 +249,8 @@ public class Player implements InputProviderListener
         {
             bowCharge++;
         }
-        System.out.println("charge==" + bowCharge);
+        currentArrow.updateAimAngle(mouseX, mouseY);
+        //System.out.println("charge==" + bowCharge);
     }
     
     /*
@@ -302,8 +308,13 @@ public class Player implements InputProviderListener
     /**
      * Adjusts the player's walking speed
      */ 
-    public boolean move(Direction dir)
+    public void move(Direction dir)
     {   
+        if(arrowCharging)
+        {
+            System.out.println("can't move, charging arrow");
+            return;
+        }
         // player directional movements     
         if(dir.equals(Direction.RIGHT))
         {
@@ -317,8 +328,6 @@ public class Player implements InputProviderListener
             currentAnimation = leftWalk;
             xSpeed = -(moveSpeed + accelX);
         }
-        
-        return true;
     }
     
     private void accelerate()
@@ -366,7 +375,6 @@ public class Player implements InputProviderListener
         // test vertical change
         
         yPos += ySpeed;
-        
         if(level.collides(getCurrentFrameRect()))
         {
             //System.out.println("vertical collision");
@@ -391,7 +399,6 @@ public class Player implements InputProviderListener
         // test horizontal 
         
         xPos += xSpeed;
-        
         if(level.collides(getCurrentFrameRect()))
         {
             xPos = oldX;
@@ -498,6 +505,10 @@ public class Player implements InputProviderListener
         g.drawAnimation(currentAnim(), getX(), getY());
         // draw arrows
         
+        if(currentArrow != null)
+        {
+            currentArrow.draw(g);    
+        }
     }
         
     /**

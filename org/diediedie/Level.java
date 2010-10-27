@@ -27,9 +27,7 @@ public class Level extends TiledMap
     
     private String name;
     private final String COLLISION_STRING = "collisions";
-    //private TileSet collisionTiles = null;
     private int collisionIndex;
-    //private List<int[]> collisionCoords; 
     private List<Tile> collisionTiles; 
     
     /**
@@ -44,35 +42,24 @@ public class Level extends TiledMap
     {
         super(in, tileSetsPath);
         this.name = name;
-        gravity = grav;
+        this.gravity = grav;
         this.playerFacing = facing;
         this.playerX = playerX;
         this.playerY = playerY;
         collisionIndex = getLayerIndex(COLLISION_STRING);
-        //collisionCoords = makeCollisionList();
         makeCollisionList();
     }    
-
-    
-    /*public TileSet getCollisionsTileSet()
-    {
-        return getTileSet(getLayerIndex("collisions"));
-    }*/
     
     public String toString()
     {
         return name;
     }
     
-
-
-    
     /**
      * Creates list of tiles on the map that act as collision markers.
      */ 
     private void makeCollisionList()
     {
-        //List<int[]> coords = new ArrayList<int[]>();
         collisionTiles = new ArrayList<Tile>();
         
         final int present = 1;
@@ -83,11 +70,6 @@ public class Level extends TiledMap
             {
                 if(getTileId(x, y, collisionIndex) == present)
                 {
-                    /*
-                        // collision tiles present at [x][y] on tiled map
-                        final int[] current = {x, y};
-                        coords.add(current);
-                    */
                     collisionTiles.add(new Tile(this, x, y));
                 }
             }

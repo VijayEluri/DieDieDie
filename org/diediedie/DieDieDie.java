@@ -60,16 +60,14 @@ public class DieDieDie extends BasicGame
 
         // load all the levels
 		level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
-                            playerXLevel1, playerYLevel1, Direction.LEFT,
-                            GRAVITY); 
-        
-        
+                           playerXLevel1, playerYLevel1, Direction.LEFT,
+                           GRAVITY); 
+                
         currentLevel = level1;
 
         // load player and associate with the level data
         player = new Player(currentLevel);
         
-
         // hook up the player to the input provider
         player.associateInputProvider(inputProv, container.getInput());
 	}
