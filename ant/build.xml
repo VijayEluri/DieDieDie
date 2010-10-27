@@ -1,0 +1,57 @@
+<project name="DieDieDie" default="compile" basedir="..">
+	<property file="ant/build.properties"/>
+    
+    <path id="classpath">
+ 	    <fileset dir="${lib.dir}"/>
+    </path>
+    
+    <target name="clean">
+        <echo>Cleaning the ${build.dir}</echo>
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <target name="init" depends="clean">
+        <echo>Creating the build directory</echo>
+        <mkdir dir="${build.dir}/org/diediedie"/>
+        <mkdir dir="${build.dir}/lib"/>
+        
+    </target>
+    
+    <target name="compile" depends="init">
+    
+        <echo>Compile the source files</echo>
+        <javac srcdir="${src.dir}" destdir="${build.dir}">
+            <classpath refid="classpath"/>
+        </javac>
+        
+        <echo>Copy the third-party jars to build dir</echo>
+        <copy todir="${build.dir}/lib">
+            <fileset dir="${lib.dir}"/>
+        </copy>
+        
+        <echo>Copy the game data</echo>
+        <copy todir="${build.dir}/data">
+            <fileset dir="${basedir}/data"/>
+        </copy>
+        
+        <echo>Copy the run script</echo>
+        <copy file="run.sh" todir="${build.dir}"/>
+        
+        
+        
+    </target>
+        
+    <target name="jar" depends="compile">
+        <jar basedir=".."
+             destfile="${build.dir}/diediedie.jar" 
+             includes="${build.dir}">
+        </jar>
+      
+        <manifest>
+            <attribute name="Main-Class" 
+                       value="org.diediedie.DieDieDie"/>
+            <attribute name="Class-path"
+                       value="${build.dir}/lib"/>
+        </manifest>
+    </target>
+</project>

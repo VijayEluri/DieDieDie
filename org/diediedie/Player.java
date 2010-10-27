@@ -3,7 +3,6 @@ package org.diediedie;
 import java.io.*;
 import java.util.*;
 import java.lang.Math.*;
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -28,20 +27,21 @@ public class Player implements InputProviderListener
     public String name;    
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f;
+                  
     private int health, bowCharge = 0;
-    private final int MAX_CHARGE = 10;
+    private final int MAX_CHARGE = 50;
     
     public final float TERMINAL_VEL = 10;
     final float INCR = 0.01f;
     // vars indicating vertical and horizontal collisions
     boolean yCollision = false, xCollision = false;
     
-    // Control commands
+    // Movement
     private Command jump;
     private Command left; 
-    private Command right;
-    private Command pullArrow;
+    private Command right;    
     
+    private Arrow currentArrow = null; 
     
     private boolean leftMoveDown = false, rightMoveDown = false,
                     arrowCharging = false;
@@ -117,12 +117,10 @@ public class Player implements InputProviderListener
         jump = new BasicCommand("jump");
         left = new BasicCommand("left");
         right = new BasicCommand("right");
-        //pullArrow = new BasicCommand("pullArrow");
         
         prov.bindCommand(new KeyControl(Input.KEY_LEFT), left);
         prov.bindCommand(new KeyControl(Input.KEY_RIGHT), right);
         prov.bindCommand(new KeyControl(Input.KEY_UP), jump);
-
         
         in.addMouseListener(new MouseListener()
         {
@@ -139,7 +137,7 @@ public class Player implements InputProviderListener
                 if(button == BOW_BUTTON)
                 {
                     //System.out.println("left mouse released");
-                    releaseArrow();
+                    releaseArrow(x, y);
                 }
             }
             public boolean isAcceptingInput() 
@@ -234,7 +232,9 @@ public class Player implements InputProviderListener
      */ 
     private void startArrowCharge()
     {
-        System.out.println("Charging arrow");
+        System.out.println("Readying arrow");
+        currentArrow = new Arrow(xPos, yPos);
+        
         arrowCharging = true;
     }
     
@@ -244,13 +244,19 @@ public class Player implements InputProviderListener
         {
             bowCharge++;
         }
+        System.out.println("charge==" + bowCharge);
     }
     
-    private void releaseArrow()
+    /*
+     * Fires an Arrow from the Player's position towards the X / Y
+     * coordinates.
+     */ 
+    private void releaseArrow(int mouseX, int mouseY)
     {
         arrowCharging = false;
+        System.out.println("released arrow ");
         
-        System.out.println("released arrow");
+        
         
         bowCharge = 0;
     }
@@ -258,7 +264,7 @@ public class Player implements InputProviderListener
     {
         if(facing != dir)
         {
-            accelX = 0;  
+            resetAccelX();
             facing = dir;
         }
     }
@@ -343,6 +349,13 @@ public class Player implements InputProviderListener
             decelerate();
         }
         
+        // arrow
+        
+        if(arrowCharging)
+        {
+            chargeArrow();
+        }
+        
         //save old coordinates in case the new positions == collision
         final float oldX = xPos;
         final float oldY = yPos;
@@ -383,7 +396,7 @@ public class Player implements InputProviderListener
         {
             xPos = oldX;
             xSpeed = 0;
-            accelX = 0;
+            resetAccelX();
         }        
         
         if(accelX == 0)
@@ -458,8 +471,13 @@ public class Player implements InputProviderListener
         
         if(accelX < 0)
         {
-            accelX = 0;
+            resetAccelX();
         }
+    }
+    
+    private void resetAccelX()
+    {
+        accelX = 0;
     }
     
     /**

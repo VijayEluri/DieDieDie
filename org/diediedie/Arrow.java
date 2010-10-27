@@ -1,19 +1,17 @@
 package org.diediedie;
 
+
 /**
  * An arrow fired by the Player.
  */ 
 public class Arrow
 {
-    // x/y coordinates for the Arrow's point (start) and feather (end)
     private float startX, startY, endX, endY;
     
-    
-    
-    public Arrow(float xPos, yPos)
+    public Arrow(float xPos, float yPos)
     {
-        this.startXPos = xPos;
-        this.startYPos = yPos;
+        this.startX = xPos;
+        this.startY = yPos;
         
         calculateEndPos();
     }
@@ -27,8 +25,4 @@ public class Arrow
     public float getStartY() { return startY; }
     public float getEndX() { return endX; }
     public float getEndY() { return endY; }
-    
-
-
-
 }
