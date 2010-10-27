@@ -11,40 +11,48 @@ import org.newdawn.slick.geom.Vector2f;
   */ 
 public class Arrow
 {
-    private float startX, startY, endX, endY, accelX = 0, speedX = 0, 
-                  speedY = 0, maxYSpeed = 20.5f, mouseX, mouseY;
-    private float angle;
-    private final float size = 20f, airRest = 0.6f;
-    
-    private final float ACCEL_RATE = 0.05f;
-    private int charge, delta;
+    private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
+                  speedX = 0, speedY = 0, mouseX, mouseY, angle, 
+                  moveSpeed = 2.3f;
+                  
+    private final float SIZE = 20f, AIR_REST = 0.3f, ACCEL_RATE = 0.05f,
+                        MAX_Y_SPEED = 10.5f, MAX_Y_ACCEL = 3.4f;
+    private Level level = null;
     private Color color = Color.red;
-    private boolean released = false;
+    private boolean isFlying = false;
     private Vector2f vec2f = new Vector2f();
     
     /**
      * Creates a new arrow at the given position.
      */ 
-    public Arrow(float xPos, float yPos)
+    public Arrow(float xPos, float yPos, Level lev)
     {
+        level = lev;
         setPosition(xPos, yPos);
     }
     
     /**
      * Informs the Arrow object that it has been released by the player
      */ 
-    public void release()
+    public void release(int power)
     {
-        released = true;
+        accelX = power;
+        accelY = power;
+        isFlying = true;
     }
-      
+    
+    public boolean isFlying()
+    {
+        return isFlying;
+    }
+    
     /**
      * Sets the x/y coordinate position of the Arrow
      */ 
     protected void setPosition(float x, float y)
     {
-        this.startX = x;
-        this.startY = y;
+        startX = x;
+        startY = y;
     }
     
     /**
@@ -52,47 +60,105 @@ public class Arrow
      * to release, based upon the mouse's position. 
      */ 
     protected void updateAiming(float mouseX, float mouseY)
-    {
-        //System.out.println("updateAimAngle: " + mouseX + ", " + mouseY);
-        
+    {       
         setAngle(mouseX, mouseY);
         calculateEndPos();
     }  
     
-    // calculate the angle and use it to set the Vector
-    private void setAngle(float mouseX, float mouseY)
+    // calculate the angle 
+    private void setAngle(float x, float y)
     {
-        angle = (float)Math.toDegrees(Math.atan2(mouseX - startX, 
-                                          startY - mouseY)); 
-        System.out.println("angle: " + angle);
+        angle = (float)Math.toDegrees(Math.atan2(x - startX,
+                                                 startY - y)); 
+        //System.out.println("angle: " + angle);
     }
     
+    /**
+     * Updates the speed of a release arrow
+     */ 
+    protected void updateSpeed()
+    {        
+        accelX -= ACCEL_RATE;
+        if(accelX < 0)
+        {
+            accelX = 0;
+        }
+        
+        speedX = (moveSpeed + accelX);
+        
+        speedY = (moveSpeed + accelY);
+        
+        
+        
+        
+        System.out.println("Arrow.updateSpeed(): speedX: " + speedX);
+        
+        
+    }
+    
+    /**
+     * Updates the position of the Arrow on the screen after it has left
+     * the Player.
+     */
+    protected void updatePosition()
+    {
+        // calculate horizontal distance travelled
+        float xTravelled = speedX * AIR_REST;
+        float yTravelled = speedY ;
+        
+        startX = (float)(startX + xTravelled * Math.sin(Math.toRadians(angle)));
+        startY = (float)(startY - xTravelled * Math.cos(Math.toRadians(angle)));
+        
+        // gravity
+        if(speedY < MAX_Y_SPEED)
+        {
+            startY += level.gravity;
+        }
+        
+        System.out.println("Arrow.updatePosition(): startX: " + startX);
+        System.out.println("Arrow.updatePosition(): startY: " + startY);
+        
+        calculateEndPos();
+    }
+    
+    
     /*
-     * 
+     * Works out the end point of the arrow based on its SIZE at
+     * angle.
      */ 
     private void calculateEndPos()
     {
-        endX = (float)(startX + size * Math.sin(Math.toRadians(angle)));
-        endY = (float)(startY - size * Math.cos(Math.toRadians(angle)));
+        endX = (float)(startX + SIZE * Math.sin(Math.toRadians(angle)));
+        endY = (float)(startY - SIZE * Math.cos(Math.toRadians(angle)));
     }
     
-    protected void setCharge(int charge)
+
+    /*
+     * Subtracts from speed to simulate air resistance. 
+     */ 
+    private void applyAirRest()
     {
-        this.charge = charge;
+        
     }
     
-    
-    
+    /**
+     * Public method for receiving Graphics object from Slick.
+     */ 
     public void draw(Graphics g)
     {
         g.setColor(this.color);
         g.drawLine(startX, startY, endX, endY);
     }
-    
+    /**
+     * Return the x-axis value of the end point
+     */ 
     public float getEndX()
     {
         return endX;
-    }
+    } 
+    /**
+     * Return the y-axis value of the end point
+     */ 
     public float getEndY()
     {
         return endY; 

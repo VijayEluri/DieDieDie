@@ -47,7 +47,7 @@ public class Player implements InputProviderListener
     private Arrow currentArrow = null; 
     
     private boolean leftMoveDown = false, rightMoveDown = false,
-                    isChargingArrow = false;
+                    isChargingArrow = false, isFiringArrow = false;
     
     // current position vars 
     private float xPos, yPos, xSpeed, ySpeed;
@@ -226,7 +226,7 @@ public class Player implements InputProviderListener
     private void readyArrow()
     {
         System.out.println("Readying arrow");
-        currentArrow = new Arrow(xPos, yPos);
+        currentArrow = new Arrow(xPos, yPos, level);
         isChargingArrow = true;
     }
     
@@ -275,11 +275,17 @@ public class Player implements InputProviderListener
     private void releaseArrow()
     {
         isChargingArrow = false;
-        currentArrow.setCharge(bowCharge);
+        isFiringArrow = true;
+        
+        currentArrow.release(bowCharge);
+        
         System.out.println("released arrow, power " + bowCharge);        
         bowCharge = 0;
     }
     
+    /*
+     * Sets the direction the Player is facing
+     */ 
     private void setFacingDir(Direction dir)
     {
         facing = dir;
@@ -289,6 +295,9 @@ public class Player implements InputProviderListener
         }
     }
     
+    /*
+     * Sets the direction the Player is moving
+     */ 
     private void setMovingDir(Direction dir)
     {
         if(moving != dir)
@@ -335,17 +344,11 @@ public class Player implements InputProviderListener
      */ 
     public void move(Direction dir)
     {   
-        /*if(isChargingArrow)
-        {
-            System.out.println("can't move, charging arrow");
-            return;
-        }*/
-        // player directional movements     
         if(dir.equals(Direction.RIGHT))
         {
             accelerate();
             currentAnimation = rightWalk;
-            xSpeed = moveSpeed + accelX;
+            xSpeed = (moveSpeed + accelX);
         }
         else if(dir.equals(Direction.LEFT))
         {
@@ -357,6 +360,9 @@ public class Player implements InputProviderListener
         System.out.println("accelX: " + accelX);
     }
     
+    /*
+     * Increases walk speed.
+     */ 
     private void accelerate()
     {
         accelX += ACCEL_RATE;
@@ -385,22 +391,23 @@ public class Player implements InputProviderListener
             decelerate();
         }
         
-        // arrow
-        
+        // Update Arrow information depending on state
         if(isChargingArrow)
         {
             chargeArrow();
+        }
+        else if(isFiringArrow)
+        {
+            currentArrow.updateSpeed();
+            currentArrow.updatePosition();
         }
         
         //save old coordinates in case the new positions == collision
         final float oldX = xPos;
         final float oldY = yPos;
         
-        //
-        // test player at new position
-        //
-        
-        // test vertical change
+        // test new position
+        // vertical 
         
         yPos += ySpeed;
         if(level.collides(getCurrentFrameRect()))
@@ -424,16 +431,15 @@ public class Player implements InputProviderListener
             canJump = false;
         }
         
-        // test horizontal 
-        
+        // horizontal 
         xPos += xSpeed;
+        
         if(level.collides(getCurrentFrameRect()))
         {
             xPos = oldX;
             xSpeed = 0;
             resetAccelX();
         }        
-        
         if(accelX == 0)
         {
             setStandingAnim();
@@ -555,9 +561,7 @@ public class Player implements InputProviderListener
         return new Rectangle(getX(), getY(), img.getWidth(), 
                              img.getHeight());
     }
-    
-    
-    
+        
     /*
      * Loads and inits the Player's Animations. 
      */ 
