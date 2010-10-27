@@ -226,7 +226,7 @@ public class Player implements InputProviderListener
     private void readyArrow()
     {
         System.out.println("Readying arrow");
-        currentArrow = new Arrow(xPos, yPos, level);
+        currentArrow = new Arrow(xPos, yPos, level, mouseX, mouseY);
         isChargingArrow = true;
     }
     

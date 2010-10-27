@@ -24,8 +24,8 @@ import org.newdawn.slick.command.InputProviderListener;
  */ 
 public class DieDieDie extends BasicGame 
 {   
-    private final float playerXLevel1 = 30;
-	private final float playerYLevel1 = 100;
+    private final float playerXLevel1 = 200;
+	private final float playerYLevel1 = 400;
     
     // object to send input to the Player object
     private InputProvider inputProv = null;

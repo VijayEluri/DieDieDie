@@ -13,22 +13,24 @@ public class Arrow
 {
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, angle, 
-                  moveSpeed = 2.3f;
+                  moveSpeed = 1.4f;
                   
-    private final float SIZE = 20f, AIR_REST = 0.3f, ACCEL_RATE = 0.05f,
-                        MAX_Y_SPEED = 10.5f, MAX_Y_ACCEL = 3.4f;
+    private final float SIZE = 20f, AIR_REST = 0.15f, ACCEL_RATE = 0.1f,
+                        MAX_Y_SPEED = 10.5f;
     private Level level = null;
     private Color color = Color.red;
     private boolean isFlying = false;
-    private Vector2f vec2f = new Vector2f();
+    //private Vector2f vec2f = new Vector2f();
     
     /**
      * Creates a new arrow at the given position.
      */ 
-    public Arrow(float xPos, float yPos, Level lev)
+    public Arrow(float xPos, float yPos, Level lev, int mouseX, int mouseY)
     {
         level = lev;
         setPosition(xPos, yPos);
+        this.setAngle(mouseX, mouseY);
+        calculateEndPos();
     }
     
     /**
@@ -65,12 +67,17 @@ public class Arrow
         calculateEndPos();
     }  
     
-    // calculate the angle 
+    /* 
+     * calculate the angle based upon destination x/y
+     */
     private void setAngle(float x, float y)
     {
         angle = (float)Math.toDegrees(Math.atan2(x - startX,
                                                  startY - y)); 
-        //System.out.println("angle: " + angle);
+        
+        /*vec2f = new Vector2f((float)Math.toDegrees(Math.atan2(x - startX,
+                                                                      startY - y)));*/
+                                                                      
     }
     
     /**
@@ -78,22 +85,19 @@ public class Arrow
      */ 
     protected void updateSpeed()
     {        
+        decelerateX();    
+        speedX = (moveSpeed * accelX);
+        speedY = (moveSpeed * accelY);
+    }
+    
+    
+    private void decelerateX()
+    {
         accelX -= ACCEL_RATE;
         if(accelX < 0)
         {
             accelX = 0;
         }
-        
-        speedX = (moveSpeed + accelX);
-        
-        speedY = (moveSpeed + accelY);
-        
-        
-        
-        
-        System.out.println("Arrow.updateSpeed(): speedX: " + speedX);
-        
-        
     }
     
     /**
@@ -104,23 +108,28 @@ public class Arrow
     {
         // calculate horizontal distance travelled
         float xTravelled = speedX * AIR_REST;
-        float yTravelled = speedY ;
+        float yTravelled = speedY;
         
-        startX = (float)(startX + xTravelled * Math.sin(Math.toRadians(angle)));
-        startY = (float)(startY - xTravelled * Math.cos(Math.toRadians(angle)));
         
-        // gravity
-        if(speedY < MAX_Y_SPEED)
-        {
-            startY += level.gravity;
-        }
+        System.out.println("arrow: " + angle + " degrees");
+        System.out.println("\t" + "speedX: " + speedX + ", speedY: "
+                           + speedY);
         
-        System.out.println("Arrow.updatePosition(): startX: " + startX);
-        System.out.println("Arrow.updatePosition(): startY: " + startY);
-        
+        startX = (float)(startX + xTravelled * 
+                            Math.sin(Math.toRadians(angle)));
+        startY = (float)(startY - xTravelled * 
+                            Math.cos(Math.toRadians(angle)));          
         calculateEndPos();
     }
-    
+
+    /*
+     * Applies 'gravity' to the angle and yPos
+     */ 
+    private void applyGravity()
+    {
+        
+        
+    }
     
     /*
      * Works out the end point of the arrow based on its SIZE at
