@@ -35,10 +35,7 @@
         </copy>
         
         <echo>Copy the run script</echo>
-        <copy file="run.sh" todir="${build.dir}"/>
-        
-        
-        
+        <copy file="run.sh" todir="${build.dir}"/>       
     </target>
         
     <target name="jar" depends="compile">
