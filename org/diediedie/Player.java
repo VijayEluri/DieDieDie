@@ -240,6 +240,7 @@ public class Player implements InputProviderListener
     {
         System.out.println("Readying arrow");
         currentArrow = new Arrow(xPos, yPos);
+        
         arrowCharging = true;
     }
     
@@ -249,9 +250,21 @@ public class Player implements InputProviderListener
         {
             bowCharge++;
         }
-        currentArrow.updateAimAngle(mouseX, mouseY);
+        currentArrow.updateAiming(mouseX, mouseY);
+        currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
         //System.out.println("charge==" + bowCharge);
     }
+    
+    // returns the x position of the arrow when being held by the player
+    private float getHoldingArrowX()
+    {
+        return xPos + 10;
+    } 
+    // returns the y position of the arrow when being held by the player
+    private float getHoldingArrowY()
+    {
+        return yPos + 10;
+    } 
     
     /*
      * Fires an Arrow from the Player's position towards the X / Y
@@ -368,6 +381,7 @@ public class Player implements InputProviderListener
         //save old coordinates in case the new positions == collision
         final float oldX = xPos;
         final float oldY = yPos;
+        
         //
         // test player at new position
         //
