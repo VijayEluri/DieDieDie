@@ -27,12 +27,13 @@ public class Player implements InputProviderListener
     public String name;    
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f;
-                  
+    
     private int health, bowCharge = 0;
     private final int MAX_CHARGE = 50;
     
     public final float TERMINAL_VEL = 10;
     final float INCR = 0.01f;
+    
     // vars indicating vertical and horizontal collisions
     boolean yCollision = false, xCollision = false;
     
@@ -41,14 +42,16 @@ public class Player implements InputProviderListener
     private Command left; 
     private Command right;    
     
+    // offset from the yPos for the arrow, when readying one.
+    private final float ARROW_Y_OFFSET = 15;
     private Arrow currentArrow = null; 
     
     private boolean leftMoveDown = false, rightMoveDown = false,
-                    arrowCharging = false;
+                    isChargingArrow = false;
     
     // current position vars 
     private float xPos, yPos, xSpeed, ySpeed;
-    private Direction facing = Direction.LEFT; 
+    private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
     
     private int mouseX, mouseY;
     
@@ -139,7 +142,7 @@ public class Player implements InputProviderListener
                 if(button == BOW_BUTTON)
                 {
                     //System.out.println("left mouse released");
-                    releaseArrow(x, y);
+                    releaseArrow();
                 }
             }
             public boolean isAcceptingInput() 
@@ -151,11 +154,10 @@ public class Player implements InputProviderListener
                 // keep track of the mouse position
                 mouseX = newx;
                 mouseY = newy;
-    
             }
             public void	mouseWheelMoved(int change) {}            
             
-            // boiler plate code
+            // boiler plate code. yeah. sorry.
             public void	mouseClicked(int button, int x, int y, int clicks) {}
             public void	mouseDragged(int oldx, int oldy, int newx, int newy) {} 
             public void	inputEnded(){} 
@@ -187,10 +189,6 @@ public class Player implements InputProviderListener
         {
             running = false;
         }
-        /*else if(com.equals(pullArrow))
-        {
-            releaseArrow();
-        }*/
     }
     
     
@@ -201,28 +199,17 @@ public class Player implements InputProviderListener
     public void controlPressed(Command com)
     {
         System.out.println("pressed: " + com);
-        
-        
-        
-        
-        // left/right movement
-        
-        /*if(arrowCharging)
-        {
-            System.out.println("can't move, charging arrow");
-            return;
-        }*/
-        
+                
         if(com.equals(left))
         {
             leftMoveDown = true;
-            setDirection(Direction.LEFT);
+            setMovingDir(Direction.LEFT);
             running = true;
         }
         else if(com.equals(right))
         {
             rightMoveDown = true;
-            setDirection(Direction.RIGHT);
+            setMovingDir(Direction.RIGHT);
             running = true;
         }
         // jumping
@@ -240,52 +227,77 @@ public class Player implements InputProviderListener
     {
         System.out.println("Readying arrow");
         currentArrow = new Arrow(xPos, yPos);
-        
-        arrowCharging = true;
+        isChargingArrow = true;
     }
     
+    /*
+     * Charges the arrow and updates the Direction the player faces.
+     */ 
     private void chargeArrow()
     {
         if(bowCharge < MAX_CHARGE)
         {
             bowCharge++;
         }
+
         currentArrow.updateAiming(mouseX, mouseY);
+        
+        // flip the player.facing dir if aiming an arrow the other way 
+        if(currentArrow.getEndX() > xPos)
+        {
+            setFacingDir(Direction.RIGHT);
+        }
+        else
+        {
+            setFacingDir(Direction.LEFT);
+        }
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
-        //System.out.println("charge==" + bowCharge);
     }
     
     // returns the x position of the arrow when being held by the player
     private float getHoldingArrowX()
     {
-        return xPos + 10;
+        return xPos + getCurrentFrameRect().getWidth() / 2;
     } 
-    // returns the y position of the arrow when being held by the player
+    
+    /*
+     * Returns the y position of the arrow when being held by the player
+     */
     private float getHoldingArrowY()
     {
-        return yPos + 10;
+        return yPos + ARROW_Y_OFFSET;
     } 
     
     /*
      * Fires an Arrow from the Player's position towards the X / Y
      * coordinates.
      */ 
-    private void releaseArrow(int mouseX, int mouseY)
+    private void releaseArrow()
     {
-        arrowCharging = false;
-        System.out.println("released arrow ");
-        
-        
-        
+        isChargingArrow = false;
+        currentArrow.setCharge(bowCharge);
+        System.out.println("released arrow, power " + bowCharge);        
         bowCharge = 0;
     }
-    private void setDirection(Direction dir)
+    
+    private void setFacingDir(Direction dir)
     {
-        if(facing != dir)
+        facing = dir;
+        if(!running)
+        {
+            setStandingAnim();
+        }
+    }
+    
+    private void setMovingDir(Direction dir)
+    {
+        if(moving != dir)
         {
             resetAccelX();
-            facing = dir;
         }
+        moving = dir;
+        setFacingDir(dir);
+        //System.out.println("setMovingDir: " + dir);
     }
     
     /**
@@ -323,11 +335,11 @@ public class Player implements InputProviderListener
      */ 
     public void move(Direction dir)
     {   
-        if(arrowCharging)
+        /*if(isChargingArrow)
         {
             System.out.println("can't move, charging arrow");
             return;
-        }
+        }*/
         // player directional movements     
         if(dir.equals(Direction.RIGHT))
         {
@@ -341,6 +353,8 @@ public class Player implements InputProviderListener
             currentAnimation = leftWalk;
             xSpeed = -(moveSpeed + accelX);
         }
+        System.out.println("xSpeed: " + xSpeed);
+        System.out.println("accelX: " + accelX);
     }
     
     private void accelerate()
@@ -364,7 +378,7 @@ public class Player implements InputProviderListener
                 
         if(running)
         {
-            move(facing);
+            move(moving);
         }
         else
         {
@@ -373,7 +387,7 @@ public class Player implements InputProviderListener
         
         // arrow
         
-        if(arrowCharging)
+        if(isChargingArrow)
         {
             chargeArrow();
         }
@@ -424,8 +438,6 @@ public class Player implements InputProviderListener
         {
             setStandingAnim();
         }
-       // printSpeed();
-       // printPosition();
     }
     
     
@@ -551,7 +563,6 @@ public class Player implements InputProviderListener
      */ 
     private void initAnim()
     {
-        //final boolean autoUpdate = false;
         final boolean autoUpdate = true;
         leftWalk = createAnim(ANIM_DURATION, autoUpdate, 
                               leftWalkPaths);
@@ -562,7 +573,6 @@ public class Player implements InputProviderListener
         leftStand = createAnim(ANIM_DURATION, autoUpdate,
                                leftStandPaths);                
         currentAnimation = leftStand;
-        //facing = Direction.LEFT;
         
         // get initial direction from the level
         facing = level.playerFacing;
