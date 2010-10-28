@@ -30,7 +30,7 @@ public class Player implements InputProviderListener
                   bowCharge = 0;
     
     private int health;
-    private final float MAX_CHARGE = 30;
+    private final float MAX_CHARGE = 25;
     
     public final float TERMINAL_VEL = 10;
     final float INCR = 0.01f, CHARGE_INCR = 0.5f;
@@ -165,7 +165,6 @@ public class Player implements InputProviderListener
             public void	inputStarted(){} 
             public void setInput(Input input) {} 
         });
-        
     }
     
     /**
@@ -244,7 +243,7 @@ public class Player implements InputProviderListener
         currentArrow.updateAiming(mouseX, mouseY);
         
         // flip the player.facing dir if aiming an arrow the other way 
-        if(currentArrow.getEndX() > xPos)
+        if(currentArrow.getAngle() >= 0)
         {
             setFacingDir(Direction.RIGHT);
         }
@@ -252,6 +251,7 @@ public class Player implements InputProviderListener
         {
             setFacingDir(Direction.LEFT);
         }
+ 
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
     }
     

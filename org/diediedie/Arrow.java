@@ -13,18 +13,17 @@ public class Arrow
 {
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, movementAngle, 
-                  moveSpeed = 0.4f, gravity = 0, oldX, oldY,
+                  moveSpeed = 0.45f, gravity = 0, oldX, oldY,
                   facingAngle = 0, angleChange = 0.1f;
                   
-    private final float SIZE = 20f, ACCEL_RATE = 0.1f, AIR_REST = 0.56f,
-                  MAX_GRAVITY = 16f, GRAVITY_INCR = 0.1f, 
-                  ANGLE_CHANGE_INCR = 0.01f, MAX_ANGLE_CHANGE = 1f, 
-                  GRAVITY_LINE = 5f;
+    private final float SIZE = 20f, ACCEL_RATE = 0.09f, AIR_REST = 0.55f,
+                  MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
+                  ANGLE_CHANGE_INCR = 0.02f, MAX_ANGLE_CHANGE = 1.11f, 
+                  GRAVITY_LINE = 3.34f;
                   
     private Level level = null;
     private Color color = Color.red;
     private boolean isFlying = false;
-    
    
     /**
      * Creates a new arrow at the given position.
@@ -43,7 +42,7 @@ public class Arrow
     public void release(float power)
     {
         accelX = power;
-        accelY = power;
+        accelY = power * 0.9f;
         isFlying = true;
     }
     
@@ -111,7 +110,14 @@ public class Arrow
         startY = (float)(startY - yTravelled * 
                             Math.cos(Math.toRadians(movementAngle)));   
         applyGravity();       
-
+        adjustFacingAngle();
+        calculateEndPos();
+        //System.out.println("arrow move angle: " + movementAngle);
+        //System.out.println("arrow face angle: " + facingAngle);
+    }
+    
+    private void adjustFacingAngle()
+    {
         if(gravity > GRAVITY_LINE)
         {
             if(movementAngle > 0)
@@ -128,11 +134,7 @@ public class Arrow
                 angleChange += ANGLE_CHANGE_INCR;
             }
         }
-        
-        calculateEndPos();
     }
-    
-    
     
     private boolean isGoingDownwards()
     {
@@ -142,6 +144,7 @@ public class Arrow
         }
         return false;
     }
+    
     /*
      * Applies 'gravity' to the vertical position
      */ 
@@ -152,7 +155,7 @@ public class Arrow
         {
             gravity += GRAVITY_INCR;
         }
-        System.out.println("gravity on arrow: " + gravity);
+        //System.out.println("gravity on arrow: " + gravity);
     }
     
     /*
@@ -184,10 +187,23 @@ public class Arrow
         return endX;
     } 
     /**
+     * Return the x-axis value of the start point
+     */ 
+    public float getStartX()
+    {
+        return startX;
+    } 
+    /**
+    /**
      * Return the y-axis value of the end point
      */ 
     public float getEndY()
     {
         return endY; 
+    }
+    
+    public float getAngle()
+    {
+        return movementAngle;
     }
 }
