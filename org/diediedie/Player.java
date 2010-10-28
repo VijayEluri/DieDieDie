@@ -460,7 +460,7 @@ public class Player implements InputProviderListener
             // here 'canJump' is used to discern the direction of the
             // collision; i.e. a 'true' value indicates (hopefully) 
             // that the player *fell* into this collision rather than
-            // headbutted it... so to speak.
+            // headbutted it... 
             
             if(canJump)
             {
@@ -470,7 +470,6 @@ public class Player implements InputProviderListener
             {
                 yPos -= INCR;
             }
-            //System.out.println("moving... " + yPos);
         }
         if(canJump)
         {

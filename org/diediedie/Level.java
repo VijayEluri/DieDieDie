@@ -87,10 +87,10 @@ public class Level extends TiledMap
     
     
     /**
-     * Returns true if Polygon p intersects with a collision tile on the
+     * Returns true if Shape p intersects with a collision tile on the
      * Level.
      */ 
-    public boolean collides(Rectangle p)
+    public boolean collides(Shape p)
     {
         for(Tile t : collisionTiles)
         {
@@ -102,4 +102,21 @@ public class Level extends TiledMap
         }
         return false;
     }
+    
+    /**
+     * Returns true if the x / y coordinate position supplied is inside
+     * a collision tile
+     */ 
+    public boolean isInCollisionTile(float x, float y)
+    {
+        for(Tile t : collisionTiles)
+        {
+            if(t.getRect().contains(x, y))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }
