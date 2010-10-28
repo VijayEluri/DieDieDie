@@ -6,9 +6,7 @@ import org.newdawn.slick.geom.Line;
 /**
  * An arrow fired by the Player.
  */ 
- /*
-  *  good movementAngle stuff here: http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates
-  */ 
+ //good movementAngle stuff here:http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates 
 public class Arrow
 {
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
@@ -22,6 +20,8 @@ public class Arrow
                   GRAVITY_LINE = 3f, ALIGN_INCR = 0.009f;
                   
     private final int REVERSE = 180;
+
+    
     private Level level = null;
     private Color color = Color.red;
     private boolean isFlying = false, collided = false;
@@ -29,13 +29,16 @@ public class Arrow
     /**
      * Creates a new arrow at the given position.
      */ 
-    public Arrow(float xPos, float yPos, Level lev, int mouseX, int mouseY)
+    public Arrow(float xPos, float yPos, Level lev, int mouseX, 
+                 int mouseY)
     {
         level = lev;
         setPosition(xPos, yPos);
         this.setMovementAngle(mouseX, mouseY);
         calculateEndPos();
     }
+    
+    
     
     /**
      * Informs the Arrow object that it has been released by the player

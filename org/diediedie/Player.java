@@ -23,20 +23,21 @@ import org.newdawn.slick.command.MouseButtonControl;
  */ 
 public class Player implements InputProviderListener
 {
-    private boolean setUp = false, canJump = false;
-    public String name;    
+    private String name;  
+    
+    private boolean setUp = false, canJump = false,
+                    yCollision = false, xCollision = false; 
+     
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
                   bowCharge = 0, oldX, oldY;
-    
-    private final int MAX_HEALTH = 20;    
-    private int health = MAX_HEALTH;
+                  
     private final float MAX_CHARGE = 25.5f, INCR = 0.01f, 
                         CHARGE_INCR = 0.5f;
-    
-    // vars indicating vertical and horizontal collisions
-    private boolean yCollision = false, xCollision = false;
-    
+                        
+    private final int MAX_HEALTH = 20;    
+    private int health = MAX_HEALTH, arrowCount = 0;;
+            
     // Movement
     private Command jump;
     private Command left; 
@@ -82,10 +83,12 @@ public class Player implements InputProviderListener
         "data/STICKMAN_RIGHT_WALK_5.png", 
         "data/STICKMAN_RIGHT_WALK_6.png"
     }; 
-    private String[] leftStandPaths = {
+    private String[] leftStandPaths =
+    {
         "data/STICKMAN_LEFT_STAND.png"        
     };
-    private String[] rightStandPaths = {
+    private String[] rightStandPaths = 
+    {
         "data/STICKMAN_RIGHT_STAND.png"        
     };
     private Animation leftWalk, rightWalk, leftStand, rightStand,
@@ -123,9 +126,9 @@ public class Player implements InputProviderListener
         left = new BasicCommand("left");
         right = new BasicCommand("right");
         
-        prov.bindCommand(new KeyControl(Input.KEY_LEFT), left);
-        prov.bindCommand(new KeyControl(Input.KEY_RIGHT), right);
-        prov.bindCommand(new KeyControl(Input.KEY_UP), jump);
+        prov.bindCommand(new KeyControl(Input.KEY_A), left);
+        prov.bindCommand(new KeyControl(Input.KEY_D), right);
+        prov.bindCommand(new KeyControl(Input.KEY_W), jump);
         
         in.addMouseListener(new MouseListener()
         {
