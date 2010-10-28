@@ -33,19 +33,18 @@ public class Player implements InputProviderListener
                   bowCharge = 0, oldX, oldY;
                   
     private final float MAX_CHARGE = 25.5f, INCR = 0.01f, 
-                        CHARGE_INCR = 0.5f;
+                        CHARGE_INCR = 0.5f, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20;    
-    private int health = MAX_HEALTH, arrowCount = 0;;
+    private int health = MAX_HEALTH, arrowCount = 0;
             
     // Movement
     private Command jump;
     private Command left; 
     private Command right;    
     
-    // offset from the yPos for the arrow, when readying one.
-    private final float ARROW_Y_OFFSET = 15;
     private Arrow currentArrow = null; 
+    private ArrayList<Arrow> firedArrows = new ArrayList<Arrow>();
     
     private boolean leftMoveDown = false, rightMoveDown = false,
                     isChargingArrow = false, isFiringArrow = false;
@@ -181,20 +180,20 @@ public class Player implements InputProviderListener
         if(com.equals(left))
         {
             leftMoveDown = false;
+            if(moving.equals(Direction.LEFT))
+            {
+                running = false;   
+            }
         }
         else if(com.equals(right))
         {
             rightMoveDown = false;
-        }
-        
-        // both released now?
-        if(!leftMoveDown && !rightMoveDown)
-        {
-            running = false;
+            if(moving.equals(Direction.RIGHT))
+            {
+                running = false;   
+            }
         }
     }
-    
-    
     
     /**
      * Defines the routines carried out for when each command is pressed.
@@ -211,11 +210,10 @@ public class Player implements InputProviderListener
         }
         else if(com.equals(right))
         {
-            rightMoveDown = true;
+            rightMoveDown = true; 
             setMovingDir(Direction.RIGHT);
             running = true;
         }
-        // jumping
         else if(com.equals(jump))
         {
             jump();
