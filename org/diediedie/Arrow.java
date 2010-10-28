@@ -19,7 +19,7 @@ public class Arrow
     private final float SIZE = 20f, ACCEL_RATE = 0.09f, AIR_REST = 0.55f,
                   MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
                   ANGLE_CHANGE_INCR = 0.02f, MAX_ANGLE_CHANGE = 1.11f, 
-                  GRAVITY_LINE = 3.34f;
+                  GRAVITY_LINE = 3.31f;
                   
     private Level level = null;
     private Color color = Color.red;
@@ -59,6 +59,8 @@ public class Arrow
         startX = x;
         startY = y;
     }
+    
+    
     
     /**
      * Allows the Player to update the movementAngle (aim) of the arrow prior

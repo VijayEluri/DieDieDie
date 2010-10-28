@@ -19,7 +19,7 @@ import org.newdawn.slick.command.KeyControl;
 import org.newdawn.slick.command.MouseButtonControl;
 
 /**
- * ..where *YOU* are the HERO! (aka 'twat')
+ * ..where *YOU* are the HERO!
  */ 
 public class Player implements InputProviderListener
 {
@@ -27,16 +27,15 @@ public class Player implements InputProviderListener
     public String name;    
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
-                  bowCharge = 0;
+                  bowCharge = 0, oldX, oldY;
     
-    private int health;
-    private final float MAX_CHARGE = 25;
-    
-    public final float TERMINAL_VEL = 10;
-    final float INCR = 0.01f, CHARGE_INCR = 0.5f;
+    private final int MAX_HEALTH = 20;    
+    private int health = MAX_HEALTH;
+    private final float MAX_CHARGE = 25.5f, INCR = 0.01f, 
+                        CHARGE_INCR = 0.5f;
     
     // vars indicating vertical and horizontal collisions
-    boolean yCollision = false, xCollision = false;
+    private boolean yCollision = false, xCollision = false;
     
     // Movement
     private Command jump;
@@ -134,7 +133,8 @@ public class Player implements InputProviderListener
             {
                 if(button == BOW_BUTTON)
                 {
-                    //System.out.println("left mouse Pressed");    
+                    mouseX = x;
+                    mouseY = y;  
                     readyArrow();
                 }
             }
@@ -198,7 +198,7 @@ public class Player implements InputProviderListener
      */ 
     public void controlPressed(Command com)
     {
-        System.out.println("pressed: " + com);
+        //System.out.println("pressed: " + com);
                 
         if(com.equals(left))
         {
@@ -357,8 +357,8 @@ public class Player implements InputProviderListener
             currentAnimation = leftWalk;
             xSpeed = -(moveSpeed + accelX);
         }
-        System.out.println("xSpeed: " + xSpeed);
-        System.out.println("accelX: " + accelX);
+        /*System.out.println("xSpeed: " + xSpeed);
+        System.out.println("accelX: " + accelX);*/
     }
     
     /*
@@ -404,12 +404,11 @@ public class Player implements InputProviderListener
         }
         
         //save old coordinates in case the new positions == collision
-        final float oldX = xPos;
-        final float oldY = yPos;
+        oldX = xPos;
+        oldY = yPos;
         
         // test new position
         // vertical 
-        
         yPos += ySpeed;
         if(level.collides(getCurrentFrameRect()))
         {

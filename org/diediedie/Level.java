@@ -7,6 +7,7 @@ import org.newdawn.slick.tiled.TileSet;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Shape;
 
 
 /**
@@ -75,15 +76,15 @@ public class Level extends TiledMap
             }
         }
     }
-
     
     /**
      * Returns true if two polygons intersect.
      */ 
-    public boolean intersection(Polygon p1, Polygon p2)
+    public boolean intersection(Shape p1, Shape p2)
     {
         return p1.intersects(p2);
     }
+    
     
     /**
      * Returns true if Polygon p intersects with a collision tile on the
@@ -101,5 +102,4 @@ public class Level extends TiledMap
         }
         return false;
     }
-
 }
