@@ -36,15 +36,15 @@ public class Player implements InputProviderListener
                         CHARGE_INCR = 0.5f, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20;    
-    private int health = MAX_HEALTH, arrowCount = 0;
-            
+    private int health = MAX_HEALTH, arrowCount = 0, mouseX, mouseY,
+                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;       
     // Movement
     private Command jump;
     private Command left; 
     private Command right;    
     
     private Arrow currentArrow = null; 
-    private ArrayList<Arrow> firedArrows = new ArrayList<Arrow>();
+    private List<Arrow> firedArrows = new ArrayList<Arrow>();
     
     private boolean leftMoveDown = false, rightMoveDown = false,
                     isChargingArrow = false, isFiringArrow = false;
@@ -52,17 +52,14 @@ public class Player implements InputProviderListener
     // current position vars 
     private float xPos, yPos, xSpeed, ySpeed;
     private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
-    
-    private int mouseX, mouseY;
-    
+        
     // running: indicates the user is holding a directional button
     private boolean running = false;
     
     // animation vars
     public static final int ANIM_DURATION = 100; 
     
-    // fire an arrow - which button?
-    private int BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;
+    
     
     private String[] leftWalkPaths = 
     {
@@ -280,6 +277,8 @@ public class Player implements InputProviderListener
         isFiringArrow = true;
         
         currentArrow.release(bowCharge);
+        firedArrows.add(currentArrow);
+        currentArrow = null;
         
         System.out.println("released arrow, power " + bowCharge);        
         bowCharge = 0;
@@ -374,6 +373,15 @@ public class Player implements InputProviderListener
         }
     }
     
+    private void updateFiredArrows()
+    {
+        for(Arrow a : firedArrows)
+        {
+            a.updateSpeed();
+            a.updatePosition();
+        }
+    }
+    
     private void applyFriction()
     {
         xSpeed *= level.groundFric;
@@ -398,11 +406,8 @@ public class Player implements InputProviderListener
         {
             chargeArrow();
         }
-        else if(isFiringArrow)
-        {
-            currentArrow.updateSpeed();
-            currentArrow.updatePosition();
-        }
+        
+        updateFiredArrows();
         
         //save old coordinates in case the new positions == collision
         oldX = xPos;
@@ -499,7 +504,6 @@ public class Player implements InputProviderListener
         {
             System.out.println("jump!");
             ySpeed = jumpSpeed;
-            //accelY = jumpSpeed;
             canJump = false;
         }
     }
@@ -535,14 +539,20 @@ public class Player implements InputProviderListener
     public void draw(Graphics g)
     {
         g.drawAnimation(currentAnim(), getX(), getY());
-        // draw arrows
-        
+        drawArrows(g);
+    }
+    
+    private void drawArrows(Graphics g)
+    {
         if(currentArrow != null)
         {
             currentArrow.draw(g);    
         }
-    }
-        
+        for(Arrow a : firedArrows)
+        {
+            a.draw(g);
+        }
+    }  
     /**
      * Returns the currently set animation.
      */ 
