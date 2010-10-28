@@ -7,18 +7,20 @@ import org.newdawn.slick.geom.Vector2f;
  * An arrow fired by the Player.
  */ 
  /*
-  *  good angle stuff here: http://www.zahniser.net/~russell/computer/index.php?title=Angle%20and%20Coordinates
+  *  good movementAngle stuff here: http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates
   */ 
 public class Arrow
 {
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
-                  speedX = 0, speedY = 0, mouseX, mouseY, angle, 
-                  moveSpeed = 0.4f, gravity = 0;
+                  speedX = 0, speedY = 0, mouseX, mouseY, movementAngle, 
+                  moveSpeed = 0.4f, gravity = 0, oldX, oldY,
+                  facingAngle = 0, angleChange = 0.1f;
                   
-    private final float SIZE = 20f, AIR_REST = 0.15f, ACCEL_RATE = 0.1f,
-                  MAX_GRAVITY = 20.4f, GRAVITY_INCR = 0.1f;
-                    
-    private final int DOWN = 180;
+    private final float SIZE = 20f, ACCEL_RATE = 0.1f, AIR_REST = 0.56f,
+                  MAX_GRAVITY = 16f, GRAVITY_INCR = 0.1f, 
+                  ANGLE_CHANGE_INCR = 0.01f, MAX_ANGLE_CHANGE = 1f, 
+                  GRAVITY_LINE = 5f;
+                  
     private Level level = null;
     private Color color = Color.red;
     private boolean isFlying = false;
@@ -31,7 +33,7 @@ public class Arrow
     {
         level = lev;
         setPosition(xPos, yPos);
-        this.setAngle(mouseX, mouseY);
+        this.setMovementAngle(mouseX, mouseY);
         calculateEndPos();
     }
     
@@ -60,21 +62,21 @@ public class Arrow
     }
     
     /**
-     * Allows the Player to update the angle (aim) of the arrow prior
+     * Allows the Player to update the movementAngle (aim) of the arrow prior
      * to release, based upon the mouse's position. 
      */ 
     protected void updateAiming(float mouseX, float mouseY)
     {       
-        setAngle(mouseX, mouseY);
+        setMovementAngle(mouseX, mouseY);
         calculateEndPos();
     }  
     
     /* 
-     * calculate the angle based upon destination x/y
+     * calculate the movementAngle based upon destination x/y
      */
-    private void setAngle(float x, float y)
+    private void setMovementAngle(float x, float y)
     {
-        angle = (float)Math.toDegrees(Math.atan2(x - startX, startY - y));                                                                       
+        movementAngle = (float)Math.toDegrees(Math.atan2(x - startX, startY - y));                                                                       
     }
     
     /**
@@ -86,51 +88,84 @@ public class Arrow
         speedY = (moveSpeed * accelY);
     }
     
-    
-    
     /**
      * Updates the position of the Arrow on the screen after it has left
      * the Player.
      */
     protected void updatePosition()
     {
-        float xTravelled = speedX;
+        float xTravelled = speedX * AIR_REST;
         float yTravelled = speedY;
              
-        /*System.out.println("arrow: " + angle + " degrees");
+        /*System.out.println("arrow: " + movementAngle + " degrees");
         System.out.println("\t" + "speedX: " + speedX + ", speedY: "
                            + speedY);*/
         
-        // move in the @angle direction
+        // save old position for isGoingDownwards()
+        //oldX = startX;
+        oldY = startY;
+        
+        // move in the @movementAngle direction
         startX = (float)(startX + xTravelled * 
-                            Math.sin(Math.toRadians(angle)));
+                            Math.sin(Math.toRadians(movementAngle)));
         startY = (float)(startY - yTravelled * 
-                            Math.cos(Math.toRadians(angle)));   
+                            Math.cos(Math.toRadians(movementAngle)));   
         applyGravity();       
+
+        if(gravity > GRAVITY_LINE)
+        {
+            if(movementAngle > 0)
+            {
+                //movementAngle += angleChange;
+                facingAngle += angleChange;
+            }
+            else
+            {
+                facingAngle -= angleChange;
+            }
+            if(angleChange < MAX_ANGLE_CHANGE)
+            {
+                angleChange += ANGLE_CHANGE_INCR;
+            }
+        }
+        
         calculateEndPos();
     }
-
+    
+    
+    
+    private boolean isGoingDownwards()
+    {
+        if(startY > oldY)
+        {
+            return true;
+        }
+        return false;
+    }
     /*
      * Applies 'gravity' to the vertical position
      */ 
     private void applyGravity()
     {
         startY += gravity;
-        
         if(gravity < MAX_GRAVITY)
         {
             gravity += GRAVITY_INCR;
         }
+        System.out.println("gravity on arrow: " + gravity);
     }
     
     /*
      * Works out the end point of the arrow based on its SIZE at
-     * angle.
+     * movementAngle.
      */ 
     private void calculateEndPos()
     {
-        endX = (float)(startX + SIZE * Math.sin(Math.toRadians(angle)));
-        endY = (float)(startY - SIZE * Math.cos(Math.toRadians(angle)));
+        
+        endX = (float)(startX + SIZE * Math.sin(
+                        Math.toRadians(movementAngle + facingAngle)));
+        endY = (float)(startY - SIZE * Math.cos(
+                        Math.toRadians(movementAngle + facingAngle)));
     }
     
     /**
