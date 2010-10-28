@@ -26,13 +26,14 @@ public class Player implements InputProviderListener
     private boolean setUp = false, canJump = false;
     public String name;    
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
-                  MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f;
+                  MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
+                  bowCharge = 0;
     
-    private int health, bowCharge = 0;
-    private final int MAX_CHARGE = 50;
+    private int health;
+    private final float MAX_CHARGE = 30;
     
     public final float TERMINAL_VEL = 10;
-    final float INCR = 0.01f;
+    final float INCR = 0.01f, CHARGE_INCR = 0.5f;
     
     // vars indicating vertical and horizontal collisions
     boolean yCollision = false, xCollision = false;
@@ -237,7 +238,7 @@ public class Player implements InputProviderListener
     {
         if(bowCharge < MAX_CHARGE)
         {
-            bowCharge++;
+            bowCharge += CHARGE_INCR;
         }
 
         currentArrow.updateAiming(mouseX, mouseY);

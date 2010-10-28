@@ -13,14 +13,13 @@ public class Arrow
 {
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, angle, 
-                  moveSpeed = 1.4f;
+                  moveSpeed = 0.4f;
                   
-    private final float SIZE = 20f, AIR_REST = 0.15f, ACCEL_RATE = 0.1f,
-                        MAX_Y_SPEED = 10.5f;
+    private final float SIZE = 20f, AIR_REST = 0.15f, ACCEL_RATE = 0.1f;
     private Level level = null;
     private Color color = Color.red;
     private boolean isFlying = false;
-    //private Vector2f vec2f = new Vector2f();
+
     
     /**
      * Creates a new arrow at the given position.
@@ -36,7 +35,7 @@ public class Arrow
     /**
      * Informs the Arrow object that it has been released by the player
      */ 
-    public void release(int power)
+    public void release(float power)
     {
         accelX = power;
         accelY = power;
@@ -73,11 +72,7 @@ public class Arrow
     private void setAngle(float x, float y)
     {
         angle = (float)Math.toDegrees(Math.atan2(x - startX,
-                                                 startY - y)); 
-        
-        /*vec2f = new Vector2f((float)Math.toDegrees(Math.atan2(x - startX,
-                                                                      startY - y)));*/
-                                                                      
+                                                 startY - y));                                                                       
     }
     
     /**
@@ -85,19 +80,19 @@ public class Arrow
      */ 
     protected void updateSpeed()
     {        
-        decelerateX();    
+        decelerate();    
         speedX = (moveSpeed * accelX);
         speedY = (moveSpeed * accelY);
     }
     
     
-    private void decelerateX()
+    private void decelerate()
     {
-        accelX -= ACCEL_RATE;
+        /*accelX -= ACCEL_RATE;
         if(accelX < 0)
         {
             accelX = 0;
-        }
+        }*/
     }
     
     /**
@@ -106,19 +101,18 @@ public class Arrow
      */
     protected void updatePosition()
     {
-        // calculate horizontal distance travelled
-        float xTravelled = speedX * AIR_REST;
+        float xTravelled = speedX;
         float yTravelled = speedY;
-        
-        
-        System.out.println("arrow: " + angle + " degrees");
+             
+        /*System.out.println("arrow: " + angle + " degrees");
         System.out.println("\t" + "speedX: " + speedX + ", speedY: "
-                           + speedY);
+                           + speedY);*/
         
         startX = (float)(startX + xTravelled * 
                             Math.sin(Math.toRadians(angle)));
         startY = (float)(startY - yTravelled * 
-                            Math.cos(Math.toRadians(angle)));          
+                            Math.cos(Math.toRadians(angle)));   
+        //applyGravity()       
         calculateEndPos();
     }
 
@@ -127,7 +121,7 @@ public class Arrow
      */ 
     private void applyGravity()
     {
-        
+        startY += speedY * level.gravity;
         
     }
     
