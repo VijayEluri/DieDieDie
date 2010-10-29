@@ -30,13 +30,16 @@ public class Player implements InputProviderListener
      
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
-                  bowCharge = 0, oldX, oldY, bowX, bowY;
+                  bowCharge = 0, oldX, oldY, bowX, bowY, 
+                  bowYCurrentOffset;
                   
     private final float MAX_CHARGE = 25.5f, INCR = 0.01f, 
-                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET = 0, 
-                        BOW_X_OFFSET = 0, ARROW_Y_OFFSET = 15;
+                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = 0, 
+                        BOW_Y_OFFSET_AIM_UP = -7, 
+                        BOW_Y_OFFSET_AIM_DOWN = 5, ARROW_Y_OFFSET = 15;
                         
-    private final int MAX_HEALTH = 20;    
+    private final int MAX_HEALTH = 20, BOW_AIM_UP_TRIGGER = 40,
+                      BOW_AIM_DOWN_TRIGGER = 100;    
     private int health = MAX_HEALTH, arrowCount = 0, mouseX, mouseY,
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;       
     // Movement
@@ -247,22 +250,53 @@ public class Player implements InputProviderListener
         }
 
         currentArrow.updateAiming(mouseX, mouseY);
-        System.out.println("arrow angle: " + currentArrow.getAngle());
+        
         // flip the player.facing dir if aiming an arrow the other way 
+        
         if(currentArrow.getAngle() >= 0)
         {
             setFacingDir(Direction.RIGHT);
             currentBow = bowRight;
             bowX = xPos + getCurrentFrameWidth();
+            
+            currentBow.setRotation(currentArrow.getAngle() - 80);
         }
         else
         {
             setFacingDir(Direction.LEFT);
             currentBow = bowLeft;
             bowX = xPos - (getCurrentFrameWidth()/2);
+            currentBow.setRotation(currentArrow.getAngle() + 80);
         }
-        bowY = yPos + BOW_Y_OFFSET;
+        updateBowHeight();
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
+    }
+   
+    
+    private void updateBowHeight()
+    {
+        if(!isChargingArrow)
+        {
+            return;
+        }
+        final float ANGLE = Math.abs(currentArrow.getAngle());
+        System.out.println("absolute arrow angle: " + ANGLE);
+        
+        // set the bow's offset depending on the angle
+        if(ANGLE < BOW_AIM_UP_TRIGGER)
+        {
+            bowYCurrentOffset = BOW_Y_OFFSET_AIM_UP;
+        }
+        else if(ANGLE < BOW_AIM_DOWN_TRIGGER)
+        {
+            bowYCurrentOffset = BOW_Y_OFFSET_NORMAL;
+        }
+        else
+        {
+            bowYCurrentOffset = BOW_Y_OFFSET_AIM_DOWN;
+        }
+        bowY = yPos + bowYCurrentOffset;
+        
     }
     
     // returns the x position of the arrow when being held by the player
