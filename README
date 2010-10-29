@@ -1,0 +1,12 @@
+To compile:
+
+cd ant
+ant
+
+To run:
+
+cd ../build
+sh run.sh
+
+Hallelujah!
+

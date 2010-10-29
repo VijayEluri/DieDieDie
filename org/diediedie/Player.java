@@ -39,8 +39,6 @@ public class Player implements InputProviderListener
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20, 
-    
-                      // angles to trigger a changein the bow position
                       BOW_AIM_UP_TRIGGER = 45,
                       BOW_AIM_DOWN_TRIGGER = 110, BOW_X_OFFSET = 5,
                       BOW_ANGLE_OFFSET = 85; 
