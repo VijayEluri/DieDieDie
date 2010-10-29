@@ -34,25 +34,15 @@ public class Player implements InputProviderListener
                   bowYCurrentOffset, bowXCurrentOffset;
                   
     private final float MAX_CHARGE = 25.5f, INCR = 0.01f, 
-                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -5, 
+                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -4, 
                         BOW_Y_OFFSET_AIM_UP = -10, 
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20, 
     
                       // angles to trigger a changein the bow position
-                      BOW_AIM_UP_TRIGGER = 50,
-                      BOW_AIM_DOWN_TRIGGER = 110, 
-                      
-                      // x offsets for when aiming bow
-                      BOW_X_OFFSET_RIGHT_NORMAL = 10,
-                      BOW_X_OFFSET_LEFT_NORMAL = 6, 
-                      
-                      // extra offsets to apply when aiming high or low
-                      // to bring the bow to a more 'natural' looking position
-                      BOW_X_OFFSET_AIM_UP = 5,
-                      BOW_X_OFFSET_AIM_DOWN = 10,
-             
+                      BOW_AIM_UP_TRIGGER = 45,
+                      BOW_AIM_DOWN_TRIGGER = 110, BOW_X_OFFSET = 5,
                       BOW_ANGLE_OFFSET = 85; 
                       
     private int health = MAX_HEALTH, arrowCount = 0, mouseX, mouseY,
@@ -136,7 +126,16 @@ public class Player implements InputProviderListener
     {
           bowLeft = loadImage(bowLeftPath);
           bowRight = bowLeft.getFlippedCopy(true, false);
+          currentBow = bowLeft;
+          bowLeft.setCenterOfRotation(bowLeft.getWidth() / 2,
+                                      bowLeft.getHeight() / 2);
+          bowRight.setCenterOfRotation(bowLeft.getWidth() / 2,
+                                       bowLeft.getHeight() / 2);
     }    
+    
+    
+    
+    
     /**
      * Links the game's InputProvider to the Player obkect
      */ 
@@ -266,22 +265,26 @@ public class Player implements InputProviderListener
 
         currentArrow.updateAiming(mouseX, mouseY);
         
-        // flip the player.facing dir if aiming an arrow the other way 
-        
+
         if(currentArrow.getAngle() >= 0)
         {
-            setFacingDir(Direction.RIGHT);
+            
             currentBow = bowRight;
-            //bowX = xPos + BOW_X_OFFSET_RIGHT;
+            
+            setFacingDir(Direction.RIGHT);
+            //bowX = getMiddleXPos() + BOW_X_OFFSET;
+            bowX = xPos + BOW_X_OFFSET + (getCurrentFrameWidth() / 2);
             currentBow.setRotation(currentArrow.getAngle() 
                                        - BOW_ANGLE_OFFSET);
         }
         else
         {
+            
             setFacingDir(Direction.LEFT);
             currentBow = bowLeft;
-           
-            //bowX = xPos - BOW_X_OFFSET_LEFT;
+            
+            //bowX = getMiddleXPos() - BOW_X_OFFSET;
+            bowX = xPos - BOW_X_OFFSET;
             currentBow.setRotation(currentArrow.getAngle() 
                                     + BOW_ANGLE_OFFSET);
         }
@@ -289,53 +292,33 @@ public class Player implements InputProviderListener
         
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
     }
+    
+    private float getMiddleXPos()
+    {
+        final float midX = xPos + (getCurrentFrameWidth() / 2);
+        System.out.println("xPos: " + xPos + ", midX: " + midX);
+        return midX;
+    }
    
     
     private void updateBowPosition()
     {
         final float ANGLE = Math.abs(currentArrow.getAngle());
         
-        //System.out.println("absolute arrow angle: " + ANGLE);
-        
-        
-       // bowXCurrentOffset = BOW_X_OFFSET_LEFT_NORMAL;
-        
         // set the bow's offset depending on the angle
         if(ANGLE < BOW_AIM_UP_TRIGGER)
         {
             bowYCurrentOffset = BOW_Y_OFFSET_AIM_UP;           
-            bowXCurrentOffset = BOW_X_OFFSET_AIM_UP;
-            
         }
         else if(ANGLE < BOW_AIM_DOWN_TRIGGER)
         {
-            bowYCurrentOffset = BOW_Y_OFFSET_NORMAL;
-            
-            if(facing.equals(Direction.LEFT))
-            {
-                bowXCurrentOffset = BOW_X_OFFSET_LEFT_NORMAL;
-            }
-            else 
-            {
-                bowXCurrentOffset = BOW_X_OFFSET_RIGHT_NORMAL;
-            }
+            bowYCurrentOffset = BOW_Y_OFFSET_NORMAL;   
         }
         else
         {
             bowYCurrentOffset = BOW_Y_OFFSET_AIM_DOWN;
-            bowXCurrentOffset = BOW_X_OFFSET_AIM_DOWN;
         }
-        bowY = yPos + bowYCurrentOffset;
-        
-        // add / subtract current x offset dependent on direction facing
-        if(facing.equals(Direction.LEFT))
-        {
-            bowX = xPos - bowXCurrentOffset;
-        }
-        else 
-        {
-            bowX = xPos + bowXCurrentOffset;
-        }
+        bowY = yPos + bowYCurrentOffset;   
     }
     
     // returns the x position of the arrow when being held by the player
