@@ -26,7 +26,6 @@ public class Tile
         this.tiledMap = tm;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
-        //this.collision = collision;
         calculatePosition();
     }
     
@@ -40,7 +39,6 @@ public class Tile
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
         rect = new Rectangle(xPos, yPos, tileWidth, tileHeight);
-        //System.out.println(this);
     }
     
     /**
@@ -53,6 +51,6 @@ public class Tile
     
     public String toString()
     {
-        return "Tile xPos, yPos: " + xPos + ", " + yPos;
+        return "Tile: x, y: " + xPos + ", " + yPos;
     }
 }

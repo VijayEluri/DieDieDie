@@ -9,7 +9,7 @@
  <tileset firstgid="43" name="bg" tilewidth="16" tileheight="16">
   <image source="level1_background.png" width="64" height="64"/>
  </tileset>
- <layer name="background" width="40" height="30" visible="0">
+ <layer name="background" width="40" height="30">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3Stw3AMADEQO0j5yzvP5i5hR4wCxbsr5ZSBhppohr2My200hb4Ox100hX4Nz3U6A383r70p78kb/rTX9L39qU//SV505/+kr63L/3pL8mb/v7l7wOI4AM4wBIAAA==
   </data>
@@ -24,4 +24,7 @@
    H4sIAAAAAAAAA+2WOw4AIQhEOYSW3v+a22xhIXGUjxPjJJQyTwW0iEhRgkEsHJoen0238mXt6/HZtOJTJX8+3nR+HuuyfCL5tPd2pbZ2+FAPhK+S8616efa1hS/jD3aq/kZqfyBM2XxN9vmQe47SjKmBOaI0Y2PnQ3N4+nr2xe5syeDrvaLkxafF7G205GadL2hf9DmiNJonUXzW2mHnY48Pp6+Pl8ASAAA=
   </data>
  </layer>
+ <objectgroup name="exits" width="40" height="30">
+  <object name="toLevel2" type="exit" x="635" y="148" width="25" height="27"/>
+ </objectgroup>
 </map>

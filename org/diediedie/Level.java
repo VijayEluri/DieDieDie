@@ -3,7 +3,7 @@ package org.diediedie;
 import java.io.*;
 import java.util.*;
 import org.newdawn.slick.tiled.TiledMap;
-import org.newdawn.slick.tiled.TileSet;
+//import org.newdawn.slick.tiled.TileSet;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Polygon;
@@ -20,7 +20,7 @@ public class Level extends TiledMap
     public float playerX, playerY;
     
     // friction. lower number == more friction
-    public static final float groundFric = 0.9f;
+    public static final float FRICTION = 0.9f;
     public float gravity;
     
     // initial direction player faces 
@@ -28,18 +28,19 @@ public class Level extends TiledMap
     
     private String name;
     private final String COLLISION_STRING = "collisions";
-    private int collisionIndex;
+    private final String EXIT_STRING = "exits";
+    private int collisionIndex, exitIndex;
+    
     private List<Tile> collisionTiles; 
+    private List<LevelObject> objects, exits;    
+    private final int PRESENT = 1;
     
     /**
-     * --------------------
-     * |!!Create a Level!!|
-     * --------------------
+     * Create a Level
      */ 
     public Level(String name, InputStream in, String tileSetsPath, 
                  float playerX, float playerY, Direction facing,
-                 float grav)
-                 throws SlickException
+                 float grav) throws SlickException
     {
         super(in, tileSetsPath);
         this.name = name;
@@ -48,8 +49,15 @@ public class Level extends TiledMap
         this.playerX = playerX;
         this.playerY = playerY;
         collisionIndex = getLayerIndex(COLLISION_STRING);
+        exitIndex = getLayerIndex(EXIT_STRING);
         makeCollisionList();
+        makeExitList();
     }    
+    
+    private void makeExitList()
+    {
+        exits = new ArrayList<LevelObject>();
+    }
     
     public String toString()
     {
@@ -61,20 +69,23 @@ public class Level extends TiledMap
      */ 
     private void makeCollisionList()
     {
-        collisionTiles = new ArrayList<Tile>();
-        
-        final int present = 1;
-        
+        collisionTiles = createLayerList(collisionIndex);
+    }
+    
+    private List<Tile> createLayerList(int index)
+    {
+        List<Tile> tiles = new ArrayList<Tile>();
         for(int x = 0; x < getWidth(); x++)
         {
             for(int y = 0; y < getHeight(); y++)
             {
-                if(getTileId(x, y, collisionIndex) == present)
+                if(getTileId(x, y, index) == PRESENT)
                 {
-                    collisionTiles.add(new Tile(this, x, y));
+                    tiles.add(new Tile(this, x, y));
                 }
             }
-        }
+        }     
+        return tiles;
     }
     
     /**
@@ -96,7 +107,6 @@ public class Level extends TiledMap
         {
             if(t.getRect().intersects(p))
             {
-                //System.out.println(t + " intersects Rect " + p);
                 return true;
             }
         }

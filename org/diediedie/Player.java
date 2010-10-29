@@ -453,7 +453,7 @@ public class Player implements InputProviderListener
     
     private void applyFriction()
     {
-        xSpeed *= level.groundFric;
+        xSpeed *= level.FRICTION;
     }
     
     public void update()
