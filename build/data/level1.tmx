@@ -16,12 +16,12 @@
  </layer>
  <layer name="collisions" width="40" height="30" opacity="0.99">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2USQrAMAwDk/9/utcSSuNFjhTwgK/S0Doeo2kaNJMtsKH9/MxllGm/HJV+6x59jSUj25vx2/Wz/bxdyHed8TtxY1j7F3Vh+UXdrP+5CpXv95d9s581A92LvnuKfu+uKlB+iJxItup98WZUcdIPuTseGH6K8wAipfh3wBIAAA==
+   H4sIAAAAAAAAA+2VSxLAIAhD8f6X7rYbWj4BomNmXJo8EXGJyFIWg1g4NF2+nE7l6zrX5cvJkzMxH0+qH2JfV04ln/bfenorwmfNsPD95U/zebOQ7zrD1zFjpvovyjLFF2Wz3nOVWOr35b0zn9UDnYuee4x876wqofgQPhFv1vni9ahSJx+ydzya4GNcD0jFJqvAEgAA
   </data>
  </layer>
  <layer name="tiles" width="40" height="30" opacity="0.9">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2VMQ7AMAgDeUQy8v9vdmgjZWiFE0zKwElezUktRKQoCjbtbwGD8luny+01kpny8xHp14AgHd65Hr+e3G91FnOvPX5sF7bf3MFAnyBOp/1U9v2Q7xyF5aRgRxSWW3Y/tIM5l7kXu7flhN88KwqW31est9HTnfW+oHsxd0Txdk+i/Lz/Tna/7LkApxqY8sASAAA=
+   H4sIAAAAAAAAA+2WOw4AIQhEOYSW3v+a22xhIXGUjxPjJJQyTwW0iEhRgkEsHJoen0238mXt6/HZtOJTJX8+3nR+HuuyfCL5tPd2pbZ2+FAPhK+S8616efa1hS/jD3aq/kZqfyBM2XxN9vmQe47SjKmBOaI0Y2PnQ3N4+nr2xe5syeDrvaLkxafF7G205GadL2hf9DmiNJonUXzW2mHnY48Pp6+Pl8ASAAA=
   </data>
  </layer>
 </map>

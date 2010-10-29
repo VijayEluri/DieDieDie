@@ -30,10 +30,11 @@ public class Player implements InputProviderListener
      
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
-                  bowCharge = 0, oldX, oldY;
+                  bowCharge = 0, oldX, oldY, bowX, bowY;
                   
     private final float MAX_CHARGE = 25.5f, INCR = 0.01f, 
-                        CHARGE_INCR = 0.5f, ARROW_Y_OFFSET = 15;
+                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET = 0, 
+                        BOW_X_OFFSET = 0, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20;    
     private int health = MAX_HEALTH, arrowCount = 0, mouseX, mouseY,
@@ -89,7 +90,7 @@ public class Player implements InputProviderListener
     };
     private Animation leftWalk, rightWalk, leftStand, rightStand,
                       currentAnimation;
-    private Image bowLeft;
+    private Image bowLeft, bowRight, currentBow;
     
     // associated level for collision / item collection reference
     private Level level = null;
@@ -116,6 +117,7 @@ public class Player implements InputProviderListener
     private void initBow()
     {
           bowLeft = loadImage(bowLeftPath);
+          bowRight = bowLeft.getFlippedCopy(true, false);
     }    
     /**
      * Links the game's InputProvider to the Player obkect
@@ -245,25 +247,34 @@ public class Player implements InputProviderListener
         }
 
         currentArrow.updateAiming(mouseX, mouseY);
-        
+        System.out.println("arrow angle: " + currentArrow.getAngle());
         // flip the player.facing dir if aiming an arrow the other way 
         if(currentArrow.getAngle() >= 0)
         {
             setFacingDir(Direction.RIGHT);
+            currentBow = bowRight;
+            bowX = xPos + getCurrentFrameWidth();
         }
         else
         {
             setFacingDir(Direction.LEFT);
+            currentBow = bowLeft;
+            bowX = xPos - (getCurrentFrameWidth()/2);
         }
- 
+        bowY = yPos + BOW_Y_OFFSET;
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
     }
     
     // returns the x position of the arrow when being held by the player
     private float getHoldingArrowX()
     {
-        return xPos + getCurrentFrameRect().getWidth() / 2;
+        return xPos + getCurrentFrameWidth() / 2;
     } 
+    
+    public float getCurrentFrameWidth()
+    {
+        return getCurrentFrameRect().getWidth();
+    }
     
     /*
      * Returns the y position of the arrow when being held by the player
@@ -363,8 +374,6 @@ public class Player implements InputProviderListener
             currentAnimation = leftWalk;
             xSpeed = -(moveSpeed + accelX);
         }
-        /*System.out.println("xSpeed: " + xSpeed);
-        System.out.println("accelX: " + accelX);*/
     }
     
     /*
@@ -546,7 +555,13 @@ public class Player implements InputProviderListener
     {
         g.drawAnimation(currentAnim(), getX(), getY());
         drawArrows(g);
+        
+        if(isChargingArrow)
+        {
+            g.drawImage(currentBow, bowX, bowY);
+        }        
     }
+      
     
     private void drawArrows(Graphics g)
     {
@@ -573,7 +588,6 @@ public class Player implements InputProviderListener
     public Rectangle getCurrentFrameRect()
     {
         Image img = currentAnim().getCurrentFrame();
-        
         return new Rectangle(getX(), getY(), img.getWidth(), 
                              img.getHeight());
     }
@@ -616,8 +630,7 @@ public class Player implements InputProviderListener
     /*
      * Returns an array of Images from a List of paths to image files. 
      */
-    private List<Image> getImagesFromPaths(String... paths)
-                                                 
+    private List<Image> getImagesFromPaths(String... paths)                                     
     {
         List<Image> images = new ArrayList<Image>();
         
