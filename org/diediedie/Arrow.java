@@ -115,6 +115,8 @@ public class Arrow
                             Math.sin(Math.toRadians(movementAngle)));
         startY = (float)(startY - yTrav * 
                             Math.cos(Math.toRadians(movementAngle))); 
+        
+        
         applyGravity();       
         adjustFacingAngle();
         calculateEndPos();
@@ -208,7 +210,6 @@ public class Arrow
      */ 
     private void calculateEndPos()
     {
-        
         endX = (float)(startX + SIZE * Math.sin(
                         Math.toRadians(movementAngle + facingAngle)));
         endY = (float)(startY - SIZE * Math.cos(

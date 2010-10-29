@@ -59,9 +59,9 @@ public class Player implements InputProviderListener
     // animation vars
     public static final int ANIM_DURATION = 100; 
     
+    private final String bowLeftPath = "data/STICKMAN_BOW_LEFT.png";
     
-    
-    private String[] leftWalkPaths = 
+    private final String[] leftWalkPaths = 
     {
         "data/STICKMAN_LEFT_WALK_1.png", 
         "data/STICKMAN_LEFT_WALK_2.png",
@@ -70,7 +70,7 @@ public class Player implements InputProviderListener
         "data/STICKMAN_LEFT_WALK_5.png", 
         "data/STICKMAN_LEFT_WALK_6.png"
     };
-    private String[] rightWalkPaths =
+    private final String[] rightWalkPaths =
     {
         "data/STICKMAN_RIGHT_WALK_1.png", 
         "data/STICKMAN_RIGHT_WALK_2.png",
@@ -89,7 +89,8 @@ public class Player implements InputProviderListener
     };
     private Animation leftWalk, rightWalk, leftStand, rightStand,
                       currentAnimation;
-                          
+    private Image bowLeft;
+    
     // associated level for collision / item collection reference
     private Level level = null;
             
@@ -107,10 +108,15 @@ public class Player implements InputProviderListener
         if(!setUp)
         {            
             initAnim();   
+            initBow();
             setUp = true;
         }
     }
     
+    private void initBow()
+    {
+          bowLeft = loadImage(bowLeftPath);
+    }    
     /**
      * Links the game's InputProvider to the Player obkect
      */ 
@@ -614,22 +620,29 @@ public class Player implements InputProviderListener
                                                  
     {
         List<Image> images = new ArrayList<Image>();
+        
         for(String p : paths)
         {
-            try
-            {
-                images.add(new Image(new FileInputStream(
-                                            new File(p)), p, false));               
-            }
-            catch(FileNotFoundException e)
-            {
-                e.printStackTrace();
-            }
-            catch(SlickException e)
-            {
-                e.printStackTrace();
-            }
+            images.add(loadImage(p));               
         }
         return images;
+    }
+    
+    private Image loadImage(String path)
+    {
+        try
+        {
+            return new Image(new FileInputStream(
+                                    new File(path)), path, false);
+        }
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch(SlickException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
