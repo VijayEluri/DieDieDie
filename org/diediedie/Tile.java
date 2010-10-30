@@ -39,6 +39,7 @@ public class Tile
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
         rect = new Rectangle(xPos, yPos, tileWidth, tileHeight);
+        //System.out.println("Tile size: " + tileWidth + ", " + tileHeight);
     }
     
     /**

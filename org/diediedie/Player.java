@@ -571,7 +571,7 @@ public class Player implements InputProviderListener
     {
         if(canJump)
         {
-            System.out.println("jump!");
+            //System.out.println("jump!");
             ySpeed = jumpSpeed;
             canJump = false;
         }

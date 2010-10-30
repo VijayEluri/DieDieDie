@@ -27,13 +27,13 @@ public class Level extends TiledMap
     public final Direction playerFacing;
     
     private String name;
-    private final String COLLISION_STRING = "collisions";
-    private final String EXIT_STRING = "exits";
-    private int collisionIndex, exitIndex;
+    private final String COLLISION_STRING = "collisions", 
+                         EXIT_STRING = "exits";
+    private int collisionIndex = -1000, exitIndex = -1000;
     
-    private List<Tile> collisionTiles; 
-    private List<LevelObject> objects, exits;    
-    private final int PRESENT = 1;
+    private List<Tile> collisionTiles = null; 
+    private List<Tile> exitTiles = null;    
+    private final int NOT_PRESENT = 0;
     
     /**
      * Create a Level
@@ -48,28 +48,21 @@ public class Level extends TiledMap
         this.playerFacing = facing;
         this.playerX = playerX;
         this.playerY = playerY;
-        collisionIndex = getLayerIndex(COLLISION_STRING);
+        
+        System.out.println("Level " + name + " has " + getLayerCount() +
+                           " tile layers");
+        
         exitIndex = getLayerIndex(EXIT_STRING);
-        makeCollisionList();
-        makeExitList();
+        exitTiles = createLayerList(exitIndex);
+        collisionIndex = getLayerIndex(COLLISION_STRING);
+        collisionTiles = createLayerList(collisionIndex);
+        
+       
     }    
-    
-    private void makeExitList()
-    {
-        exits = new ArrayList<LevelObject>();
-    }
-    
+        
     public String toString()
     {
         return name;
-    }
-    
-    /**
-     * Creates list of tiles on the map that act as collision markers.
-     */ 
-    private void makeCollisionList()
-    {
-        collisionTiles = createLayerList(collisionIndex);
     }
     
     private List<Tile> createLayerList(int index)
@@ -79,12 +72,13 @@ public class Level extends TiledMap
         {
             for(int y = 0; y < getHeight(); y++)
             {
-                if(getTileId(x, y, index) == PRESENT)
+                if(getTileId(x, y, index) != NOT_PRESENT)
                 {
                     tiles.add(new Tile(this, x, y));
                 }
             }
-        }     
+        } 
+        System.out.println("layer " + index + ": " + tiles.size());    
         return tiles;
     }
     
