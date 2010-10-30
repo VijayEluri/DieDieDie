@@ -9,27 +9,49 @@
  <tileset firstgid="43" name="bg" tilewidth="16" tileheight="16">
   <image source="level1_background.png" width="64" height="64"/>
  </tileset>
- <tileset firstgid="59" name="exit" tilewidth="16" tileheight="16">
-  <image source="exit_tile.png" width="16" height="16"/>
+ <tileset firstgid="59" name="object" tilewidth="16" tileheight="16">
+  <image source="object_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="object"/>
+   </properties>
+  </tile>
  </tileset>
+ <tileset firstgid="60" name="exit" tilewidth="16" tileheight="16">
+  <image source="exit_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="exit"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="objects" width="40" height="30" visible="0">
+  <properties>
+   <property name="isvisible" value="false"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3OAQkAAAgDsAezfy5LHATZEiwBgF/mOgAAAFQtvbDIgMASAAA=
+  </data>
+ </layer>
  <layer name="background" width="40" height="30">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3Stw3AMADEQO0j5yzvP5i5hR4wCxbsr5ZSBhppohr2My200hb4Ox100hX4Nz3U6A383r70p78kb/rTX9L39qU//SV505/+kr63L/3pL8mb/v7l7wOI4AM4wBIAAA==
   </data>
  </layer>
- <layer name="collisions" width="40" height="30" opacity="0.99">
+ <layer name="collisions" width="40" height="30" visible="0" opacity="0.99">
+  <properties>
+   <property name="isvisible" value="false"/>
+  </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2VSxLAIAhD8f6X7rYbWj4BomNmXJo8EXGJyFIWg1g4NF2+nE7l6zrX5cvJkzMxH0+qH2JfV04ln/bfenorwmfNsPD95U/zebOQ7zrD1zFjpvovyjLFF2Wz3nOVWOr35b0zn9UDnYuee4x876wqofgQPhFv1vni9ahSJx+ydzya4GNcD0jFJqvAEgAA
-  </data>
- </layer>
- <layer name="exits" width="40" height="30">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OAQkAAAgDsPeyfy9LHATZEiwBgF/mOgAAAFQt6FJqccASAAA=
+   H4sIAAAAAAAAA+2VSxLAIAhD8f6X7rYbWj4BomNmXJo8EXGJyFIWg1g4NF2+nE7l6zrX5cvJkzMxH0+qH2JfV04ln/bfenorwmfNsPD95U/zebOQ7zrD1zFfpvovyjLFF2Wz3nOVWOr35b0zn9UDnYuee4x876wqofgQPhFv1vni9ahSJx+ydzya4GNcDy3t/j7AEgAA
   </data>
  </layer>
  <layer name="tiles" width="40" height="30">
+  <properties>
+   <property name="isvisible" value="true"/>
+  </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2WOw4AIQhEOYSW3v+a22xhIXGUjxPjJJQyTwW0iEhRgkEsHJoen0238mXt6/HZtOJTJX8+3nR+HuuyfCL5tPd2pbZ2+FAPhK+S8616efa1hS/jD3aq/kZqfyBM2XxN9vmQe47SjKmBOaI0Y2PnQ3N4+nr2xe5syeDrvaLkxafF7G205GadL2hf9DmiNJonUXzW2mHnY48Pp6+Pl8ASAAA=
+   H4sIAAAAAAAAA+2VOw7AIAxDcwgYuf81u3RgIMKQDxbCUkbiR5uYIiJFKQaxcGh6fDbdypd1r8dn04pPlfx8vOn7eZzL8onk097bldna4UM9EL5Kzrfq5bnXFr6MfDk1fyO1vxCmbL4m+3zIf47SjKmBPaI0Y2PnQ3t4+nruxW6+ZPD1XlHy4tNq9jZaerPmC7oXfY8ojfIkis86O+x87PUBrKmyRsASAAA=
   </data>
  </layer>
 </map>

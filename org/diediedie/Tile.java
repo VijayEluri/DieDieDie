@@ -1,6 +1,6 @@
 package org.diediedie;
 
-
+import java.util.*;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.geom.Rectangle;
@@ -12,21 +12,38 @@ import org.newdawn.slick.geom.Rectangle;
  */ 
 public class Tile
 {
-    private int xCoord, yCoord, tileWidth, tileHeight;
+    private int xCoord, yCoord, tileWidth, tileHeight, layer, id;
     private float xPos, yPos;
     private TiledMap tiledMap;
     private Rectangle rect;
+    private Map<String, String> properties = null;
+    
+    private final String[] ALL_PROPERTIES = {"isvisible", "type"};
+    private final String[] ALL_VALUES = {"true", "false", "exit", 
+                                         "object"};
     
     /**
      * Creates a Tile from a tile at specified coordinates (x,y). If
      * this is a collision 
      */ 
-    public Tile(TiledMap tm, int xCoord, int yCoord)
+    public Tile(TiledMap map, int xCoord, int yCoord, int layer)
     {
-        this.tiledMap = tm;
+        this.tiledMap = map;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
+        this.layer = layer;
+        this.id = map.getTileId(xCoord, yCoord, layer); 
+        
         calculatePosition();
+        extractProperties();
+    }
+    
+    private void extractProperties()
+    {
+        for(final String P : ALL_PROPERTIES)
+        {
+            tiledMap.getTileProperty(id, P, "false");
+        }
     }
     
     /**

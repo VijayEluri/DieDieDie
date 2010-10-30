@@ -28,11 +28,16 @@ public class Level extends TiledMap
     
     private String name;
     private final String COLLISION_STRING = "collisions", 
-                         EXIT_STRING = "exits";
-    private int collisionIndex = -1000, exitIndex = -1000;
+                         //EXIT_STRING = "exits",
+                         OBJECTS_STRING = "objects";
+                         
+    private int collisionIndex/*, exitIndex*/, objectsIndex;
     
-    private List<Tile> collisionTiles = null; 
-    private List<Tile> exitTiles = null;    
+    private List<Tile> collisionTiles, exitTiles;    
+    private List<Tile> objectTiles = null;
+    
+    private List<List<Tile>> visibleLayers;
+    
     private final int NOT_PRESENT = 0;
     
     /**
@@ -51,14 +56,20 @@ public class Level extends TiledMap
         
         System.out.println("Level " + name + " has " + getLayerCount() +
                            " tile layers");
-        
-        exitIndex = getLayerIndex(EXIT_STRING);
-        exitTiles = createLayerList(exitIndex);
+                           
         collisionIndex = getLayerIndex(COLLISION_STRING);
         collisionTiles = createLayerList(collisionIndex);
         
-       
-    }    
+        objectsIndex = getLayerIndex(OBJECTS_STRING);
+        objectTiles = createLayerList(objectsIndex);
+        //System.out.println("objectsIndex: " + objectsIndex);
+    }   
+            
+    @Override
+    public void render(int x, int y)
+    {
+        super.render(x, y);
+    }
         
     public String toString()
     {
@@ -74,7 +85,7 @@ public class Level extends TiledMap
             {
                 if(getTileId(x, y, index) != NOT_PRESENT)
                 {
-                    tiles.add(new Tile(this, x, y));
+                    tiles.add(new Tile(this, x, y, index));
                 }
             }
         } 
@@ -83,12 +94,13 @@ public class Level extends TiledMap
     }
     
     /**
-     * Returns true if two polygons intersect.
+     * Returns true if two Shapes intersect.
      */ 
     public boolean intersection(Shape p1, Shape p2)
     {
         return p1.intersects(p2);
     }
+    
     
     
     /**

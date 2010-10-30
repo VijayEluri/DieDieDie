@@ -127,12 +127,10 @@ public class Player implements InputProviderListener
           currentBow = bowLeft;
           bowLeft.setCenterOfRotation(bowLeft.getWidth() / 2,
                                       bowLeft.getHeight() / 2);
+                                      
           bowRight.setCenterOfRotation(bowLeft.getWidth() / 2,
                                        bowLeft.getHeight() / 2);
     }    
-    
-    
-    
     
     /**
      * Links the game's InputProvider to the Player obkect

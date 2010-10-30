@@ -18,7 +18,6 @@ import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 
-
 /**
  * DieDieDie AKA Captain EXCITEMENT
  */ 
@@ -48,7 +47,6 @@ public class DieDieDie extends BasicGame
     {
 		super("DieDieDie");
 	}
-    
     
     /**
      * Initialises the game. Of course.
