@@ -16,12 +16,12 @@ public class Tile
     private float xPos, yPos;
     private TiledMap tiledMap;
     private Rectangle rect;
-    private Map<String, String> properties = null;
+    private Map<String, String> properties = new HashMap<String, String>();
     
     private final String[] ALL_PROPERTIES = {"isvisible", "type"};
     private final String[] ALL_VALUES = {"true", "false", "exit", 
                                          "object"};
-    
+    private final String NULL = "NULL";
     /**
      * Creates a Tile from a tile at specified coordinates (x,y). If
      * this is a collision 
@@ -42,7 +42,16 @@ public class Tile
     {
         for(final String P : ALL_PROPERTIES)
         {
-            tiledMap.getTileProperty(id, P, "false");
+            final String V = tiledMap.getTileProperty(id, P, NULL);
+            
+            if(!V.equals(NULL))
+            {
+                properties.put(P, V);
+            }
+        }
+        for(Map.Entry<String, String> e : properties.entrySet())
+        {
+            System.out.println("\t" + e.getKey() + " : " + e.getValue());
         }
     }
     

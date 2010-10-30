@@ -89,7 +89,7 @@ public class Level extends TiledMap
                 }
             }
         } 
-        System.out.println("layer " + index + ": " + tiles.size());    
+        //System.out.println("layer " + index + ": " + tiles.size());    
         return tiles;
     }
     
