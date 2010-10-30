@@ -21,7 +21,7 @@ import org.newdawn.slick.command.MouseButtonControl;
 /**
  * ..where *YOU* are the HERO!
  */ 
-public class Player implements InputProviderListener
+public class Player implements InputProviderListener, Actor
 {
     private String name;  
     
@@ -292,7 +292,7 @@ public class Player implements InputProviderListener
     private float getMiddleXPos()
     {
         final float midX = xPos + (getCurrentFrameWidth() / 2);
-        System.out.println("xPos: " + xPos + ", midX: " + midX);
+        //System.out.println("xPos: " + xPos + ", midX: " + midX);
         return midX;
     }
    
@@ -412,7 +412,7 @@ public class Player implements InputProviderListener
     /**
      * Adjusts the player's walking speed
      */ 
-    public void move(Direction dir)
+    private void move(Direction dir)
     {   
         if(dir.equals(Direction.RIGHT))
         {
