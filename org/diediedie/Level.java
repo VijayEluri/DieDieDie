@@ -27,18 +27,24 @@ public class Level extends TiledMap
     public final Direction playerFacing;
     
     private String name;
-    private final String COLLISION_STRING = "collisions", 
-                         //EXIT_STRING = "exits",
-                         OBJECTS_STRING = "objects";
-                         
-    private int collisionIndex/*, exitIndex*/, objectsIndex;
-    
-    private List<Tile> collisionTiles, exitTiles;    
-    private List<Tile> objectTiles = null;
-    
-    private List<List<Tile>> visibleLayers;
+    private final String COLLISION_STR = "collisions", 
+                         OBJECTS_STR = "objects", 
+                         BACKGROUND_STR = "background",
+                         TILES_STR = "platforms",
+                         VIS_STR = "isvisible", TRUE_STR = "true", 
+                         FALSE_STR = "false", PLATFORM_STR = "platforms";
     
     private final int NOT_PRESENT = 0;
+    private int collisionIndex, visibleTilesIndex, objectsIndex;
+    
+    private MapLayer collisionTiles, /*exitTiles,*/ objectTiles, 
+                     visibleTiles, backgroundTiles, platformTiles;
+    
+    
+    
+    //private Map<int, List<Tile>> layers = new HashMap<int, List<Tile>>();
+    
+    
     
     /**
      * Create a Level
@@ -57,28 +63,41 @@ public class Level extends TiledMap
         System.out.println("Level " + name + " has " + getLayerCount() +
                            " tile layers");
                            
-        collisionIndex = getLayerIndex(COLLISION_STRING);
-        collisionTiles = createLayerList(collisionIndex);
+     
+       // collisionTiles = createLayerList(collisionIndex);
+
+       // objectsIndex = getLayerIndex(OBJECTS_STR);
+        //objectTiles = createLayerList(objectsIndex);
         
-        objectsIndex = getLayerIndex(OBJECTS_STRING);
-        objectTiles = createLayerList(objectsIndex);
+        //layers.put(collisionIndex, collisionTiles);
+        //layers.put(objectsIndex, objectTiles);
+        
+        collisionTiles = createMapLayer(getLayerIndex(COLLISION_STR));
+        objectTiles = createMapLayer(getLayerIndex(OBJECTS_STR));
+        platformTiles = createMapLayer(getLayerIndex(PLATFORM_STR));
+        backgroundTiles = createMapLayer(getLayerIndex(BACKGROUND_STR));
+        
+        
+                
         //System.out.println("objectsIndex: " + objectsIndex);
     }   
-            
-    @Override
-    public void render(int x, int y)
+    
+
+    
+    /*public void render(int x, int y)
     {
-        super.render(x, y);
-    }
+       render(x, y, 
+    }*/
         
     public String toString()
     {
         return name;
     }
     
-    private List<Tile> createLayerList(int index)
+    private MapLayer createMapLayer(int index)
     {
         List<Tile> tiles = new ArrayList<Tile>();
+                
         for(int x = 0; x < getWidth(); x++)
         {
             for(int y = 0; y < getHeight(); y++)
@@ -88,9 +107,22 @@ public class Level extends TiledMap
                     tiles.add(new Tile(this, x, y, index));
                 }
             }
-        } 
-        //System.out.println("layer " + index + ": " + tiles.size());    
-        return tiles;
+        }   
+        
+        // is this a visible layer?
+        final boolean VISIBLE; 
+        final String v = getLayerProperty(index, VIS_STR, Tile.NULL);
+        
+        if(v.equals(TRUE_STR))
+        {
+            VISIBLE = true;
+        }
+        else
+        {
+            VISIBLE = false;
+        }
+        
+        return new MapLayer(tiles, index, VISIBLE);
     }
     
     /**
@@ -109,7 +141,7 @@ public class Level extends TiledMap
      */ 
     public boolean collides(Shape p)
     {
-        for(Tile t : collisionTiles)
+        for(Tile t : collisionTiles.tiles)
         {
             if(t.getRect().intersects(p))
             {
@@ -125,7 +157,7 @@ public class Level extends TiledMap
      */ 
     public boolean isInCollisionTile(float x, float y)
     {
-        for(Tile t : collisionTiles)
+        for(Tile t : collisionTiles.tiles)
         {
             if(t.getRect().contains(x, y))
             {

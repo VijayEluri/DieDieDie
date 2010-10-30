@@ -33,7 +33,7 @@ public class Player implements InputProviderListener
                   bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
-    private final float MAX_CHARGE = 25.5f, INCR = 0.01f, 
+    private final float MAX_CHARGE = 25.55f, INCR = 0.01f, 
                         CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -4, 
                         BOW_Y_OFFSET_AIM_UP = -10, 
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15;

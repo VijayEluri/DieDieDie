@@ -18,10 +18,11 @@ public class Tile
     private Rectangle rect;
     private Map<String, String> properties = new HashMap<String, String>();
     
-    private final String[] ALL_PROPERTIES = {"isvisible", "type"};
-    private final String[] ALL_VALUES = {"true", "false", "exit", 
-                                         "object"};
-    private final String NULL = "NULL";
+    private static final String[] PROPERTIES = {"type"};
+    private static final String[] VALUES = {"exit", "object"};
+    
+    public static final String NULL = "NULL";
+    
     /**
      * Creates a Tile from a tile at specified coordinates (x,y). If
      * this is a collision 
@@ -38,12 +39,13 @@ public class Tile
         extractProperties();
     }
     
+    
+    
     private void extractProperties()
     {
-        for(final String P : ALL_PROPERTIES)
+        for(final String P : PROPERTIES)
         {
             final String V = tiledMap.getTileProperty(id, P, NULL);
-            
             if(!V.equals(NULL))
             {
                 properties.put(P, V);
@@ -54,6 +56,8 @@ public class Tile
             System.out.println("\t" + e.getKey() + " : " + e.getValue());
         }
     }
+    
+    
     
     /**
      * Stores the coordinates and size of the current Tile. 
@@ -78,6 +82,6 @@ public class Tile
     
     public String toString()
     {
-        return "Tile: x, y: " + xPos + ", " + yPos;
+        return "Tile: x, y, index: " + xPos + ", " + yPos + ", " + layer;
     }
 }
