@@ -18,7 +18,6 @@ public class MapLayer
         tiles = layerTiles;
         index = in;
         isVisible = visible;
-        
         System.out.println("MapLayer: tileCount " + tiles.size() +
                             ", index " + index + ", visible: " + 
                             isVisible);

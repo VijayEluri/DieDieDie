@@ -35,10 +35,9 @@ public class Level extends TiledMap
                          FALSE_STR = "false", PLATFORM_STR = "platforms";
     
     private final int NOT_PRESENT = 0;
-    private int collisionIndex, visibleTilesIndex, objectsIndex;
     
-    private MapLayer collisionTiles, /*exitTiles,*/ objectTiles, 
-                     visibleTiles, backgroundTiles, platformTiles;
+    private MapLayer collisionTiles, objectTiles, visibleTiles, 
+                     backgroundTiles, platformTiles;
     
     
     
@@ -62,15 +61,7 @@ public class Level extends TiledMap
         
         System.out.println("Level " + name + " has " + getLayerCount() +
                            " tile layers");
-                           
-     
-       // collisionTiles = createLayerList(collisionIndex);
 
-       // objectsIndex = getLayerIndex(OBJECTS_STR);
-        //objectTiles = createLayerList(objectsIndex);
-        
-        //layers.put(collisionIndex, collisionTiles);
-        //layers.put(objectsIndex, objectTiles);
         
         collisionTiles = createMapLayer(getLayerIndex(COLLISION_STR));
         objectTiles = createMapLayer(getLayerIndex(OBJECTS_STR));
@@ -78,7 +69,7 @@ public class Level extends TiledMap
         backgroundTiles = createMapLayer(getLayerIndex(BACKGROUND_STR));
         
         
-                
+        
         //System.out.println("objectsIndex: " + objectsIndex);
     }   
     
@@ -133,6 +124,12 @@ public class Level extends TiledMap
         return p1.intersects(p2);
     }
     
+    public void render(int x, int y)
+    {
+        // keep the order correct!
+        render(x, y, backgroundTiles.index);
+        render(x, y, platformTiles.index);
+    }
     
     
     /**
