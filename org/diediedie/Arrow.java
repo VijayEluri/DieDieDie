@@ -37,7 +37,7 @@ public class Arrow
     {
         level = lev;
         setPosition(xPos, yPos);
-        this.setMovementAngle(mouseX, mouseY);
+        setMovementAngle(mouseX, mouseY);
         calculateEndPos();
     }
     
@@ -164,6 +164,7 @@ public class Arrow
         speedY = 0;
     }
     
+    // applies 'gravity' to the arrow WHEN IT IS IN FLIGHT
     private void adjustFacingAngle()
     {
         if(gravity > GRAVITY_LINE)
@@ -184,7 +185,7 @@ public class Arrow
         }
     }
     
-    private boolean isGoingDown()
+    public boolean isGoingDown()
     {
         if(startY > oldY)
         {
@@ -194,7 +195,8 @@ public class Arrow
     }
     
     /*
-     * Applies 'gravity' to the vertical position
+     * Applies 'gravity' to the y-axis position once it has left the 
+     * player
      */ 
     private void applyGravity()
     {
@@ -227,8 +229,9 @@ public class Arrow
         {
             return;
         }
-        g.setColor(this.color);
-        g.drawLine(startX, startY, endX, endY);
+        //g.setColor(this.color);
+        g.drawGradientLine(startX, startY, Color.yellow, endX, endY,
+                            Color.red);
     }
     /**
      * Return the x-axis value of the end point
