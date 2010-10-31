@@ -229,7 +229,7 @@ public class Arrow
             return;
         }
         //g.setColor(this.color);
-        g.drawGradientLine(startX, startY, Color.yellow, endX, endY,
+        g.drawGradientLine(startX, startY, Color.black, endX, endY,
                             Color.red);
     }
     

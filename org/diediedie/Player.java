@@ -30,14 +30,15 @@ public class Player implements Actor, InputProviderListener
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
      
-    private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
+    private float accelX = 0f, ACCEL_RATE = 0.05f, 
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
                   bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
     private final float MAX_CHARGE = 25.55f, INCR = 0.01f, 
                         CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -4, 
-                        BOW_Y_OFFSET_AIM_UP = -10, 
+                        BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
+                        MAX_X_SPEED = 2.5f,
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20, 
@@ -109,11 +110,10 @@ public class Player implements Actor, InputProviderListener
     public Player(Level level)
     {
         this.level = level;
-        
-        
         System.out.println("Player is on level " + level + 
                            "at position x: " + xPos + ", y: " + yPos );
         setUpStartPosition();
+        
         if(!setUp)
         {            
             initAnim();   
@@ -133,11 +133,11 @@ public class Player implements Actor, InputProviderListener
           bowLeft = loadImage(bowLeftPath);
           bowRight = bowLeft.getFlippedCopy(true, false);
           currentBow = bowLeft;
-          bowLeft.setCenterOfRotation(bowLeft.getWidth() / 2,
+          /*bowLeft.setCenterOfRotation(bowLeft.getWidth() / 2,
                                       bowLeft.getHeight() / 2);
                                       
           bowRight.setCenterOfRotation(bowLeft.getWidth() / 2,
-                                       bowLeft.getHeight() / 2);
+                                       bowLeft.getHeight() / 2);*/
     }    
     
     /**
@@ -266,9 +266,8 @@ public class Player implements Actor, InputProviderListener
         {
             bowCharge += CHARGE_INCR;
         }
-        
         currentArrow.updateAiming(mouseX, mouseY);
-        
+
         if(currentArrow.getAngle() >= 0)
         {
             currentBow = bowRight;   
@@ -286,7 +285,9 @@ public class Player implements Actor, InputProviderListener
                                     + BOW_ANGLE_OFFSET);
         }
         updateBowPosition();
+        
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
+        
     }
     
     private float getMiddleXPos()
@@ -426,6 +427,12 @@ public class Player implements Actor, InputProviderListener
             currentAnimation = leftWalk;
             xSpeed = -(moveSpeed + accelX);
         }
+        if(xSpeed > MAX_X_SPEED)
+        {
+            xSpeed = MAX_X_SPEED;
+        }
+        
+        //System.out.println("xSpeed: " + xSpeed);
     }
     
     /*
@@ -590,6 +597,7 @@ public class Player implements Actor, InputProviderListener
         {
             resetAccelX();
         }
+
     }
     
     private void resetAccelX()
@@ -602,7 +610,7 @@ public class Player implements Actor, InputProviderListener
      */ 
     private void applyGravity()
     {
-        if(ySpeed < maxYSpeed)
+        if(ySpeed < MAX_Y_SPEED)
         {
             ySpeed += level.gravity;  
         }
