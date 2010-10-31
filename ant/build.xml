@@ -13,8 +13,7 @@
     <target name="init" depends="clean">
         <echo>Creating the build directory</echo>
         <mkdir dir="${build.dir}/org/diediedie"/>
-        <mkdir dir="${build.dir}/lib"/>
-        
+        <mkdir dir="${build.dir}/lib"/>   
     </target>
     
     <target name="compile" depends="init">

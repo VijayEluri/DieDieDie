@@ -23,9 +23,8 @@ import org.newdawn.slick.command.MouseButtonControl;
 /**
  * ..where *YOU* are the HERO!
  */ 
-public class Player extends Actor implements InputProviderListener 
+public class Player implements Actor, InputProviderListener 
 {
-    /*private String name;  */
     
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
@@ -58,7 +57,7 @@ public class Player extends Actor implements InputProviderListener
     private boolean leftMoveDown = false, rightMoveDown = false,
                     isChargingArrow = false, isFiringArrow = false;
     
-    // current position vars 
+
     private float xPos, yPos, xSpeed, ySpeed;
     private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
         
@@ -435,10 +434,9 @@ public class Player extends Actor implements InputProviderListener
      */ 
     private void accelerate()
     {
-        accelX += ACCEL_RATE;
-        if(accelX > MAX_ACCEL)
+        if(accelX < MAX_ACCEL)
         {
-            accelX = MAX_ACCEL;
+            accelX += ACCEL_RATE;
         }
     }
     

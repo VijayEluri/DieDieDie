@@ -12,9 +12,9 @@ import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
-public class Enemy extends Actor
+public class Enemy implements Actor
 {
-    
+    private float xPos, yPos;
     
     public Enemy()
     {
@@ -30,5 +30,12 @@ public class Enemy extends Actor
     {
         
     }
- 
+    /**
+     * Returns the x position
+     */ 
+    public float getX() { return xPos; }
+    /**
+     * Returns the y position
+     */ 
+    public float getY() { return yPos; } 
 }
