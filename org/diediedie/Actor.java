@@ -3,7 +3,7 @@ package org.diediedie.actors;
 import org.newdawn.slick.Graphics;
 
 
-interface Actor
+public interface Actor
 {            
     /**
      * Returns the x position

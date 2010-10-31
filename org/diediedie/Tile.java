@@ -5,22 +5,21 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.geom.Rectangle;
 
-
 /**
  * Acts as a bridge between a TiledMap and the individual tiles so they
  * can be accessed easily (for collision det. etc).
  */ 
 public class Tile
 {
-    private int xCoord, yCoord, tileWidth, tileHeight, layer, id;
-    private float xPos, yPos;
+    public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
+    public float xPos, yPos;
     private TiledMap tiledMap;
     private Rectangle rect;
-    private Map<String, String> properties = new HashMap<String, String>();
     
-    private static final String[] PROPERTIES = {"type"};
-    private static final String[] VALUES = {"exit", "object"};
+    public Map<String, String> properties = new HashMap<String, String>();
     
+    public static final String[] PROPERTIES = {"type"};
+    public static final String[] VALUES = {"exit", "enemy", "start"};
     public static final String NULL = "NULL";
     
     /**
@@ -34,9 +33,9 @@ public class Tile
         this.yCoord = yCoord;
         this.layer = layer;
         this.id = map.getTileId(xCoord, yCoord, layer); 
-        
         calculatePosition();
         extractProperties();
+       // System.out.println("new Tile: " + xCoord + " , " + yCoord);
     }
     
     
@@ -58,18 +57,17 @@ public class Tile
     }
     
     
-    
     /**
      * Stores the coordinates and size of the current Tile. 
      */ 
     private void calculatePosition()
     {
         tileWidth = tiledMap.getTileWidth();
+        
         tileHeight = tiledMap.getTileHeight();
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
         rect = new Rectangle(xPos, yPos, tileWidth, tileHeight);
-        //System.out.println("Tile size: " + tileWidth + ", " + tileHeight);
     }
     
     /**

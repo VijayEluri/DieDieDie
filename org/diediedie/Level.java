@@ -1,6 +1,7 @@
 package org.diediedie;
 
 import org.diediedie.actors.Direction;
+import org.diediedie.actors.Actor;
 
 import java.io.*;
 import java.util.*;
@@ -17,7 +18,7 @@ import org.newdawn.slick.geom.Shape;
 public class Level extends TiledMap
 {
     // where the player will first appear
-    public float playerX, playerY;
+    public float playerStartX, playerStartY, exitX, exitY;
     
     // friction. lower number == more friction
     public static final float FRICTION = 0.91f;
@@ -27,53 +28,65 @@ public class Level extends TiledMap
     public final Direction playerFacing;
     
     private String name;
-    private final String COLLISION_STR = "collisions", 
-                         OBJECTS_STR = "objects", 
-                         BACKGROUND_STR = "background",
-                         TILES_STR = "platforms",
-                         VIS_STR = "isvisible", TRUE_STR = "true", 
+    private final String VIS_STR = "isvisible", TRUE_STR = "true", 
                          FALSE_STR = "false", PLATFORM_STR = "platforms";
     
     private final int NOT_PRESENT = 0;
     
-    private MapLayer collisionTiles, objectTiles, visibleTiles, 
-                     backgroundTiles, platformTiles;
+    private MapLayer collisionLayer, objectLayer, backgroundLayer, 
+                     platformLayer;
+    
+    private List<Actor> enemies;
+    
+    
+    
     
     /**
      * Create a Level
      */ 
     public Level(String name, InputStream in, String tileSetsPath, 
-                 float playerX, float playerY, Direction facing,
-                 float grav) throws SlickException
+                 Direction facing, float grav) throws SlickException
     {
         super(in, tileSetsPath);
         this.name = name;
         this.gravity = grav;
         this.playerFacing = facing;
-        this.playerX = playerX;
-        this.playerY = playerY;
-        
+                
         System.out.println("Level " + name + " has " + getLayerCount() +
-                           " tile layers");
-
-        
-        collisionTiles = createMapLayer(getLayerIndex(COLLISION_STR));
-        objectTiles = createMapLayer(getLayerIndex(OBJECTS_STR));
-        platformTiles = createMapLayer(getLayerIndex(PLATFORM_STR));
-        backgroundTiles = createMapLayer(getLayerIndex(BACKGROUND_STR));
-        
-        
-        
-        //System.out.println("objectsIndex: " + objectsIndex);
+                           " tile layers");        
+        collisionLayer = createMapLayer(getLayerIndex("collisions"));
+        objectLayer = createMapLayer(getLayerIndex("objects"));
+        platformLayer = createMapLayer(getLayerIndex("platforms"));
+        backgroundLayer = createMapLayer(getLayerIndex("background"));     
+        sortObjects();
     }   
     
+    private void sortObjects()
+    {
+        for(Tile t : objectLayer.tiles)
+        {
+            try
+            {                
+                if(t.properties.get("type").equalsIgnoreCase("exit"))
+                {
+                    exitX = t.xPos;
+                    exitY = t.yPos;
+                }
+                else if(t.properties.get("type").equalsIgnoreCase("start"))
+                {
+                    playerStartX = t.xPos;
+                    playerStartY = t.yPos;
+                }
+            }
+            catch(NullPointerException e)
+            {
+                System.out.println("sortObjects: ignoring np exception");
+            }
+        }
+    }
+    
 
     
-    /*public void render(int x, int y)
-    {
-       render(x, y, 
-    }*/
-        
     public String toString()
     {
         return name;
@@ -121,8 +134,8 @@ public class Level extends TiledMap
     public void render(int x, int y)
     {
         // keep the order correct!
-        render(x, y, backgroundTiles.index);
-        render(x, y, platformTiles.index);
+        render(x, y, backgroundLayer.index);
+        render(x, y, platformLayer.index);
     }
     
     
@@ -132,7 +145,7 @@ public class Level extends TiledMap
      */ 
     public boolean collides(Shape p)
     {
-        for(Tile t : collisionTiles.tiles)
+        for(Tile t : collisionLayer.tiles)
         {
             if(t.getRect().intersects(p))
             {
@@ -148,7 +161,7 @@ public class Level extends TiledMap
      */ 
     public boolean isInCollisionTile(float x, float y)
     {
-        for(Tile t : collisionTiles.tiles)
+        for(Tile t : collisionLayer.tiles)
         {
             if(t.getRect().contains(x, y))
             {

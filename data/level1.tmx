@@ -25,7 +25,27 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="61" name="bluey" tilewidth="16" tileheight="16">
+  <image source="bluey_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="bluey"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="62" name="start" tilewidth="16" tileheight="16">
+  <image source="start_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="start"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="background" width="40" height="30">
+  <properties>
+   <property name="isvisible" value="true"/>
+  </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3Stw3AMADEQO0j5yzvP5i5hR4wCxbsr5ZSBhppohr2My200hb4Ox100hX4Nz3U6A383r70p78kb/rTX9L39qU//SV505/+kr63L/3pL8mb/v7l7wOI4AM4wBIAAA==
   </data>
@@ -51,7 +71,7 @@
    <property name="isvisible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OAQkAAAgDsAezfy5LHATZEiwBgF/mOgAAAFQtvbDIgMASAAA=
+   H4sIAAAAAAAAA+3OAQ0AMAgEMYQx/MtCxi+kNXBXBcBvOtB8gSYAAPdMeoCTFlfFF9fAEgAA
   </data>
  </layer>
 </map>

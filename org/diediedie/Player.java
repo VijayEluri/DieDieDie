@@ -2,6 +2,7 @@ package org.diediedie.actors;
 
 import org.diediedie.Level;
 
+
 import java.io.*;
 import java.util.*;
 import java.lang.Math.*;
@@ -108,17 +109,23 @@ public class Player implements Actor, InputProviderListener
     public Player(Level level)
     {
         this.level = level;
-        this.xPos = level.playerX;
-        this.yPos = level.playerY;
         
-        System.out.println("Player is on level " + level);
         
+        System.out.println("Player is on level " + level + 
+                           "at position x: " + xPos + ", y: " + yPos );
+        setUpStartPosition();
         if(!setUp)
         {            
             initAnim();   
             initBow();
             setUp = true;
         }
+    }
+    
+    private void setUpStartPosition()
+    {
+        this.xPos = level.playerStartX;
+        this.yPos = level.playerStartY;
     }
     
     private void initBow()
@@ -259,34 +266,26 @@ public class Player implements Actor, InputProviderListener
         {
             bowCharge += CHARGE_INCR;
         }
-
+        
         currentArrow.updateAiming(mouseX, mouseY);
         
-
         if(currentArrow.getAngle() >= 0)
         {
-            
-            currentBow = bowRight;
-            
+            currentBow = bowRight;   
             setFacingDir(Direction.RIGHT);
-            //bowX = getMiddleXPos() + BOW_X_OFFSET;
             bowX = xPos + BOW_X_OFFSET + (getCurrentFrameWidth() / 2);
             currentBow.setRotation(currentArrow.getAngle() 
-                                       - BOW_ANGLE_OFFSET);
+                                   - BOW_ANGLE_OFFSET);
         }
         else
         {
-            
             setFacingDir(Direction.LEFT);
-            currentBow = bowLeft;
-            
-            //bowX = getMiddleXPos() - BOW_X_OFFSET;
+            currentBow = bowLeft;   
             bowX = xPos - BOW_X_OFFSET;
             currentBow.setRotation(currentArrow.getAngle() 
                                     + BOW_ANGLE_OFFSET);
         }
         updateBowPosition();
-        
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
     }
     
@@ -483,7 +482,7 @@ public class Player implements Actor, InputProviderListener
         // test new position
         // vertical 
         yPos += ySpeed;
-        if(level.collides(getCurrentFrameRect()))
+        if(collides())
         {
             //System.out.println("vertical collision");
             yCollision = true;
@@ -507,7 +506,7 @@ public class Player implements Actor, InputProviderListener
         // horizontal 
         xPos += xSpeed;
         
-        if(level.collides(getCurrentFrameRect()))
+        if(collides())
         {
             xPos = oldX;
             xSpeed = 0;
@@ -519,6 +518,14 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
+    private boolean collides()
+    {
+        if(level.collides(getCurrentFrameRect()))
+        {
+            return true;
+        }
+        return false;
+    }
     
     /*
      * Closely aligns the Player to an object following a collision.
@@ -528,7 +535,7 @@ public class Player implements Actor, InputProviderListener
     private void alignToObstacle()
     {
         // finally, put the Player as close to the obstacle as possible
-        while(!level.collides(getCurrentFrameRect()))
+        while(!collides())
         {
             // here 'canJump' is used to discern the direction of the
             // collision; i.e. a 'true' value indicates (hopefully) 

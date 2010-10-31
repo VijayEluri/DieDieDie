@@ -171,7 +171,6 @@ public class Arrow
         {
             if(movementAngle > 0)
             {
-                //movementAngle += angleChange;
                 facingAngle += angleChange;
             }
             else
@@ -233,6 +232,7 @@ public class Arrow
         g.drawGradientLine(startX, startY, Color.yellow, endX, endY,
                             Color.red);
     }
+    
     /**
      * Return the x-axis value of the end point
      */ 

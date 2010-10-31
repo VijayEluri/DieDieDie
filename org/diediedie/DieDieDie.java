@@ -1,7 +1,7 @@
 package org.diediedie;
 
 import org.diediedie.actors.Player;
-import org.diediedie.actors.Enemy;
+
 import org.diediedie.actors.Direction;
 
 
@@ -60,11 +60,9 @@ public class DieDieDie extends BasicGame
 		container.setVSync(true);    
         inputProv = new InputProvider(container.getInput());
 
-        // load all the levels
-		level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
-                           playerXLevel1, playerYLevel1, Direction.LEFT,
-                           GRAVITY); 
-                
+        // load levels
+		
+        loadLevels();
         currentLevel = level1;
 
         // load player and associate with the level data
@@ -74,6 +72,13 @@ public class DieDieDie extends BasicGame
         player.associateInputProvider(inputProv, container.getInput());
 	}
     
+    private void loadLevels()
+    {
+        level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
+                           Direction.LEFT, GRAVITY); 
+                           
+    }
+    
     
  
     /*
@@ -81,14 +86,13 @@ public class DieDieDie extends BasicGame
      * acts as a nice wrapper for the lavel path.
      */ 
     private Level loadLevel(String name, String levelPath, 
-                            String tileSetsPath, float x, float y, 
-                            Direction startDir, float gravity)
+                            String tileSetsPath, Direction startDir, 
+                            float grav)
     {
         try 
         {
             FileInputStream in = new FileInputStream(new File(levelPath));
-            return new Level(name, in, tileSetsPath, x, y, startDir,
-                            gravity);
+            return new Level(name, in, tileSetsPath, startDir, grav);
         }
         catch(Exception e)
         {
