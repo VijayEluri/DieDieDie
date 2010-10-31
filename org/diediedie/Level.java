@@ -1,9 +1,10 @@
 package org.diediedie;
 
+import org.diediedie.actors.Direction;
+
 import java.io.*;
 import java.util.*;
 import org.newdawn.slick.tiled.TiledMap;
-//import org.newdawn.slick.tiled.TileSet;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Polygon;
@@ -11,8 +12,7 @@ import org.newdawn.slick.geom.Shape;
 
 
 /**
- * Level in a game of DIE DIE DIE aka snapper snap snap snappy snap a 
- * snapp snap
+ * Level in a game of DIE DIE DIE 
  */ 
 public class Level extends TiledMap
 {
@@ -20,7 +20,7 @@ public class Level extends TiledMap
     public float playerX, playerY;
     
     // friction. lower number == more friction
-    public static final float FRICTION = 0.9f;
+    public static final float FRICTION = 0.91f;
     public float gravity;
     
     // initial direction player faces 
@@ -38,12 +38,6 @@ public class Level extends TiledMap
     
     private MapLayer collisionTiles, objectTiles, visibleTiles, 
                      backgroundTiles, platformTiles;
-    
-    
-    
-    //private Map<int, List<Tile>> layers = new HashMap<int, List<Tile>>();
-    
-    
     
     /**
      * Create a Level

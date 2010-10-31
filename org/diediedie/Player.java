@@ -1,4 +1,6 @@
-package org.diediedie;
+package org.diediedie.actors;
+
+import org.diediedie.Level;
 
 import java.io.*;
 import java.util.*;
@@ -21,12 +23,12 @@ import org.newdawn.slick.command.MouseButtonControl;
 /**
  * ..where *YOU* are the HERO!
  */ 
-public class Player implements InputProviderListener, Actor
+public class Player extends Actor implements InputProviderListener 
 {
-    private String name;  
+    /*private String name;  */
     
     private boolean setUp = false, canJump = false,
-                    yCollision = false, xCollision = false; 
+                    yCollision = false, xCollision = false;
      
     private float accelX = 0f, ACCEL_RATE = 0.05f, maxYSpeed = 20.5f,
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
@@ -135,7 +137,7 @@ public class Player implements InputProviderListener, Actor
     /**
      * Links the game's InputProvider to the Player obkect
      */ 
-    protected void associateInputProvider(InputProvider prov, Input in)
+    public void associateInputProvider(InputProvider prov, Input in)
     {
         prov.addListener(this); 
         
@@ -392,7 +394,7 @@ public class Player implements InputProviderListener, Actor
     /**
      * Sets the Player's current Animation var to 'standing'. 
      */ 
-    public void setStandingAnim()
+    private void setStandingAnim()
     {
         if(facing.equals(Direction.RIGHT))
         {
@@ -565,7 +567,7 @@ public class Player implements InputProviderListener, Actor
         System.out.println("xPos==" + xPos + ", yPos==" + yPos); 
     }
     
-    public void jump()
+    private void jump()
     {
         if(canJump)
         {
@@ -593,7 +595,7 @@ public class Player implements InputProviderListener, Actor
     /**
      * Applies gravity to the player's position.
      */ 
-    public void applyGravity()
+    private void applyGravity()
     {
         if(ySpeed < maxYSpeed)
         {
@@ -629,7 +631,7 @@ public class Player implements InputProviderListener, Actor
     /**
      * Returns the currently set animation.
      */ 
-    public Animation currentAnim()
+    private Animation currentAnim()
     {
         return currentAnimation;
     }

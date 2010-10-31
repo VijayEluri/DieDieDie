@@ -1,4 +1,4 @@
-package org.diediedie;
+package org.diediedie.actors;
 
 
 public enum Direction

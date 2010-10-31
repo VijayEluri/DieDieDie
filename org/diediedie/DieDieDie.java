@@ -1,5 +1,9 @@
 package org.diediedie;
 
+import org.diediedie.actors.Player;
+import org.diediedie.actors.Enemy;
+import org.diediedie.actors.Direction;
+
 
 import java.io.*;
 import java.util.*;
