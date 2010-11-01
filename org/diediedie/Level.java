@@ -1,7 +1,7 @@
 package org.diediedie;
 
 import org.diediedie.actors.Direction;
-import org.diediedie.actors.Actor;
+import org.diediedie.actors.*;
 
 import java.io.*;
 import java.util.*;
@@ -61,6 +61,9 @@ public class Level extends TiledMap
         sortObjects();
     }   
     
+    /*
+     * Sorts the object layer into separate structures
+     */ 
     private void sortObjects()
     {
         for(Tile t : objectLayer.tiles)
@@ -77,6 +80,14 @@ public class Level extends TiledMap
                     playerStartX = t.xPos;
                     playerStartY = t.yPos;
                 }
+                else if(t.properties.get("type").equalsIgnoreCase("enemy"))
+                {
+                    enemies = new ArrayList<Actor>();
+                    if(t.properties.get("name").equalsIgnoreCase("bluey"))
+                    {
+                        enemies.add(new Bluey(t.xPos, t.yPos));
+                    }
+                }
             }
             catch(NullPointerException e)
             {
@@ -84,6 +95,7 @@ public class Level extends TiledMap
             }
         }
     }
+    
     
 
     

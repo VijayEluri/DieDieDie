@@ -26,7 +26,6 @@ import org.newdawn.slick.command.MouseButtonControl;
  */ 
 public class Player implements Actor, InputProviderListener 
 {
-    
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
      
@@ -59,16 +58,12 @@ public class Player implements Actor, InputProviderListener
     private boolean leftMoveDown = false, rightMoveDown = false,
                     isChargingArrow = false, isFiringArrow = false;
     
-
     private float xPos, yPos, xSpeed, ySpeed;
     private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
         
     // running: indicates the user is holding a directional button
     private boolean running = false;
-    
-    // animation vars
-    public static final int ANIM_DURATION = 100; 
-    
+        
     private final String bowLeftPath = "data/STICKMAN_BOW_LEFT.png";
     
     private final String[] leftWalkPaths = 
@@ -80,6 +75,7 @@ public class Player implements Actor, InputProviderListener
         "data/STICKMAN_LEFT_WALK_5.png", 
         "data/STICKMAN_LEFT_WALK_6.png"
     };
+    
     private final String[] rightWalkPaths =
     {
         "data/STICKMAN_RIGHT_WALK_1.png", 
@@ -664,14 +660,16 @@ public class Player implements Actor, InputProviderListener
     private void initAnim()
     {
         final boolean autoUpdate = true;
-        leftWalk = AnimCreator.createAnim(ANIM_DURATION, autoUpdate, 
-                              leftWalkPaths);
-        rightWalk = AnimCreator.createAnim(ANIM_DURATION, autoUpdate, 
-                               rightWalkPaths);           
-        rightStand = AnimCreator.createAnim(ANIM_DURATION, autoUpdate,
-                                rightStandPaths);
-        leftStand = AnimCreator.createAnim(ANIM_DURATION, autoUpdate,
-                               leftStandPaths);                
+        leftWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
+                                    autoUpdate, leftWalkPaths);
+        rightWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
+                                    autoUpdate, rightWalkPaths);           
+        rightStand = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
+                                    autoUpdate, rightStandPaths);
+        leftStand = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
+                                    autoUpdate, leftStandPaths);                
+        
+        
         currentAnimation = leftStand;
         
         // get initial direction from the level

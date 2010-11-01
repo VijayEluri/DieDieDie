@@ -37,7 +37,12 @@ public class Bluey implements Actor
     
     private void createAnimations()
     {
-        
+        //Image = 
+        //createAnimFromPaths(ANIM_DURATION, true, standLeftPath);
+        /*rightWalkAnim = createAnimFromPaths(ANIM_DURATION
+        leftStandAnim = 
+        rightStandAnim = ;*/
+
     }
     
     public Rectangle getCurrentFrameRect()

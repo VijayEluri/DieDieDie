@@ -1,7 +1,6 @@
 package org.diediedie.actors;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -18,14 +17,16 @@ public class AnimCreator
      * the list of file paths given. If flip is true, flip the images 
      * on load. 
      */ 
-    public static Animation createAnim(int duration, boolean autoUpdate, 
+    public static Animation createAnimFromPaths(int duration, boolean autoUpdate, 
                                        String... paths)
     {
         List<Image> images = getImagesFromPaths(paths);
         Image[] imgArr = new Image[images.size()];
         images.toArray(imgArr);
         return new Animation(imgArr, duration, autoUpdate);
-    }    
+    }  
+                                         
+      
     public static Image loadImage(String path)
     {
         try
