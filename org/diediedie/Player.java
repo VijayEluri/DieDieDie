@@ -25,7 +25,22 @@ import org.newdawn.slick.command.MouseButtonControl;
  * ..where *YOU* are the HERO!
  */ 
 public class Player implements Actor, InputProviderListener 
-{
+{    
+    /**
+     * Initialises a new Player at the given position.
+     */ 
+    public Player(Level level)
+    {
+        this.level = level;
+        setUpStartPosition();
+        if(!setUp)
+        {            
+            initAnim();   
+            initBow();
+            setUp = true;
+        }
+    }    
+    
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
      
@@ -99,29 +114,15 @@ public class Player implements Actor, InputProviderListener
     
     // associated level for collision / item collection reference
     private Level level = null;
-            
-    /**
-     * Initialises a new Player at the given position.
-     */ 
-    public Player(Level level)
-    {
-        this.level = level;
-        System.out.println("Player is on level " + level + 
-                           " at position x: " + xPos + ", y: " + yPos );
-        setUpStartPosition();
-        
-        if(!setUp)
-        {            
-            initAnim();   
-            initBow();
-            setUp = true;
-        }
-    }
+    
     
     private void setUpStartPosition()
     {
-        this.xPos = level.playerStartX;
-        this.yPos = level.playerStartY;
+        this.xPos = level.getPlayerTile().xPos;
+        this.yPos = level.getPlayerTile().yPos - 
+                            level.getPlayerTile().tileHeight;
+        System.out.println("Player is on level " + level + 
+                           " at position x: " + xPos + ", y: " + yPos);              
     }
     
     private void initBow()
@@ -321,7 +322,7 @@ public class Player implements Actor, InputProviderListener
     
     public float getCurrentFrameWidth()
     {
-        return getCurrentFrameRect().getWidth();
+        return AnimCreator.getCurrentFrameRect(this).getWidth();
     }
     
     /*
@@ -522,13 +523,19 @@ public class Player implements Actor, InputProviderListener
     
     private boolean collides()
     {
-        if(level.collides(getCurrentFrameRect()))
+        if(level.collides(AnimCreator.getCurrentFrameRect(this)))
         {
             return true;
         }
         return false;
     }
     
+    
+    public Animation getCurrentAnim()
+    {
+        return currentAnim;
+    }
+
     /*
      * Closely aligns the Player to an object following a collision.
      * This is done to stop it looking like the player is 'hovering'
@@ -638,16 +645,7 @@ public class Player implements Actor, InputProviderListener
     }  
     
         
-    /**
-     * Returns the current animation frame's rectangular bounding box.
-     */ 
-    public Rectangle getCurrentFrameRect()
-    {
-        Image img = currentAnim.getCurrentFrame();
-        return new Rectangle(getX(), getY(), img.getWidth(), 
-                             img.getHeight());
-    }
-        
+    
     /*
      * Loads and inits the Player's Animations. 
      */ 

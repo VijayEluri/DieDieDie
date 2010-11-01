@@ -1,5 +1,6 @@
 package org.diediedie.actors;
 
+import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
@@ -12,21 +13,27 @@ import org.newdawn.slick.Graphics;
  */ 
 public class Bluey implements Actor
 {
-    
-    public Bluey(float x, float y)
+    public Bluey(Tile t)
     {
-        xPos = x;
-        yPos = y;
-        System.out.println("new Bluey enemy at " + x + ", " + y);
-        
         if(!setUp)
         {
+            tileHeight = t.tileHeight;
             createAnimations();
             setUp = true;
         }
+        
+        xPos = t.xPos;
+        yPos = t.yPos;
+        
+        yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
+                 t.tileHeight);
+        
+        System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
+        
     }
     
-    private float xPos, yPos;
+    private float xPos, yPos, tileHeight;
+    
     private boolean setUp = false;
     
     private final String leftStandPath = "data/bluey_standing_left.png";
@@ -52,30 +59,29 @@ public class Bluey implements Actor
         Image leftStand1 = AnimCreator.loadImage(leftStandPath);
         Image rightStand1 = leftStand1.getFlippedCopy(true, false);        
         
-        Image[] leftStandImages = null, rightStandImages = null;
         
         // put into arrays to use them as a 1-frame animations
-        leftStandImages[0] = leftStand1;
-        rightStandImages[0] = rightStand1;        
+        Image[] leftStandImages = { leftStand1 };
+        Image[] rightStandImages = { rightStand1 };        
         
         leftStandAnim = new Animation(leftStandImages, 
                                       Actor.ANIM_DURATION,false);
-        
         rightStandAnim = new Animation(rightStandImages,
-                                      Actor.ANIM_DURATION,false);
-                                      
-                                      
+                                      Actor.ANIM_DURATION,false);                           
         currentAnim = leftStandAnim;
+        
+        
     }
     
-    public Rectangle getCurrentFrameRect()
+
+    public float getTileHeight()
     {
-        return null;    
+        return tileHeight;
     }
      
     public void update()
     {
-        System.out.println("updating bluey");
+        //System.out.println("updating bluey");
         updatePosition();
         updateProjectiles();
     }
@@ -87,13 +93,18 @@ public class Bluey implements Actor
     {
         
     }
+    public Animation getCurrentAnim()
+    {
+        return currentAnim;
+    }
     
     public void draw(Graphics g)
     {
-        System.out.println("drawing Bluey: " + getX() + ", " + getY());
-        
+        //System.out.println("drawing Bluey: " + getX() + ", " + getY());
         g.drawAnimation(currentAnim, getX(), getY());
-        g.draw(getCurrentFrameRect());
+        
+        g.draw(AnimCreator.getCurrentFrameRect(this));
+        
         drawProjectiles(g);
     }
     
@@ -104,5 +115,4 @@ public class Bluey implements Actor
     
     public float getX(){ return xPos; }   
     public float getY(){ return yPos; } 
-    
 }

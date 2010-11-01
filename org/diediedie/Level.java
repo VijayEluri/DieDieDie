@@ -19,7 +19,7 @@ import org.newdawn.slick.Graphics;
 public class Level extends TiledMap
 {
     // where the player will first appear
-    public float playerStartX, playerStartY, exitX, exitY;
+    public float exitX, exitY;
     
     // friction. lower number == more friction
     public static final float FRICTION = 0.91f;
@@ -37,8 +37,8 @@ public class Level extends TiledMap
     private MapLayer collisionLayer, objectLayer, backgroundLayer, 
                      platformLayer;
     
-    private List<Actor> enemies = new ArrayList<Actor>();
-    
+    private List<Actor> enemies;
+    private Tile playerTile = null;
     
     /**
      * Create a Level
@@ -58,9 +58,14 @@ public class Level extends TiledMap
         objectLayer = createMapLayer(getLayerIndex("objects"));
         platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
-         
+        enemies = new ArrayList<Actor>();
         sortObjects();
     }   
+    
+    public Tile getPlayerTile()
+    {
+        return playerTile;   
+    }
     
     public void update()
     {
@@ -91,8 +96,7 @@ public class Level extends TiledMap
                 }
                 else if(t.properties.get("type").equalsIgnoreCase("start"))
                 {
-                    playerStartX = t.xPos;
-                    playerStartY = t.yPos;
+                    playerTile = t;
                 }
                 else if(t.properties.get("type").equalsIgnoreCase("enemy"))
                 {
@@ -103,13 +107,14 @@ public class Level extends TiledMap
                     if(t.properties.get("name").equalsIgnoreCase("bluey"))
                     {
                         
-                        enemies.add(new Bluey(t.xPos, t.yPos));
+                        enemies.add(new Bluey(t));
                     }
                 }
             }
             catch(NullPointerException e)
             {
-                System.out.println("sortObjects: ignoring np exception");
+                //System.out.println("sortObjects: ignoring np exception");
+                e.printStackTrace();
             }
         }
         System.out.println("level has " + enemies.size() + " enemies");

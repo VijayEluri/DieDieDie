@@ -10,19 +10,7 @@ import org.newdawn.slick.geom.Rectangle;
  * can be accessed easily (for collision det. etc).
  */ 
 public class Tile
-{
-    public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
-    public float xPos, yPos;
-    private TiledMap tiledMap;
-    private Rectangle rect;
-    
-    public Map<String, String> properties = new HashMap<String, String>();
-    
-    public static final String[] PROPERTIES = {"type", "name"};
-    public static final String[] VALUES = {"exit", "enemy", "start",
-                                           "name"};
-    public static final String NULL = "NULL";
-    
+{   
     /**
      * Creates a Tile from a tile at specified coordinates (x,y). If
      * this is a collision 
@@ -39,6 +27,19 @@ public class Tile
        // System.out.println("new Tile: " + xCoord + " , " + yCoord);
     }
     
+    public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
+    public float xPos, yPos;
+    private TiledMap tiledMap;
+    private Rectangle rect;
+    
+    public Map<String, String> properties = new HashMap<String, String>();
+    
+    public static final String[] PROPERTIES = {"type", "name"};
+    public static final String[] VALUES = {"exit", "enemy", "start",
+                                           "bluey"};
+    public static final String NULL = "NULL";
+    
+
     
     
     private void extractProperties()
@@ -46,6 +47,7 @@ public class Tile
         for(final String P : PROPERTIES)
         {
             final String V = tiledMap.getTileProperty(id, P, NULL);
+            
             if(!V.equals(NULL))
             {
                 properties.put(P, V);
@@ -53,10 +55,10 @@ public class Tile
         }
         for(Map.Entry<String, String> e : properties.entrySet())
         {
-            System.out.println("\t" + e.getKey() + " : " + e.getValue());
+            
+            System.out.println(this + e.getKey() + " : " + e.getValue());
         }
     }
-    
     
     /**
      * Stores the coordinates and size of the current Tile. 
@@ -64,10 +66,11 @@ public class Tile
     private void calculatePosition()
     {
         tileWidth = tiledMap.getTileWidth();
-        
         tileHeight = tiledMap.getTileHeight();
+        
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
+
         rect = new Rectangle(xPos, yPos, tileWidth, tileHeight);
     }
     

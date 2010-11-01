@@ -4,6 +4,8 @@ import java.util.*;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+
 import java.io.*;
 
 /**
@@ -59,4 +61,15 @@ public class AnimCreator
         }
         return images;
     }
+    /**
+     * Returns an Animation frame's rectangular bounding box.
+     */ 
+    public static Rectangle getCurrentFrameRect(Actor actr)
+    {
+        Image img = actr.getCurrentAnim().getCurrentFrame();
+        return new Rectangle(actr.getX(), actr.getY(), img.getWidth(), 
+                             img.getHeight());
+    }
+       
+
 }
