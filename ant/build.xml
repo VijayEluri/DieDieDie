@@ -43,7 +43,6 @@
              destfile="${build.dir}/diediedie.jar"
              includes="${build.dir}">
         </jar>
-
         <manifest>
             <attribute name="Main-Class"
                        value="org.diediedie.DieDieDie"/>

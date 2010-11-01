@@ -7,10 +7,13 @@ To run:
 
 cd ../build
 
+Then
 
-Linux: sh run.sh
+Linux: chmod +x run-linux
+       ./run-linux
 
-Win: double click / type run.bat
+Windows: double click on or type run-windows.bat at the dos prompt
+
 
 
 Hallelujah!

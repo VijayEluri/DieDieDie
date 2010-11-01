@@ -1,7 +1,7 @@
 package org.diediedie.actors;
 
 import org.diediedie.Level;
-
+import org.diediedie.actors.AnimCreator;
 
 import java.io.*;
 import java.util.*;
@@ -130,7 +130,7 @@ public class Player implements Actor, InputProviderListener
     
     private void initBow()
     {
-          bowLeft = loadImage(bowLeftPath);
+          bowLeft = AnimCreator.loadImage(bowLeftPath);
           bowRight = bowLeft.getFlippedCopy(true, false);
           currentBow = bowLeft;
           /*bowLeft.setCenterOfRotation(bowLeft.getWidth() / 2,
@@ -665,13 +665,13 @@ public class Player implements Actor, InputProviderListener
     private void initAnim()
     {
         final boolean autoUpdate = true;
-        leftWalk = createAnim(ANIM_DURATION, autoUpdate, 
+        leftWalk = AnimCreator.createAnim(ANIM_DURATION, autoUpdate, 
                               leftWalkPaths);
-        rightWalk = createAnim(ANIM_DURATION, autoUpdate, 
+        rightWalk = AnimCreator.createAnim(ANIM_DURATION, autoUpdate, 
                                rightWalkPaths);           
-        rightStand = createAnim(ANIM_DURATION, autoUpdate,
+        rightStand = AnimCreator.createAnim(ANIM_DURATION, autoUpdate,
                                 rightStandPaths);
-        leftStand = createAnim(ANIM_DURATION, autoUpdate,
+        leftStand = AnimCreator.createAnim(ANIM_DURATION, autoUpdate,
                                leftStandPaths);                
         currentAnimation = leftStand;
         
@@ -679,50 +679,8 @@ public class Player implements Actor, InputProviderListener
         facing = level.playerFacing;
     }
     
-    /*
-     * Utility function that creates and returns an animation in which
-     * each frame lasts the amount set in 'duration', based upon 
-     * the list of file paths given. If flip is true, flip the images 
-     * on load. 
-     */ 
-    private Animation createAnim(int duration, boolean autoUpdate, 
-                                 String... paths)
-    {
-        List<Image> images = getImagesFromPaths(paths);
-        Image[] imgArr = new Image[images.size()];
-        images.toArray(imgArr);
-        return new Animation(imgArr, duration, autoUpdate);
-    }    
+   
     
-    /*
-     * Returns an array of Images from a List of paths to image files. 
-     */
-    private List<Image> getImagesFromPaths(String... paths)                                     
-    {
-        List<Image> images = new ArrayList<Image>();
-        
-        for(String p : paths)
-        {
-            images.add(loadImage(p));               
-        }
-        return images;
-    }
     
-    private Image loadImage(String path)
-    {
-        try
-        {
-            return new Image(new FileInputStream(
-                                    new File(path)), path, false);
-        }
-        catch(FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        catch(SlickException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    
 }

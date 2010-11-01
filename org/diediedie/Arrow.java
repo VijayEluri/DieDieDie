@@ -23,10 +23,9 @@ public class Arrow
                   GRAVITY_LINE = 2.9f, ALIGN_INCR = 0.009f;
                   
     private final int REVERSE = 180;
-
     
     private Level level = null;
-    private Color color = Color.red;
+
     private boolean isFlying = false, collided = false;
    
     /**

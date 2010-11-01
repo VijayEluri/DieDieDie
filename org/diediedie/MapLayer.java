@@ -12,8 +12,7 @@ public class MapLayer
     protected int index;
     protected boolean isVisible;
     
-    public MapLayer(List<Tile> layerTiles, final int in, 
-                    boolean visible)
+    public MapLayer(List<Tile> layerTiles, final int in, boolean visible)
     {
         tiles = layerTiles;
         index = in;
