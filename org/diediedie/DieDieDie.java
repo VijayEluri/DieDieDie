@@ -109,9 +109,8 @@ public class DieDieDie extends BasicGame
      */ 
 	public void render(GameContainer container, Graphics g)  
     {
-		currentLevel.render(0, 0);
+		currentLevel.draw(g);
         player.draw(g);
-        //g.draw(player.getCurrentFrameRect());
 	}
     
     

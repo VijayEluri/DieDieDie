@@ -10,6 +10,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.Graphics;
 
 
 /**
@@ -36,7 +37,7 @@ public class Level extends TiledMap
     private MapLayer collisionLayer, objectLayer, backgroundLayer, 
                      platformLayer;
     
-    private List<Actor> enemies;
+    private List<Actor> enemies = new ArrayList<Actor>();
     
     
     /**
@@ -56,7 +57,8 @@ public class Level extends TiledMap
         collisionLayer = createMapLayer(getLayerIndex("collisions"));
         objectLayer = createMapLayer(getLayerIndex("objects"));
         platformLayer = createMapLayer(getLayerIndex("platforms"));
-        backgroundLayer = createMapLayer(getLayerIndex("background"));     
+        backgroundLayer = createMapLayer(getLayerIndex("background"));    
+         
         sortObjects();
     }   
     
@@ -94,9 +96,13 @@ public class Level extends TiledMap
                 }
                 else if(t.properties.get("type").equalsIgnoreCase("enemy"))
                 {
-                    enemies = new ArrayList<Actor>();
+                    System.out.print("read enemy... ");
+                    System.out.println(" name: " 
+                                       + t.properties.get("name"));
+                    
                     if(t.properties.get("name").equalsIgnoreCase("bluey"))
                     {
+                        
                         enemies.add(new Bluey(t.xPos, t.yPos));
                     }
                 }
@@ -106,6 +112,7 @@ public class Level extends TiledMap
                 System.out.println("sortObjects: ignoring np exception");
             }
         }
+        System.out.println("level has " + enemies.size() + " enemies");
     }
     
     public String toString()
@@ -132,7 +139,6 @@ public class Level extends TiledMap
             }
         }   
         
-        // is this a visible layer?
         final boolean VISIBLE; 
         final String v = getLayerProperty(index, VIS_STR, Tile.NULL);
         
@@ -144,7 +150,6 @@ public class Level extends TiledMap
         {
             VISIBLE = false;
         }
-        
         return new MapLayer(tiles, index, VISIBLE);
     }
     
@@ -158,11 +163,24 @@ public class Level extends TiledMap
     
     public void render(int x, int y)
     {
-        // keep the order correct!
+        // keep the ordering!
         render(x, y, backgroundLayer.index);
         render(x, y, platformLayer.index);
     }
     
+    public void draw(Graphics g)
+    {
+        render(0, 0);
+        drawEnemies(g);
+    }
+    
+    private void drawEnemies(Graphics g)
+    {
+        for(Actor a : enemies)
+        {
+            a.draw(g);
+        }
+    }
     
     /**
      * Returns true if Shape p intersects with a collision tile on the

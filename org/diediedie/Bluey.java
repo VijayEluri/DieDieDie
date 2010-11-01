@@ -5,34 +5,19 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.Graphics;
 
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */ 
 public class Bluey implements Actor
 {
-    private float xPos, yPos;
-    private boolean setUp = false;
     
-    private final String leftStandPath = "data/bluey_standing_left.png";
-    
-    private final String[] leftWalkPaths = 
-        {
-            "data/bluey_walk_left_1.png",
-            "data/bluey_walk_left_1.png",
-            "data/bluey_walk_left_1.png",
-            "data/bluey_walk_left_1.png",
-            "data/bluey_walk_left_1.png",
-            "data/bluey_walk_left_1.png"
-        };
-    
-    private Animation leftWalkAnim, rightWalkAnim, leftStandAnim, 
-                      rightStandAnim, currentAnim = null;
-        
     public Bluey(float x, float y)
     {
         xPos = x;
         yPos = y;
+        System.out.println("new Bluey enemy at " + x + ", " + y);
         
         if(!setUp)
         {
@@ -41,8 +26,29 @@ public class Bluey implements Actor
         }
     }
     
+    private float xPos, yPos;
+    private boolean setUp = false;
+    
+    private final String leftStandPath = "data/bluey_standing_left.png";
+    
+    private final String[] leftWalkPaths = 
+    {
+        "data/bluey_walk_left_1.png",
+        "data/bluey_walk_left_1.png",
+        "data/bluey_walk_left_1.png",
+        "data/bluey_walk_left_1.png",
+        "data/bluey_walk_left_1.png",
+        "data/bluey_walk_left_1.png"
+    };
+    
+    private Animation leftWalkAnim, rightWalkAnim, leftStandAnim, 
+                      rightStandAnim, currentAnim = null;
+        
+    
+    
     private void createAnimations()
     {
+        System.out.println("bluey -> creating animations");
         Image leftStand1 = AnimCreator.loadImage(leftStandPath);
         Image rightStand1 = leftStand1.getFlippedCopy(true, false);        
         
@@ -57,6 +63,9 @@ public class Bluey implements Actor
         
         rightStandAnim = new Animation(rightStandImages,
                                       Actor.ANIM_DURATION,false);
+                                      
+                                      
+        currentAnim = leftStandAnim;
     }
     
     public Rectangle getCurrentFrameRect()
@@ -66,6 +75,7 @@ public class Bluey implements Actor
      
     public void update()
     {
+        System.out.println("updating bluey");
         updatePosition();
         updateProjectiles();
     }
@@ -80,7 +90,10 @@ public class Bluey implements Actor
     
     public void draw(Graphics g)
     {
+        System.out.println("drawing Bluey: " + getX() + ", " + getY());
+        
         g.drawAnimation(currentAnim, getX(), getY());
+        g.draw(getCurrentFrameRect());
         drawProjectiles(g);
     }
     

@@ -107,7 +107,7 @@ public class Player implements Actor, InputProviderListener
     {
         this.level = level;
         System.out.println("Player is on level " + level + 
-                           "at position x: " + xPos + ", y: " + yPos );
+                           " at position x: " + xPos + ", y: " + yPos );
         setUpStartPosition();
         
         if(!setUp)
@@ -662,8 +662,6 @@ public class Player implements Actor, InputProviderListener
                                     autoUpdate, rightStandPaths);
         leftStand = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
                                     autoUpdate, leftStandPaths);                
-        
-        
         currentAnim = leftStand;
         
         // get initial direction from the level

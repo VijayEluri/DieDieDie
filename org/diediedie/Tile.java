@@ -18,8 +18,9 @@ public class Tile
     
     public Map<String, String> properties = new HashMap<String, String>();
     
-    public static final String[] PROPERTIES = {"type"};
-    public static final String[] VALUES = {"exit", "enemy", "start"};
+    public static final String[] PROPERTIES = {"type", "name"};
+    public static final String[] VALUES = {"exit", "enemy", "start",
+                                           "name"};
     public static final String NULL = "NULL";
     
     /**
