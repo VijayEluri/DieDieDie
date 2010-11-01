@@ -6,7 +6,12 @@ ant
 To run:
 
 cd ../build
-sh run.sh
+
+
+Linux: sh run.sh
+
+Win: double click / type run.bat
+
 
 Hallelujah!
 

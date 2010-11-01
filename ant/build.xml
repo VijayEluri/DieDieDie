@@ -17,7 +17,6 @@
     </target>
 
     <target name="compile" depends="init">
-
         <echo>Compile the source files</echo>
         <javac srcdir="${src.dir}" destdir="${build.dir}" debug="true">
             <classpath refid="classpath"/>
@@ -33,8 +32,10 @@
             <fileset dir="${basedir}/data"/>
         </copy>
 
-        <echo>Copy the run script</echo>
+        <echo>Copy the run scripts</echo>
         <copy file="run.sh" todir="${build.dir}"/>
+        <copy file="run.bat" todir="${build.dir}"/>
+        
     </target>
 
     <target name="jar" depends="compile">
