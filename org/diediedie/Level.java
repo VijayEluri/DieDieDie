@@ -1,10 +1,10 @@
 package org.diediedie;
 
-import org.diediedie.actors.Direction;
-import org.diediedie.actors.*;
 
 import java.io.*;
 import java.util.*;
+import org.diediedie.actors.Direction;
+import org.diediedie.actors.*;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
@@ -39,8 +39,6 @@ public class Level extends TiledMap
     private List<Actor> enemies;
     
     
-    
-    
     /**
      * Create a Level
      */ 
@@ -53,7 +51,8 @@ public class Level extends TiledMap
         this.playerFacing = facing;
                 
         System.out.println("Level " + name + " has " + getLayerCount() +
-                           " tile layers");        
+                           " tile layers");
+        
         collisionLayer = createMapLayer(getLayerIndex("collisions"));
         objectLayer = createMapLayer(getLayerIndex("objects"));
         platformLayer = createMapLayer(getLayerIndex("platforms"));
@@ -61,6 +60,19 @@ public class Level extends TiledMap
         sortObjects();
     }   
     
+    public void update()
+    {
+        updateEnemies();
+    }
+        
+    public void updateEnemies()
+    {
+        for(Actor a : enemies)
+        {
+            a.update();
+        }
+    }
+
     /*
      * Sorts the object layer into separate structures
      */ 
@@ -96,14 +108,15 @@ public class Level extends TiledMap
         }
     }
     
-    
-
-    
     public String toString()
     {
         return name;
     }
     
+    /*
+     * Creates a map layer by retrieving the data from the Tiled file
+     * at the given index
+     */ 
     private MapLayer createMapLayer(int index)
     {
         List<Tile> tiles = new ArrayList<Tile>();

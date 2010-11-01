@@ -94,7 +94,7 @@ public class Player implements Actor, InputProviderListener
         "data/STICKMAN_RIGHT_STAND.png"        
     };
     private Animation leftWalk, rightWalk, leftStand, rightStand,
-                      currentAnimation;
+                      currentAnim;
     private Image bowLeft, bowRight, currentBow;
     
     // associated level for collision / item collection reference
@@ -392,11 +392,11 @@ public class Player implements Actor, InputProviderListener
     {
         if(facing.equals(Direction.RIGHT))
         {
-            currentAnimation = rightStand;
+            currentAnim = rightStand;
         }
         else if(facing.equals(Direction.LEFT))
         {
-            currentAnimation = leftStand;   
+            currentAnim = leftStand;   
         }
         else 
         {
@@ -413,13 +413,13 @@ public class Player implements Actor, InputProviderListener
         if(dir.equals(Direction.RIGHT))
         {
             accelerate();
-            currentAnimation = rightWalk;
+            currentAnim = rightWalk;
             xSpeed = (moveSpeed + accelX);
         }
         else if(dir.equals(Direction.LEFT))
         {
             accelerate();
-            currentAnimation = leftWalk;
+            currentAnim = leftWalk;
             xSpeed = -(moveSpeed + accelX);
         }
         if(xSpeed > MAX_X_SPEED)
@@ -615,7 +615,7 @@ public class Player implements Actor, InputProviderListener
      */ 
     public void draw(Graphics g)
     {
-        g.drawAnimation(currentAnim(), getX(), getY());
+        g.drawAnimation(currentAnim, getX(), getY());
         drawArrows(g);
         
         if(isChargingArrow)
@@ -636,20 +636,14 @@ public class Player implements Actor, InputProviderListener
             a.draw(g);
         }
     }  
-    /**
-     * Returns the currently set animation.
-     */ 
-    private Animation currentAnim()
-    {
-        return currentAnimation;
-    }
+    
         
     /**
      * Returns the current animation frame's rectangular bounding box.
      */ 
     public Rectangle getCurrentFrameRect()
     {
-        Image img = currentAnim().getCurrentFrame();
+        Image img = currentAnim.getCurrentFrame();
         return new Rectangle(getX(), getY(), img.getWidth(), 
                              img.getHeight());
     }
@@ -670,7 +664,7 @@ public class Player implements Actor, InputProviderListener
                                     autoUpdate, leftStandPaths);                
         
         
-        currentAnimation = leftStand;
+        currentAnim = leftStand;
         
         // get initial direction from the level
         facing = level.playerFacing;

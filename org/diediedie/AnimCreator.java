@@ -17,8 +17,8 @@ public class AnimCreator
      * the list of file paths given. If flip is true, flip the images 
      * on load. 
      */ 
-    public static Animation createAnimFromPaths(int duration, boolean autoUpdate, 
-                                       String... paths)
+    public static Animation createAnimFromPaths(int duration, 
+                                    boolean autoUpdate, String... paths)
     {
         List<Image> images = getImagesFromPaths(paths);
         Image[] imgArr = new Image[images.size()];
@@ -26,7 +26,9 @@ public class AnimCreator
         return new Animation(imgArr, duration, autoUpdate);
     }  
                                          
-      
+ /*   public static Animation createAnimFromImages(int duration, 
+                                    boolean autoUpdate, 
+   */ 
     public static Image loadImage(String path)
     {
         try

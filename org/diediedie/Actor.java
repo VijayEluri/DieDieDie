@@ -5,8 +5,9 @@ import org.newdawn.slick.geom.Rectangle;
 
 public interface Actor
 {            
-    public static int ANIM_DURATION = 150; 
+    public static final int ANIM_DURATION = 150; 
     Rectangle getCurrentFrameRect();
+    void draw(Graphics g);
     float getX();
     float getY();
     void update();

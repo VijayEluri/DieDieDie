@@ -3,11 +3,8 @@ package org.diediedie;
 import org.diediedie.actors.Player;
 
 import org.diediedie.actors.Direction;
-
-
 import java.io.*;
 import java.util.*;
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -27,9 +24,6 @@ import org.newdawn.slick.command.InputProviderListener;
  */ 
 public class DieDieDie extends BasicGame 
 {   
-    private final float PLAYER_X_LEVEL_1 = 200;
-	private final float PLAYER_Y_LEVEL_1 = 400;
-    
     // object to send input to the Player object
     private InputProvider inputProv = null;
     
@@ -107,6 +101,7 @@ public class DieDieDie extends BasicGame
 	public void update(GameContainer container, int delta) 
     { 
         player.update();
+        currentLevel.update();
 	}
     
     /**
