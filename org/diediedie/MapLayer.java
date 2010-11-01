@@ -19,7 +19,6 @@ public class MapLayer
         isVisible = visible;
         System.out.println(toString());
     }
-
     
     public String toString()
     {

@@ -33,8 +33,8 @@
         </copy>
 
         <echo>Copy the run scripts</echo>
-        <copy file="run.sh" todir="${build.dir}"/>
-        <copy file="run.bat" todir="${build.dir}"/>
+        <copy file="run-linux" todir="${build.dir}"/>
+        <copy file="run-windows.bat" todir="${build.dir}"/>
         
     </target>
 

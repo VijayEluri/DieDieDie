@@ -296,7 +296,6 @@ public class Player implements Actor, InputProviderListener
         //System.out.println("xPos: " + xPos + ", midX: " + midX);
         return midX;
     }
-   
     
     private void updateBowPosition()
     {
