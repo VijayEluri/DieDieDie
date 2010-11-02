@@ -4,6 +4,7 @@ import org.diediedie.Level;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.util.FastTrig;
 
 /**
  * An arrow fired by the Player.
@@ -26,13 +27,14 @@ public class Arrow
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, 
                   movementAngle = 90, 
-                  moveSpeed = 0.44f, gravity = 0, oldX, oldY,
+                  gravity = 0, oldX, oldY,
                   facingAngle = 0, angleChange = 0.1f, xTrav, yTrav;
                   
     private final float SIZE = 19f, ACCEL_RATE = 0.09f, AIR_REST = 0.6f,
                   MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
-                  ANGLE_CHANGE_INCR = 0.04f, MAX_ANGLE_CHANGE = 1.11f, 
-                  GRAVITY_LINE = 2.9f, ALIGN_INCR = 0.009f;
+                  ANGLE_CHANGE_INCR = 0.05f, MAX_ANGLE_CHANGE = 1.09f, 
+                  GRAVITY_LINE = 3f, ALIGN_INCR = 0.009f,
+                  MOVE_SPEED = 0.44f;
                   
     private final int REVERSE = 180;
     
@@ -90,8 +92,8 @@ public class Arrow
      */ 
     protected void updateSpeed()
     {          
-        speedX = (moveSpeed * accelX);
-        speedY = (moveSpeed * accelY);
+        speedX = (MOVE_SPEED * accelX);
+        speedY = (MOVE_SPEED * accelY);
     }
     
     /**
@@ -113,10 +115,15 @@ public class Arrow
         oldX = startX;
         
         // move in the @movementAngle direction
-        startX = (float)(startX + xTrav * 
+        /*startX = (float)(startX + xTrav * 
                             Math.sin(Math.toRadians(movementAngle)));
         startY = (float)(startY - yTrav * 
                             Math.cos(Math.toRadians(movementAngle))); 
+        */
+        startX = (float)(startX + xTrav * 
+                            FastTrig.sin(Math.toRadians(movementAngle)));
+        startY = (float)(startY - yTrav * 
+                            FastTrig.cos(Math.toRadians(movementAngle)));
         
         
         applyGravity();       

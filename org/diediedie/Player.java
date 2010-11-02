@@ -61,7 +61,8 @@ public class Player implements Actor, InputProviderListener
                       BOW_ANGLE_OFFSET = 85; 
                       
     private int health = MAX_HEALTH, arrowCount = 0, mouseX, mouseY,
-                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;       
+                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;   
+                    
     // Movement
     private Command jump;
     private Command left; 
@@ -122,7 +123,6 @@ public class Player implements Actor, InputProviderListener
         this.xPos = level.getPlayerTile().xPos;
         this.yPos = level.getPlayerTile().yPos - level.getPlayerTile()
                                                            .tileHeight;
-        
         yPos--;
         
         System.out.println("Player is on level " + level + 
@@ -134,11 +134,6 @@ public class Player implements Actor, InputProviderListener
           bowLeft = AnimCreator.loadImage(bowLeftPath);
           bowRight = bowLeft.getFlippedCopy(true, false);
           currentBow = bowLeft;
-          /*bowLeft.setCenterOfRotation(bowLeft.getWidth() / 2,
-                                      bowLeft.getHeight() / 2);
-                                      
-          bowRight.setCenterOfRotation(bowLeft.getWidth() / 2,
-                                       bowLeft.getHeight() / 2);*/
     }    
     
     /**
@@ -405,7 +400,8 @@ public class Player implements Actor, InputProviderListener
         }
         else 
         {
-            throw new IllegalStateException();
+            throw new IllegalStateException(
+                            "standing dir neither left or right");
         }
     }
     
@@ -461,16 +457,6 @@ public class Player implements Actor, InputProviderListener
                 it.remove();
             }
         }
-        
-        /*for(Arrow a :  firedArrows)
-        {
-            a.updateSpeed();
-            a.updatePosition();
-            if(!a.isFlying())
-            {
-                firedArrows.remove(a);
-            }
-        }*/
     }
     
     private void applyFriction()
