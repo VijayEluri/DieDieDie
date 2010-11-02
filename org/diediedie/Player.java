@@ -68,7 +68,8 @@ public class Player implements Actor, InputProviderListener
     private Command right;    
     
     private Arrow currentArrow = null; 
-    private List<Arrow> firedArrows = new ArrayList<Arrow>();
+    private List<Arrow> firedArrows = 
+                Collections.synchronizedList(new ArrayList<Arrow>());
     
     private boolean leftMoveDown = false, rightMoveDown = false,
                     isChargingArrow = false, isFiringArrow = false;
@@ -445,13 +446,31 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
-    private void updateFiredArrows()
+    private void  updateFiredArrows()
     {
-        for(Arrow a : firedArrows)
+        Iterator<Arrow> it = firedArrows.iterator();
+        
+        while(it.hasNext())
+        {
+            Arrow a = it.next();
+            
+            a.updateSpeed();
+            a.updatePosition();
+            if(!a.isFlying())
+            {
+                it.remove();
+            }
+        }
+        
+        /*for(Arrow a :  firedArrows)
         {
             a.updateSpeed();
             a.updatePosition();
-        }
+            if(!a.isFlying())
+            {
+                firedArrows.remove(a);
+            }
+        }*/
     }
     
     private void applyFriction()

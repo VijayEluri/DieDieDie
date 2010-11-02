@@ -55,6 +55,7 @@ public class Bluey implements Actor
     private void createAnimations()
     {
         System.out.println("bluey -> creating animations");
+        
         Image leftStand1 = AnimCreator.loadImage(leftStandPath);
         Image rightStand1 = leftStand1.getFlippedCopy(true, false);        
         
@@ -66,13 +67,13 @@ public class Bluey implements Actor
                                       Actor.ANIM_DURATION,false);
         rightStandAnim = new Animation(rightStandImages,
                                       Actor.ANIM_DURATION,false);          
-        
         // walking anims
         Image[] leftWalkImages = AnimCreator.getImagesFromPaths(
                                leftWalkPaths).toArray(rightStandImages);
         Image[] rightWalkImages = AnimCreator
                             .getHorizontallyFlippedCopy(leftWalkImages)
                                             .toArray(rightStandImages);
+        
         currentAnim = leftStandAnim;
     }
     
