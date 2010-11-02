@@ -44,7 +44,7 @@ public class Player implements Actor, InputProviderListener
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
      
-    private float accelX = 0f, ACCEL_RATE = 0.05f, 
+    private float accelX = 0f, ACCEL_RATE = 0.03f, 
                   MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
                   bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
@@ -119,8 +119,11 @@ public class Player implements Actor, InputProviderListener
     private void setUpStartPosition()
     {
         this.xPos = level.getPlayerTile().xPos;
-        this.yPos = level.getPlayerTile().yPos - 
-                            level.getPlayerTile().tileHeight;
+        this.yPos = level.getPlayerTile().yPos - level.getPlayerTile()
+                                                           .tileHeight;
+        
+        yPos--;
+        
         System.out.println("Player is on level " + level + 
                            " at position x: " + xPos + ", y: " + yPos);              
     }

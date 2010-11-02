@@ -1,5 +1,7 @@
 package org.diediedie.actors;
 
+import java.util.List;
+import java.util.ArrayList;
 import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.newdawn.slick.Animation;
@@ -24,19 +26,16 @@ public class Bluey implements Actor
         
         xPos = t.xPos;
         yPos = t.yPos;
-        
         yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
                  t.tileHeight);
-        
+        yPos--;
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
-        
     }
     
     private float xPos, yPos, tileHeight;
-    
     private boolean setUp = false;
-    
     private final String leftStandPath = "data/bluey_standing_left.png";
+    private final float SCALE = 0.75f;
     
     private final String[] leftWalkPaths = 
     {
@@ -59,20 +58,25 @@ public class Bluey implements Actor
         Image leftStand1 = AnimCreator.loadImage(leftStandPath);
         Image rightStand1 = leftStand1.getFlippedCopy(true, false);        
         
-        
-        // put into arrays to use them as a 1-frame animations
+        // standing anims
         Image[] leftStandImages = { leftStand1 };
-        Image[] rightStandImages = { rightStand1 };        
-        
+        Image[] rightStandImages = { rightStand1 };  
+              
         leftStandAnim = new Animation(leftStandImages, 
                                       Actor.ANIM_DURATION,false);
         rightStandAnim = new Animation(rightStandImages,
-                                      Actor.ANIM_DURATION,false);                           
+                                      Actor.ANIM_DURATION,false);          
+        
+        // walking anims
+        Image[] leftWalkImages = AnimCreator.getImagesFromPaths(
+                               leftWalkPaths).toArray(rightStandImages);
+        Image[] rightWalkImages = AnimCreator
+                            .getHorizontallyFlippedCopy(leftWalkImages)
+                                            .toArray(rightStandImages);
         currentAnim = leftStandAnim;
-        
-        
     }
     
+       
 
     public float getTileHeight()
     {
@@ -102,9 +106,7 @@ public class Bluey implements Actor
     {
         //System.out.println("drawing Bluey: " + getX() + ", " + getY());
         g.drawAnimation(currentAnim, getX(), getY());
-        
-        g.draw(AnimCreator.getCurrentFrameRect(this));
-        
+        //g.draw(AnimCreator.getCurrentFrameRect(this));
         drawProjectiles(g);
     }
     

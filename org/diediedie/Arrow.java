@@ -31,7 +31,7 @@ public class Arrow
                   
     private final float SIZE = 19f, ACCEL_RATE = 0.09f, AIR_REST = 0.6f,
                   MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
-                  ANGLE_CHANGE_INCR = 0.03f, MAX_ANGLE_CHANGE = 1.11f, 
+                  ANGLE_CHANGE_INCR = 0.04f, MAX_ANGLE_CHANGE = 1.11f, 
                   GRAVITY_LINE = 2.9f, ALIGN_INCR = 0.009f;
                   
     private final int REVERSE = 180;

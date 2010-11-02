@@ -28,9 +28,6 @@ public class AnimCreator
         return new Animation(imgArr, duration, autoUpdate);
     }  
                                          
- /*   public static Animation createAnimFromImages(int duration, 
-                                    boolean autoUpdate, 
-   */ 
     public static Image loadImage(String path)
     {
         try
@@ -48,13 +45,40 @@ public class AnimCreator
         }
         return null;
     }
+    
+    public static List<Image> scaleImages(float scale, Image... imgs)
+    {
+        List<Image> scaled = getEmptyImageList();
+        
+        for(Image i : imgs)
+        {
+            scaled.add(i.getScaledCopy(scale));
+        }
+        
+        return scaled;
+    }
+    
+    public static List<Image> getHorizontallyFlippedCopy(Image[] images)
+    {
+        List<Image> flipped = getEmptyImageList();        
+        for(Image i : images)
+        {
+            flipped.add(i.getFlippedCopy(true, false));
+        }
+        return flipped;
+    }
+    
+    public static List<Image> getEmptyImageList()
+    {
+        return new ArrayList<Image>();
+    }
+    
     /*
      * Returns an array of Images from a List of paths to image files. 
      */
     public static List<Image> getImagesFromPaths(String... paths)                                     
     {
-        List<Image> images = new ArrayList<Image>();
-        
+        List<Image> images = getEmptyImageList();
         for(String p : paths)
         {
             images.add(loadImage(p));               
@@ -70,6 +94,4 @@ public class AnimCreator
         return new Rectangle(actr.getX(), actr.getY(), img.getWidth(), 
                              img.getHeight());
     }
-       
-
 }
