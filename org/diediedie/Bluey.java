@@ -1,6 +1,10 @@
 package org.diediedie.actors;
+
+
 import org.diediedie.Level;
 import org.diediedie.actors.Direction;
+import org.diediedie.actors.State;
+
 import java.util.List;
 import java.util.ArrayList;
 import org.diediedie.Tile;
@@ -16,22 +20,10 @@ import org.newdawn.slick.Graphics;
  */ 
 public class Bluey implements Actor, Enemy
 {
-    public Bluey(Level l, Tile t)
-    {
-        if(!setUp)
-        {
-            tileHeight = t.tileHeight;
-            createAnimations();
-            setUp = true;
-        }
-        level = l;
-        xPos = t.xPos;
-        yPos = t.yPos;
-        yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
-                 t.tileHeight);
-        yPos--;
-        System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
-    }
+    private List<State> states = new ArrayList<State>();  
+    
+    
+    
     private int health;
     private Direction facing = null;
     private Level level;
@@ -52,7 +44,28 @@ public class Bluey implements Actor, Enemy
     
     private Animation leftWalkAnim, rightWalkAnim, leftStandAnim, 
                       rightStandAnim, currentAnim = null;
-        
+       
+    /**
+     * Constructor. The object is associated with a Level and is
+     * positioned as near to Tile t on it as possible.
+     */ 
+    public Bluey(Level l, Tile t)
+    {
+        if(!setUp)
+        {
+            tileHeight = t.tileHeight;
+            createAnimations();
+            setUp = true;
+        }
+        level = l;
+        xPos = t.xPos;
+        yPos = t.yPos;
+        yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
+                 t.tileHeight);
+        yPos--;
+        System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
+    }
+    
     public int getHealth()
     {
         return health;
