@@ -637,6 +637,11 @@ public class Player implements Actor, InputProviderListener
         accelX = 0;
     }
     
+    public Direction getFacing()
+    {
+        return facing;
+    }
+
     /**
      * Applies gravity to the player's position.
      */ 

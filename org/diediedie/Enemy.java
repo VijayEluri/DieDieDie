@@ -23,6 +23,5 @@ package org.diediedie.actors;
 public interface Enemy extends Actor
 {
     void setStates();
-    boolean canSeePlayer(float playerX, float playerY); 
-    Direction getFacing();   
+    boolean canSeePlayer(float playerX, float playerY);    
 }

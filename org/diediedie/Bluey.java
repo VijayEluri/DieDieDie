@@ -14,8 +14,6 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
-
 package org.diediedie.actors;
 import org.diediedie.Level;
 import org.diediedie.actors.Direction;
@@ -43,7 +41,6 @@ public class Bluey implements Enemy, StateMachine
     private Direction facing = null;
     private Level level;
     private float xPos, yPos, tileHeight;
-
     private final String leftStandPath = "data/bluey_standing_left.png";
     private final float SCALE = 0.75f;
     

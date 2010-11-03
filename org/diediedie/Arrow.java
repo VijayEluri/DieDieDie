@@ -28,17 +28,7 @@ import org.newdawn.slick.util.FastTrig;
  //good movementAngle stuff here:http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates 
 public class Arrow
 {  
-    /**
-     * Creates a new arrow at the given position.
-     */ 
-    public Arrow(float xPos, float yPos, Level lev, int mouseX, 
-                 int mouseY)
-    {
-        level = lev;
-        setPosition(xPos, yPos);
-        setMovementAngle(mouseX, mouseY);
-        calculateEndPos();
-    }
+    
     
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, 
@@ -58,8 +48,18 @@ public class Arrow
 
     private boolean isFlying = false, collided = false;
    
- 
     
+    /**
+     * Creates a new arrow at the given position.
+     */ 
+    public Arrow(float xPos, float yPos, Level lev, int mouseX, 
+                 int mouseY)
+    {
+        level = lev;
+        setPosition(xPos, yPos);
+        setMovementAngle(mouseX, mouseY);
+        calculateEndPos();
+    }
     
     /**
      * Informs the Arrow object that it has been released by the player
@@ -67,7 +67,7 @@ public class Arrow
     public void release(float power)
     {
         accelX = power;
-        accelY = power * 0.9f;
+        accelY = power;// * 0.9f;
         isFlying = true;
     }
     

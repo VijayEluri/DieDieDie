@@ -32,6 +32,7 @@ public interface Actor
     void update();
     void applyGravity();
     int getHealth();
+    Direction getFacing();
     void move(Direction d);    
     void die();
 }  
