@@ -79,16 +79,28 @@ public class Level extends TiledMap
         sortObjects();
     }   
     
+    /**
+     * Returns the Tile associated with the Player's start position on 
+     * this Level.
+     */ 
     public Tile getPlayerTile()
     {
         return playerTile;   
     }
     
+    /**
+     * Updates the contents of the level, if any.
+     */ 
     public void update()
     {
         updateEnemies();
     }
-        
+    
+    
+    /**
+     * Updates the behaviour and position etc of all enemies on the
+     * level
+     */ 
     public void updateEnemies()
     {
         for(Actor a : enemies)
@@ -189,12 +201,19 @@ public class Level extends TiledMap
         render(x, y, platformLayer.index);
     }
     
+    /**
+     * Draw using Graphics object g this Level at 0,0 plus any 
+     * inhabiting enemies. 
+     */ 
     public void draw(Graphics g)
     {
         render(0, 0);
         drawEnemies(g);
     }
     
+    /**
+     * Draw using Graphics object g any visible enemies. 
+     */ 
     private void drawEnemies(Graphics g)
     {
         for(Actor a : enemies)

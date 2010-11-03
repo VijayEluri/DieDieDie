@@ -26,11 +26,7 @@ import java.util.ArrayList;
  */ 
 public interface StateMachine
 {
-    
     public void setState(State nextState);  
-    
-    /*
-     * Returns the current state
-     */     
     public State getState();    
 }
+

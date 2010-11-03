@@ -17,17 +17,15 @@
 
 package org.diediedie.actors;
 
+/**
+ * Interface design for use when creating States for a (finite)
+ * StateMachine 
+ */ 
 public interface State
 {
+    void setHost(Actor a);
     Actor getHost();
-    
-    /*
-     * Begin execution
-     */ 
     void start();
-    /**
-     * End execution
-     */ 
     void stop();
     String toString();
 }
