@@ -48,17 +48,13 @@ public class Tile
     public float xPos, yPos;
     private TiledMap tiledMap;
     private Rectangle rect;
-    
     public Map<String, String> properties = new HashMap<String, String>();
-    
     public static final String[] PROPERTIES = {"type", "name"};
     public static final String[] VALUES = {"exit", "enemy", "start",
                                            "bluey"};
     public static final String NULL = "NULL";
     
-
-    
-    
+        
     private void extractProperties()
     {
         for(final String P : PROPERTIES)
@@ -99,6 +95,9 @@ public class Tile
         return rect;
     }
     
+    /**
+     * 
+     */ 
     public String toString()
     {
         return "Tile: x, y, index: " + xPos + ", " + yPos + ", " + layer;

@@ -17,11 +17,12 @@
 
 package org.diediedie.actors;
 
-public interface Enemy
+/**
+ * Enemy ACTORS! The sheer bloody bastards!
+ */ 
+public interface Enemy extends Actor
 {
     void setStates();
-    void attack();
-    void flee();
-    Direction getFacing();
-    boolean canSeePlayer(float playerX, float playerY);       
+    boolean canSeePlayer(float playerX, float playerY); 
+    Direction getFacing();   
 }

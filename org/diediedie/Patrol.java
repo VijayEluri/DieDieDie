@@ -18,7 +18,7 @@ import org.diediedie.Level;
  */
 
 import org.diediedie.actors.State;
-
+ 
 public class Patrol implements State
 {
     private Actor host = null;

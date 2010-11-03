@@ -33,15 +33,12 @@ import org.newdawn.slick.Graphics;
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */ 
-public class Bluey implements Actor, Enemy, StateMachine
+public class Bluey implements Enemy, StateMachine
 {
     private List<State> states = new ArrayList<State>();  
-    
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
-    
-    public static final int MAX_BLUEY_HEALTH = 100;
-    
+    public static final int MAX_HEALTH = 100;
     private int health;
     private Direction facing = null;
     private Level level;
@@ -73,7 +70,7 @@ public class Bluey implements Actor, Enemy, StateMachine
         {
             tileHeight = t.tileHeight;
             createAnimations();
-            health = MAX_BLUEY_HEALTH;
+            health = MAX_HEALTH;
             setUp = true;
         }
         level = l;
@@ -85,27 +82,35 @@ public class Bluey implements Actor, Enemy, StateMachine
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
+    /**
+     * Sets Bluey's possible States
+     */ 
+    @Override
     public void setStates()
     {
         
     }
-
+    @Override
     public void move(Direction d)
     {
         
     }
+    @Override
     public Direction getFacing()
     {
         return facing;
     }
+    @Override
     public int getHealth()
     {
         return health;
     }
+    @Override
     public void setState(State nextState)
     {
         
     }
+    @Override
     public State getState()
     {
         return null;        
@@ -140,14 +145,26 @@ public class Bluey implements Actor, Enemy, StateMachine
         currentAnim = leftStandAnim;
     }
     
+    /**
+     * Returns true if Bluey has hit a collision Tile.
+     */ 
+    @Override
+    public boolean collides()
+    {
+        return true;
+    }
+    
+    /*
+     * Returns the height of Bluey's Tile in the Map Editor, Tiled.
+     */ 
     public float getTileHeight()
     {
         return tileHeight;
     }
-     
+    
+    @Override
     public void update()
-    {
-        //System.out.println("updating bluey");
+    {        
         updatePosition();
         updateProjectiles();
     }
@@ -155,27 +172,17 @@ public class Bluey implements Actor, Enemy, StateMachine
     {
         applyGravity();
     }
-    
+    @Override
     public void applyGravity()
     {
         
     }
-    
+    @Override
     public boolean canSeePlayer(float playerX, float playerY)
     {
         return false;
     }
     
-    
-    public void flee()
-    {
-        
-    }
-    
-    public void attack()
-    {
-        
-    }
     
     public void die()
     {
@@ -186,7 +193,7 @@ public class Bluey implements Actor, Enemy, StateMachine
     {
         
     }
-    
+    @Override
     public Animation getCurrentAnim()
     {
         return currentAnim;

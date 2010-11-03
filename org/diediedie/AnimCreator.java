@@ -44,7 +44,10 @@ public class AnimCreator
         images.toArray(imgArr);
         return new Animation(imgArr, duration, autoUpdate);
     }  
-                                         
+                             
+    /**
+     * Load an Image from a given path String.
+     */ 
     public static Image loadImage(String path)
     {
         try
@@ -63,6 +66,10 @@ public class AnimCreator
         return null;
     }
     
+    /**
+     * Returns a cloned, scaled version of a given list by a given
+     * scale. 
+     */ 
     public static List<Image> scaleImages(float scale, Image... imgs)
     {
         List<Image> scaled = getEmptyImageList();

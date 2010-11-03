@@ -22,13 +22,18 @@ import java.util.*;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 
-
+/**
+ * Represents a layer of Tiles
+ */ 
 public class MapLayer 
 {
     protected List<Tile> tiles;
     protected int index;
     protected boolean isVisible;
     
+    /**
+     * Constructs a new map layer from a List of Tiles.  
+     */
     public MapLayer(List<Tile> layerTiles, final int in, boolean visible)
     {
         tiles = layerTiles;

@@ -59,14 +59,14 @@ public class Player implements Actor, InputProviderListener
                     yCollision = false, xCollision = false;
      
     private float accelX = 0f, ACCEL_RATE = 0.03f, 
-                  MAX_ACCEL = 4f, moveSpeed = 0.9f, jumpSpeed = -5.5f,
+                  MAX_ACCEL = 4f, moveSpeed = 0.9f, 
                   bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
     private final float MAX_CHARGE = 25.55f, INCR = 0.01f, 
                         CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -2f, 
                         BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
-                        MAX_X_SPEED = 2.5f,
+                        MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20, 
@@ -549,7 +549,7 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
-    private boolean collides()
+    public boolean collides()
     {
         if(level.collides(AnimCreator.getCurrentFrameRect(this)))
         {
@@ -558,7 +558,7 @@ public class Player implements Actor, InputProviderListener
         return false;
     }
     
-    
+    @Override
     public Animation getCurrentAnim()
     {
         return currentAnim;
@@ -609,12 +609,14 @@ public class Player implements Actor, InputProviderListener
         System.out.println("xPos==" + xPos + ", yPos==" + yPos); 
     }
     
+    /**
+     * Jump! If you can. 
+     */
     private void jump()
     {
         if(canJump)
         {
-            //System.out.println("jump!");
-            ySpeed = jumpSpeed;
+            ySpeed = JUMP_SPEED;
             canJump = false;
         }
     }

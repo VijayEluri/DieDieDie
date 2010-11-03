@@ -25,6 +25,7 @@ public interface Actor
     static final int ANIM_DURATION = 100;
     
     Animation getCurrentAnim();
+    boolean collides();
     void draw(Graphics g);
     float getX();
     float getY();
@@ -32,6 +33,5 @@ public interface Actor
     void applyGravity();
     int getHealth();
     void move(Direction d);    
-    
     void die();
 }  

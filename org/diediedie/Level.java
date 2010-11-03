@@ -96,7 +96,6 @@ public class Level extends TiledMap
         updateEnemies();
     }
     
-    
     /**
      * Updates the behaviour and position etc of all enemies on the
      * level
@@ -148,6 +147,9 @@ public class Level extends TiledMap
         System.out.println("level has " + enemies.size() + " enemies");
     }
     
+    /**
+     * Returns the name of this Level.
+     */ 
     public String toString()
     {
         return name;

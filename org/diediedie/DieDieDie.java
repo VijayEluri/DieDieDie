@@ -38,19 +38,22 @@ import org.newdawn.slick.command.InputProviderListener;
  */ 
 public class DieDieDie extends BasicGame 
 {   
+    // where YOU are the HERO
+    private Player player;
+    
+    
     // object to send input to the Player object
     private InputProvider inputProv = null;
     
-    // higher == more gravity
-    public static final float GRAVITY = 0.20f;
     
     private static int xSize = 640, ySize = 480;
 	private Level level1 = null, currentLevel = null;	
+    
     private final String TILE_SETS_PATH = "data", 
                          LEVEL_1_PATH = "data/level1.tmx",
                          LEVEL_ONE_NAME = "Level 1";
-    
-	private Player player;
+                         
+    public static final float GRAVITY = 0.20f;
     
     /**
      * Creates the GAME...
@@ -126,7 +129,6 @@ public class DieDieDie extends BasicGame
 		currentLevel.draw(g);
         player.draw(g);
 	}
-    
     
     /**
      * For running the program from the command line. 
