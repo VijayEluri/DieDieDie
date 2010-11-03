@@ -18,17 +18,20 @@ import org.newdawn.slick.Graphics;
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */ 
-public class Bluey implements Actor, Enemy
+public class Bluey implements Actor, Enemy, StateMachine
 {
     private List<State> states = new ArrayList<State>();  
     
+    private boolean setUp = false, canJump = false,
+                    yCollision = false, xCollision = false;
     
+    public static final int MAX_BLUEY_HEALTH = 100;
     
     private int health;
     private Direction facing = null;
     private Level level;
     private float xPos, yPos, tileHeight;
-    private boolean setUp = false;
+
     private final String leftStandPath = "data/bluey_standing_left.png";
     private final float SCALE = 0.75f;
     
@@ -55,6 +58,7 @@ public class Bluey implements Actor, Enemy
         {
             tileHeight = t.tileHeight;
             createAnimations();
+            health = MAX_BLUEY_HEALTH;
             setUp = true;
         }
         level = l;
@@ -66,9 +70,30 @@ public class Bluey implements Actor, Enemy
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
+    public void setStates()
+    {
+        
+    }
+
+    public void move(Direction d)
+    {
+        
+    }
+    public Direction getFacing()
+    {
+        return facing;
+    }
     public int getHealth()
     {
         return health;
+    }
+    public void setState(State nextState)
+    {
+        
+    }
+    public State getState()
+    {
+        return null;        
     }
     
     private void createAnimations()
@@ -121,12 +146,11 @@ public class Bluey implements Actor, Enemy
         
     }
     
-    
-    @Override
     public boolean canSeePlayer(float playerX, float playerY)
     {
         return false;
     }
+    
     
     public void flee()
     {

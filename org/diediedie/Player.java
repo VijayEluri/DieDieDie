@@ -292,7 +292,7 @@ public class Player implements Actor, InputProviderListener
      
     public void die()
     {
-        
+        System.out.println("Player is dead!");
     }
     
     private float getMiddleXPos()
@@ -407,18 +407,15 @@ public class Player implements Actor, InputProviderListener
         {
             currentAnim = leftStand;   
         }
-        else 
-        {
-            throw new IllegalStateException(
-                            "standing dir neither left or right");
-        }
+        else throw 
+            new IllegalStateException("standing dir neither left or right");
     }
     
       
     /**
      * Adjusts the player's walking speed
      */ 
-    private void move(Direction dir)
+    public void move(Direction dir)
     {   
         if(dir.equals(Direction.RIGHT))
         {

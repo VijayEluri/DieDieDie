@@ -2,12 +2,13 @@ package org.diediedie.actors;
 
 public interface Enemy
 {
+    void setStates();
     void attack();
-    
     void flee();
     
-    boolean canSeePlayer(float playerX, float playerY);
-    
-    
-    
+    /**
+     * Returns the Direction the Enemy is facing
+     */ 
+    Direction getFacing();
+    boolean canSeePlayer(float playerX, float playerY);       
 }

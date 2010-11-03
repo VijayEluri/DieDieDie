@@ -1,4 +1,5 @@
 package org.diediedie.actors;
+import org.diediedie.actors.Direction;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Animation;
@@ -15,6 +16,7 @@ public interface Actor
     void update();
     void applyGravity();
     int getHealth();
-        
+    void move(Direction d);    
+    
     void die();
 }  

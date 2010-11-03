@@ -1,6 +1,4 @@
 package org.diediedie;
-
-
 import java.io.*;
 import java.util.*;
 import org.diediedie.actors.Direction;
@@ -15,7 +13,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Level in a game of DIE DIE DIE 
+ * A single level...
  */ 
 public class Level extends TiledMap
 {
