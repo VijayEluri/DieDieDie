@@ -105,9 +105,8 @@ public class Level extends TiledMap
                                        + t.properties.get("name"));
                     
                     if(t.properties.get("name").equalsIgnoreCase("bluey"))
-                    {
-                        
-                        enemies.add(new Bluey(t));
+                    {                       
+                        enemies.add(new Bluey(this, t));
                     }
                 }
             }

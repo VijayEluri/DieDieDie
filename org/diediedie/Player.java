@@ -50,15 +50,15 @@ public class Player implements Actor, InputProviderListener
                   bowYCurrentOffset, bowXCurrentOffset;
                   
     private final float MAX_CHARGE = 25.55f, INCR = 0.01f, 
-                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -4, 
+                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -2f, 
                         BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
                         MAX_X_SPEED = 2.5f,
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15;
                         
     private final int MAX_HEALTH = 20, 
-                      BOW_AIM_UP_TRIGGER = 45,
+                      BOW_AIM_UP_TRIGGER = 50,
                       BOW_AIM_DOWN_TRIGGER = 110, BOW_X_OFFSET = 5,
-                      BOW_ANGLE_OFFSET = 85; 
+                      BOW_ANGLE_OFFSET = 90; 
                       
     private int health = MAX_HEALTH, arrowCount = 0, mouseX, mouseY,
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;   
@@ -285,6 +285,15 @@ public class Player implements Actor, InputProviderListener
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
         
     }
+    public int getHealth()
+    {
+        return health;
+    }
+     
+    public void die()
+    {
+        
+    }
     
     private float getMiddleXPos()
     {
@@ -452,10 +461,10 @@ public class Player implements Actor, InputProviderListener
             
             a.updateSpeed();
             a.updatePosition();
-            if(!a.isFlying())
+            /*if(!a.isFlying())
             {
                 it.remove();
-            }
+            }*/
         }
     }
     
@@ -618,7 +627,7 @@ public class Player implements Actor, InputProviderListener
     /**
      * Applies gravity to the player's position.
      */ 
-    private void applyGravity()
+    public void applyGravity()
     {
         if(ySpeed < MAX_Y_SPEED)
         {

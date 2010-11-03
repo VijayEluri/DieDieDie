@@ -1,5 +1,6 @@
 package org.diediedie.actors;
-
+import org.diediedie.Level;
+import org.diediedie.actors.Direction;
 import java.util.List;
 import java.util.ArrayList;
 import org.diediedie.Tile;
@@ -13,9 +14,9 @@ import org.newdawn.slick.Graphics;
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */ 
-public class Bluey implements Actor
+public class Bluey implements Actor, Enemy
 {
-    public Bluey(Tile t)
+    public Bluey(Level l, Tile t)
     {
         if(!setUp)
         {
@@ -23,7 +24,7 @@ public class Bluey implements Actor
             createAnimations();
             setUp = true;
         }
-        
+        level = l;
         xPos = t.xPos;
         yPos = t.yPos;
         yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
@@ -31,7 +32,9 @@ public class Bluey implements Actor
         yPos--;
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
-    
+    private int health;
+    private Direction facing = null;
+    private Level level;
     private float xPos, yPos, tileHeight;
     private boolean setUp = false;
     private final String leftStandPath = "data/bluey_standing_left.png";
@@ -50,7 +53,10 @@ public class Bluey implements Actor
     private Animation leftWalkAnim, rightWalkAnim, leftStandAnim, 
                       rightStandAnim, currentAnim = null;
         
-    
+    public int getHealth()
+    {
+        return health;
+    }
     
     private void createAnimations()
     {
@@ -64,21 +70,23 @@ public class Bluey implements Actor
         Image[] rightStandImages = { rightStand1 };  
               
         leftStandAnim = new Animation(leftStandImages, 
-                                      Actor.ANIM_DURATION,false);
+                                      Actor.ANIM_DURATION, false);
         rightStandAnim = new Animation(rightStandImages,
-                                      Actor.ANIM_DURATION,false);          
+                                      Actor.ANIM_DURATION, false);          
         // walking anims
         Image[] leftWalkImages = AnimCreator.getImagesFromPaths(
                                leftWalkPaths).toArray(rightStandImages);
         Image[] rightWalkImages = AnimCreator
                             .getHorizontallyFlippedCopy(leftWalkImages)
                                             .toArray(rightStandImages);
-        
+        leftWalkAnim = new Animation(leftWalkImages, 
+                                      Actor.ANIM_DURATION, false);
+        rightWalkAnim = new Animation(rightWalkImages,
+                                       Actor.ANIM_DURATION, false);
+        facing = Direction.LEFT;
         currentAnim = leftStandAnim;
     }
     
-       
-
     public float getTileHeight()
     {
         return tileHeight;
@@ -92,12 +100,41 @@ public class Bluey implements Actor
     }
     private void updatePosition()
     {
+        applyGravity();
+    }
+    
+    public void applyGravity()
+    {
         
     }
+    
+    
+    @Override
+    public boolean canSeePlayer(float playerX, float playerY)
+    {
+        return false;
+    }
+    
+    public void flee()
+    {
+        
+    }
+    
+    public void attack()
+    {
+        
+    }
+    
+    public void die()
+    {
+        
+    }
+
     private void updateProjectiles()
     {
         
     }
+    
     public Animation getCurrentAnim()
     {
         return currentAnim;
