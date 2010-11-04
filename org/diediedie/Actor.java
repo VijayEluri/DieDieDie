@@ -23,10 +23,11 @@ import org.newdawn.slick.geom.Rectangle;
 public interface Actor
 {            
     final int ANIM_DURATION = 100;
-        
+    
+    Animation getCurrentAnim();    
     void draw(Graphics g);
     void update();
-    Animation getCurrentAnim();
+    
     
     boolean collides();
     boolean canJump();

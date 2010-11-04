@@ -29,33 +29,38 @@ public class Patrol implements State
         host = a;
     }  
     
+    @Override
     public Actor getHost()
     {
         return host;
     }
-
+    
+    @Override
     public void start()
     {
         
     }
     
+    @Override
     public void stop()
     {
     
     }
     
+    @Override
     public boolean isRunning()
     {
         return running;
     }
     
 
-    
+    @Override
     public boolean isStopped()
     {
         return stopped;       
     }
     
+    @Override
     public String toString()
     {
         return "Patrol";

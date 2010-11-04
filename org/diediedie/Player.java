@@ -41,21 +41,19 @@ import org.newdawn.slick.command.MouseButtonControl;
  */ 
 public class Player implements Actor, InputProviderListener 
 {    
-    
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
      
-    private float accelX = 0f, ACCEL_RATE = 0.03f, 
-                  MAX_ACCEL = 4f, 
-                  bowCharge = 0, oldX, oldY, bowX, bowY, 
+    private float accelX = 0f, bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
-    private final float MAX_CHARGE = 25.55f, CHARGE_INCR = 0.5f, 
-                        BOW_Y_OFFSET_NORMAL = -2f, 
-                        BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
-                        MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
-                        BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
-                        MOVE_SPEED = 0.9f;
+    public final float MAX_CHARGE = 25.55f, CHARGE_INCR = 0.5f, 
+                       BOW_Y_OFFSET_NORMAL = -2f, 
+                       BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
+                       MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
+                       BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
+                       MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
+                       ACCEL_RATE = 0.03f;
                         
     private final int MAX_HEALTH = 20, BOW_AIM_UP_TRIGGER = 50,
                       BOW_AIM_DOWN_TRIGGER = 110, BOW_X_OFFSET = 5,
@@ -103,10 +101,12 @@ public class Player implements Actor, InputProviderListener
         "data/STICKMAN_RIGHT_WALK_5.png", 
         "data/STICKMAN_RIGHT_WALK_6.png"
     }; 
+    
     private String[] leftStandPaths =
     {
         "data/STICKMAN_LEFT_STAND.png"        
     };
+    
     private String[] rightStandPaths = 
     {
         "data/STICKMAN_RIGHT_STAND.png"        
@@ -133,6 +133,10 @@ public class Player implements Actor, InputProviderListener
         }
     }    
     
+    /*
+     * Places the Player at the designated start position according to
+     * the Level associated with it. 
+     */ 
     private void setUpStartPosition()
     {
         this.xPos = level.getPlayerTile().xPos;

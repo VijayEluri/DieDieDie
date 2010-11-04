@@ -47,11 +47,11 @@ public class Bluey implements Enemy, StateMachine
     private Level level;
     
     private float xPos, yPos, tileHeight, moveSpeed = 0, oldX, oldY,
-                  xSpeed = 0, ySpeed = 0;
+                  xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0;
     
-    private final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 3.5f, 
-                        RUN_SPEED = 5.1f, JUMP_SPEED = -5.5f;
-    
+    public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 3.5f, 
+                        RUN_SPEED = 5.1f, JUMP_SPEED = -5.5f,
+                        ACCEL_RATE = 0.03f;
     
     private final String leftStandPath = "data/bluey_standing_left.png";
     private final String[] leftWalkPaths = 
@@ -78,7 +78,7 @@ public class Bluey implements Enemy, StateMachine
             tileHeight = t.tileHeight;
             createAnimations();
             health = MAX_HEALTH;
-            setStates();
+            createStates();
             setUp = true;
         }
         level = l;
@@ -87,19 +87,28 @@ public class Bluey implements Enemy, StateMachine
         yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
                  t.tileHeight);
         yPos--;
+        
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
     @Override
-    public void setMoveSpeed()
+    public void setMoveSpeed(float f)
     {
-        
+        moveSpeed = f;
     }
     
     @Override
     public void setFacing(Direction d)
     {
         facing = d;
+        if(d.equals(Direction.LEFT))
+        {
+            currentAnim = leftWalkAnim;
+        }
+        else
+        {
+            currentAnim = rightWalkAnim;
+        }
     }
     
     @Override
@@ -113,11 +122,12 @@ public class Bluey implements Enemy, StateMachine
     {
         yPos = y;
     }
+    
     /**
-     * Sets Bluey's possible States
+     * Set Bluey's possible States
      */ 
     @Override
-    public void setStates()
+    public void createStates()
     {
         states = new ArrayList<State>();
         states.add(new Patrol(this));
