@@ -98,6 +98,12 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    public Level getLevel()
+    {
+        return level;
+    }
+    
+    @Override
     public void setFacing(Direction d)
     {
         facing = d;
@@ -245,16 +251,7 @@ public class Bluey implements Enemy, StateMachine
         facing = Direction.LEFT;
         currentAnim = leftStandAnim;
     }
-    
-    /**
-     * Returns true if Bluey has hit a collision Tile.
-     */ 
-    @Override
-    public boolean collides()
-    {
-        return true;
-    }
-    
+        
     /*
      * Returns the height of Bluey's Tile in the Map Editor, Tiled.
      */ 

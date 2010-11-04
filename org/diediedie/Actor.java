@@ -16,22 +16,22 @@
  */
 package org.diediedie.actors;
 import org.diediedie.actors.Direction;
+import org.diediedie.Level;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.Rectangle;
  
 public interface Actor
 {            
-    final int ANIM_DURATION = 100;
+    public static final int ANIM_DURATION = 100;
     
     Animation getCurrentAnim();    
     void draw(Graphics g);
     void update();
-    
-    
-    boolean collides();
     boolean canJump();
-        
+    
+    Level getLevel();
+    
     // position, velocity etc
     float getX();
     float getY();    
@@ -47,7 +47,6 @@ public interface Actor
     float getXSpeed();
     float getJumpSpeed();
     float getMoveSpeed();
-    
     
     void setYSpeed(float y);
     void setXSpeed(float x);

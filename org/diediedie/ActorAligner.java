@@ -1,6 +1,7 @@
 package org.diediedie.actors;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.Actor;
+import org.diediedie.actors.AnimCreator;
 
 /**
  * Utility class for aligning an Actor against a collision Tile 
@@ -8,12 +9,24 @@ import org.diediedie.actors.Actor;
  */ 
 public class ActorAligner
 {
-    private static final float INCR = 0.01f;
+    public static final float INCR = 0.01f;
     
+    public static boolean collides(Actor a)
+    {
+        if(a.getLevel().collides(AnimCreator.getCurrentFrameRect(a)))
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Aligns a collided Actor to a non-colliding part of the Level.
+     */ 
     public static void alignToObstacle(Actor a)
     {
         // finally, put the Player as close to the obstacle as possible
-        while(!a.collides())
+        while(!collides(a))
         {
             // here 'canJump' is used to discern the direction of the
             // collision; i.e. a 'true' value indicates (hopefully) 

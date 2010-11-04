@@ -163,17 +163,7 @@ public class Arrow
         }
         return false;
     }
-
-    // not used 
-    private void reverse()
-    {
-        startX = (float)(startX + ALIGN_INCR * 
-                    Math.sin(Math.toRadians(movementAngle + REVERSE)));
-        startY = (float)(startY - ALIGN_INCR * 
-                    Math.cos(Math.toRadians(movementAngle + REVERSE)));
-        calculateEndPos();
-    }
-    
+        
     /*
      * Stops the movement of the Arrow
      */ 

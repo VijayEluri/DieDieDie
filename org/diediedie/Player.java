@@ -526,7 +526,7 @@ public class Player implements Actor, InputProviderListener
         // test new position
         // vertical 
         yPos += ySpeed;
-        if(collides())
+        if(ActorAligner.collides(this))
         {
             //System.out.println("vertical collision");
             yCollision = true;
@@ -550,7 +550,7 @@ public class Player implements Actor, InputProviderListener
         // horizontal 
         xPos += xSpeed;
         
-        if(collides())
+        if(ActorAligner.collides(this))
         {
             xPos = oldX;
             xSpeed = 0;
@@ -562,14 +562,12 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
-    public boolean collides()
+    @Override
+    public Level getLevel()
     {
-        if(level.collides(AnimCreator.getCurrentFrameRect(this)))
-        {
-            return true;
-        }
-        return false;
+        return level;
     }
+
     
     @Override
     public Animation getCurrentAnim()
