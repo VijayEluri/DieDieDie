@@ -49,6 +49,8 @@ public class Patrol implements State
         return running;
     }
     
+
+    
     public boolean isStopped()
     {
         return stopped;       

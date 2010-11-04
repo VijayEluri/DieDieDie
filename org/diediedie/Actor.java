@@ -26,14 +26,22 @@ public interface Actor
     
     Animation getCurrentAnim();
     boolean collides();
+    boolean canJump();
     void draw(Graphics g);
+    
     float getX();
-    float getY();
-    void update();
-    void applyGravity();
+    float getY();    
+    void setX(float x);
+    void setY(float y);
+    
     int getHealth();
+    void update();
     Direction getFacing();
+    void applyGravity();
     void move(Direction d);    
+    float getMaxFallSpeed();
+    float getYSpeed();
+    float getXSpeed();
     
     void die();
 }  

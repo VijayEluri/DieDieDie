@@ -17,6 +17,7 @@
 package org.diediedie.actors;
 import org.diediedie.Level;
 import org.diediedie.actors.AnimCreator;
+import org.diediedie.actors.ActorAligner;
 import java.io.*;
 import java.util.*;
 import java.lang.Math.*;
@@ -49,8 +50,8 @@ public class Player implements Actor, InputProviderListener
                   bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
-    private final float MAX_CHARGE = 25.55f, INCR = 0.01f, 
-                        CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -2f, 
+    private final float MAX_CHARGE = 25.55f, CHARGE_INCR = 0.5f, 
+                        BOW_Y_OFFSET_NORMAL = -2f, 
                         BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
                         MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
@@ -521,7 +522,7 @@ public class Player implements Actor, InputProviderListener
             ySpeed = 0;
             yPos = oldY;
             
-            alignToObstacle();
+            ActorAligner.alignToObstacle(this);
         } 
         else
         {
@@ -564,33 +565,11 @@ public class Player implements Actor, InputProviderListener
      * This is done to stop it looking like the player is 'hovering'
      * before landing due to having a high falling speed.
      */ 
-    private void alignToObstacle()
+    
+    @Override
+    public boolean canJump()
     {
-        // finally, put the Player as close to the obstacle as possible
-        while(!collides())
-        {
-            // here 'canJump' is used to discern the direction of the
-            // collision; i.e. a 'true' value indicates (hopefully) 
-            // that the player *fell* into this collision rather than
-            // headbutted it... 
-            
-            if(canJump)
-            {
-                yPos += INCR;
-            }
-            else
-            {
-                yPos -= INCR;
-            }
-        }
-        if(canJump)
-        {
-            yPos -= INCR;
-        }
-        else
-        {
-            yPos += INCR;
-        }
+        return canJump;
     }
     
     public void printSpeed()
@@ -614,6 +593,18 @@ public class Player implements Actor, InputProviderListener
             ySpeed = JUMP_SPEED;
             canJump = false;
         }
+    }
+    
+    @Override
+    public void setX(float x)
+    {
+        xPos = x;
+    }
+    
+    @Override
+    public void setY(float y)
+    {
+        yPos = y;
     }
     
     private void decelerate()
@@ -642,14 +633,33 @@ public class Player implements Actor, InputProviderListener
      */ 
     public void applyGravity()
     {
-        if(ySpeed < MAX_Y_SPEED)
+        if(ySpeed < getMaxFallSpeed())
         {
             ySpeed += level.gravity;  
         }
     }
+    @Override
+    public float getYSpeed()
+    {
+        return ySpeed;
+    }
+    
+    @Override
+    public float getXSpeed()
+    {
+        return xSpeed;
+    }
+    
+    @Override
+    public float getMaxFallSpeed()
+    {
+        return MAX_Y_SPEED;
+    }
+    
     /**
      * Draw method. Public due to implementation requirement.
      */ 
+    @Override
     public void draw(Graphics g)
     {
         g.drawAnimation(currentAnim, getX(), getY());

@@ -36,17 +36,18 @@ public class Bluey implements Enemy, StateMachine
     private List<State> states;
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false, 
-                    isMoving = false;
+                    moving = false;
                     
     public static final int MAX_HEALTH = 100;
     private int health;
     private Direction facing = null;
     private Level level;
     
-    private float xPos, yPos, tileHeight, moveSpeed = 0;
+    private float xPos, yPos, tileHeight, moveSpeed = 0, oldX, oldY,
+                  xSpeed = 0, ySpeed = 0;
     
-    
-    private final float WALK_SPEED = 3.5f, RUN_SPEED = 5.1f;
+    private final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 3.5f, 
+                        RUN_SPEED = 5.1f;
     
     
     private final String leftStandPath = "data/bluey_standing_left.png";
@@ -97,7 +98,18 @@ public class Bluey implements Enemy, StateMachine
     {
         facing = d;
     }
-
+    
+    @Override
+    public void setX(float x)
+    {
+        xPos = x;
+    }
+    
+    @Override
+    public void setY(float y)
+    {
+        yPos = y;
+    }
     /**
      * Sets Bluey's possible States
      */ 
@@ -108,10 +120,19 @@ public class Bluey implements Enemy, StateMachine
         states.add(new Patrol(this));
     }
     
+    
+    
     @Override
     public void move(Direction d)
     {
-        
+        if(d.equals(Direction.RIGHT))
+        {
+            
+        }
+        else if(d.equals(Direction.LEFT))
+        {
+            
+        }
     }
     
     @Override
@@ -130,6 +151,24 @@ public class Bluey implements Enemy, StateMachine
     public void setState(State nextState)
     {
         
+    }
+    
+    @Override
+    public float getYSpeed()
+    {
+        return ySpeed;
+    }
+    
+    @Override
+    public float getXSpeed()
+    {
+        return xSpeed;
+    }
+    
+    @Override
+    public boolean canJump()
+    {
+        return canJump;
     }
     
     @Override
@@ -193,16 +232,22 @@ public class Bluey implements Enemy, StateMachine
     private void updatePosition()
     {
         applyGravity();
-        if(isMoving)
+        
+        // save pre-move position so that if moving causes a collision
+        // it can be undone:
+        oldX = xPos;
+        oldY = yPos;
+        
+        if(isMoving())
         {
-            
+            move(facing);
         }
     }
     
     @Override
     public boolean isMoving()
     {
-        return isMoving;   
+        return moving;   
     }
 
     
@@ -217,6 +262,12 @@ public class Bluey implements Enemy, StateMachine
         return false;
     }
     
+    @Override
+    public float getMaxFallSpeed()
+    {
+        return MAX_Y_SPEED;
+        
+    }
     
     public void die()
     {
