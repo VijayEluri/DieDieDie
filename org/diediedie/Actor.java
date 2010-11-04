@@ -34,5 +34,6 @@ public interface Actor
     int getHealth();
     Direction getFacing();
     void move(Direction d);    
+    
     void die();
 }  

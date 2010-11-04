@@ -14,7 +14,6 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
 package org.diediedie.actors;
 
 /**
@@ -25,7 +24,16 @@ public interface State
 {
     void setHost(Actor a);
     Actor getHost();
+    
+    /**
+     * Starts this state.
+     */ 
     void start();
+    
+    /**
+     * Stops this state.
+     */ 
     void stop();
+    
     String toString();
 }

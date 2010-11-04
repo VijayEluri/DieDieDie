@@ -16,6 +16,7 @@
  */
 
 package org.diediedie.actors;
+import org.diediedie.actors.Direction;
 
 /**
  * Enemy ACTORS! The sheer bloody bastards!
@@ -23,5 +24,8 @@ package org.diediedie.actors;
 public interface Enemy extends Actor
 {
     void setStates();
-    boolean canSeePlayer(float playerX, float playerY);    
+    void setMoveSpeed();
+    void setFacing(Direction d);
+    boolean canSeePlayer(float playerX, float playerY);
+    boolean isMoving();  
 }

@@ -35,15 +35,21 @@ public class Bluey implements Enemy, StateMachine
 {
     private List<State> states;
     private boolean setUp = false, canJump = false,
-                    yCollision = false, xCollision = false;
+                    yCollision = false, xCollision = false, 
+                    isMoving = false;
+                    
     public static final int MAX_HEALTH = 100;
     private int health;
     private Direction facing = null;
     private Level level;
-    private float xPos, yPos, tileHeight;
-    private final String leftStandPath = "data/bluey_standing_left.png";
-    private final float SCALE = 0.75f;
     
+    private float xPos, yPos, tileHeight, moveSpeed = 0;
+    
+    
+    private final float WALK_SPEED = 3.5f, RUN_SPEED = 5.1f;
+    
+    
+    private final String leftStandPath = "data/bluey_standing_left.png";
     private final String[] leftWalkPaths = 
     {
         "data/bluey_walk_left_1.png",
@@ -80,6 +86,18 @@ public class Bluey implements Enemy, StateMachine
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
+    @Override
+    public void setMoveSpeed()
+    {
+        
+    }
+    
+    @Override
+    public void setFacing(Direction d)
+    {
+        facing = d;
+    }
+
     /**
      * Sets Bluey's possible States
      */ 
@@ -87,27 +105,33 @@ public class Bluey implements Enemy, StateMachine
     public void setStates()
     {
         states = new ArrayList<State>();
+        states.add(new Patrol(this));
     }
+    
     @Override
     public void move(Direction d)
     {
         
     }
+    
     @Override
     public Direction getFacing()
     {
         return facing;
     }
+    
     @Override
     public int getHealth()
     {
         return health;
     }
+    
     @Override
     public void setState(State nextState)
     {
         
     }
+    
     @Override
     public State getState()
     {
@@ -169,7 +193,19 @@ public class Bluey implements Enemy, StateMachine
     private void updatePosition()
     {
         applyGravity();
+        if(isMoving)
+        {
+            
+        }
     }
+    
+    @Override
+    public boolean isMoving()
+    {
+        return isMoving;   
+    }
+
+    
     @Override
     public void applyGravity()
     {

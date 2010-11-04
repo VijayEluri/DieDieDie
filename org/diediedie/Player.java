@@ -40,20 +40,6 @@ import org.newdawn.slick.command.MouseButtonControl;
  */ 
 public class Player implements Actor, InputProviderListener 
 {    
-    /**
-     * Initialises a new Player at the given position.
-     */ 
-    public Player(Level level)
-    {
-        this.level = level;
-        setUpStartPosition();
-        if(!setUp)
-        {            
-            initAnim();   
-            initBow();
-            setUp = true;
-        }
-    }    
     
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
@@ -70,8 +56,7 @@ public class Player implements Actor, InputProviderListener
                         BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
                         MOVE_SPEED = 0.9f;
                         
-    private final int MAX_HEALTH = 20, 
-                      BOW_AIM_UP_TRIGGER = 50,
+    private final int MAX_HEALTH = 20, BOW_AIM_UP_TRIGGER = 50,
                       BOW_AIM_DOWN_TRIGGER = 110, BOW_X_OFFSET = 5,
                       BOW_ANGLE_OFFSET = 90; 
                       
@@ -132,6 +117,20 @@ public class Player implements Actor, InputProviderListener
     // associated level for collision / item collection reference
     private Level level = null;
     
+    /**
+     * Constructs the Player at the given position.
+     */ 
+    public Player(Level level)
+    {
+        this.level = level;
+        setUpStartPosition();
+        if(!setUp)
+        {            
+            initAnim();   
+            initBow();
+            setUp = true;
+        }
+    }    
     
     private void setUpStartPosition()
     {
@@ -422,8 +421,8 @@ public class Player implements Actor, InputProviderListener
         {
             currentAnim = leftStand;   
         }
-        else throw 
-            new IllegalStateException("standing dir neither left or right");
+        else throw new IllegalStateException(
+                            "standing dir neither left or right");
     }
     
       
@@ -463,7 +462,7 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
-    private void  updateFiredArrows()
+    private void updateFiredArrows()
     {
         Iterator<Arrow> it = firedArrows.iterator();
         
