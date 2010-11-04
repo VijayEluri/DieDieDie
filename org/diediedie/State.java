@@ -34,6 +34,7 @@ public interface State
      */ 
     void stop();
     
+    //void update();
     
     boolean isRunning();
     boolean isStopped();

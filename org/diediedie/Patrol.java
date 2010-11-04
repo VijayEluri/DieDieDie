@@ -39,16 +39,22 @@ public class Patrol implements State
     public void start()
     {
         running = true;
-        
-        
     }
     
     @Override
     public void stop()
     {
-    
+        running = false;
     }
     
+    /**
+     * Update the state 
+     */                     /*
+    public void update()
+    {
+        
+    }*/
+
     @Override
     public boolean isRunning()
     {

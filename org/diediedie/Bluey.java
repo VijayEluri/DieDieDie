@@ -285,14 +285,12 @@ public class Bluey implements Enemy, StateMachine
         
         // save pre-move position so that if moving causes a collision
         // it can be undone:
-        oldX = xPos;
-        oldY = yPos;
-        
+                
         if(isMoving())
         {
             applySpeed(facing);
         }
-                
+        Mover.move(this);
     }
     
     @Override
@@ -315,11 +313,16 @@ public class Bluey implements Enemy, StateMachine
         return moving;   
     }
 
-    
+    /**
+     * Applies gravity to the player's position.
+     */ 
     @Override
     public void applyGravity()
     {
-        
+        if(getYSpeed() < getMaxFallSpeed())
+        {
+            setYSpeed(getYSpeed() + level.gravity);  
+        }
     }
     @Override
     public boolean canSeePlayer()

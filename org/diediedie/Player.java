@@ -617,11 +617,12 @@ public class Player implements Actor, InputProviderListener
     /**
      * Applies gravity to the player's position.
      */ 
+    @Override
     public void applyGravity()
     {
-        if(ySpeed < getMaxFallSpeed())
+        if(getYSpeed() < getMaxFallSpeed())
         {
-            ySpeed += level.gravity;  
+            setYSpeed(getYSpeed() + level.gravity);  
         }
     }
     

@@ -24,7 +24,7 @@ import org.diediedie.actors.Collider;
  * Class used to move Actors around a Level. 
  */ 
 public class Mover
-{
+{    
     public static void move(Actor a)
     {
         final float oldX = a.getX();
