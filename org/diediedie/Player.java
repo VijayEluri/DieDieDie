@@ -151,6 +151,12 @@ public class Player implements Actor, InputProviderListener
           currentBow = bowLeft;
     }    
     
+    @Override
+    public float getMoveSpeed()
+    {
+        return MOVE_SPEED;
+    }
+    
     /**
      * Links the game's InputProvider to the Player obkect
      */ 

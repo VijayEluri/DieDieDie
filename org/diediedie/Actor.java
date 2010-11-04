@@ -45,6 +45,8 @@ public interface Actor
     float getYSpeed();
     float getXSpeed();
     float getJumpSpeed();
+    float getMoveSpeed();
+    
     
     void setYSpeed(float y);
     void setXSpeed(float x);

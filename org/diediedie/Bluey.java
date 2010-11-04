@@ -124,19 +124,29 @@ public class Bluey implements Enemy, StateMachine
     }
     
     
-    
     @Override
     public void move(Direction d)
     {
         if(d.equals(Direction.RIGHT))
         {
-            
+            //accelerate();
+            currentAnim = rightWalkAnim;
+            xSpeed = getMoveSpeed();// + accelX;
         }
         else if(d.equals(Direction.LEFT))
         {
-            
+            //accelerate();
+            currentAnim = leftWalkAnim;
+            xSpeed = -getMoveSpeed();// + accelX);
         }
     }
+    
+    @Override
+    public float getMoveSpeed()
+    {
+        return moveSpeed;
+    }
+    
     @Override
     public float getJumpSpeed()
     {
@@ -262,6 +272,8 @@ public class Bluey implements Enemy, StateMachine
         {
             move(facing);
         }
+        
+        
     }
     
     @Override
