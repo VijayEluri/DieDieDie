@@ -24,8 +24,11 @@ import org.diediedie.actors.Direction;
 public interface Enemy extends Actor
 {
     void createStates();
+    void setInitialState();
     void setMoveSpeed(float f);
     void setFacing(Direction d);
     boolean canSeePlayer();
     boolean isMoving();  
+    //boolean knowsOfPlayer();
+    
 }

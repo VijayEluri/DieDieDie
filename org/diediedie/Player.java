@@ -449,12 +449,55 @@ public class Player implements Actor, InputProviderListener
                             "standing dir neither left or right");
     }
     
-      
+    
     /**
-     * Adjusts the player's walking speed
-     */ 
-    public void move(Direction dir)
-    {   
+     * Updates the position of the Actor based upon x / y speeds.
+     */
+    @Override
+    public void move()
+    {
+        oldX = getX();
+        oldY = getY();
+        
+        // test new position
+        // vertical 
+        
+        setY(getY() + getYSpeed());
+        
+        
+        if(ActorAligner.collides(this))
+        {
+            //System.out.println("vertical collision");
+            
+            if(getY() >= oldY)
+            {
+                // fell 
+                canJump = true;
+            }
+            setYSpeed(0);
+            setY(oldY);
+            
+            ActorAligner.alignToObstacle(this);
+        } 
+        else
+        {
+            canJump = false;
+        }
+        
+        // horizontal 
+        setX(getX() + getXSpeed());
+        
+        if(ActorAligner.collides(this))
+        {
+            setX(oldX);
+            setXSpeed(0);
+            resetAccelX();
+        }        
+    }
+    
+    @Override
+    public void applySpeed(Direction dir)
+    {
         if(dir.equals(Direction.RIGHT))
         {
             accelerate();
@@ -466,9 +509,9 @@ public class Player implements Actor, InputProviderListener
             accelerate();
             currentAnim = leftWalk;
             xSpeed = -(MOVE_SPEED + accelX);
-        }
-        //System.out.println("Player xSpeed: " + xSpeed);
+        }          
     }
+
     
     /*
      * Increases walk speed.
@@ -510,7 +553,7 @@ public class Player implements Actor, InputProviderListener
                 
         if(running)
         {
-            move(moving);
+            applySpeed(moving);
         }
         else
         {
@@ -525,42 +568,7 @@ public class Player implements Actor, InputProviderListener
         
         updateFiredArrows();
         
-        //save old coordinates in case the new positions == collision
-        oldX = xPos;
-        oldY = yPos;
-        
-        // test new position
-        // vertical 
-        yPos += ySpeed;
-        if(ActorAligner.collides(this))
-        {
-            //System.out.println("vertical collision");
-            
-            if(yPos >= oldY)
-            {
-                // fell 
-                canJump = true;
-            }
-            ySpeed = 0;
-            yPos = oldY;
-            
-            ActorAligner.alignToObstacle(this);
-        } 
-        else
-        {
-            canJump = false;
-        }
-        
-        // horizontal 
-        xPos += xSpeed;
-        
-        if(ActorAligner.collides(this))
-        {
-            xPos = oldX;
-            xSpeed = 0;
-            resetAccelX();
-        }        
-     
+        move();        
     }
     
     @Override
@@ -599,12 +607,10 @@ public class Player implements Actor, InputProviderListener
         System.out.println("xPos==" + xPos + ", yPos==" + yPos); 
     }
     
-    /**
-     * Jump! If you can. 
-     */
-    private void jump()
+    @Override
+    public void jump()
     {
-        if(canJump)
+        if(canJump())
         {
             ySpeed = JUMP_SPEED;
             canJump = false;
@@ -631,7 +637,6 @@ public class Player implements Actor, InputProviderListener
         {
             resetAccelX();
         }
-
     }
     
     private void resetAccelX()
@@ -639,6 +644,7 @@ public class Player implements Actor, InputProviderListener
         accelX = 0;
         setStandingAnim();
     }
+    
     
     public Direction getFacing()
     {
@@ -655,6 +661,7 @@ public class Player implements Actor, InputProviderListener
             ySpeed += level.gravity;  
         }
     }
+    
     @Override
     public float getYSpeed()
     {

@@ -33,25 +33,28 @@ public interface Actor
     Level getLevel();
     
     // position, velocity etc
-    
+   
     void setLevel(Level l);
     float getX();
     float getY();    
     void setX(float x);
     void setY(float y);
+    void jump();
+    
+    void applySpeed(Direction d);
     void applyGravity();
-    void move(Direction d);  
+    void move();  
     Direction getFacing();
     
     // speed 
-    float getMaxFallSpeed();
-    float getYSpeed();
-    float getXSpeed();
-    float getJumpSpeed();
-    float getMoveSpeed();
-    
     void setYSpeed(float y);
     void setXSpeed(float x);
+    
+    float getYSpeed();
+    float getXSpeed();
+    float getMaxFallSpeed();
+    float getJumpSpeed();
+    float getMoveSpeed();
     
     int getHealth();
     void die();

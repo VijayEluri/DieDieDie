@@ -34,9 +34,8 @@ import org.newdawn.slick.Graphics;
  */ 
 public class Bluey implements Enemy, StateMachine
 {
-    
-    private List<State> states;
     private State currentState = null;
+    private State patrol;
     
     private boolean setUp = false, canJump = false, moving = false;
     
@@ -124,6 +123,12 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    public void setInitialState()
+    {
+        currentState = patrol;
+    }
+    
+    @Override
     public void setX(float x)
     {
         xPos = x;
@@ -141,26 +146,14 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void createStates()
     {
-        states = new ArrayList<State>();
-        states.add(new Patrol(this));
+        patrol = new Patrol(this);
     }
     
     
     @Override
-    public void move(Direction d)
+    public void move()
     {
-        if(d.equals(Direction.RIGHT))
-        {
-            //accelerate();
-            currentAnim = rightWalkAnim;
-            xSpeed = getMoveSpeed();// + accelX;
-        }
-        else if(d.equals(Direction.LEFT))
-        {
-            //accelerate();
-            currentAnim = leftWalkAnim;
-            xSpeed = -getMoveSpeed();// + accelX);
-        }
+        
     }
     
     @Override
@@ -267,6 +260,14 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    public void jump()
+    {
+        if(canJump())
+        {
+            System.out.println("bluey jump");    
+        }
+    }
+    @Override
     public void update()
     {        
         updatePosition();
@@ -283,10 +284,23 @@ public class Bluey implements Enemy, StateMachine
         
         if(isMoving())
         {
-            move(facing);
+            applySpeed(facing);
         }
-        
-        
+                
+    }
+    
+    @Override
+    public void applySpeed(Direction dir)
+    {
+        setFacing(dir);
+        if(dir.equals(Direction.RIGHT))
+        {
+            xSpeed = (moveSpeed);
+        }
+        else if(dir.equals(Direction.LEFT))
+        {            
+            xSpeed = -(moveSpeed);
+        }          
     }
     
     @Override
@@ -312,18 +326,20 @@ public class Bluey implements Enemy, StateMachine
     public float getMaxFallSpeed()
     {
         return MAX_Y_SPEED;
-        
     }
     
+    @Override
     public void die()
     {
         
     }
-
+    
+    
     private void updateProjectiles()
     {
         
     }
+    
     @Override
     public Animation getCurrentAnim()
     {
