@@ -14,10 +14,12 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
+ 
 package org.diediedie.actors;
 import org.diediedie.Level;
 import org.diediedie.actors.AnimCreator;
-import org.diediedie.actors.ActorAligner;
+import org.diediedie.actors.Collider;
+import org.diediedie.actors.Aligner;
 import java.io.*;
 import java.util.*;
 import java.lang.Math.*;
@@ -465,7 +467,7 @@ public class Player implements Actor, InputProviderListener
         setY(getY() + getYSpeed());
         
         
-        if(ActorAligner.collides(this))
+        if(Collider.collides(this))
         {
             //System.out.println("vertical collision");
             
@@ -477,7 +479,7 @@ public class Player implements Actor, InputProviderListener
             setYSpeed(0);
             setY(oldY);
             
-            ActorAligner.alignToObstacle(this);
+            Aligner.alignToObstacle(this);
         } 
         else
         {
@@ -487,7 +489,7 @@ public class Player implements Actor, InputProviderListener
         // horizontal 
         setX(getX() + getXSpeed());
         
-        if(ActorAligner.collides(this))
+        if(Collider.collides(this))
         {
             setX(oldX);
             setXSpeed(0);
