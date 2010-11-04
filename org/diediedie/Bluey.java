@@ -136,6 +136,18 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    public void setYSpeed(float f)
+    {
+        ySpeed = f;
+    }
+    
+    @Override
+    public void setXSpeed(float f)
+    {
+        xSpeed = f;
+    }
+    
+    @Override
     public Direction getFacing()
     {
         return facing;

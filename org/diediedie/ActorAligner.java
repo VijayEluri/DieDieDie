@@ -2,7 +2,6 @@ package org.diediedie.actors;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.Actor;
 
-
 /**
  * Utility class for aligning an Actor against a collision Tile 
  * following a collision

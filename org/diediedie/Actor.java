@@ -19,29 +19,34 @@ import org.diediedie.actors.Direction;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.Rectangle;
-
+ 
 public interface Actor
 {            
-    static final int ANIM_DURATION = 100;
-    
+    final int ANIM_DURATION = 100;
+        
+    void draw(Graphics g);
+    void update();
     Animation getCurrentAnim();
+    
     boolean collides();
     boolean canJump();
-    void draw(Graphics g);
-    
+        
+    // position, velocity etc
     float getX();
     float getY();    
     void setX(float x);
     void setY(float y);
-    
-    int getHealth();
-    void update();
-    Direction getFacing();
     void applyGravity();
-    void move(Direction d);    
+    void move(Direction d);  
+    Direction getFacing();
+    
+    // speed 
     float getMaxFallSpeed();
     float getYSpeed();
     float getXSpeed();
+    void setYSpeed(float y);
+    void setXSpeed(float x);
     
+    int getHealth();
     void die();
 }  

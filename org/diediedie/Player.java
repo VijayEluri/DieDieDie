@@ -651,6 +651,18 @@ public class Player implements Actor, InputProviderListener
     }
     
     @Override
+    public void setYSpeed(float f)
+    {
+        ySpeed = f;
+    }
+    
+    @Override
+    public void setXSpeed(float f)
+    {
+        xSpeed = f;
+    }
+    
+    @Override
     public float getMaxFallSpeed()
     {
         return MAX_Y_SPEED;
