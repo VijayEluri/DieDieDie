@@ -443,10 +443,6 @@ public class Player implements Actor, InputProviderListener
             currentAnim = leftWalk;
             xSpeed = -(MOVE_SPEED + accelX);
         }
-        if(xSpeed > MAX_X_SPEED)
-        {
-            xSpeed = MAX_X_SPEED;
-        }
         
         //System.out.println("xSpeed: " + xSpeed);
     }
