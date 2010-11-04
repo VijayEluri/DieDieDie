@@ -33,6 +33,8 @@ public interface Actor
     Level getLevel();
     
     // position, velocity etc
+    
+    void setLevel(Level l);
     float getX();
     float getY();    
     void setX(float x);

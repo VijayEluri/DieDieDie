@@ -17,6 +17,7 @@
 package org.diediedie.actors;
 import org.diediedie.Level;
 import org.diediedie.actors.Direction;
+import org.diediedie.actors.Player;
 import org.diediedie.actors.State;
 import java.util.List;
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class Bluey implements Enemy, StateMachine
             setUp = true;
         }
         
-        level = l;
+        setLevel(l);;
         xPos = t.xPos;
         yPos = t.yPos;
         yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
@@ -90,6 +91,12 @@ public class Bluey implements Enemy, StateMachine
         yPos--;
         
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
+    }
+    
+    @Override
+    public void setLevel(Level l)
+    {
+        level = l;
     }
     
     @Override
@@ -297,8 +304,9 @@ public class Bluey implements Enemy, StateMachine
         
     }
     @Override
-    public boolean canSeePlayer(float playerX, float playerY)
+    public boolean canSeePlayer()
     {
+        
         return false;
     }
     

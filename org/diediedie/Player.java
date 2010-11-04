@@ -121,9 +121,9 @@ public class Player implements Actor, InputProviderListener
     /**
      * Constructs the Player at the given position.
      */ 
-    public Player(Level level)
+    public Player(Level l)
     {
-        this.level = level;
+        setLevel(l);
         setUpStartPosition();
         if(!setUp)
         {            
@@ -133,6 +133,13 @@ public class Player implements Actor, InputProviderListener
         }
     }    
     
+    @Override
+    public void setLevel(Level l)
+    {
+        level = l;
+        level.associatePlayer(this);
+    }
+
     /*
      * Places the Player at the designated start position according to
      * the Level associated with it. 

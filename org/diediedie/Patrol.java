@@ -38,6 +38,8 @@ public class Patrol implements State
     @Override
     public void start()
     {
+        running = true;
+        
         
     }
     

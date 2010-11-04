@@ -53,7 +53,7 @@ public class Level extends TiledMap
     
     private MapLayer collisionLayer, objectLayer, backgroundLayer, 
                      platformLayer;
-    
+    private Player player;
     private List<Actor> enemies;
     private Tile playerTile = null;
     
@@ -67,7 +67,7 @@ public class Level extends TiledMap
         this.name = name;
         this.gravity = grav;
         this.playerFacing = facing;
-                
+        
         System.out.println("Level " + name + " has " + getLayerCount() +
                            " tile layers");
         
@@ -79,6 +79,16 @@ public class Level extends TiledMap
         sortObjects();
     }   
     
+    public void associatePlayer(Player p)
+    {
+        player = p;        
+    }
+    
+    public Player getPlayer()
+    {
+        return player;
+    }
+    
     /**
      * Returns the Tile associated with the Player's start position on 
      * this Level.
@@ -87,6 +97,8 @@ public class Level extends TiledMap
     {
         return playerTile;   
     }
+    
+    
     
     /**
      * Updates the contents of the level, if any.
