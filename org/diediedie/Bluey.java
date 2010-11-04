@@ -33,7 +33,7 @@ import org.newdawn.slick.Graphics;
  */ 
 public class Bluey implements Enemy, StateMachine
 {
-    private List<State> states = new ArrayList<State>();  
+    private List<State> states;
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false;
     public static final int MAX_HEALTH = 100;
@@ -68,6 +68,7 @@ public class Bluey implements Enemy, StateMachine
             tileHeight = t.tileHeight;
             createAnimations();
             health = MAX_HEALTH;
+            setStates();
             setUp = true;
         }
         level = l;
@@ -85,7 +86,7 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void setStates()
     {
-        
+        states = new ArrayList<State>();
     }
     @Override
     public void move(Direction d)

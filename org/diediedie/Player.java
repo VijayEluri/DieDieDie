@@ -59,7 +59,7 @@ public class Player implements Actor, InputProviderListener
                     yCollision = false, xCollision = false;
      
     private float accelX = 0f, ACCEL_RATE = 0.03f, 
-                  MAX_ACCEL = 4f, moveSpeed = 0.9f, 
+                  MAX_ACCEL = 4f, 
                   bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
@@ -67,7 +67,8 @@ public class Player implements Actor, InputProviderListener
                         CHARGE_INCR = 0.5f, BOW_Y_OFFSET_NORMAL = -2f, 
                         BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
                         MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
-                        BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15;
+                        BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
+                        MOVE_SPEED = 0.9f;
                         
     private final int MAX_HEALTH = 20, 
                       BOW_AIM_UP_TRIGGER = 50,
@@ -435,13 +436,13 @@ public class Player implements Actor, InputProviderListener
         {
             accelerate();
             currentAnim = rightWalk;
-            xSpeed = (moveSpeed + accelX);
+            xSpeed = (MOVE_SPEED + accelX);
         }
         else if(dir.equals(Direction.LEFT))
         {
             accelerate();
             currentAnim = leftWalk;
-            xSpeed = -(moveSpeed + accelX);
+            xSpeed = -(MOVE_SPEED + accelX);
         }
         if(xSpeed > MAX_X_SPEED)
         {

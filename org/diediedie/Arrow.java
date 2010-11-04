@@ -25,11 +25,10 @@ import org.newdawn.slick.util.FastTrig;
 /**
  * An arrow fired by the Player.
  */ 
- //good movementAngle stuff here:http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates 
+ // good movement stuff here:
+ // http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates 
 public class Arrow
-{  
-    
-    
+{      
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, 
                   movementAngle = 90, 
