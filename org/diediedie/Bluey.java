@@ -33,11 +33,14 @@ import org.newdawn.slick.Graphics;
  */ 
 public class Bluey implements Enemy, StateMachine
 {
+    
     private List<State> states;
+    private State currentState = null;
+    
     private boolean setUp = false, canJump = false,
                     yCollision = false, xCollision = false, 
                     moving = false;
-                    
+    
     public static final int MAX_HEALTH = 100;
     private int health;
     private Direction facing = null;
@@ -47,7 +50,7 @@ public class Bluey implements Enemy, StateMachine
                   xSpeed = 0, ySpeed = 0;
     
     private final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 3.5f, 
-                        RUN_SPEED = 5.1f;
+                        RUN_SPEED = 5.1f, JUMP_SPEED = -5.5f;
     
     
     private final String leftStandPath = "data/bluey_standing_left.png";
@@ -134,6 +137,11 @@ public class Bluey implements Enemy, StateMachine
             
         }
     }
+    @Override
+    public float getJumpSpeed()
+    {
+        return JUMP_SPEED;
+    }
     
     @Override
     public void setYSpeed(float f)
@@ -160,7 +168,7 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public void setState(State nextState)
+    public void changeState(State nextState)
     {
         
     }
@@ -186,7 +194,7 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public State getState()
     {
-        return null;        
+        return currentState;        
     }
     
     private void createAnimations()

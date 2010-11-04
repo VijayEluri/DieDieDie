@@ -300,11 +300,18 @@ public class Player implements Actor, InputProviderListener
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
         
     }
+    
+    @Override
     public int getHealth()
     {
         return health;
     }
-     
+    @Override
+    public float getJumpSpeed()
+    {
+        return JUMP_SPEED;
+    }
+    @Override
     public void die()
     {
         System.out.println("Player is dead!");
