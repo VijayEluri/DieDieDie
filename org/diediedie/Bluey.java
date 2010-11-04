@@ -38,9 +38,7 @@ public class Bluey implements Enemy, StateMachine
     private List<State> states;
     private State currentState = null;
     
-    private boolean setUp = false, canJump = false,
-                    yCollision = false, xCollision = false, 
-                    moving = false;
+    private boolean setUp = false, canJump = false, moving = false;
     
     public static final int MAX_HEALTH = 100;
     private int health;

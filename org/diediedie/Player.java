@@ -41,8 +41,7 @@ import org.newdawn.slick.command.MouseButtonControl;
  */ 
 public class Player implements Actor, InputProviderListener 
 {    
-    private boolean setUp = false, canJump = false,
-                    yCollision = false, xCollision = false;
+    private boolean setUp = false, canJump = false;
      
     private float accelX = 0f, bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
@@ -536,7 +535,6 @@ public class Player implements Actor, InputProviderListener
         if(ActorAligner.collides(this))
         {
             //System.out.println("vertical collision");
-            yCollision = true;
             
             if(yPos >= oldY)
             {
@@ -550,7 +548,6 @@ public class Player implements Actor, InputProviderListener
         } 
         else
         {
-            yCollision = false;
             canJump = false;
         }
         
