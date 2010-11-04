@@ -149,11 +149,17 @@ public class Bluey implements Enemy, StateMachine
         patrol = new Patrol(this);
     }
     
+    @Override
+    public void setJump(boolean b)
+    {
+        canJump = b;
+    }   
+
     
     @Override
-    public void move()
+    public void resetAccelX()
     {
-        
+        // do nothing
     }
     
     @Override

@@ -29,7 +29,7 @@ public interface Actor
     void draw(Graphics g);
     void update();
     boolean canJump();
-    
+    void setJump(boolean b);
     Level getLevel();
     
     // position, velocity etc
@@ -40,10 +40,10 @@ public interface Actor
     void setX(float x);
     void setY(float y);
     void jump();
-    
+    void resetAccelX();
     void applySpeed(Direction d);
     void applyGravity();
-    void move();  
+
     Direction getFacing();
     
     // speed 

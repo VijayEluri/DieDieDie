@@ -135,6 +135,12 @@ public class Player implements Actor, InputProviderListener
     }    
     
     @Override
+    public void setJump(boolean b)
+    {
+        canJump = b;
+    }
+    
+    @Override
     public void setLevel(Level l)
     {
         level = l;
@@ -452,51 +458,6 @@ public class Player implements Actor, InputProviderListener
     }
     
     
-    /**
-     * Updates the position of the Actor based upon x / y speeds.
-     */
-    @Override
-    public void move()
-    {
-        oldX = getX();
-        oldY = getY();
-        
-        // test new position
-        // vertical 
-        
-        setY(getY() + getYSpeed());
-        
-        
-        if(Collider.collides(this))
-        {
-            //System.out.println("vertical collision");
-            
-            if(getY() >= oldY)
-            {
-                // fell 
-                canJump = true;
-            }
-            setYSpeed(0);
-            setY(oldY);
-            
-            Aligner.alignToObstacle(this);
-        } 
-        else
-        {
-            canJump = false;
-        }
-        
-        // horizontal 
-        setX(getX() + getXSpeed());
-        
-        if(Collider.collides(this))
-        {
-            setX(oldX);
-            setXSpeed(0);
-            resetAccelX();
-        }        
-    }
-    
     @Override
     public void applySpeed(Direction dir)
     {
@@ -570,7 +531,7 @@ public class Player implements Actor, InputProviderListener
         
         updateFiredArrows();
         
-        move();        
+        Mover.move(this);
     }
     
     @Override
@@ -641,7 +602,7 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
-    private void resetAccelX()
+    public void resetAccelX()
     {
         accelX = 0;
         setStandingAnim();
