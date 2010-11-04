@@ -22,7 +22,6 @@ package org.diediedie.actors;
  */ 
 public interface State
 {
-    void setHost(Actor a);
     Actor getHost();
     
     /**
@@ -34,6 +33,9 @@ public interface State
      * Stops this state.
      */ 
     void stop();
+    
+    boolean isRunning();
+    boolean isStopped();
     
     String toString();
 }

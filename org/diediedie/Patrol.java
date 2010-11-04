@@ -22,25 +22,18 @@ public class Patrol implements State
 {
     private Actor host = null;
     private Level level = null;
+    private boolean running = false, stopped = false;
     
     public Patrol(Actor a)
     {
-        setHost(a);
-    }
-    
-    public void setHost(Actor a)
-    {
         host = a;
-    }
+    }  
     
     public Actor getHost()
     {
         return host;
     }
-    
-    /**
-     * 
-     */ 
+
     public void start()
     {
         
@@ -49,6 +42,16 @@ public class Patrol implements State
     public void stop()
     {
     
+    }
+    
+    public boolean isRunning()
+    {
+        return running;
+    }
+    
+    public boolean isStopped()
+    {
+        return stopped;       
     }
     
     public String toString()

@@ -443,8 +443,7 @@ public class Player implements Actor, InputProviderListener
             currentAnim = leftWalk;
             xSpeed = -(MOVE_SPEED + accelX);
         }
-        
-        //System.out.println("xSpeed: " + xSpeed);
+        //System.out.println("Player xSpeed: " + xSpeed);
     }
     
     /*
