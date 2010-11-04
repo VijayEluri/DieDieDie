@@ -4,8 +4,8 @@ import org.diediedie.actors.Actor;
 import org.diediedie.actors.AnimCreator;
 
 /**
- * Utility class for aligning an Actor against a collision Tile 
- * following a collision
+ * Utility class checking for collisions and for aligning an Actor 
+ * against a collision Tile following a collision
  */ 
 public class ActorAligner
 {

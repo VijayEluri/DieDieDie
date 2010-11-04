@@ -52,7 +52,6 @@ public class Patrol implements State
     {
         return running;
     }
-    
 
     @Override
     public boolean isStopped()

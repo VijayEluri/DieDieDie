@@ -556,10 +556,7 @@ public class Player implements Actor, InputProviderListener
             xSpeed = 0;
             resetAccelX();
         }        
-        if(accelX == 0)
-        {
-            setStandingAnim();
-        }
+     
     }
     
     @Override
@@ -636,6 +633,7 @@ public class Player implements Actor, InputProviderListener
     private void resetAccelX()
     {
         accelX = 0;
+        setStandingAnim();
     }
     
     public Direction getFacing()

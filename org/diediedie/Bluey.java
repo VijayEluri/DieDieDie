@@ -81,6 +81,7 @@ public class Bluey implements Enemy, StateMachine
             createStates();
             setUp = true;
         }
+        
         level = l;
         xPos = t.xPos;
         yPos = t.yPos;
