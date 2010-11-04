@@ -23,21 +23,10 @@ package org.diediedie.actors;
 public interface State
 {
     Actor getHost();
-    
-    /**
-     * Starts this state.
-     */ 
     void start();
-    
-    /**
-     * Stops this state.
-     */ 
     void stop();
-    
-    //void update();
-    
     boolean isRunning();
     boolean isStopped();
-    
     String toString();
 }
+

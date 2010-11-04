@@ -24,6 +24,9 @@ public class Patrol implements State
     private Level level = null;
     private boolean running = false, stopped = false;
     
+    /**
+     * Associate this State with an Actor
+     */ 
     public Patrol(Actor a)
     {
         host = a;
@@ -47,13 +50,7 @@ public class Patrol implements State
         running = false;
     }
     
-    /**
-     * Update the state 
-     */                     /*
-    public void update()
-    {
-        
-    }*/
+    
 
     @Override
     public boolean isRunning()

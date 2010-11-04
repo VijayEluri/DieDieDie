@@ -14,23 +14,19 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
 package org.diediedie.actors;
+
 import org.diediedie.actors.Direction;
+import org.diediedie.Level;
+
 
 /**
- * Enemy ACTORS! The sheer bloody bastards!
- */ 
-public interface Enemy extends Actor
+ * An Action performed by an Actor when in a certain State.
+ */
+public interface Action
 {
-    void createStates();
-    void setInitialState();
-    void setMoveSpeed(float f);
-    void setFacing(Direction d);
-    boolean canSeePlayer();
-    boolean isMoving();  
-    //boolean knowsOfPlayer();
-    float getWalkSpeed();
-    float getRunSpeed();
-
+    void setUp(Actor a);
+    void performAction();
+    boolean hasStarted();
+    boolean hasFinished();
 }

@@ -107,7 +107,17 @@ public class Bluey implements Enemy, StateMachine
     {
         return level;
     }
-    
+    @Override
+    public final float getWalkSpeed()
+    {
+        return WALK_SPEED;   
+    }
+    @Override
+    public final float getRunSpeed()
+    {
+        return RUN_SPEED;
+    }
+   
     @Override
     public void setFacing(Direction d)
     {
@@ -282,10 +292,7 @@ public class Bluey implements Enemy, StateMachine
     private void updatePosition()
     {
         applyGravity();
-        
-        // save pre-move position so that if moving causes a collision
-        // it can be undone:
-                
+                        
         if(isMoving())
         {
             applySpeed(facing);
@@ -355,6 +362,7 @@ public class Bluey implements Enemy, StateMachine
         return currentAnim;
     }
     
+    @Override
     public void draw(Graphics g)
     {
         //System.out.println("drawing Bluey: " + getX() + ", " + getY());

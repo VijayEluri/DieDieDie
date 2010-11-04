@@ -27,6 +27,7 @@ public class Mover
 {    
     public static void move(Actor a)
     {
+        //System.out.println("moving " + a);
         final float oldX = a.getX();
         final float oldY = a.getY();
         
