@@ -15,18 +15,15 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.actions;
+import org.diediedie.actors.Enemy;
 
-
-import org.diediedie.actors.Direction;
-import org.diediedie.actors.Actor;
-import org.diediedie.Level;
 
 /**
  * An Action performed by an Actor when in a certain State.
  */
 public interface Action
 {
-    void setUp(Actor a);
+    void setUp(Enemy a);
     void performAction();
     boolean hasStarted();
     boolean hasFinished();

@@ -312,7 +312,8 @@ public class Bluey implements Enemy, StateMachine
         else if(dir.equals(Direction.LEFT))
         {            
             xSpeed = -(moveSpeed);
-        }          
+        }  
+        System.out.println("bluey speed " + xSpeed);        
     }
     
     @Override

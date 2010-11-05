@@ -15,14 +15,14 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
-
+import org.diediedie.actors.Enemy;
 /**
  * Interface design for use when creating States for a (finite)
  * StateMachine 
  */ 
 public interface State
 {
-    Actor getHost();
+    Enemy getHost();
     void start();
     void stop();
     boolean isRunning();

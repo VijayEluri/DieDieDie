@@ -20,20 +20,20 @@ import org.diediedie.actors.State;
  
 public class Patrol implements State
 {
-    private Actor host = null;
+    private Enemy host = null;
     private Level level = null;
     private boolean running = false, stopped = false;
     
     /**
      * Associate this State with an Actor
      */ 
-    public Patrol(Actor a)
+    public Patrol(Enemy e)
     {
-        host = a;
+        host = e;
     }  
     
     @Override
-    public Actor getHost()
+    public Enemy getHost()
     {
         return host;
     }

@@ -21,12 +21,13 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.util.FastTrig;
-
+ 
 /**
  * An arrow fired by the Player.
+ * 
+ * good movement stuff here:
+ * http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates
  */ 
- // good movement stuff here:
- // http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates 
 public class Arrow
 {      
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
@@ -38,7 +39,7 @@ public class Arrow
     private final float SIZE = 19f, ACCEL_RATE = 0.09f, AIR_REST = 0.6f,
                   MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
                   ANGLE_CHANGE_INCR = 0.05f, MAX_ANGLE_CHANGE = 1.09f, 
-                  GRAVITY_LINE = 3f, ALIGN_INCR = 0.009f,
+                  GRAVITY_LINE = 2.9f, ALIGN_INCR = 0.009f,
                   MOVE_SPEED = 0.44f;
                   
     private final int REVERSE = 180;
