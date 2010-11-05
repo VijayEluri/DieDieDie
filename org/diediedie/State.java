@@ -16,6 +16,7 @@
  */
 package org.diediedie.actors;
 import org.diediedie.actors.Enemy;
+
 /**
  * Interface design for use when creating States for a (finite)
  * StateMachine 
@@ -23,10 +24,10 @@ import org.diediedie.actors.Enemy;
 public interface State
 {
     Enemy getHost();
+    String toString();
+    
     void start();
     void stop();
-    boolean isRunning();
-    boolean isStopped();
-    String toString();
+    boolean isRunning();    
 }
 

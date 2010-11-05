@@ -130,12 +130,7 @@ public class Arrow
         oldY = startY;
         oldX = startX;
         
-        // move in the @movementAngle direction
-        /*startX = (float)(startX + xTrav * 
-                            Math.sin(Math.toRadians(movementAngle)));
-        startY = (float)(startY - yTrav * 
-                            Math.cos(Math.toRadians(movementAngle))); 
-        */
+       
         startX = (float)(startX + xTrav * 
                             FastTrig.sin(Math.toRadians(movementAngle)));
         startY = (float)(startY - yTrav * 

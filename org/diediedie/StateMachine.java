@@ -25,13 +25,13 @@ import java.util.ArrayList;
  */ 
 public interface StateMachine
 {
+    boolean isRunning();
+    State getState();   
+    
     void createStates();
     void setInitialState();
-    
     void startFSM();
     void changeState(State nextState);
     void stopFSM();
-    boolean isRunning();
-    State getState();    
 }
 

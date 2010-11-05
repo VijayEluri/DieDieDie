@@ -69,8 +69,8 @@ public class Player implements Actor, InputProviderListener
     private Command right;    
     
     private Arrow currentArrow = null; 
-    private List<Arrow> firedArrows = 
-                Collections.synchronizedList(new ArrayList<Arrow>());
+    private List<Arrow> firedArrows = Collections.synchronizedList(new
+                                                    ArrayList<Arrow>());
     
     private boolean leftMoveDown = false, rightMoveDown = false,
                     isChargingArrow = false, isFiringArrow = false;
@@ -511,6 +511,7 @@ public class Player implements Actor, InputProviderListener
         xSpeed *= level.FRICTION;
     }
     
+    @Override
     public void update()
     {
         applyGravity();
@@ -530,9 +531,7 @@ public class Player implements Actor, InputProviderListener
         {
             chargeArrow();
         }
-        
         updateFiredArrows();
-        
         Mover.move(this);
     }
     
@@ -541,7 +540,6 @@ public class Player implements Actor, InputProviderListener
     {
         return level;
     }
-
     
     @Override
     public Animation getCurrentAnim()
@@ -604,13 +602,14 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
+    @Override
     public void resetAccelX()
     {
         accelX = 0;
         setStandingAnim();
     }
     
-    
+    @Override
     public Direction getFacing()
     {
         return facing;

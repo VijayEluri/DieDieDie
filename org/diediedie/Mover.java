@@ -15,17 +15,20 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
-
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Collider;
-
 
 /**
  * Class used to move Actors around a Level. 
  */ 
 public class Mover
 {    
-    public static void move(Actor a)
+    /**
+     * Attempts to move the Actor, a, according to its x / y speeds.
+     * 
+     * Returns true if moved *horizontally*.
+     */ 
+    public static boolean move(final Actor a)
     {
         //System.out.println("moving " + a);
         final float oldX = a.getX();
@@ -33,7 +36,6 @@ public class Mover
         
         // test new position
         // vertical 
-        
         a.setY(a.getY() + a.getYSpeed());
         
         if(Collider.collides(a))
@@ -62,5 +64,10 @@ public class Mover
             a.setXSpeed(0);
             a.resetAccelX();
         }       
+        if(a.getX() == oldX)
+        {
+            return false;
+        }
+        return true;
     }
 }

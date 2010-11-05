@@ -27,11 +27,10 @@ public class Patrol implements State
 {
     private Enemy host = null;
     private Level level = null;
-    private boolean running = false, stopped = false;
-    
-    private Walk walk;
+    private boolean running = false;
     
     private Action currentAction;
+    private Walk walk;
     
     /**
      * Associate this State with an Actor
@@ -52,10 +51,12 @@ public class Patrol implements State
     @Override
     public void start()
     {
-        running = true;
-        
-        System.out.println("started " + this);
-        currentAction.perform(host);
+        if(!running)
+        {
+            running = true;
+            System.out.println("started " + this);
+            currentAction.perform(host);
+        }
     }
     
     @Override
@@ -68,12 +69,6 @@ public class Patrol implements State
     public boolean isRunning()
     {
         return running;
-    }
-
-    @Override
-    public boolean isStopped()
-    {
-        return stopped;       
     }
     
     @Override

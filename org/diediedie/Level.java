@@ -14,8 +14,6 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
-
 package org.diediedie;
 import java.io.*;
 import java.util.*;
@@ -35,17 +33,22 @@ import java.util.ArrayList;
  */ 
 public class Level extends TiledMap
 {
-    // where the player will first appear
+    // where the exit of the level is
     public float exitX, exitY;
     
-    // friction. lower number == more friction
+    // friction. lower number == more friction, because the horizontal
+    // speed is multiplied by this number
     public static final float FRICTION = 0.91f;
+    
+    // other way with gravity because gravity is added to the Actors' 
+    // ySpeed
     public float gravity;
     
     // initial direction player faces 
     public final Direction playerFacing;
     
     private String name;
+    
     private final String VIS_STR = "isvisible", TRUE_STR = "true", 
                          FALSE_STR = "false", PLATFORM_STR = "platforms";
     
@@ -53,6 +56,7 @@ public class Level extends TiledMap
     
     private MapLayer collisionLayer, objectLayer, backgroundLayer, 
                      platformLayer;
+        
     private Player player;
     private List<Actor> enemies;
     private Tile playerTile = null;

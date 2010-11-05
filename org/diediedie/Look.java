@@ -14,35 +14,48 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
 package org.diediedie.actors.actions;
-
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
-
 
 /**
  * 
  */
 public class Look implements Action
 {
-    private boolean started, finished;
+    private boolean running;
+    private float xViewStart, yViewStart;
     
-    
+    /*
+     *  Look!
+     */
     public Look()
     {
-        started = false;
-        finished = false;
+        /*started = false;
+        finished = false;*/
+        running = false;
     }
     
     @Override
     public void perform(Enemy e)
     {
-        started = true;
-        System.out.println("Look.performAction(): not implemented");
+        running = true;
+        System.out.println("Look.performAction(): ");
+        constructView(e);
+                
     }
     
-    @Override
+    /**
+     * Constructs a view from a Enemy's facing direction and position 
+     */ 
+    private void constructView(Enemy e)
+    {
+        xViewStart = e.getEyePosX();
+        yViewStart = e.getEyePosY();
+        
+    }
+    
+    /*@Override
     public boolean hasStarted()
     {
         return started;
@@ -52,6 +65,11 @@ public class Look implements Action
     public boolean hasFinished()
     {
         return finished;
+    }*/
+    
+    @Override
+    public boolean isRunning() 
+    {
+        return running;
     }
-
 }

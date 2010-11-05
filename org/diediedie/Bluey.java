@@ -36,9 +36,9 @@ public class Bluey implements Enemy, StateMachine
 {
     // constants
     public static final int MAX_HEALTH = 100;
-    private final String leftStandPath = "data/bluey_standing_left.png";
+    public final String leftStandPath = "data/bluey_standing_left.png";
     
-    private final String[] leftWalkPaths = 
+    public final String[] leftWalkPaths = 
     {
         "data/bluey_walk_left_1.png",
         "data/bluey_walk_left_2.png",
@@ -83,14 +83,12 @@ public class Bluey implements Enemy, StateMachine
             createStates();
             setUp = true;
         }
-        
         setLevel(l);;
         xPos = t.xPos;
         yPos = t.yPos;
         yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
                  t.tileHeight);
         yPos--;
-        
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
@@ -111,7 +109,6 @@ public class Bluey implements Enemy, StateMachine
     {
         moveSpeed = f;
         System.out.println("bluey setMoveSpeed: " + f);
-        
     }
     
     @Override
@@ -183,10 +180,6 @@ public class Bluey implements Enemy, StateMachine
         yPos = y;
     }
     
-    
-    /**
-     * Set Bluey's possible States
-     */ 
     @Override
     public void createStates()
     {
@@ -199,6 +192,7 @@ public class Bluey implements Enemy, StateMachine
     public void setJump(boolean b)
     {
         canJump = b;
+        // System.out.println("bluey: canJump == " + canJump);
     }   
     
     @Override
@@ -206,12 +200,11 @@ public class Bluey implements Enemy, StateMachine
     {
         return currentState;
     }
-
     
     @Override
     public void resetAccelX()
     {
-        // do nothing
+        // do nothing for now
     }
     
     @Override
@@ -313,17 +306,23 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    /**
+     * Instructs the enemy to jump
+     */ 
     public void jump()
     {
         if(canJump())
         {
             System.out.println("bluey jump");    
+            ySpeed = JUMP_SPEED;
+            canJump = false;
         }
     }
     
     @Override
     public void update()
     {        
+        // Start the machine!
         if(!fsmRunning)
         {
             startFSM();
@@ -331,6 +330,7 @@ public class Bluey implements Enemy, StateMachine
         
         updatePosition();
         updateProjectiles();
+        
         if(xSpeed > 0)
         {
             System.out.println("bluey speed " + xSpeed);        
@@ -340,13 +340,38 @@ public class Bluey implements Enemy, StateMachine
     private void updatePosition()
     {
         applyGravity();
-                        
+        applyFriction();
+        
         if(isMoving())
         {
             applySpeed(facing);
         }
         
-        Mover.move(this);
+        if(!Mover.move(this))
+        {
+            setStandingAnim();
+        }
+    }
+    
+    // this is just a dupe of the one from Player, give or take...
+    private void setStandingAnim()
+    {
+        if(getFacing().equals(Direction.RIGHT))
+        {
+            currentAnim = rightStandAnim;
+        }
+        else if(getFacing().equals(Direction.LEFT))
+        {
+            currentAnim = leftStandAnim;   
+        }
+        else throw new IllegalStateException(
+                            "standing dir neither left or right");
+    }
+    
+    // Woah there!
+    private void applyFriction()
+    {
+        xSpeed *= level.FRICTION;
     }
     
     @Override
@@ -361,7 +386,6 @@ public class Bluey implements Enemy, StateMachine
         {            
             xSpeed = -(moveSpeed);
         }  
-        
     }
     
     @Override
@@ -375,6 +399,7 @@ public class Bluey implements Enemy, StateMachine
         {
             
         }*/
+        // for now:
         return AnimCreator.getCurrentFrameRect(this).getWidth() / 2;
     }
     
@@ -422,7 +447,8 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void die()
     {
-        
+        System.out.println("Die, you, " + this);
+        // n i
     }
     
     

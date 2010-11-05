@@ -14,54 +14,61 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
 package org.diediedie.actors.actions;
-
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
 
-
 /**
- * Enemy State Action. Makes the Enemy walk along in the current
+ * Causes an Enemy to start walking in their currently faced direction. 
  */ 
 public class Walk implements Action
 {   
-    private boolean started, finished;
+    private boolean performing;
     private Enemy host = null;
     
-    
+    /**
+     * Walk!
+     */ 
     public Walk()
     {
-        started = false;
-        finished = false;
+        performing = false;
     }
 
     @Override
     public void perform(Enemy host)
     {
-        System.out.println("performing Walk for " 
-            + new Throwable().fillInStackTrace()
-                            .getStackTrace()[1].getClassName());
-        started = true;
-        host.setMoveSpeed(host.getWalkSpeed());
-        host.setMoving(true);
-    }    
+        if(!performing)
+        {
+            System.out.println("\tperforming Walk for " 
+                + new Throwable().fillInStackTrace()
+                                .getStackTrace()[1].getClassName());
+            performing = true;
+            host.setMoveSpeed(host.getWalkSpeed());
+            host.setMoving(true);
+        }    
+    }
     
-    @Override
+    /*@Override
     public boolean hasStarted()    
     {
         return started;
     }
+    
     @Override
     public boolean hasFinished() 
     {
         return finished;
+    }*/
+    
+    @Override
+    public boolean isRunning() 
+    {
+        return performing;
     }
-
-
+    
+    @Override
     public String toString()
     {
         return "Walk";
     }
-
 }
