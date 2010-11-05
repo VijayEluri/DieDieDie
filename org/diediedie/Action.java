@@ -14,11 +14,12 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie.actors;
+package org.diediedie.actors.Actions;
+
 
 import org.diediedie.actors.Direction;
+import org.diediedie.actors.Actor;
 import org.diediedie.Level;
-
 
 /**
  * An Action performed by an Actor when in a certain State.

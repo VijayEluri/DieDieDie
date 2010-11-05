@@ -50,8 +50,6 @@ public class Patrol implements State
         running = false;
     }
     
-    
-
     @Override
     public boolean isRunning()
     {

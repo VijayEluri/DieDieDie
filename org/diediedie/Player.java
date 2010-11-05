@@ -48,7 +48,7 @@ public class Player implements Actor, InputProviderListener
     private float accelX = 0f, bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
-    public final float MAX_CHARGE = 25.55f, CHARGE_INCR = 0.5f, 
+    public final float MAX_CHARGE = 20f, CHARGE_INCR = 0.3f, 
                        BOW_Y_OFFSET_NORMAL = -2f, 
                        BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
                        MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
@@ -300,7 +300,9 @@ public class Player implements Actor, InputProviderListener
         if(bowCharge < MAX_CHARGE)
         {
             bowCharge += CHARGE_INCR;
+            
         }
+        System.out.println("bowCharge " + bowCharge);
         currentArrow.updateAiming(mouseX, mouseY);
 
         if(currentArrow.getAngle() >= 0)
