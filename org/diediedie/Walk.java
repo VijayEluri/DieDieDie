@@ -22,25 +22,32 @@ import org.diediedie.actors.Enemy;
 
 
 /**
- * 
+ * Enemy State Action. Makes the Enemy walk along in the current
  */ 
 public class Walk implements Action
 {   
     private boolean started, finished;
     private Enemy host = null;
     
-    @Override
-    public void setUp(Enemy e)
+    
+    public Walk()
     {
-        host = e;
         started = false;
         finished = false;
     }
+
     @Override
-    public void performAction()
+    public void perform(Enemy host)
     {
+        System.out.println("performing Walk for " 
+            + new Throwable().fillInStackTrace()
+                            .getStackTrace()[1].getClassName());
+        started = true;
+        
         host.setMoveSpeed(host.getWalkSpeed());
+        host.setMoving(true);
     }    
+    
     @Override
     public boolean hasStarted()    
     {

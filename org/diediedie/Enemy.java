@@ -25,6 +25,9 @@ public interface Enemy extends Actor
 {
 
     void setMoveSpeed(float f);
+    
+    void setMoving(boolean b);
+    boolean isMoving();  
     void setFacing(Direction d);
 
     float getEyePosX();
@@ -33,7 +36,7 @@ public interface Enemy extends Actor
     boolean canSeePlayer();
     boolean hasSeenPlayer();
     
-    boolean isMoving();  
+    
     float getWalkSpeed();
     float getRunSpeed();
     

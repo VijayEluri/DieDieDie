@@ -17,10 +17,11 @@
 package org.diediedie.actors;
 import org.diediedie.Level;
 import org.diediedie.actors.State;
+import org.diediedie.actors.actions.*;
  
  /**
   * State class wherein an Enemy(Actor) moves around the Level,
-  * checking out the other Actors.
+  * looking for the Player.
   */ 
 public class Patrol implements State
 {
@@ -28,12 +29,18 @@ public class Patrol implements State
     private Level level = null;
     private boolean running = false, stopped = false;
     
+    private Walk walk;
+    
+    private Action currentAction;
+    
     /**
      * Associate this State with an Actor
      */ 
     public Patrol(Enemy e)
     {
         host = e;
+        walk = new Walk();
+        currentAction = walk;
     }  
     
     @Override
@@ -46,7 +53,9 @@ public class Patrol implements State
     public void start()
     {
         running = true;
-        host.setMoveSpeed(host.getWalkSpeed());
+        
+        System.out.println("started " + this);
+        currentAction.perform(host);
     }
     
     @Override

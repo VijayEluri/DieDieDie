@@ -26,23 +26,29 @@ import org.diediedie.actors.Enemy;
  */
 public class Look implements Action
 {
-    private boolean started = false, finished = false;
-    private Enemy host;
+    private boolean started, finished;
     
-    public void setUp(Enemy e)
+    
+    public Look()
     {
-        host = e;
-    }
-    public void performAction()
-    {
-        
+        started = false;
+        finished = false;
     }
     
+    @Override
+    public void perform(Enemy e)
+    {
+        started = true;
+        System.out.println("Look.performAction(): not implemented");
+    }
+    
+    @Override
     public boolean hasStarted()
     {
         return started;
     }
     
+    @Override
     public boolean hasFinished()
     {
         return finished;

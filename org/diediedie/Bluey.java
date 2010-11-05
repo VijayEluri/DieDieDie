@@ -57,7 +57,8 @@ public class Bluey implements Enemy, StateMachine
     private State patrol;
     
     private boolean setUp = false, canJump = false, moving = false,
-                    canSeePlayer = false, hasSeenPlayer = false;
+                    canSeePlayer = false, hasSeenPlayer = false,
+                    fsmRunning = false;
     
     
     private int health;
@@ -96,6 +97,12 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    public boolean isRunning()
+    {
+        return fsmRunning;   
+    }
+    
+    @Override
     public void setLevel(Level l)
     {
         level = l;
@@ -106,6 +113,13 @@ public class Bluey implements Enemy, StateMachine
     {
         moveSpeed = f;
         System.out.println("bluey setMoveSpeed: " + f);
+        
+    }
+    
+    @Override
+    public void setMoving(boolean m)
+    {
+        moving = m;
     }
     
     @Override
@@ -117,14 +131,19 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void startFSM()
     {
-        
+        System.out.println(this + "\n\tstartFSM()");
+        fsmRunning = true;
+        currentState.start();
     }
+    
+    
     
     @Override
     public Level getLevel()
     {
         return level;
     }
+    
     @Override
     public final float getWalkSpeed()
     {
@@ -168,13 +187,16 @@ public class Bluey implements Enemy, StateMachine
         yPos = y;
     }
     
+    
     /**
      * Set Bluey's possible States
      */ 
     @Override
     public void createStates()
     {
+        System.out.println("creating states for " + this);
         patrol = new Patrol(this);
+        setInitialState();
     }
     
     @Override
@@ -305,9 +327,17 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void update()
     {        
+        if(!fsmRunning)
+        {
+            startFSM();
+        }
+        
         updatePosition();
         updateProjectiles();
-        //System.out.println("bluey speed " + xSpeed);        
+        if(xSpeed > 0)
+        {
+            System.out.println("bluey speed " + xSpeed);        
+        }
     }
 
     private void updatePosition()
@@ -318,6 +348,7 @@ public class Bluey implements Enemy, StateMachine
         {
             applySpeed(facing);
         }
+        
         Mover.move(this);
     }
     
