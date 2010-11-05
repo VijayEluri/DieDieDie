@@ -302,7 +302,7 @@ public class Player implements Actor, InputProviderListener
             bowCharge += CHARGE_INCR;
             
         }
-        System.out.println("bowCharge " + bowCharge);
+        //System.out.println("bowCharge " + bowCharge);
         currentArrow.updateAiming(mouseX, mouseY);
 
         if(currentArrow.getAngle() >= 0)
