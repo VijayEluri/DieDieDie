@@ -14,6 +14,7 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
+ 
 package org.diediedie.actors;
 import org.diediedie.actors.Direction;
 import org.diediedie.Level;
@@ -31,9 +32,7 @@ public interface Actor
     boolean canJump();
     void setJump(boolean b);
     Level getLevel();
-    
-    // position, velocity etc
-   
+       
     void setLevel(Level l);
     float getX();
     float getY();    
@@ -46,7 +45,7 @@ public interface Actor
 
     Direction getFacing();
     
-    // speed 
+
     void setYSpeed(float y);
     void setXSpeed(float x);
     

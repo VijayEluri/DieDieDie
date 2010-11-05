@@ -17,9 +17,10 @@
 package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
+import org.diediedie.actors.Direction;
 
 /**
- * 
+ * Look around the immediate area, in the current Direction.
  */
 public class Look implements Action
 {

@@ -35,7 +35,7 @@ import org.newdawn.slick.Graphics;
 public class Bluey implements Enemy, StateMachine
 {
     // constants
-    public static final int MAX_HEALTH = 100;
+    public static final int MAX_HEALTH = 50;
     public final String leftStandPath = "data/bluey_standing_left.png";
     
     public final String[] leftWalkPaths = 
@@ -51,9 +51,9 @@ public class Bluey implements Enemy, StateMachine
     public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, 
                        RUN_SPEED = 3.1f, JUMP_SPEED = -5.5f,
                        ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;        
-    // variables
-    private State currentState = null;
-    private State patrol;
+    
+    // Variables    
+    private State currentState = null, patrol;
     
     private boolean setUp = false, canJump = false, moving = false,
                     canSeePlayer = false, hasSeenPlayer = false,
@@ -120,7 +120,9 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void stopFSM()
     {
-        
+        System.out.println("stopping FSM on " + this);
+        currentState.stop();
+        fsmRunning = false;
     }
     
     @Override
@@ -142,6 +144,7 @@ public class Bluey implements Enemy, StateMachine
     {
         return WALK_SPEED;   
     }
+    
     @Override
     public final float getRunSpeed()
     {
@@ -323,8 +326,9 @@ public class Bluey implements Enemy, StateMachine
     public void update()
     {        
         // Start the machine!
-        if(!fsmRunning)
+        if(!fsmRunning && getHealth() > 0)
         {
+            
             startFSM();
         }
         
