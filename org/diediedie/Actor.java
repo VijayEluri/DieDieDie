@@ -31,20 +31,22 @@ public interface Actor
     void update();
     boolean canJump();
     void setJump(boolean b);
+    
     Level getLevel();
-       
     void setLevel(Level l);
+    
     float getX();
     float getY();    
     void setX(float x);
     void setY(float y);
+    
     void jump();
+    
     void resetAccelX();
     void applySpeed(Direction d);
     void applyGravity();
 
     Direction getFacing();
-    
 
     void setYSpeed(float y);
     void setXSpeed(float x);

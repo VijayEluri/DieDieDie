@@ -59,6 +59,8 @@ public class Patrol implements State
         }
     }
     
+    
+    
     @Override
     public void stop()
     {

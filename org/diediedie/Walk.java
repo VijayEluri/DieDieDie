@@ -19,7 +19,7 @@ import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
 
 /**
- * Causes an Enemy to start walking in their currently faced direction. 
+ * Causes an Enemy to *start* walking in their currently faced direction. 
  */ 
 public class Walk implements Action
 {   
@@ -45,20 +45,14 @@ public class Walk implements Action
             performing = true;
             host.setMoveSpeed(host.getWalkSpeed());
             host.setMoving(true);
-        }    
-    }
-    
-    /*@Override
-    public boolean hasStarted()    
-    {
-        return started;
+        }
     }
     
     @Override
-    public boolean hasFinished() 
+    public void update(Enemy host)
     {
-        return finished;
-    }*/
+        
+    }
     
     @Override
     public boolean isRunning() 

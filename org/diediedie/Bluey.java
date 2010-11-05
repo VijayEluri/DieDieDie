@@ -36,6 +36,7 @@ public class Bluey implements Enemy, StateMachine
 {
     // constants
     public static final int MAX_HEALTH = 50;
+    
     public final String leftStandPath = "data/bluey_standing_left.png";
     
     public final String[] leftWalkPaths = 
@@ -354,6 +355,7 @@ public class Bluey implements Enemy, StateMachine
         if(!Mover.move(this))
         {
             setStandingAnim();
+            moving = false;
         }
     }
     

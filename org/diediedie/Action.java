@@ -24,4 +24,5 @@ public interface Action
 {
     void perform(Enemy e);
     boolean isRunning();
+    void update(Enemy e);
 }

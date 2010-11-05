@@ -32,8 +32,6 @@ public class Look implements Action
      */
     public Look()
     {
-        /*started = false;
-        finished = false;*/
         running = false;
     }
     
@@ -43,7 +41,6 @@ public class Look implements Action
         running = true;
         System.out.println("Look.performAction(): ");
         constructView(e);
-                
     }
     
     /**
@@ -54,20 +51,23 @@ public class Look implements Action
         xViewStart = e.getEyePosX();
         yViewStart = e.getEyePosY();
         
-    }
-    
-    /*@Override
-    public boolean hasStarted()
-    {
-        return started;
+        if(e.getFacing().equals(Direction.LEFT))
+        {
+            System.out.println(e + " left view");
+        }
+        else if(e.getFacing().equals(Direction.RIGHT))
+        {
+            System.out.println(e + " right view");
+        }
+        
     }
     
     @Override
-    public boolean hasFinished()
+    public void update(Enemy host)
     {
-        return finished;
-    }*/
-    
+        
+    }
+     
     @Override
     public boolean isRunning() 
     {
