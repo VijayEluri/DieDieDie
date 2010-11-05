@@ -19,11 +19,12 @@ import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
 
 /**
- * Causes an Enemy to *start* walking in their currently faced direction. 
+ * Causes an Enemy to *start* walking in their currently faced direction.
+ * 
  */ 
 public class Walk implements Action
 {   
-    private boolean performing;
+    private boolean started, finished;
     private Enemy host = null;
     
     /**
@@ -31,18 +32,19 @@ public class Walk implements Action
      */ 
     public Walk()
     {
-        performing = false;
+        started = false;
+        finished = false;
     }
 
     @Override
     public void perform(Enemy host)
     {
-        if(!performing)
+        if(!started)
         {
-            System.out.println("\tperforming Walk for " 
+            System.out.println("\tstarted Walk for " 
                 + new Throwable().fillInStackTrace()
                                 .getStackTrace()[1].getClassName());
-            performing = true;
+            started = true;
             host.setMoveSpeed(host.getWalkSpeed());
             host.setMoving(true);
         }
@@ -55,9 +57,16 @@ public class Walk implements Action
     }
     
     @Override
-    public boolean isRunning() 
+    public boolean hasFinished() 
     {
-        return performing;
+        return started;
+    }
+    
+    
+    @Override
+    public boolean hasStarted() 
+    {
+        return started;
     }
     
     @Override

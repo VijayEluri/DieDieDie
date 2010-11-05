@@ -24,7 +24,7 @@ import org.diediedie.actors.Direction;
  */
 public class Look implements Action
 {
-    private boolean running;
+    private boolean started, finished;
     private float xViewStart, yViewStart;
     
     /*
@@ -32,13 +32,14 @@ public class Look implements Action
      */
     public Look()
     {
-        running = false;
+        started = false;
+        finished = false;
     }
     
     @Override
     public void perform(Enemy e)
     {
-        running = true;
+        started = true;
         System.out.println("Look.performAction(): ");
         constructView(e);
     }
@@ -51,6 +52,8 @@ public class Look implements Action
         xViewStart = e.getEyePosX();
         yViewStart = e.getEyePosY();
         
+        System.out.println(this + "\n\tconstructView():");
+        
         if(e.getFacing().equals(Direction.LEFT))
         {
             System.out.println(e + " left view");
@@ -59,7 +62,6 @@ public class Look implements Action
         {
             System.out.println(e + " right view");
         }
-        
     }
     
     @Override
@@ -69,8 +71,14 @@ public class Look implements Action
     }
      
     @Override
-    public boolean isRunning() 
+    public boolean hasStarted() 
     {
-        return running;
+        return started;
+    }
+    
+    @Override
+    public boolean hasFinished() 
+    {
+        return started;
     }
 }

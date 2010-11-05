@@ -23,6 +23,7 @@ import org.diediedie.actors.Enemy;
 public interface Action
 {
     void perform(Enemy e);
-    boolean isRunning();
+    boolean hasStarted();
+    boolean hasFinished(); 
     void update(Enemy e);
 }

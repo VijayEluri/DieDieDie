@@ -327,9 +327,8 @@ public class Bluey implements Enemy, StateMachine
     public void update()
     {        
         // Start the machine!
-        if(!fsmRunning && getHealth() > 0)
+        if(!fsmRunning && (health > 0))
         {
-            
             startFSM();
         }
         
