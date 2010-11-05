@@ -25,7 +25,9 @@ import java.util.ArrayList;
  */ 
 public interface StateMachine
 {
-    public void changeState(State nextState);  
-    public State getState();    
+    void changeState(State nextState);  
+    State getState();    
+    void createStates();
+    void setInitialState();
 }
 

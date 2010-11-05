@@ -23,11 +23,10 @@ import org.diediedie.actors.Direction;
  */ 
 public interface Enemy extends Actor
 {
-    void createStates();
-    void setInitialState();
+
     void setMoveSpeed(float f);
     void setFacing(Direction d);
-    
+
     float getEyePosX();
     float getEyePosY();
     
@@ -37,4 +36,5 @@ public interface Enemy extends Actor
     boolean isMoving();  
     float getWalkSpeed();
     float getRunSpeed();
+    
 }

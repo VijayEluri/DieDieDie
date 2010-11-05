@@ -14,16 +14,41 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
+
 package org.diediedie.actors.actions;
+
+import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
 
-/**
- * An Action performed by an Actor when in a certain State.
- */
-public interface Action
-{
-    void setUp(Enemy a);
-    void performAction();
-    boolean hasStarted();
-    boolean hasFinished();
+public class Walk implements Action
+{   
+    private boolean started, finished;
+    private Enemy host = null;
+    
+    @Override
+    public void setUp(Enemy e)
+    {
+        host = e;
+        started = false;
+        finished = false;
+    }
+    @Override
+    public void performAction()
+    {
+        
+    }    
+    @Override
+    public boolean hasStarted()    
+    {
+        return started;
+    }
+    @Override
+    public boolean hasFinished() 
+    {
+        return finished;
+    }
+
+
+
+
 }

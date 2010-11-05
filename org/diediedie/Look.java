@@ -27,10 +27,11 @@ import org.diediedie.actors.Enemy;
 public class Look implements Action
 {
     private boolean started = false, finished = false;
+    private Enemy host;
     
     public void setUp(Enemy e)
     {
-        
+        host = e;
     }
     public void performAction()
     {

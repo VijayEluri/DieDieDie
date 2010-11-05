@@ -170,6 +170,12 @@ public class Bluey implements Enemy, StateMachine
     {
         canJump = b;
     }   
+    
+    @Override
+    public State getState()
+    {
+        return currentState;
+    }
 
     
     @Override
@@ -237,13 +243,7 @@ public class Bluey implements Enemy, StateMachine
     {
         return canJump;
     }
-    
-    @Override
-    public State getState()
-    {
-        return currentState;        
-    }
-    
+
     private void createAnimations()
     {
         System.out.println("bluey -> creating animations");
@@ -294,7 +294,9 @@ public class Bluey implements Enemy, StateMachine
     {        
         updatePosition();
         updateProjectiles();
+        //System.out.println("bluey speed " + xSpeed);        
     }
+
     private void updatePosition()
     {
         applyGravity();
@@ -318,10 +320,10 @@ public class Bluey implements Enemy, StateMachine
         {            
             xSpeed = -(moveSpeed);
         }  
-        System.out.println("bluey speed " + xSpeed);        
+        
     }
     
-     @Override
+    @Override
     public float getEyePosX()
     {
        /* if(getFacing().equals(Direction.LEFT))
