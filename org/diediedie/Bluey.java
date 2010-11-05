@@ -109,6 +109,18 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    public void stopFSM()
+    {
+        
+    }
+    
+    @Override
+    public void startFSM()
+    {
+        
+    }
+    
+    @Override
     public Level getLevel()
     {
         return level;
@@ -289,6 +301,7 @@ public class Bluey implements Enemy, StateMachine
             System.out.println("bluey jump");    
         }
     }
+    
     @Override
     public void update()
     {        

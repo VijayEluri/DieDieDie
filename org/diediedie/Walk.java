@@ -20,6 +20,10 @@ package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
 
+
+/**
+ * 
+ */ 
 public class Walk implements Action
 {   
     private boolean started, finished;
@@ -35,7 +39,7 @@ public class Walk implements Action
     @Override
     public void performAction()
     {
-        
+        host.setMoveSpeed(host.getWalkSpeed());
     }    
     @Override
     public boolean hasStarted()    
@@ -49,6 +53,9 @@ public class Walk implements Action
     }
 
 
-
+    public String toString()
+    {
+        return "Walk";
+    }
 
 }

@@ -25,6 +25,8 @@ import java.util.ArrayList;
  */ 
 public interface StateMachine
 {
+    void startFSM();
+    void stopFSM();
     void changeState(State nextState);  
     State getState();    
     void createStates();
