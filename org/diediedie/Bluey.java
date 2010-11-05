@@ -37,30 +37,28 @@ public class Bluey implements Enemy, StateMachine
     // constants
     public static final int MAX_HEALTH = 100;
     private final String leftStandPath = "data/bluey_standing_left.png";
+    
     private final String[] leftWalkPaths = 
     {
         "data/bluey_walk_left_1.png",
-        "data/bluey_walk_left_1.png",
-        "data/bluey_walk_left_1.png",
-        "data/bluey_walk_left_1.png",
-        "data/bluey_walk_left_1.png",
-        "data/bluey_walk_left_1.png"
+        "data/bluey_walk_left_2.png",
+        "data/bluey_walk_left_3.png",
+        "data/bluey_walk_left_4.png",
+        "data/bluey_walk_left_5.png",
+        "data/bluey_walk_left_6.png"
     };
     
+    public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, 
+                       RUN_SPEED = 3.1f, JUMP_SPEED = -5.5f,
+                       ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;        
     // variables
-    public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 3.5f, 
-                       RUN_SPEED = 5.1f, JUMP_SPEED = -5.5f,
-                       ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;
-                       
-    
     private State currentState = null;
     private State patrol;
     
     private boolean setUp = false, canJump = false, moving = false,
                     canSeePlayer = false, hasSeenPlayer = false,
                     fsmRunning = false;
-    
-    
+                    
     private int health;
     private Direction facing = null;
     private Level level;
@@ -135,8 +133,6 @@ public class Bluey implements Enemy, StateMachine
         fsmRunning = true;
         currentState.start();
     }
-    
-    
     
     @Override
     public Level getLevel()
@@ -290,9 +286,10 @@ public class Bluey implements Enemy, StateMachine
         Image[] rightStandImages = { rightStand1 };  
               
         leftStandAnim = new Animation(leftStandImages, 
-                                      Actor.ANIM_DURATION, false);
+                                      Actor.ANIM_DURATION, true);
         rightStandAnim = new Animation(rightStandImages,
-                                      Actor.ANIM_DURATION, false);          
+                                      Actor.ANIM_DURATION, true);
+                                                
         // walking anims
         Image[] leftWalkImages = AnimCreator.getImagesFromPaths(
                                leftWalkPaths).toArray(rightStandImages);
@@ -300,9 +297,9 @@ public class Bluey implements Enemy, StateMachine
                             .getHorizontallyFlippedCopy(leftWalkImages)
                                             .toArray(rightStandImages);
         leftWalkAnim = new Animation(leftWalkImages, 
-                                      Actor.ANIM_DURATION, false);
+                                      Actor.ANIM_DURATION, true);
         rightWalkAnim = new Animation(rightWalkImages,
-                                       Actor.ANIM_DURATION, false);
+                                       Actor.ANIM_DURATION, true);
         facing = Direction.LEFT;
         currentAnim = leftStandAnim;
     }

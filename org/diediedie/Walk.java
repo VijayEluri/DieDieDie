@@ -43,7 +43,6 @@ public class Walk implements Action
             + new Throwable().fillInStackTrace()
                             .getStackTrace()[1].getClassName());
         started = true;
-        
         host.setMoveSpeed(host.getWalkSpeed());
         host.setMoving(true);
     }    
