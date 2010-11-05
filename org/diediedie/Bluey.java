@@ -37,7 +37,8 @@ public class Bluey implements Enemy, StateMachine
     private State currentState = null;
     private State patrol;
     
-    private boolean setUp = false, canJump = false, moving = false;
+    private boolean setUp = false, canJump = false, moving = false,
+                    canSeePlayer = false, hasSeenPlayer = false;
     
     public static final int MAX_HEALTH = 100;
     private int health;
@@ -334,8 +335,13 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public boolean canSeePlayer()
     {
-        
-        return false;
+        return canSeePlayer;
+    }
+    
+    @Override
+    public boolean hasSeenPlayer()
+    {
+        return hasSeenPlayer;
     }
     
     @Override
@@ -370,6 +376,7 @@ public class Bluey implements Enemy, StateMachine
         //g.draw(AnimCreator.getCurrentFrameRect(this));
         drawProjectiles(g);
     }
+
     
     private void drawProjectiles(Graphics g)
     {

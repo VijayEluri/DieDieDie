@@ -27,10 +27,11 @@ public interface Enemy extends Actor
     void setInitialState();
     void setMoveSpeed(float f);
     void setFacing(Direction d);
+    
     boolean canSeePlayer();
+    boolean hasSeenPlayer();
+    
     boolean isMoving();  
-    //boolean knowsOfPlayer();
     float getWalkSpeed();
     float getRunSpeed();
-
 }
