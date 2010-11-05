@@ -18,6 +18,10 @@ package org.diediedie.actors;
 import org.diediedie.Level;
 import org.diediedie.actors.State;
  
+ /**
+  * State class wherein an Enemy(Actor) moves around the Level,
+  * checking out the other Actors.
+  */ 
 public class Patrol implements State
 {
     private Enemy host = null;
@@ -42,6 +46,7 @@ public class Patrol implements State
     public void start()
     {
         running = true;
+        host.setMoveSpeed(host.getWalkSpeed());
     }
     
     @Override

@@ -34,24 +34,8 @@ import org.newdawn.slick.Graphics;
  */ 
 public class Bluey implements Enemy, StateMachine
 {
-    private State currentState = null;
-    private State patrol;
-    
-    private boolean setUp = false, canJump = false, moving = false,
-                    canSeePlayer = false, hasSeenPlayer = false;
-    
+    // constants
     public static final int MAX_HEALTH = 100;
-    private int health;
-    private Direction facing = null;
-    private Level level;
-    
-    private float xPos, yPos, tileHeight, moveSpeed = 0, oldX, oldY,
-                  xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0;
-    
-    public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 3.5f, 
-                        RUN_SPEED = 5.1f, JUMP_SPEED = -5.5f,
-                        ACCEL_RATE = 0.03f;
-    
     private final String leftStandPath = "data/bluey_standing_left.png";
     private final String[] leftWalkPaths = 
     {
@@ -63,6 +47,26 @@ public class Bluey implements Enemy, StateMachine
         "data/bluey_walk_left_1.png"
     };
     
+    // variables
+    public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 3.5f, 
+                       RUN_SPEED = 5.1f, JUMP_SPEED = -5.5f,
+                       ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;
+                       
+    
+    private State currentState = null;
+    private State patrol;
+    
+    private boolean setUp = false, canJump = false, moving = false,
+                    canSeePlayer = false, hasSeenPlayer = false;
+    
+    
+    private int health;
+    private Direction facing = null;
+    private Level level;
+    
+    private float xPos, yPos, tileHeight, moveSpeed = 0, oldX, oldY,
+                  xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0;
+   
     private Animation leftWalkAnim, rightWalkAnim, leftStandAnim, 
                       rightStandAnim, currentAnim = null;
        
@@ -101,6 +105,7 @@ public class Bluey implements Enemy, StateMachine
     public void setMoveSpeed(float f)
     {
         moveSpeed = f;
+        System.out.println("bluey setMoveSpeed: " + f);
     }
     
     @Override
@@ -314,6 +319,26 @@ public class Bluey implements Enemy, StateMachine
             xSpeed = -(moveSpeed);
         }  
         System.out.println("bluey speed " + xSpeed);        
+    }
+    
+     @Override
+    public float getEyePosX()
+    {
+       /* if(getFacing().equals(Direction.LEFT))
+        {
+            return xPos + EYE_OFFSET_WIDTH; 
+        }
+        else if(getFacing().equals(Direction.RIGHT))
+        {
+            
+        }*/
+        return AnimCreator.getCurrentFrameRect(this).getWidth() / 2;
+    }
+    
+    @Override
+    public float getEyePosY()
+    {
+        return yPos + EYE_OFFSET_HEIGHT;
     }
     
     @Override
