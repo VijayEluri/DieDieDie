@@ -24,6 +24,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import java.util.List;
 import java.util.ArrayList;
+import org.newdawn.slick.util.FastTrig;
 
 /**
  * Look at the immediate area in the current Direction. 
@@ -36,7 +37,7 @@ public class Look implements Action
     
     
     // a list of the collision tiles (walls, floors)
-    private List<Tile> surfacesSeen = null;
+    //private List<Tile> surfacesSeen = null;
     
     /**
      * Look!
@@ -74,21 +75,15 @@ public class Look implements Action
     @Override
     public void update(Enemy e)
     {
-        System.out.println("\t updating Look action for " + e);
+        // System.out.println("\t updating Look action for " + e);
         view.draw(new Graphics());
     }
          
     @Override
-    public boolean hasStarted() 
-    {
-        return started;
-    }
+    public boolean hasStarted() { return started; }
     
     @Override
-    public boolean hasFinished() 
-    {
-        return finished;
-    }
+    public boolean hasFinished() { return finished; }
     
     /*
      * View - constructs the geometry describing the field-of-view from
@@ -99,20 +94,41 @@ public class Look implements Action
      */ 
     class View
     {
+        private final int EYE_ANG_UP = 45, EYE_ANG_DOWN = 135; 
+        
+        private Line fovTop = null, fovBot = null;
+        
+        private final int LENGTH = 200;
+        
         private float xViewStart, yViewStart;
         private Color color = new Color(162, 205, 90);
         
-        // degrees
-        private final float EYE_ANGLE = 90f, FOV = 20f; 
+        // semi transparent fov lines
+        float ALPHA = 50f;         
           
        /**
         * Constructs a view from a Enemy's facing direction and position 
         */
         View(Enemy e)
         {
+            color.a = ALPHA; 
+            constructFOV(e);
+        } 
+        
+        /*
+         * Create FOV Lines
+         */ 
+        private void constructFOV(Enemy e)
+        {
+            // line positions
+            
+            float topEndX, topEndY, botEndX, botEndY;
+            int i = 0;
+            
             xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
-                        
+                       
+            
             if(e.getFacing().equals(Direction.LEFT))
             {
                 System.out.println(e + " left view");
@@ -121,18 +137,26 @@ public class Look implements Action
             {
                 System.out.println(e + " right view");
             }
-        } 
-        
-        List<Tile> getSurfaces()
-        {
-            return null;
+            
+            
         }
+        
         /*
          * For testing purposes, draw the field of vision lines.
          */ 
         void draw(Graphics g)
         {
-            
-        }      
+            // g.drawGradientLine(float x1, float y1, Color Color1, 
+            //                  float x2, float y2, Color Color2) 
+         
+        } 
+
+        /*List<Tile> getSurfaces()
+        {
+            return null;
+        }
+        */
+        
+             
     }
 }

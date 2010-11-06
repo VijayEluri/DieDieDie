@@ -63,7 +63,6 @@ public class Patrol implements State
     @Override
     public void update()
     {
-        
         currentAction.update(host);
     }
     
