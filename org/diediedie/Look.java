@@ -20,6 +20,8 @@ import org.diediedie.actors.Enemy;
 import org.diediedie.Tile;
 import org.diediedie.actors.Direction;
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Color;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -32,6 +34,7 @@ public class Look implements Action
     private float xViewStart, yViewStart;
     private View view = null;
     
+    
     // a list of the collision tiles (walls, floors)
     private List<Tile> surfacesSeen = null;
     
@@ -40,26 +43,41 @@ public class Look implements Action
      */
     public Look()
     {
+        reset();
+    }
+    
+    private void reset()
+    {
         started = false;
         finished = false;
     }
     
+    /*
+     * Rem: perform() is the entry point for States. 
+     */ 
     @Override
     public void perform(Enemy e)
     {
-        started = true;
-        System.out.println("Look.performAction(): ");
-        view = new View(e);
-        update(e);
+        if(!started && !finished)
+        {
+            started = true;
+            System.out.println("Look.performAction(): ");
+            
+            view = new View(e);
+        }
+        else if(started && !finished)
+        {
+            update(e);
+        }
     }
-    
          
     @Override
     public void update(Enemy e)
     {
-        
+        System.out.println("\t updating Look action for " + e);
+        view.draw(new Graphics());
     }
-     
+         
     @Override
     public boolean hasStarted() 
     {
@@ -80,9 +98,13 @@ public class Look implements Action
      * see an object, platform or Actor on the Level.  
      */ 
     class View
-    {    
+    {
         private float xViewStart, yViewStart;
+        private Color color = new Color(162, 205, 90);
         
+        // degrees
+        private final float EYE_ANGLE = 90f, FOV = 20f; 
+          
        /**
         * Constructs a view from a Enemy's facing direction and position 
         */
@@ -99,7 +121,18 @@ public class Look implements Action
             {
                 System.out.println(e + " right view");
             }
-        }       
+        } 
+        
+        List<Tile> getSurfaces()
+        {
+            return null;
+        }
+        /*
+         * For testing purposes, draw the field of vision lines.
+         */ 
+        void draw(Graphics g)
+        {
+            
+        }      
     }
-    
 }

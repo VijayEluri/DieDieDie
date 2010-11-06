@@ -23,21 +23,41 @@ class StopWalking implements Action
     private boolean started, finished;
     private Enemy host = null;
     
+    /**
+     * Create a new StopWalking Action
+     */ 
     public StopWalking()
     {
-    
+        reset();
     }
     
+    private void reset()
+    {
+        started = false;
+        finished = false;
+    }  
     @Override
     public void perform(Enemy e)
     {
+        if(!started && !finished)
+        {
+            started = true;
+            
+            System.out.println("\tperforming StopWalking for " 
+                + new Throwable().fillInStackTrace()
+                                .getStackTrace()[1].getClassName());
+            host.setMoving(false);
+            
+            // this action doesn't require that any further steps be taken
+            finished = true;
+        }
         
     }
     
     @Override
     public void update(Enemy host)
     {
-        
+        // this action doesn't require that any further steps be taken
     }
     
     @Override

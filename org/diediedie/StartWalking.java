@@ -31,28 +31,37 @@ public class StartWalking implements Action
      */ 
     public StartWalking()
     {
+         reset();
+    }
+    
+    private void reset()
+    {
         started = false;
         finished = false;
-    }
-
+    }  
     @Override
     public void perform(Enemy host)
     {
-        if(!started)
+        if(!started && !finished)
         {
-            System.out.println("\tstarted Walk for " 
+            started = true;
+            
+            System.out.println("\tperforming StartWalking for " 
                 + new Throwable().fillInStackTrace()
                                 .getStackTrace()[1].getClassName());
-            started = true;
+            
             host.setMoveSpeed(host.getWalkSpeed());
             host.setMoving(true);
+            
+            // this action doesn't require that any further steps be taken
+            finished = true;
         }
     }
     
     @Override
     public void update(Enemy host)
     {
-        
+        // this action doesn't require that any further steps be taken
     }
     
     @Override

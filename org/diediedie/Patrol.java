@@ -48,6 +48,7 @@ public class Patrol implements State
         return host;
     }
     
+
     @Override
     public void enter()
     {
