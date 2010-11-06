@@ -18,35 +18,20 @@ package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
 
-/**
- * Causes an Enemy to *start* walking in their currently faced direction.
- */ 
-public class StartWalking implements Action
-{   
+class StopWalking implements Action
+{  
     private boolean started, finished;
     private Enemy host = null;
     
-    /**
-     * Walk!
-     */ 
-    public StartWalking()
+    public StopWalking()
     {
-        started = false;
-        finished = false;
+    
     }
-
+    
     @Override
-    public void perform(Enemy host)
+    public void perform(Enemy e)
     {
-        if(!started)
-        {
-            System.out.println("\tstarted Walk for " 
-                + new Throwable().fillInStackTrace()
-                                .getStackTrace()[1].getClassName());
-            started = true;
-            host.setMoveSpeed(host.getWalkSpeed());
-            host.setMoving(true);
-        }
+        
     }
     
     @Override
@@ -70,6 +55,6 @@ public class StartWalking implements Action
     @Override
     public String toString()
     {
-        return "StartWalking";
+        return "StopWalking";
     }
 }

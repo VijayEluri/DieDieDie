@@ -17,28 +17,26 @@
 package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
+import org.diediedie.Tile;
 import org.diediedie.actors.Direction;
+import org.newdawn.slick.geom.Line;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
- * Look around the immediate area, in the current Direction.
- * 
- * If moving:
- *
- *  -
- * 
- * 
- * If not moving:
- * 
- * -
- * 
+ * Look at the immediate area in the current Direction. 
  */
 public class Look implements Action
 {
     private boolean started, finished;
     private float xViewStart, yViewStart;
-    private View view;
-    /*
-     *  Look!
+    private View view = null;
+    
+    // a list of the collision tiles (walls, floors)
+    private List<Tile> surfacesSeen = null;
+    
+    /**
+     * Look!
      */
     public Look()
     {
@@ -51,14 +49,11 @@ public class Look implements Action
     {
         started = true;
         System.out.println("Look.performAction(): ");
+        view = new View(e);
         update(e);
     }
     
-    /**
-     * Constructs a view from a Enemy's facing direction and position 
-     */ 
-    
-    
+         
     @Override
     public void update(Enemy e)
     {
@@ -88,13 +83,14 @@ public class Look implements Action
     {    
         private float xViewStart, yViewStart;
         
+       /**
+        * Constructs a view from a Enemy's facing direction and position 
+        */
         View(Enemy e)
         {
             xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
-            
-            System.out.println("\n\tconstructView():");
-            
+                        
             if(e.getFacing().equals(Direction.LEFT))
             {
                 System.out.println(e + " left view");
@@ -105,4 +101,5 @@ public class Look implements Action
             }
         }       
     }
+    
 }
