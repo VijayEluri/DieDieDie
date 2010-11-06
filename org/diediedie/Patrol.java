@@ -49,7 +49,7 @@ public class Patrol implements State
     }
     
     @Override
-    public void start()
+    public void enter()
     {
         if(!running)
         {
@@ -68,7 +68,7 @@ public class Patrol implements State
     
     
     @Override
-    public void stop()
+    public void exit()
     {
         running = false;
     }

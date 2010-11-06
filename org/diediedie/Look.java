@@ -21,12 +21,22 @@ import org.diediedie.actors.Direction;
 
 /**
  * Look around the immediate area, in the current Direction.
+ * 
+ * If moving:
+ *
+ *  -
+ * 
+ * 
+ * If not moving:
+ * 
+ * -
+ * 
  */
 public class Look implements Action
 {
     private boolean started, finished;
     private float xViewStart, yViewStart;
-    
+    private View view;
     /*
      *  Look!
      */
@@ -41,31 +51,16 @@ public class Look implements Action
     {
         started = true;
         System.out.println("Look.performAction(): ");
-        constructView(e);
+        update(e);
     }
     
     /**
      * Constructs a view from a Enemy's facing direction and position 
      */ 
-    private void constructView(Enemy e)
-    {
-        xViewStart = e.getEyePosX();
-        yViewStart = e.getEyePosY();
-        
-        System.out.println(this + "\n\tconstructView():");
-        
-        if(e.getFacing().equals(Direction.LEFT))
-        {
-            System.out.println(e + " left view");
-        }
-        else if(e.getFacing().equals(Direction.RIGHT))
-        {
-            System.out.println(e + " right view");
-        }
-    }
+    
     
     @Override
-    public void update(Enemy host)
+    public void update(Enemy e)
     {
         
     }
@@ -79,6 +74,35 @@ public class Look implements Action
     @Override
     public boolean hasFinished() 
     {
-        return started;
+        return finished;
+    }
+    
+    /*
+     * View - constructs the geometry describing the field-of-view from
+     * the Enemy's eye position to the Level that s/he exists in. 
+     * 
+     * This View is used to calculate whether or not the Enemy can 
+     * see an object, platform or Actor on the Level.  
+     */ 
+    class View
+    {    
+        private float xViewStart, yViewStart;
+        
+        View(Enemy e)
+        {
+            xViewStart = e.getEyePosX();
+            yViewStart = e.getEyePosY();
+            
+            System.out.println("\n\tconstructView():");
+            
+            if(e.getFacing().equals(Direction.LEFT))
+            {
+                System.out.println(e + " left view");
+            }
+            else if(e.getFacing().equals(Direction.RIGHT))
+            {
+                System.out.println(e + " right view");
+            }
+        }       
     }
 }

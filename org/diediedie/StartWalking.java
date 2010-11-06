@@ -20,7 +20,6 @@ import org.diediedie.actors.Enemy;
 
 /**
  * Causes an Enemy to *start* walking in their currently faced direction.
- * 
  */ 
 public class StartWalking implements Action
 {   
@@ -61,7 +60,6 @@ public class StartWalking implements Action
     {
         return started;
     }
-    
     
     @Override
     public boolean hasStarted() 

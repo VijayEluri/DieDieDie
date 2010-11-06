@@ -122,7 +122,7 @@ public class Bluey implements Enemy, StateMachine
     public void stopFSM()
     {
         System.out.println("stopping FSM on " + this);
-        currentState.stop();
+        currentState.exit();
         fsmRunning = false;
     }
     
@@ -131,7 +131,7 @@ public class Bluey implements Enemy, StateMachine
     {
         System.out.println(this + "\n\tstartFSM()");
         fsmRunning = true;
-        currentState.start();
+        currentState.enter();
     }
     
     @Override

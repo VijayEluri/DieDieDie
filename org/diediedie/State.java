@@ -26,8 +26,8 @@ public interface State
     Enemy getHost();
     String toString();
     void update();
-    void start();
-    void stop();
+    void enter();
+    void exit();
     boolean isRunning();    
 }
 
