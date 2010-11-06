@@ -326,21 +326,29 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void update()
     {        
-        // Start the machine!
-        if(!fsmRunning && (health > 0))
-        {
-            startFSM();
-        }
-        
         updatePosition();
         updateProjectiles();
+        updateFSM();
         
         if(xSpeed > 0)
         {
             System.out.println("bluey speed " + xSpeed);        
         }
     }
-
+    
+    private void updateFSM()
+    {
+        // Start the machine!
+        if(!fsmRunning && (health > 0))
+        {
+            startFSM();
+        }
+        if(isRunning())
+        {
+            
+        }
+    }
+    
     private void updatePosition()
     {
         applyGravity();

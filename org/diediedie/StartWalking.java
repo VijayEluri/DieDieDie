@@ -14,74 +14,64 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie.actors;
-import org.diediedie.Level;
-import org.diediedie.actors.State;
-import org.diediedie.actors.actions.*;
- 
- /**
-  * State class wherein an Enemy(Actor) moves around the Level,
-  * looking for the Player.
-  */ 
-public class Patrol implements State
-{
+package org.diediedie.actors.actions;
+import org.diediedie.actors.actions.Action;
+import org.diediedie.actors.Enemy;
+
+/**
+ * Causes an Enemy to *start* walking in their currently faced direction.
+ * 
+ */ 
+public class StartWalking implements Action
+{   
+    private boolean started, finished;
     private Enemy host = null;
-    private Level level = null;
-    private boolean running = false;
-    
-    private Action currentAction;
-    private StartWalking walk;
     
     /**
-     * Associate this State with an Actor
+     * Walk!
      */ 
-    public Patrol(Enemy e)
+    public StartWalking()
     {
-        host = e;
-        walk = new StartWalking();
-        currentAction = walk;
-    }  
-    
-    @Override
-    public Enemy getHost()
-    {
-        return host;
+        started = false;
+        finished = false;
     }
-    
+
     @Override
-    public void start()
+    public void perform(Enemy host)
     {
-        if(!running)
+        if(!started)
         {
-            running = true;
-            System.out.println("\tstarted " + this);
-            currentAction.perform(host);
+            System.out.println("\tstarted Walk for " 
+                + new Throwable().fillInStackTrace()
+                                .getStackTrace()[1].getClassName());
+            started = true;
+            host.setMoveSpeed(host.getWalkSpeed());
+            host.setMoving(true);
         }
     }
     
     @Override
-    public void update()
+    public void update(Enemy host)
     {
         
-        currentAction.update(host);
+    }
+    
+    @Override
+    public boolean hasFinished() 
+    {
+        return started;
     }
     
     
     @Override
-    public void stop()
+    public boolean hasStarted() 
     {
-        running = false;
-    }
-    
-    @Override
-    public boolean isRunning()
-    {
-        return running;
+        return started;
     }
     
     @Override
     public String toString()
     {
-        return "Patrol";
+        return "Walk";
     }
 }
