@@ -20,6 +20,8 @@ import org.diediedie.actors.Enemy;
 import org.diediedie.Tile;
 import org.diediedie.actors.Direction;
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import java.util.List;
@@ -32,12 +34,10 @@ import java.lang.Math;
  */
 public class Look implements Action
 {
-    private boolean started, finished;
+    private boolean started, finished, viewCreated;
     private float xViewStart, yViewStart;
     private View view = null;
     
-    
-    // a list of the collision tiles (walls, floors)
     //private List<Tile> surfacesSeen = null;
     
     /**
@@ -46,12 +46,15 @@ public class Look implements Action
     public Look()
     {
         reset();
+        
+        
     }
     
     private void reset()
     {
         started = false;
         finished = false;
+        viewCreated = false;
     }
     
     /*
@@ -63,10 +66,7 @@ public class Look implements Action
         if(!started && !finished)
         {
             started = true;
-            System.out.println("Look.perform() ");
-            
-            
-            assert(view != null);
+            System.out.println("Look.perform()");
         }
         else if(started && !finished)
         {
@@ -77,7 +77,7 @@ public class Look implements Action
     @Override
     public void draw(Graphics g)
     {
-        if(view != null)
+        if(viewCreated)
         {
             view.draw(g);
         }
@@ -87,8 +87,15 @@ public class Look implements Action
     public void update(Enemy e)
     {
         //System.out.println("\t updating Look action for " + e);
-        view = new View(e);
-        //view.draw();
+        if(!viewCreated)
+        {
+            view = new View(e);
+            viewCreated = true;
+        }
+        else
+        {
+            view.update(e);
+        }
     }
          
     @Override
@@ -104,17 +111,20 @@ public class Look implements Action
      * This View is used to calculate whether or not the Enemy can 
      * see an object, platform or Actor on the Level.  
      */ 
-    class View
+    class View 
     {
         //private final int EYE_ANG_UP = 45, EYE_ANG_DOWN = 135; 
         // now using stored radians instead of degrees
         private final float EYE_ANG_UP = 0.7853982f, 
                             EYE_ANG_DOWN = 2.3561945f;
-        private Line fovTop = null, fovBot = null;
+        
+        private Shape topLine, botLine;
         private final int LINE_LEN = 350;
         
+        private Transform trans;
+        
         // view geometry components
-        private float xViewStart, yViewStart, topEndX, topEndY, //botEndX, 
+        private float xViewStart, yViewStart, topEndX, topEndY, 
                       endX, botEndY;
           
        /**
@@ -123,6 +133,7 @@ public class Look implements Action
         View(Enemy e)
         {
             constructFOV(e);
+            System.out.println("constructed view");
         } 
         
         private float fastSin(float x, float radians)
@@ -146,35 +157,49 @@ public class Look implements Action
             if(e.getFacing().equals(Direction.LEFT))
             {
                 //System.out.println(e + " left view");
-                endX = fastSin(xViewStart, /*-LINE_LEN, */ -EYE_ANG_UP);
-                
+                endX = fastSin(xViewStart, -EYE_ANG_UP);
             }
             else if(e.getFacing().equals(Direction.RIGHT))
             {
                //System.out.println(e + " right view");
-                endX = fastSin(xViewStart, /*-LINE_LEN, */ EYE_ANG_UP);    
+                endX = fastSin(xViewStart, EYE_ANG_UP);    
             }
                         
             topEndY = fastCos(yViewStart, EYE_ANG_UP);
             botEndY = fastCos(yViewStart, EYE_ANG_DOWN);
-          /*  System.out.println("fov top: " + xViewStart + ", " + 
-                        yViewStart + " to " + endX +  
-            */
-            //fovTop = new Line(xViewStart, yViewStart, topEndX, topEndY);
+            
+            topLine = new Line(xViewStart, yViewStart, endX, 
+                                    topEndY);            
+            botLine = new Line(xViewStart, yViewStart, endX,
+                                    botEndY);    
         }
         
+        public void update(Enemy e)
+        {
+            trans = makeTrans(e, (Line)topLine);
+            topLine = topLine.transform(trans);
+            botLine = botLine.transform(trans);
+        }
         
-        
+        private Transform makeTrans(Enemy e, Line l)
+        {
+            final Transform T = Transform.createTranslateTransform(
+                                    e.getEyePosX() - l.getX1(), 
+                                    e.getEyePosY() - l.getY1()    );
+            
+            //System.out.println("Transform: " + T);
+            
+            return T;
+        }
         
         /*
          * For testing purposes, draw the field of vision lines.
          */ 
         public void draw(Graphics g)
         {
-           /* g.drawGradientLine(xViewStart, yViewStart, color, topEndX, topEndY,
-                                color);            */
-            g.drawLine(xViewStart, yViewStart, endX, topEndY);            
-            g.drawLine(xViewStart, yViewStart, endX, botEndY);            
+            g.setColor(Color.white);
+            g.draw(topLine);
+            g.draw(botLine);
         } 
     }
 }

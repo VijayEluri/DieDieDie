@@ -73,7 +73,6 @@ public class Patrol implements State
     @Override
     public void update()
     {
-        Class cls;
         //System.out.println("Patrol.update(): currentAction " + currentAction);
         if(!currentAction.hasStarted())
         {
@@ -82,7 +81,7 @@ public class Patrol implements State
         }
         else if(currentAction.hasFinished())
         {
-            cls = currentAction.getClass();
+            final Class cls = currentAction.getClass();
             if(cls.equals(startWalking.getClass()))
             {
                 //System.out.println("Patrol.update(): changing state");   

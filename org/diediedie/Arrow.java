@@ -46,7 +46,7 @@ public class Arrow
     
     private Level level = null;
 
-    private boolean isFlying = false, collided = false;
+    private boolean flying = false, collided = false;
    
     
     /**
@@ -68,12 +68,12 @@ public class Arrow
     {
         accelX = power;
         accelY = power;// * 0.9f;
-        isFlying = true;
+        flying = true;
     }
     
     public boolean isFlying()
     {
-        return isFlying;
+        return flying;
     }
     
     /**
@@ -100,7 +100,8 @@ public class Arrow
      */
     private void setMovementAngle(float x, float y)
     {
-        movementAngle = (float)Math.toDegrees(Math.atan2(x - startX, startY - y));                                                                       
+        movementAngle = (float)Math.toDegrees(Math.atan2(x - startX, 
+                                              startY - y));
     }
     
     /**
@@ -118,10 +119,11 @@ public class Arrow
      */
     protected void updatePosition()
     {
-        if(!isFlying)
+        if(!flying)
         {
             return;
         }
+        
         xTrav = speedX * AIR_REST;
         yTrav = speedY;
              
@@ -129,16 +131,14 @@ public class Arrow
         oldY = startY;
         oldX = startX;
         
-       
         startX = (float)(startX + xTrav * 
                             FastTrig.sin(Math.toRadians(movementAngle)));
         startY = (float)(startY - yTrav * 
                             FastTrig.cos(Math.toRadians(movementAngle)));
-        
-        
         applyGravity();       
         adjustFacingAngle();
         calculateEndPos();
+        
         if(collidesLevel())
         {
             stop();
@@ -164,7 +164,7 @@ public class Arrow
      */ 
     private void stop()
     {
-        isFlying = false;
+        flying = false;
         accelX = 0;
         accelY = 0;
         speedX = 0;
