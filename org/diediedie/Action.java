@@ -16,6 +16,7 @@
  */
 package org.diediedie.actors.actions;
 import org.diediedie.actors.Enemy;
+import org.newdawn.slick.Graphics;
 
 /**
  * An Action performed by an Actor when in a certain State.
@@ -26,4 +27,6 @@ public interface Action
     boolean hasStarted();
     boolean hasFinished(); 
     void update(Enemy e);
+    
+    void draw(Graphics g);
 }

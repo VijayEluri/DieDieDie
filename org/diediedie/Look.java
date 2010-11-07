@@ -25,6 +25,7 @@ import org.newdawn.slick.Color;
 import java.util.List;
 import java.util.ArrayList;
 import org.newdawn.slick.util.FastTrig;
+import java.lang.Math;
 
 /**
  * Look at the immediate area in the current Direction. 
@@ -62,21 +63,32 @@ public class Look implements Action
         if(!started && !finished)
         {
             started = true;
-            System.out.println("Look.performAction(): ");
+            System.out.println("Look.perform() ");
             
-            view = new View(e);
+            
+            assert(view != null);
         }
         else if(started && !finished)
         {
             update(e);
         }
     }
+    
+    @Override
+    public void draw(Graphics g)
+    {
+        if(view != null)
+        {
+            view.draw(g);
+        }
+    }
          
     @Override
     public void update(Enemy e)
     {
-        // System.out.println("\t updating Look action for " + e);
-        view.draw(new Graphics());
+        System.out.println("\t updating Look action for " + e);
+        view = new View(e);
+        //view.draw();
     }
          
     @Override
@@ -95,16 +107,14 @@ public class Look implements Action
     class View
     {
         private final int EYE_ANG_UP = 45, EYE_ANG_DOWN = 135; 
-        
         private Line fovTop = null, fovBot = null;
-        
-        private final int LENGTH = 200;
-        
-        private float xViewStart, yViewStart;
-        private Color color = new Color(162, 205, 90);
-        
+        private final int LINE_LEN = 200;
+        private float xViewStart, yViewStart, topEndX, topEndY, botEndX, 
+                      botEndY;
+        private Color color = new Color.White;//new Color(162, 205, 90);
+        private Graphics g;
         // semi transparent fov lines
-        float ALPHA = 50f;         
+        float ALPHA = 60f;         
           
        /**
         * Constructs a view from a Enemy's facing direction and position 
@@ -112,6 +122,7 @@ public class Look implements Action
         View(Enemy e)
         {
             color.a = ALPHA; 
+
             constructFOV(e);
         } 
         
@@ -119,16 +130,11 @@ public class Look implements Action
          * Create FOV Lines
          */ 
         private void constructFOV(Enemy e)
-        {
-            // line positions
-            
-            float topEndX, topEndY, botEndX, botEndY;
-            int i = 0;
-            
+        {            
+            g = e.getGraphics();
             xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
                        
-            
             if(e.getFacing().equals(Direction.LEFT))
             {
                 System.out.println(e + " left view");
@@ -138,25 +144,30 @@ public class Look implements Action
                 System.out.println(e + " right view");
             }
             
+            topEndX = xViewStart + LINE_LEN * (float)FastTrig.sin(
+                        Math.toRadians(EYE_ANG_UP));
+            topEndY = yViewStart - LINE_LEN * (float)FastTrig.cos(
+                        Math.toRadians(EYE_ANG_UP));
+            //fovTop = new Line(xViewStart, yViewStart, topEndX, topEndY);
             
         }
+        
+        
         
         /*
          * For testing purposes, draw the field of vision lines.
          */ 
-        void draw(Graphics g)
+        public void draw(Graphics g)
         {
-            // g.drawGradientLine(float x1, float y1, Color Color1, 
-            //                  float x2, float y2, Color Color2) 
-         
+            g.drawGradientLine(xViewStart, yViewStart, color, topEndX, topEndY,
+                                color);
+            /*g.setColor(color);
+            g.drawLine(xViewStart, yViewStart, topEndX, topEndY);                */
+            System.out.println("fov top:" + xViewStart + ", " +
+                                yViewStart + " to " + topEndX + ", " +
+                                topEndY);
+                                
+            
         } 
-
-        /*List<Tile> getSurfaces()
-        {
-            return null;
-        }
-        */
-        
-             
     }
 }

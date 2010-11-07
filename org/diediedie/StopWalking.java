@@ -17,6 +17,7 @@
 package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
+import org.newdawn.slick.Graphics;
 
 class StopWalking implements Action
 {  
@@ -30,6 +31,13 @@ class StopWalking implements Action
     {
         reset();
     }
+    
+    @Override
+    public void draw(Graphics g)
+    {
+        
+    }
+    
     
     private void reset()
     {

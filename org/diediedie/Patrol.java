@@ -18,7 +18,7 @@ package org.diediedie.actors;
 import org.diediedie.Level;
 import org.diediedie.actors.State;
 import org.diediedie.actors.actions.*;
- 
+import java.lang.Class;
  /**
   * State class wherein an Enemy(Actor) moves around the Level,
   * looking for the Player.
@@ -30,7 +30,9 @@ public class Patrol implements State
     private boolean running = false;
     
     private Action currentAction;
-    private StartWalking walk;
+    private StartWalking startWalking;
+    
+    
     
     /**
      * Associate this State with an Actor
@@ -38,8 +40,8 @@ public class Patrol implements State
     public Patrol(Enemy e)
     {
         host = e;
-        walk = new StartWalking();
-        currentAction = walk;
+        startWalking = new StartWalking();
+        currentAction = startWalking;
     }  
     
     @Override
@@ -48,6 +50,10 @@ public class Patrol implements State
         return host;
     }
     
+    public Action getCurrentAction()
+    {
+        return currentAction;
+    }
 
     @Override
     public void enter()
@@ -60,12 +66,39 @@ public class Patrol implements State
         }
     }
     
+    /**
+     * Define the procedure for updating the Patrolling state based upon 
+     * the currentAction. 
+     */ 
     @Override
     public void update()
     {
-        currentAction.update(host);
+        Class cls;
+        //System.out.println("Patrol.update(): currentAction " + currentAction);
+        if(!currentAction.hasStarted())
+        {
+            currentAction.perform(host);
+            System.out.println("Patrol.update(): started " + currentAction);
+        }
+        else if(currentAction.hasFinished())
+        {
+            cls = currentAction.getClass();
+            if(cls.equals(startWalking.getClass()))
+            {
+                System.out.println("Patrol.update(): changing state");   
+                currentAction = new Look();    
+            }
+        }
+        else
+        {
+            currentAction.update(host);    
+        }
     }
     
+    public Class getCurrentActionType()
+    {
+        return currentAction.getClass();
+    }
     
     @Override
     public void exit()

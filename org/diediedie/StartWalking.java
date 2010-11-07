@@ -17,9 +17,10 @@
 package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
+import org.newdawn.slick.Graphics;
 
 /**
- * Causes an Enemy to *start* walking in their currently faced direction.
+ * Causes an Enemy to *start* walking in the currently faced direction.
  */ 
 public class StartWalking implements Action
 {   
@@ -39,6 +40,7 @@ public class StartWalking implements Action
         started = false;
         finished = false;
     }  
+    
     @Override
     public void perform(Enemy host)
     {
@@ -59,9 +61,15 @@ public class StartWalking implements Action
     }
     
     @Override
+    public void draw(Graphics g)
+    {
+        
+    }
+    
+    @Override
     public void update(Enemy host)
     {
-        // this action doesn't require that any further steps be taken
+        // this action doesn't require that any further steps be taken!
     }
     
     @Override

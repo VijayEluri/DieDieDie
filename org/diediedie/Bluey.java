@@ -19,6 +19,7 @@ import org.diediedie.Level;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.State;
+import org.diediedie.actors.actions.*;
 import java.util.List;
 import java.util.ArrayList;
 import org.diediedie.Tile;
@@ -39,6 +40,8 @@ public class Bluey implements Enemy, StateMachine
     
     public final String leftStandPath = "data/bluey_standing_left.png";
     
+    private Graphics g;
+    
     public final String[] leftWalkPaths = 
     {
         "data/bluey_walk_left_1.png",
@@ -54,7 +57,8 @@ public class Bluey implements Enemy, StateMachine
                        ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;        
     
     // Variables    
-    private State currentState = null, patrol;
+    private State currentState = null;
+    Patrol patrol;
     
     private boolean setUp = false, canJump = false, moving = false,
                     canSeePlayer = false, hasSeenPlayer = false,
@@ -328,7 +332,7 @@ public class Bluey implements Enemy, StateMachine
     {        
         updatePosition();
         updateProjectiles();
-        updateFSM();
+        updateState();
         
         if(xSpeed > 0)
         {
@@ -336,7 +340,7 @@ public class Bluey implements Enemy, StateMachine
         }
     }
     
-    private void updateFSM()
+    private void updateState()
     {
         // Start the machine!
         if(!fsmRunning && (health > 0))
@@ -345,7 +349,7 @@ public class Bluey implements Enemy, StateMachine
         }
         if(isRunning())
         {
-            
+            currentState.update();
         }
     }
     
@@ -404,16 +408,8 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public float getEyePosX()
     {
-       /* if(getFacing().equals(Direction.LEFT))
-        {
-            return xPos + EYE_OFFSET_WIDTH; 
-        }
-        else if(getFacing().equals(Direction.RIGHT))
-        {
-            
-        }*/
-        // for now:
-        return AnimCreator.getCurrentFrameRect(this).getWidth() / 2;
+       return xPos + 
+                 (AnimCreator.getCurrentFrameRect(this).getWidth() / 2);
     }
     
     @Override
@@ -481,10 +477,23 @@ public class Bluey implements Enemy, StateMachine
     {
         //System.out.println("drawing Bluey: " + getX() + ", " + getY());
         g.drawAnimation(currentAnim, getX(), getY());
-        //g.draw(AnimCreator.getCurrentFrameRect(this));
+
         drawProjectiles(g);
+
+        final Look look = null;
+        
+        // this is just debug code; it won't be here for ever :)
+        if(currentState.getClass().equals(patrol.getClass()))
+        {
+            Action act = patrol.getCurrentAction();
+            act.draw(g);
+        }
     }
 
+    public Graphics getGraphics()
+    {
+        return g;
+    }
     
     private void drawProjectiles(Graphics g)
     {

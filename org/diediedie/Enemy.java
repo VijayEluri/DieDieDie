@@ -17,6 +17,7 @@
 
 package org.diediedie.actors;
 import org.diediedie.actors.Direction;
+import org.newdawn.slick.Graphics;
 
 /**
  * Enemy ACTORS! The sheer bloody bastards!
@@ -33,7 +34,7 @@ public interface Enemy extends Actor
     boolean canSeePlayer();
     boolean hasSeenPlayer();
     boolean isMoving();  
-    
+    Graphics getGraphics();
     float getWalkSpeed();
     float getRunSpeed();
 }

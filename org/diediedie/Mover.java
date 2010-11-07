@@ -66,6 +66,8 @@ public class Mover
         }       
         if(a.getX() == oldX)
         {
+         /*   System.out.println("Mover.move(): " + a + "\n\t" + 
+                                "did not move horizontally"); */
             return false;
         }
         return true;
