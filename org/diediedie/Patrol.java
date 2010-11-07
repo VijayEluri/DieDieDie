@@ -85,7 +85,7 @@ public class Patrol implements State
             cls = currentAction.getClass();
             if(cls.equals(startWalking.getClass()))
             {
-                System.out.println("Patrol.update(): changing state");   
+                //System.out.println("Patrol.update(): changing state");   
                 currentAction = new Look();    
             }
         }
@@ -94,6 +94,7 @@ public class Patrol implements State
             currentAction.update(host);    
         }
     }
+    
     
     public Class getCurrentActionType()
     {

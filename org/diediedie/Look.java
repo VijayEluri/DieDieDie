@@ -86,7 +86,7 @@ public class Look implements Action
     @Override
     public void update(Enemy e)
     {
-        System.out.println("\t updating Look action for " + e);
+        //System.out.println("\t updating Look action for " + e);
         view = new View(e);
         //view.draw();
     }
@@ -106,51 +106,63 @@ public class Look implements Action
      */ 
     class View
     {
-        private final int EYE_ANG_UP = 45, EYE_ANG_DOWN = 135; 
+        //private final int EYE_ANG_UP = 45, EYE_ANG_DOWN = 135; 
+        // now using stored radians instead of degrees
+        private final float EYE_ANG_UP = 0.7853982f, 
+                            EYE_ANG_DOWN = 2.3561945f;
         private Line fovTop = null, fovBot = null;
-        private final int LINE_LEN = 200;
-        private float xViewStart, yViewStart, topEndX, topEndY, botEndX, 
-                      botEndY;
-        private Color color = new Color.White;//new Color(162, 205, 90);
-        private Graphics g;
-        // semi transparent fov lines
-        float ALPHA = 60f;         
+        private final int LINE_LEN = 350;
+        
+        // view geometry components
+        private float xViewStart, yViewStart, topEndX, topEndY, //botEndX, 
+                      endX, botEndY;
           
        /**
         * Constructs a view from a Enemy's facing direction and position 
         */
         View(Enemy e)
         {
-            color.a = ALPHA; 
-
             constructFOV(e);
         } 
+        
+        private float fastSin(float x, float radians)
+        {
+            return x + LINE_LEN * (float)FastTrig.sin(radians);
+        }
+
+        private float fastCos(float y, float radians)
+        {
+            return y - LINE_LEN * (float)FastTrig.cos(radians);
+        }
         
         /*
          * Create FOV Lines
          */ 
         private void constructFOV(Enemy e)
         {            
-            g = e.getGraphics();
             xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
                        
             if(e.getFacing().equals(Direction.LEFT))
             {
-                System.out.println(e + " left view");
+                //System.out.println(e + " left view");
+                endX = fastSin(xViewStart, /*-LINE_LEN, */ -EYE_ANG_UP);
+                
             }
             else if(e.getFacing().equals(Direction.RIGHT))
             {
-                System.out.println(e + " right view");
+               //System.out.println(e + " right view");
+                endX = fastSin(xViewStart, /*-LINE_LEN, */ EYE_ANG_UP);    
             }
-            
-            topEndX = xViewStart + LINE_LEN * (float)FastTrig.sin(
-                        Math.toRadians(EYE_ANG_UP));
-            topEndY = yViewStart - LINE_LEN * (float)FastTrig.cos(
-                        Math.toRadians(EYE_ANG_UP));
+                        
+            topEndY = fastCos(yViewStart, EYE_ANG_UP);
+            botEndY = fastCos(yViewStart, EYE_ANG_DOWN);
+          /*  System.out.println("fov top: " + xViewStart + ", " + 
+                        yViewStart + " to " + endX +  
+            */
             //fovTop = new Line(xViewStart, yViewStart, topEndX, topEndY);
-            
         }
+        
         
         
         
@@ -159,15 +171,10 @@ public class Look implements Action
          */ 
         public void draw(Graphics g)
         {
-            g.drawGradientLine(xViewStart, yViewStart, color, topEndX, topEndY,
-                                color);
-            /*g.setColor(color);
-            g.drawLine(xViewStart, yViewStart, topEndX, topEndY);                */
-            System.out.println("fov top:" + xViewStart + ", " +
-                                yViewStart + " to " + topEndX + ", " +
-                                topEndY);
-                                
-            
+           /* g.drawGradientLine(xViewStart, yViewStart, color, topEndX, topEndY,
+                                color);            */
+            g.drawLine(xViewStart, yViewStart, endX, topEndY);            
+            g.drawLine(xViewStart, yViewStart, endX, botEndY);            
         } 
     }
 }

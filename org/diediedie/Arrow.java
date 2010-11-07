@@ -125,7 +125,6 @@ public class Arrow
         xTrav = speedX * AIR_REST;
         yTrav = speedY;
              
-        
         // save old position 
         oldY = startY;
         oldX = startX;
