@@ -22,6 +22,7 @@ import org.diediedie.actors.Direction;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
+import org.newdawn.slick.geom.Path;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import java.util.List;
@@ -118,7 +119,8 @@ public class Look implements Action
         private final float EYE_ANG_UP = 0.7853982f, 
                             EYE_ANG_DOWN = 2.3561945f;
         
-        private Shape topLine, botLine;
+        private Line topLine, botLine;
+        private Path fovShape;
         private final int LINE_LEN = 350;
         
         private Transform trans;
@@ -168,29 +170,24 @@ public class Look implements Action
             topEndY = fastCos(yViewStart, EYE_ANG_UP);
             botEndY = fastCos(yViewStart, EYE_ANG_DOWN);
             
-            topLine = new Line(xViewStart, yViewStart, endX, 
-                                    topEndY);            
-            botLine = new Line(xViewStart, yViewStart, endX,
-                                    botEndY);    
+            /*topLine = new Line(xViewStart, yViewStart, endX, topEndY);            
+            botLine = new Line(xViewStart, yViewStart, endX, botEndY);*/
+            
+            fovShape = new Path(xViewStart, yViewStart);
+            
+            fovShape.lineTo(endX, topEndY);
+            fovShape.lineTo(endX, botEndY);
+            
+            fovShape.close();
         }
+        
+        
         
         public void update(Enemy e)
         {
-            trans = makeTrans(e, (Line)topLine);
-            topLine = topLine.transform(trans);
-            botLine = botLine.transform(trans);
+            constructFOV(e);
         }
-        
-        private Transform makeTrans(Enemy e, Line l)
-        {
-            final Transform T = Transform.createTranslateTransform(
-                                    e.getEyePosX() - l.getX1(), 
-                                    e.getEyePosY() - l.getY1()    );
-            
-            //System.out.println("Transform: " + T);
-            
-            return T;
-        }
+     
         
         /*
          * For testing purposes, draw the field of vision lines.
@@ -198,8 +195,9 @@ public class Look implements Action
         public void draw(Graphics g)
         {
             g.setColor(Color.white);
-            g.draw(topLine);
-            g.draw(botLine);
+            /*g.draw(topLine);
+            g.draw(botLine);*/
+            g.draw(fovShape);
         } 
     }
 }

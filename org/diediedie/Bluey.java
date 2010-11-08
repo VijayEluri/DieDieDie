@@ -408,8 +408,8 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public float getEyePosX()
     {
-       return xPos + 
-                 (AnimCreator.getCurrentFrameRect(this).getWidth() / 2);
+       return xPos + (AnimCreator.getCurrentFrameRect(this)
+                                 .getWidth() / 2);
     }
     
     @Override
