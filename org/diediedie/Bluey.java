@@ -102,7 +102,7 @@ public class Bluey implements Enemy, StateMachine
     
     
     @Override
-    public boolean isRunning()
+    public boolean isFSMRunning()
     {
         return fsmRunning;   
     }
@@ -129,7 +129,8 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void stopFSM()
     {
-        System.out.println("stopping FSM on " + this);
+        System.out.println("stopping FSM on " + this + ", current state " 
+                            + currentState);
         currentState.exit();
         fsmRunning = false;
     }
@@ -258,7 +259,8 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void changeState(State nextState)
     {
-        
+        currentState.exit();
+        currentState = nextState;
     }
     
     @Override
@@ -338,23 +340,23 @@ public class Bluey implements Enemy, StateMachine
         updateProjectiles();
         updateState();
         
-        if(xSpeed > 0)
+        /*if(xSpeed > 0)
         {
             System.out.println("bluey speed " + xSpeed);        
-        }
+        }*/
     }
     
     private void updateState()
     {
         // Start the machine!
-        if(!fsmRunning && (health > 0))
+        if(!isFSMRunning() && (health > 0))
         {
             startFSM();
         }
-        if(isRunning())
-        {
-            currentState.update();
-        }
+        
+        // finally
+        currentState.update();
+
     }
     
     private void updatePosition()

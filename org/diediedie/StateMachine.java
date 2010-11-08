@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */ 
 public interface StateMachine
 {
-    boolean isRunning();
+    boolean isFSMRunning();
     State getState();   
     
     void createStates();

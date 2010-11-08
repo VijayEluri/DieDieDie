@@ -19,7 +19,7 @@ import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
 import org.newdawn.slick.Graphics;
 
-class StopWalking implements Action
+public class StopWalking implements Action
 {  
     private boolean started, finished;
     private Enemy host = null;

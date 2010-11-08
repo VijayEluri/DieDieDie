@@ -21,10 +21,11 @@ import org.diediedie.actors.Enemy;
 import org.diediedie.actors.Player;
 import org.diediedie.Tile;
 import org.diediedie.actors.Direction;
-import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.*;
+/*import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
-import org.newdawn.slick.geom.Path;
+import org.newdawn.slick.geom.Path;*/
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import java.util.List;
@@ -41,8 +42,8 @@ public class Look implements Action
     private boolean started, finished, viewCreated;
     private float xViewStart, yViewStart;
     private View view = null;    
-   // private List<Tile> surfacesSeen = null;
-    
+    private Line sightLine = null; 
+        
     /**
      * Look!
      */
@@ -56,6 +57,7 @@ public class Look implements Action
         started = false;
         finished = false;
         viewCreated = false;
+        sightLine = null;
     }
     
     /*
@@ -93,14 +95,16 @@ public class Look implements Action
         analyseView(e, view.getShape());   
     }
     
+    /*
+     * Analyses an Enemy's view Shape for presence of the Player. 
+     */ 
     private void analyseView(Enemy e, Shape sh)
     {
-        Player pl = e.getLevel().getPlayer();
-        if(AnimCreator.getCurrentFrameRect(pl).intersects(sh))
+        if(playerIsVisible(e, sh, e.getLevel().getPlayer()))
         {
-            System.out.println("Player is in " + e + "'s view!");
             e.setCanSeenPlayer(true);
-           
+            System.out.println("Player is visible to  " + e + "!");
+            
             if(!e.hasSeenPlayer())
             {
                 e.setHasSeenPlayer(true);
@@ -108,8 +112,59 @@ public class Look implements Action
         }
         else
         {
-             e.setCanSeenPlayer(false);
+            e.setCanSeenPlayer(false);
         }
+    }
+    
+    /*
+     * Returns true if any of the four points of the Player's Rectangle
+     * are inside the view Shape sh.
+     */ 
+    private boolean playerInsideView(Shape sh, Player pl)
+    {
+        Shape r = AnimCreator.getCurrentFrameRect(pl);
+      
+        float[][] points = 
+        {
+            { r.getX(), r.getY() },
+            { r.getX() + r.getWidth(), r.getY() },
+            { r.getX() + r.getWidth(), r.getY() + r.getHeight() },
+            { r.getX(), r.getY() + r.getHeight()}
+        };
+            
+        for(float[] p : points)
+        {
+            if(sh.contains(p[0], p[1]))
+            {
+                return true;
+            }
+        }        
+        return false;
+    }
+    private boolean playerIsVisible(Enemy e, Shape sh, Player pl)
+    {
+        if(playerInsideView(sh, pl) && !isViewBlocked(e, sh, pl))
+        {
+            return true;
+        }  
+        return false;
+    }
+    
+    private boolean isViewBlocked(Enemy e, Shape sh, Player pl)
+    {
+        // create lines from the view view start to the top and bottom of 
+        // the Player. if either are unobstructed, return false 
+        final float[] pos = AnimCreator.getCurrentFrameRect(pl).getCenter();
+        sightLine = new Line(e.getEyePosX(), e.getEyePosY(), pos[0], pos[1]);
+       
+        if(e.getLevel().collides(sightLine))
+        {
+            sightLine = null;        
+            return true;
+        }
+        
+        
+        return false;
     }
          
     @Override
@@ -203,6 +258,10 @@ public class Look implements Action
         {
             g.setColor(Color.white);
             g.draw(fovShape);
+            if(sightLine != null)
+            {
+                g.draw(sightLine);
+            }
         } 
     }
 }

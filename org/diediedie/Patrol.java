@@ -26,15 +26,15 @@ import java.lang.Class;
   */ 
 public class Patrol implements State
 {
+    private boolean running = false;
     private Enemy host = null;
     private Level level = null;
-    private boolean running = false;
+    
     
     private Action currentAction;
-    
-    private StartWalking startWalking;
     private Look look;
-    
+    private StartWalking startWalking;
+    private StopWalking  stopWalking;
     
     /**
      * Associate this State with an Actor
@@ -43,8 +43,8 @@ public class Patrol implements State
     {
         host = e;
         startWalking = new StartWalking();
+        stopWalking = new StopWalking();
         look = new Look();
-       // currentAction = startWalking;
         currentAction = look;
     }  
     
@@ -72,43 +72,39 @@ public class Patrol implements State
     }
     
     /**
-     * Define the procedure for updating the Patrolling state based upon 
-     * the currentAction. 
+     * Update the Patrolling state's current action.
      */ 
     @Override
     public void update()
     {
+        final Class cls = currentAction.getClass();
         //System.out.println("Patrol.update(): currentAction " + currentAction);
+        
+        // NOT STARTED
         if(!currentAction.hasStarted())
         {
-            // deal with non-started actions
-            
             currentAction.perform(host);
             System.out.println("Patrol.update(): started " + currentAction);
         }
+        // STARTED BUT NOT FINISHED
         else if(!currentAction.hasFinished())
         {
             // update all started but non-finished actions
             currentAction.update(host);
         }
+        // STARTED AND FINISHED
         else if(currentAction.hasFinished())
         {
-            // deal with each type of finished action differently
-            final Class cls = currentAction.getClass();
-                     
-            if(cls.equals(look.getClass()))
+           /* if(cls.equals(look.getClass()))
             {
                 System.out.println("Look Action finished");
             }
-            else if(cls.equals(startWalking.getClass()))
+            else */
+            if(cls.equals(startWalking.getClass()))
             {
-                //System.out.println("Patrol.update(): changing state");   
+                System.out.println("Patrol.update(): changing state");   
                 currentAction = new Look();    
             }
-        }
-        else
-        {
-            currentAction.update(host);    
         }
     }
     

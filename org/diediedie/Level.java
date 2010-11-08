@@ -80,6 +80,7 @@ public class Level extends TiledMap
         platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
         enemies = new ArrayList<Actor>();
+        
         sortObjects();
     }   
     
@@ -101,8 +102,6 @@ public class Level extends TiledMap
     {
         return playerTile;   
     }
-    
-    
     
     /**
      * Updates the contents of the level, if any.
