@@ -16,6 +16,8 @@
  */
 package org.diediedie.actors;
 import org.diediedie.actors.Enemy;
+import org.diediedie.actors.actions.Action;
+import java.lang.Class;
 
 /**
  * Interface design for use when creating States for a (finite)
@@ -28,6 +30,8 @@ public interface State
     void update();
     void enter();
     void exit();
-    boolean isRunning();    
+    boolean isRunning();      
+    Class getCurrentActionType();
+    Action getCurrentAction();
 }
 

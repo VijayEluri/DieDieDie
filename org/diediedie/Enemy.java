@@ -16,6 +16,7 @@
  */
 
 package org.diediedie.actors;
+
 import org.diediedie.actors.Direction;
 import org.newdawn.slick.Graphics;
 
@@ -27,12 +28,13 @@ public interface Enemy extends Actor
     void setMoveSpeed(float f);
     void setMoving(boolean b);
     void setFacing(Direction d);
-
+        
     float getEyePosX();
     float getEyePosY();
     
     boolean canSeePlayer();
     boolean hasSeenPlayer();
+    
     boolean isMoving();  
     Graphics getGraphics();
     float getWalkSpeed();

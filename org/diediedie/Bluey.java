@@ -97,6 +97,8 @@ public class Bluey implements Enemy, StateMachine
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
+    
+    
     @Override
     public boolean isRunning()
     {

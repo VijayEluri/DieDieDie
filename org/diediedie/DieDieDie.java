@@ -41,10 +41,8 @@ public class DieDieDie extends BasicGame
     // where YOU are the HERO
     private Player player;
     
-    
     // object to send input to the Player object
-    private InputProvider inputProv = null;
-    
+    private InputProvider inputProv = null;    
     
     private static int xSize = 640, ySize = 480;
 	private Level level1 = null, currentLevel = null;	
@@ -68,11 +66,12 @@ public class DieDieDie extends BasicGame
      */ 
 	public void init(GameContainer container) throws SlickException 
     {
+        
 		container.setVSync(true);    
+        //container.setTargetFrameRate(60);
         inputProv = new InputProvider(container.getInput());
 
-        // load levels
-		
+        // set up levels
         createLevels();
         currentLevel = level1;
 

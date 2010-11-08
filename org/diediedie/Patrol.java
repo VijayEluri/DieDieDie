@@ -19,6 +19,7 @@ import org.diediedie.Level;
 import org.diediedie.actors.State;
 import org.diediedie.actors.actions.*;
 import java.lang.Class;
+
  /**
   * State class wherein an Enemy(Actor) moves around the Level,
   * looking for the Player.
@@ -30,8 +31,9 @@ public class Patrol implements State
     private boolean running = false;
     
     private Action currentAction;
-    private StartWalking startWalking;
     
+    private StartWalking startWalking;
+    private Look look;
     
     
     /**
@@ -41,7 +43,9 @@ public class Patrol implements State
     {
         host = e;
         startWalking = new StartWalking();
-        currentAction = startWalking;
+        look = new Look();
+       // currentAction = startWalking;
+        currentAction = look;
     }  
     
     @Override
@@ -50,12 +54,13 @@ public class Patrol implements State
         return host;
     }
     
+    @Override
     public Action getCurrentAction()
     {
         return currentAction;
     }
 
-    @Override
+    @Override 
     public void enter()
     {
         if(!running)
@@ -76,13 +81,26 @@ public class Patrol implements State
         //System.out.println("Patrol.update(): currentAction " + currentAction);
         if(!currentAction.hasStarted())
         {
+            // deal with non-started actions
+            
             currentAction.perform(host);
             System.out.println("Patrol.update(): started " + currentAction);
         }
+        else if(!currentAction.hasFinished())
+        {
+            // update all started but non-finished actions
+            currentAction.update(host);
+        }
         else if(currentAction.hasFinished())
         {
+            // deal with each type of finished action differently
             final Class cls = currentAction.getClass();
-            if(cls.equals(startWalking.getClass()))
+                     
+            if(cls.equals(look.getClass()))
+            {
+                System.out.println("Look Action finished");
+            }
+            else if(cls.equals(startWalking.getClass()))
             {
                 //System.out.println("Patrol.update(): changing state");   
                 currentAction = new Look();    
@@ -94,7 +112,7 @@ public class Patrol implements State
         }
     }
     
-    
+    @Override
     public Class getCurrentActionType()
     {
         return currentAction.getClass();

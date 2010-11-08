@@ -17,6 +17,7 @@
 package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.Enemy;
+import org.diediedie.actors.Player;
 import org.diediedie.Tile;
 import org.diediedie.actors.Direction;
 import org.newdawn.slick.geom.Line;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.newdawn.slick.util.FastTrig;
 import java.lang.Math;
+import org.newdawn.slick.geom.GeomUtil;
 
 /**
  * Look at the immediate area in the current Direction. 
@@ -37,9 +39,8 @@ public class Look implements Action
 {
     private boolean started, finished, viewCreated;
     private float xViewStart, yViewStart;
-    private View view = null;
-    
-    //private List<Tile> surfacesSeen = null;
+    private View view = null;    
+   // private List<Tile> surfacesSeen = null;
     
     /**
      * Look!
@@ -47,8 +48,6 @@ public class Look implements Action
     public Look()
     {
         reset();
-        
-        
     }
     
     private void reset()
@@ -67,6 +66,8 @@ public class Look implements Action
         if(!started && !finished)
         {
             started = true;
+            view = new View(e);
+            viewCreated = true;
             System.out.println("Look.perform()");
         }
         else if(started && !finished)
@@ -87,16 +88,14 @@ public class Look implements Action
     @Override
     public void update(Enemy e)
     {
-        //System.out.println("\t updating Look action for " + e);
-        if(!viewCreated)
-        {
-            view = new View(e);
-            viewCreated = true;
-        }
-        else
-        {
-            view.update(e);
-        }
+        view = new View(e);
+        
+        analyseView(e, view.getShape());   
+    }
+    
+    private void analyseView(Enemy e, Shape sh)
+    {
+        Player pl = e.getLevel().getPlayer();
     }
          
     @Override
@@ -123,7 +122,7 @@ public class Look implements Action
         private Path fovShape;
         private final int LINE_LEN = 350;
         
-        private Transform trans;
+       // private Transform trans;
         
         // view geometry components
         private float xViewStart, yViewStart, topEndX, topEndY, 
@@ -135,8 +134,13 @@ public class Look implements Action
         View(Enemy e)
         {
             constructFOV(e);
-            System.out.println("constructed view");
+            //System.out.println("constructed view");
         } 
+        
+        public Shape getShape()
+        {
+            return (Shape)fovShape;
+        }
         
         private float fastSin(float x, float radians)
         {
@@ -166,37 +170,24 @@ public class Look implements Action
                //System.out.println(e + " right view");
                 endX = fastSin(xViewStart, EYE_ANG_UP);    
             }
-                        
+            
             topEndY = fastCos(yViewStart, EYE_ANG_UP);
-            botEndY = fastCos(yViewStart, EYE_ANG_DOWN);
-            
-            /*topLine = new Line(xViewStart, yViewStart, endX, topEndY);            
-            botLine = new Line(xViewStart, yViewStart, endX, botEndY);*/
-            
+            botEndY = fastCos(yViewStart, EYE_ANG_DOWN);   
+                     
             fovShape = new Path(xViewStart, yViewStart);
             
             fovShape.lineTo(endX, topEndY);
             fovShape.lineTo(endX, botEndY);
             
             fovShape.close();
-        }
-        
-        
-        
-        public void update(Enemy e)
-        {
-            constructFOV(e);
-        }
-     
-        
+        }       
+               
         /*
          * For testing purposes, draw the field of vision lines.
          */ 
         public void draw(Graphics g)
         {
             g.setColor(Color.white);
-            /*g.draw(topLine);
-            g.draw(botLine);*/
             g.draw(fovShape);
         } 
     }
