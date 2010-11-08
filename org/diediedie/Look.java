@@ -16,6 +16,7 @@
  */
 package org.diediedie.actors.actions;
 import org.diediedie.actors.actions.Action;
+import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.Player;
 import org.diediedie.Tile;
@@ -66,7 +67,7 @@ public class Look implements Action
         if(!started && !finished)
         {
             started = true;
-            view = new View(e);
+            update(e);
             viewCreated = true;
             System.out.println("Look.perform()");
         }
@@ -89,13 +90,26 @@ public class Look implements Action
     public void update(Enemy e)
     {
         view = new View(e);
-        
         analyseView(e, view.getShape());   
     }
     
     private void analyseView(Enemy e, Shape sh)
     {
         Player pl = e.getLevel().getPlayer();
+        if(AnimCreator.getCurrentFrameRect(pl).intersects(sh))
+        {
+            System.out.println("Player is in " + e + "'s view!");
+            e.setCanSeenPlayer(true);
+           
+            if(!e.hasSeenPlayer())
+            {
+                e.setHasSeenPlayer(true);
+            }
+        }
+        else
+        {
+             e.setCanSeenPlayer(false);
+        }
     }
          
     @Override

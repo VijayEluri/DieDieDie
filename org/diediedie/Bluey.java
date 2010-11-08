@@ -86,6 +86,8 @@ public class Bluey implements Enemy, StateMachine
             createAnimations();
             health = MAX_HEALTH;
             createStates();
+            canSeePlayer = false;
+            hasSeenPlayer = false;
             setUp = true;
         }
         setLevel(l);;
@@ -437,6 +439,19 @@ public class Bluey implements Enemy, StateMachine
             setYSpeed(getYSpeed() + level.gravity);  
         }
     }
+    
+    @Override
+    public void setHasSeenPlayer(boolean b)
+    {
+        hasSeenPlayer = b;
+    }
+    
+    @Override
+    public void setCanSeenPlayer(boolean b)
+    {
+        canSeePlayer = b;
+    }
+    
     @Override
     public boolean canSeePlayer()
     {

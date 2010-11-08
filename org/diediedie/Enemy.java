@@ -34,6 +34,8 @@ public interface Enemy extends Actor
     
     boolean canSeePlayer();
     boolean hasSeenPlayer();
+    void setHasSeenPlayer(boolean b);
+    void setCanSeenPlayer(boolean b);
     
     boolean isMoving();  
     Graphics getGraphics();
