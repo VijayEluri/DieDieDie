@@ -25,7 +25,7 @@ import org.diediedie.actors.Collider;
  */ 
 public class Mover
 {    
-    static final int ITER = 6;
+    static final int ITER = 2;
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
      * 
@@ -85,19 +85,11 @@ public class Mover
             return;
         }
         
-        // work out the distance to travel in this update assuming no
-        // collisions 
         final float xTrav = p.getXSpeed() * p.getAirRes();
         final float yTrav = p.getYSpeed();
+                
         
-        /*float xMoved = 0f;
-        float yMoved = 0f;*/
-        
-        p.adjustFacingAngle();
-        
-        
-        // spit the travelling in half, testing for collision each time        
-        
+        // spit the travelling, testing for collision each time        
         for(int i = 0; i < ITER && p.isFlying(); ++i)
         {
             doMove(p, xTrav/ITER, yTrav/ITER);

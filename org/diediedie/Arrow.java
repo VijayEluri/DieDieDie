@@ -26,7 +26,9 @@ import org.newdawn.slick.util.FastTrig;
  * An arrow fired by the Player.
  * 
  * good movement stuff here:
- * http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates
+ 
+   http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates
+ 
  */ 
 public class Arrow implements Projectile
 {      
@@ -36,18 +38,14 @@ public class Arrow implements Projectile
                   gravity = 0, oldX, oldY,
                   facingAngle = 0, angleChange = 0.1f;//, xTrav, yTrav;
                   
-    private final float SIZE = 19f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
-                  MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
-                  ANGLE_CHANGE_INCR = 0.06f, MAX_ANGLE_CHANGE = 1.09f, 
-                  GRAVITY_LINE = 2.8f, ALIGN_INCR = 0.009f,
-                  MOVE_SPEED = 0.6f;
+    private final float SIZE = 18f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
+                  MAX_GRAVITY = 23f, GRAVITY_INCR = 0.1f, 
+                  ANGLE_CHANGE_INCR = 0.07f, MAX_ANGLE_CHANGE = 1.11f, 
+                  GRAVITY_LINE = 2.7f, MOVE_SPEED = 0.6f;
                   
     private final int REVERSE = 180;
-    
     private Level level = null;
-
     private boolean flying = false, collided = false;
-   
     
     /**
      * Creates a new arrow at the given position.
@@ -173,6 +171,7 @@ public class Arrow implements Projectile
     {
         /*oldX = getStartX();
         oldY = getStartY();*/
+        adjustFacingAngle();
         applyGravity();
         Mover.move(this);
     }
@@ -239,25 +238,19 @@ public class Arrow implements Projectile
      */ 
     public void applyGravity()
     {
-        /*float gravDist = gravity;
-        float travelled = 0f;
-        
-        while(!Collider.collidesLevel(this) && (travelled < gravDist) )
-        {
-            startY ++;
-            travelled ++;
-        }
-        */
         if(!isFlying())
         {
             return;
         }
         
         startY += gravity;
+        calculateEndPos();
+        
         if(gravity < MAX_GRAVITY)
         {
             gravity += GRAVITY_INCR;
         }
+     
         if(Collider.collidesLevel(this))
         {
             stop();

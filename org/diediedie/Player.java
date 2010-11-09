@@ -614,7 +614,6 @@ public class Player implements Actor, InputProviderListener
         // do nothing for now
     }
     
-    
     @Override
     public void resetAccelX()
     {
@@ -684,8 +683,10 @@ public class Player implements Actor, InputProviderListener
             g.drawImage(currentBow, bowX, bowY);
         }        
     }
-      
     
+    /*
+     * Draw all the arrows that still exist 
+     */
     private void drawArrows(Graphics g)
     {
         if(currentArrow != null)
@@ -697,8 +698,6 @@ public class Player implements Actor, InputProviderListener
             a.draw(g);
         }
     }  
-    
-        
     
     /*
      * Loads and inits the Player's Animations. 
@@ -718,10 +717,5 @@ public class Player implements Actor, InputProviderListener
         
         // get initial direction from the level
         facing = level.playerFacing;
-    }
-    
-   
-    
-    
-    
+    }    
 }

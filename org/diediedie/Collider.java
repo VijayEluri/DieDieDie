@@ -41,8 +41,15 @@ public class Collider
      */ 
     public static boolean collidesLevel(Projectile p)
     {
-        if(p.getLevel().collides(new Line(p.getX(), p.getY(),
+        /*if(p.getLevel().collides(new Line(p.getX(), p.getY(),
                                           p.getEndX(), p.getEndY())))
+        {
+            return true;
+        }
+        */
+        if(p.getLevel().isInCollisionTile(p.getX(), p.getY()) 
+          ||
+           p.getLevel().isInCollisionTile(p.getEndX(), p.getEndY()))
         {
             return true;
         }
