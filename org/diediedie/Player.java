@@ -44,6 +44,7 @@ import org.newdawn.slick.command.MouseButtonControl;
 public class Player implements Actor, InputProviderListener 
 {    
     private boolean setUp = false, canJump = false;
+    final boolean autoUpdate = true;
      
     private float accelX = 0f, bowCharge = 0, oldX, oldY, bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
@@ -67,6 +68,7 @@ public class Player implements Actor, InputProviderListener
     private Command jump;
     private Command left; 
     private Command right;    
+    
     
     private Arrow currentArrow = null; 
     private List<Arrow> firedArrows = Collections.synchronizedList(new
@@ -240,7 +242,7 @@ public class Player implements Actor, InputProviderListener
         
         if(com.equals(left))
         {
-            leftMoveDown = false;
+            //leftMoveDown = false;
             if(moving.equals(Direction.LEFT))
             {
                 running = false;   
@@ -248,7 +250,7 @@ public class Player implements Actor, InputProviderListener
         }
         else if(com.equals(right))
         {
-            rightMoveDown = false;
+            //rightMoveDown = false;
             if(moving.equals(Direction.RIGHT))
             {
                 running = false;   
@@ -265,13 +267,13 @@ public class Player implements Actor, InputProviderListener
                 
         if(com.equals(left))
         {
-            leftMoveDown = true;
+            //leftMoveDown = true;
             setMovingDir(Direction.LEFT);
             running = true;
         }
         else if(com.equals(right))
         {
-            rightMoveDown = true; 
+            //rightMoveDown = true; 
             setMovingDir(Direction.RIGHT);
             running = true;
         }
@@ -458,7 +460,6 @@ public class Player implements Actor, InputProviderListener
                             "standing dir neither left or right");
     }
     
-    
     @Override
     public void applySpeed(Direction dir)
     {
@@ -475,7 +476,6 @@ public class Player implements Actor, InputProviderListener
             xSpeed = -(MOVE_SPEED + accelX);
         }          
     }
-
     
     /*
      * Increases walk speed.
@@ -601,7 +601,6 @@ public class Player implements Actor, InputProviderListener
     private void decelerate()
     {
         accelX -= ACCEL_RATE;
-        
         if(accelX < 0)
         {
             resetAccelX();
@@ -669,9 +668,6 @@ public class Player implements Actor, InputProviderListener
         return MAX_Y_SPEED;
     }
     
-    /**
-     * Draw method. Public due to implementation requirement.
-     */ 
     @Override
     public void draw(Graphics g)
     {
@@ -704,7 +700,7 @@ public class Player implements Actor, InputProviderListener
      */ 
     private void initAnim()
     {
-        final boolean autoUpdate = true;
+        
         leftWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
                                     autoUpdate, leftWalkPaths);
         rightWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 

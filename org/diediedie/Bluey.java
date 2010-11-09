@@ -58,7 +58,7 @@ public class Bluey implements Enemy, StateMachine
     
     // Variables    
     private State currentState = null;
-    Patrol patrol;
+    private Patrol patrol;
     
     private boolean setUp = false, canJump = false, moving = false,
                     canSeePlayer = false, hasSeenPlayer = false,
@@ -363,7 +363,7 @@ public class Bluey implements Enemy, StateMachine
         
         // finally
         currentState.update();
-
+        
     }
     
     public void updatePosition()

@@ -39,7 +39,7 @@ public class Arrow implements Projectile
                   facingAngle = 0, angleChange = 0.1f;//, xTrav, yTrav;
                   
     private final float SIZE = 18f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
-                  MAX_GRAVITY = 23f, GRAVITY_INCR = 0.1f, 
+                  MAX_GRAVITY = 20f, GRAVITY_INCR = 0.1f, 
                   ANGLE_CHANGE_INCR = 0.07f, MAX_ANGLE_CHANGE = 1.11f, 
                   GRAVITY_LINE = 2.7f, MOVE_SPEED = 0.6f;
                   
