@@ -18,7 +18,6 @@
 
 package org.diediedie.actors;
 import org.diediedie.actors.Direction;
-import org.diediedie.actors.MovableObject;
 import org.diediedie.actors.AnimCreator;
 
 /**
@@ -30,7 +29,7 @@ public class Aligner
     public static final float INCR = 0.01f;
     
     /**
-     * Aligns a collided Actor to a non-colliding part of the Level.
+     * Aligns a collided Actor adjacently colliding part of the Level.
      */ 
     public static void alignToObstacle(Actor m)
     {
@@ -40,7 +39,6 @@ public class Aligner
             // collision; i.e. a 'true' value indicates (hopefully) 
             // that the m *fell* into this collision rather than
             // headbutted it... 
-            
             
             if(m.canJump())
             {
@@ -60,5 +58,6 @@ public class Aligner
             m.setY(m.getY() + INCR);
         }
     }    
+    
     
 }

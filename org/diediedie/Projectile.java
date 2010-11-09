@@ -17,14 +17,13 @@ public interface Projectile extends MovableObject
     boolean isFlying();
     
     float getAngle();
-    
-    float getStartX();
-    float getStartY();
+
     float getEndX();
     float getEndY();    
     
     float getAirRes();
     
     void calculateEndPos();
+    
     void adjustFacingAngle();
 }

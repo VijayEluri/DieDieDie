@@ -7,17 +7,12 @@ public interface MovableObject extends LevelObject
  
     void applyGravity();
     
- 
     void setYSpeed(float y);
     void setXSpeed(float x);
+    
     float getYSpeed();
     float getXSpeed();
     
-    
-    
-    
     void resetAccelX();
     void resetAccelY();
-    
-  
 }

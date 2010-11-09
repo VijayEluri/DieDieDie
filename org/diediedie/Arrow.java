@@ -34,7 +34,7 @@ public class Arrow implements Projectile
                   speedX = 0, speedY = 0, mouseX, mouseY, 
                   movementAngle = 90, 
                   gravity = 0, oldX, oldY,
-                  facingAngle = 0, angleChange = 0.1f, xTrav, yTrav;
+                  facingAngle = 0, angleChange = 0.1f;//, xTrav, yTrav;
                   
     private final float SIZE = 19f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
                   MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
@@ -161,17 +161,8 @@ public class Arrow implements Projectile
         speedX = f;
     }
     
-    @Override
-    public float getX()
-    {
-        return getStartX();
-    }
-    
-    @Override
-    public float getY()
-    {
-        return getStartY();
-    }
+   
+
     
     /**
      * Updates the position of the Arrow on the screen after it has left
@@ -179,34 +170,11 @@ public class Arrow implements Projectile
      */
     public void updatePosition()
     {
-        if(!isFlying())
-        {
-            return;
-        }
-        
-        xTrav = getXSpeed() * getAirRes();
-        yTrav = getYSpeed();
-             
-        // save old position 
-        oldY = startY;
-        oldX = startX;
-        
-        startX = (float)(startX + xTrav * 
-                            FastTrig.sin(Math.toRadians(movementAngle)));
-        startY = (float)(startY - yTrav * 
-                            FastTrig.cos(Math.toRadians(movementAngle)));
-        applyGravity();       
-        adjustFacingAngle();
-        calculateEndPos();
-        
-        if(Collider.collidesLevel(this))
-        {
-            stop();
-        }
+        /*oldX = getStartX();
+        oldY = getStartY();*/
+        Mover.move(this);
     }
-    
-  
-    
+        
         
     /*
      * Stops the movement of the Arrow
@@ -294,13 +262,13 @@ public class Arrow implements Projectile
     }
     
     @Override
-    public float getStartX()
+    public float getX()
     {
         return startX;
     }
     
     @Override
-    public float getStartY()
+    public float getY()
     {
         return startY;
     }

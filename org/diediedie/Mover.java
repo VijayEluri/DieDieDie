@@ -15,9 +15,11 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+import org.newdawn.slick.util.FastTrig;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Collider;
-import java.lang.Class;
+
+
 /**
  * Class used to move Actors around a Level. 
  */ 
@@ -72,9 +74,31 @@ public class Mover
         return true;
     }
     
+    
     public static void move(Projectile p)
     {
+        if(!p.isFlying())
+        {
+            return;
+        }
         
+        // work out the distance to travel in this update assuming no
+        // collisions 
+        final float xTrav = p.getXSpeed() * p.getAirRes();
+        final float yTrav = p.getYSpeed();
+
+        
+        p.setX((float)(p.getX() + xTrav * 
+                            FastTrig.sin(Math.toRadians(p.getAngle()))));
+        p.setY((float)(p.getY() - yTrav * 
+                            FastTrig.cos(Math.toRadians(p.getAngle()))));
+        p.applyGravity();       
+        p.adjustFacingAngle();
+        p.calculateEndPos();
+        
+        if(Collider.collidesLevel(p))
+        {
+            p.stop();
+        }
     }
-    
 }
