@@ -220,6 +220,13 @@ public class Bluey implements Enemy, StateMachine
         // do nothing for now
     }
     
+    
+    @Override
+    public void resetAccelY()
+    {
+        // do nothing for now
+    }
+    
     @Override
     public float getMoveSpeed()
     {
@@ -359,7 +366,7 @@ public class Bluey implements Enemy, StateMachine
 
     }
     
-    private void updatePosition()
+    public void updatePosition()
     {
         applyGravity();
         applyFriction();
@@ -452,6 +459,11 @@ public class Bluey implements Enemy, StateMachine
     public void setCanSeenPlayer(boolean b)
     {
         canSeePlayer = b;
+        
+        if(b && !hasSeenPlayer())
+        {
+            setHasSeenPlayer(true);
+        }
     }
     
     @Override

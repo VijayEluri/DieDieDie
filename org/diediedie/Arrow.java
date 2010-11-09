@@ -28,7 +28,7 @@ import org.newdawn.slick.util.FastTrig;
  * good movement stuff here:
  * http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates
  */ 
-public class Arrow
+public class Arrow implements Projectile
 {      
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, 
@@ -36,11 +36,11 @@ public class Arrow
                   gravity = 0, oldX, oldY,
                   facingAngle = 0, angleChange = 0.1f, xTrav, yTrav;
                   
-    private final float SIZE = 19f, ACCEL_RATE = 0.09f, AIR_REST = 0.6f,
+    private final float SIZE = 19f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
                   MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
                   ANGLE_CHANGE_INCR = 0.06f, MAX_ANGLE_CHANGE = 1.09f, 
                   GRAVITY_LINE = 2.8f, ALIGN_INCR = 0.009f,
-                  MOVE_SPEED = 0.44f;
+                  MOVE_SPEED = .65f;
                   
     private final int REVERSE = 180;
     
@@ -55,10 +55,31 @@ public class Arrow
     public Arrow(float xPos, float yPos, Level lev, int mouseX, 
                  int mouseY)
     {
-        level = lev;
+        setLevel(lev);
         setPosition(xPos, yPos);
         setMovementAngle(mouseX, mouseY);
         calculateEndPos();
+    }
+    
+    
+    
+    @Override
+    public void setLevel(Level l)
+    {
+        level = l;
+    }
+
+    @Override
+    public Level getLevel()
+    {
+        return level;
+    }
+    
+    
+    @Override
+    public float getAirRes()
+    {
+        return AIR_REST;
     }
     
     /**
@@ -67,10 +88,11 @@ public class Arrow
     public void release(float power)
     {
         accelX = power;
-        accelY = power;// * 0.9f;
+        accelY = power;
         flying = true;
     }
     
+    @Override
     public boolean isFlying()
     {
         return flying;
@@ -89,7 +111,7 @@ public class Arrow
      * Allows the Player to update the movementAngle (aim) of the arrow prior
      * to release, based upon the mouse's position. 
      */ 
-    protected void updateAiming(float mouseX, float mouseY)
+    public void updateAiming(float mouseX, float mouseY)
     {       
         setMovementAngle(mouseX, mouseY);
         calculateEndPos();
@@ -104,28 +126,66 @@ public class Arrow
                                               startY - y));
     }
     
+    @Override // boilerplate
+    public void update(){ }
+    
     /**
      * Updates the speed of a release arrow
      */ 
     protected void updateSpeed()
     {          
-        speedX = (MOVE_SPEED * accelX);
-        speedY = (MOVE_SPEED * accelY);
+        setXSpeed(MOVE_SPEED * accelX);
+        setYSpeed(MOVE_SPEED * accelY);
+    }
+    
+    @Override
+    public void setX(float f)
+    {
+        startX = f;
+    }
+    
+    @Override
+    public void setY(float f)
+    {
+        startY = f;
+    }
+    
+    @Override
+    public void setYSpeed(float f)
+    {
+        speedY = f;
+    }
+    @Override
+    public void setXSpeed(float f)
+    {
+        speedX = f;
+    }
+    
+    @Override
+    public float getX()
+    {
+        return getStartX();
+    }
+    
+    @Override
+    public float getY()
+    {
+        return getStartY();
     }
     
     /**
      * Updates the position of the Arrow on the screen after it has left
      * the Player.
      */
-    protected void updatePosition()
+    public void updatePosition()
     {
-        if(!flying)
+        if(!isFlying())
         {
             return;
         }
         
-        xTrav = speedX * AIR_REST;
-        yTrav = speedY;
+        xTrav = getXSpeed() * getAirRes();
+        yTrav = getYSpeed();
              
         // save old position 
         oldY = startY;
@@ -139,40 +199,43 @@ public class Arrow
         adjustFacingAngle();
         calculateEndPos();
         
-        if(collidesLevel())
+        if(Collider.collidesLevel(this))
         {
             stop();
         }
     }
     
   
-    /*
-     * Returns true if the arrow intersects with collision Tile on the
-     * Level
-     */ 
-    private boolean collidesLevel()
-    {
-        if(level.collides(new Line(startX, startY, endX, endY)))
-        {
-            return true;
-        }
-        return false;
-    }
+    
         
     /*
      * Stops the movement of the Arrow
      */ 
-    private void stop()
+    public void stop()
     {
+        System.out.println("stopping Arrow " + hashCode() + "; speed " +
+                        speedX + ", " + speedY);
         flying = false;
-        accelX = 0;
-        accelY = 0;
+        resetAccelX();
+        resetAccelY();
         speedX = 0;
         speedY = 0;
     }
     
+    @Override
+    public float getYSpeed()
+    {
+        return speedY;
+    }
+    
+    @Override
+    public float getXSpeed()
+    {
+        return speedX;
+    }
+    
     // applies 'gravity' to the arrow WHEN IT IS IN FLIGHT
-    private void adjustFacingAngle()
+    public void adjustFacingAngle()
     {
         if(gravity > GRAVITY_LINE)
         {
@@ -204,7 +267,7 @@ public class Arrow
      * Applies 'gravity' to the y-axis position once it has left the 
      * player
      */ 
-    private void applyGravity()
+    public void applyGravity()
     {
         startY += gravity;
         if(gravity < MAX_GRAVITY)
@@ -214,11 +277,15 @@ public class Arrow
         //System.out.println("gravity on arrow: " + gravity);
     }
     
+
+
+    
     /*
      * Works out the end point of the arrow based on its SIZE at
      * movementAngle.
      */ 
-    private void calculateEndPos()
+    @Override
+    public void calculateEndPos()
     {
         endX = (float)(startX + SIZE * Math.sin(
                         Math.toRadians(movementAngle + facingAngle)));
@@ -226,45 +293,57 @@ public class Arrow
                         Math.toRadians(movementAngle + facingAngle)));
     }
     
-    /**
-     * Public method for receiving Graphics object from Slick.
-     */ 
-    public void draw(Graphics g)
-    {
-        if(collided)
-        {
-            return;
-        }
-        //g.setColor(this.color);
-        g.drawGradientLine(startX, startY, Color.black, endX, endY,
-                            Color.red);
-    }
-    
-    /**
-     * Return the x-axis value of the end point
-     */ 
-    public float getEndX()
-    {
-        return endX;
-    } 
-    /**
-     * Return the x-axis value of the start point
-     */ 
+    @Override
     public float getStartX()
     {
         return startX;
-    } 
-    /**
-    /**
-     * Return the y-axis value of the end point
-     */ 
+    }
+    
+    @Override
+    public float getStartY()
+    {
+        return startY;
+    }
+    
+    @Override
+    public float getEndX()
+    {
+        return endX;
+    }
+    
+    @Override
     public float getEndY()
     {
-        return endY; 
+        return endY;
+    }
+    
+    /**
+     * Public method for receiving Graphics object from Slick.
+     */ 
+    @Override
+    public void draw(Graphics g)
+    {
+        g.drawGradientLine(startX, startY, Color.black, endX, endY,
+                            Color.red);
     }
     
     public float getAngle()
     {
         return movementAngle;
     }
+    
+     @Override
+    public void resetAccelX()
+    {
+        accelX = 0;
+    }
+    
+    
+    @Override
+    public void resetAccelY()
+    {
+        accelY = 0;
+    }
+    
+    
 }

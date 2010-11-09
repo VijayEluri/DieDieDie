@@ -16,17 +16,37 @@
  */
 package org.diediedie.actors;
 import org.diediedie.actors.Direction;
-import org.diediedie.actors.Actor;
+import org.diediedie.actors.MovableObject;
 import org.diediedie.actors.AnimCreator;
+import org.newdawn.slick.geom.Line;
 
+/**
+ * Used to discern whether or not a MovableObject is going to hit
+ * something else (i.e. collision, another collidable....)
+ */ 
 public class Collider
 {
-    public static boolean collides(Actor a)
+    public static boolean collidesLevel(Actor m)
     {
-        if(a.getLevel().collides(AnimCreator.getCurrentFrameRect(a)))
+        if(m.getLevel().collides(AnimCreator.getCurrentFrameRect(m)))
         {
             return true;
         }
         return false;
     }
+    
+    /*
+     * Returns true if the arrow intersects with collision Tile on the
+     * Level
+     */ 
+    public static boolean collidesLevel(Projectile p)
+    {
+        if(p.getLevel().collides(new Line(p.getStartX(), p.getStartY(),
+                                          p.getEndX(), p.getEndY())))
+        {
+            return true;
+        }
+        return false;
+    }
+    
 }

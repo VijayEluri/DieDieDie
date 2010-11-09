@@ -300,7 +300,6 @@ public class Player implements Actor, InputProviderListener
         if(bowCharge < MAX_CHARGE)
         {
             bowCharge += CHARGE_INCR;
-            
         }
         //System.out.println("bowCharge " + bowCharge);
         currentArrow.updateAiming(mouseX, mouseY);
@@ -322,9 +321,7 @@ public class Player implements Actor, InputProviderListener
                                     + BOW_ANGLE_OFFSET);
         }
         updateBowPosition();
-        
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
-        
     }
     
     @Override
@@ -332,11 +329,13 @@ public class Player implements Actor, InputProviderListener
     {
         return health;
     }
+    
     @Override
     public float getJumpSpeed()
     {
         return JUMP_SPEED;
     }
+    
     @Override
     public void die()
     {
@@ -489,6 +488,9 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
+    /*
+     * Updates the position / existence of previously fired Arrows. 
+     */ 
     private void updateFiredArrows()
     {
         Iterator<Arrow> it = firedArrows.iterator();
@@ -499,6 +501,7 @@ public class Player implements Actor, InputProviderListener
             
             a.updateSpeed();
             a.updatePosition();
+            
             /*if(!a.isFlying())
             {
                 it.remove();
@@ -506,6 +509,9 @@ public class Player implements Actor, InputProviderListener
         }
     }
     
+    /*
+     * Applies friction to the player
+     */ 
     private void applyFriction()
     {
         xSpeed *= level.FRICTION;
@@ -601,6 +607,13 @@ public class Player implements Actor, InputProviderListener
             resetAccelX();
         }
     }
+    
+    @Override
+    public void resetAccelY()
+    {
+        // do nothing for now
+    }
+    
     
     @Override
     public void resetAccelX()

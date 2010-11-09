@@ -14,16 +14,24 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie;
+package org.diediedie.actors;
 import java.io.*;
 import java.util.*;
-import org.newdawn.slick.tiled.TiledMap;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Graphics;
+import org.diediedie.Level;
 
-public class LevelObject
+/**
+ * 
+ */ 
+public interface LevelObject
 {
-    public LevelObject()
-    {
-        
-    }
+    void update();
+    
+    void draw(Graphics g);
+    
+    Level getLevel();
+    void setLevel(Level l);
+    
+    float getX();
+    float getY();  
 }

@@ -16,46 +16,31 @@
  */
  
 package org.diediedie.actors;
+import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.Direction;
-import org.diediedie.Level;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.Rectangle;
- 
-public interface Actor
+import org.newdawn.slick.Animation;
+
+public interface Actor extends MovableObject
 {            
     public static final int ANIM_DURATION = 100;
     
-    Animation getCurrentAnim();    
-    void draw(Graphics g);
-    void update();
     boolean canJump();
     void setJump(boolean b);
-    
-    Level getLevel();
-    void setLevel(Level l);
-    
-    float getX();
-    float getY();    
-    void setX(float x);
-    void setY(float y);
-    
+    void applySpeed(Direction d);
     void jump();
     
-    void resetAccelX();
-    void applySpeed(Direction d);
-    void applyGravity();
-
-    Direction getFacing();
-
-    void setYSpeed(float y);
-    void setXSpeed(float x);
+    float getJumpSpeed();
+    float getMoveSpeed();    
+    float getMaxFallSpeed();
     
+    void resetAccelX();
+    Animation getCurrentAnim(); 
     float getYSpeed();
     float getXSpeed();
-    float getMaxFallSpeed();
-    float getJumpSpeed();
-    float getMoveSpeed();
+
+    Direction getFacing();
     
     int getHealth();
     void die();

@@ -18,7 +18,7 @@
 
 package org.diediedie.actors;
 import org.diediedie.actors.Direction;
-import org.diediedie.actors.Actor;
+import org.diediedie.actors.MovableObject;
 import org.diediedie.actors.AnimCreator;
 
 /**
@@ -32,32 +32,32 @@ public class Aligner
     /**
      * Aligns a collided Actor to a non-colliding part of the Level.
      */ 
-    public static void alignToObstacle(Actor a)
+    public static void alignToObstacle(Actor m)
     {
-        // finally, put the Player as close to the obstacle as possible
-        while(!Collider.collides(a))
+        while(!Collider.collidesLevel(m))
         {
             // here 'canJump' is used to discern the direction of the
             // collision; i.e. a 'true' value indicates (hopefully) 
-            // that the player *fell* into this collision rather than
+            // that the m *fell* into this collision rather than
             // headbutted it... 
             
-            if(a.canJump())
+            
+            if(m.canJump())
             {
-                a.setY(a.getY() + INCR);
+                m.setY(m.getY() + INCR);
             }
             else
             {
-                a.setY(a.getY() - INCR);
+                m.setY(m.getY() - INCR);
             }
         }
-        if(a.canJump())
+        if(m.canJump())
         {   
-            a.setY(a.getY() - INCR);
+            m.setY(m.getY() - INCR);
         }
         else
         {
-            a.setY(a.getY() + INCR);
+            m.setY(m.getY() + INCR);
         }
     }    
     

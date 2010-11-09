@@ -103,12 +103,8 @@ public class Look implements Action
         if(playerIsVisible(e, sh, e.getLevel().getPlayer()))
         {
             e.setCanSeenPlayer(true);
-            System.out.println("Player is visible to  " + e + "!");
+            //System.out.println("Player is visible to  " + e + "!");
             
-            if(!e.hasSeenPlayer())
-            {
-                e.setHasSeenPlayer(true);
-            }
         }
         else
         {
@@ -122,9 +118,9 @@ public class Look implements Action
      */ 
     private boolean playerInsideView(Shape sh, Player pl)
     {
-        Shape r = AnimCreator.getCurrentFrameRect(pl);
+        final Shape r = AnimCreator.getCurrentFrameRect(pl);
       
-        float[][] points = 
+        final float[][] points = 
         {
             { r.getX(), r.getY() },
             { r.getX() + r.getWidth(), r.getY() },
@@ -132,7 +128,7 @@ public class Look implements Action
             { r.getX(), r.getY() + r.getHeight()}
         };
             
-        for(float[] p : points)
+        for(final float[] p : points)
         {
             if(sh.contains(p[0], p[1]))
             {
@@ -141,6 +137,7 @@ public class Look implements Action
         }        
         return false;
     }
+    
     private boolean playerIsVisible(Enemy e, Shape sh, Player pl)
     {
         if(playerInsideView(sh, pl) && !isViewBlocked(e, sh, pl))
@@ -159,7 +156,7 @@ public class Look implements Action
        
         if(e.getLevel().collides(sightLine))
         {
-            sightLine = null;        
+            sightLine = null;
             return true;
         }
         

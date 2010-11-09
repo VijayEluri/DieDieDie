@@ -17,7 +17,7 @@
 package org.diediedie.actors;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Collider;
-
+import java.lang.Class;
 /**
  * Class used to move Actors around a Level. 
  */ 
@@ -26,7 +26,7 @@ public class Mover
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
      * 
-     * Returns true if moved *horizontally*.
+     * Returns true if moved *horizontally* since last position.
      */ 
     public static boolean move(final Actor a)
     {
@@ -38,11 +38,10 @@ public class Mover
         // vertical 
         a.setY(a.getY() + a.getYSpeed());
         
-        if(Collider.collides(a))
+        if(Collider.collidesLevel(a))
         {            
             if(a.getY() >= oldY)
             {
-                // fell to earth
                 a.setJump(true);
             }
             a.setYSpeed(0);
@@ -58,7 +57,7 @@ public class Mover
         // horizontal 
         a.setX(a.getX() + a.getXSpeed());
         
-        if(Collider.collides(a))
+        if(Collider.collidesLevel(a))
         {
             a.setX(oldX);
             a.setXSpeed(0);
@@ -72,4 +71,10 @@ public class Mover
         }
         return true;
     }
+    
+    public static void move(Projectile p)
+    {
+        
+    }
+    
 }
