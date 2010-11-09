@@ -40,7 +40,7 @@ public class Arrow implements Projectile
                   MAX_GRAVITY = 25f, GRAVITY_INCR = 0.1f, 
                   ANGLE_CHANGE_INCR = 0.06f, MAX_ANGLE_CHANGE = 1.09f, 
                   GRAVITY_LINE = 2.8f, ALIGN_INCR = 0.009f,
-                  MOVE_SPEED = .65f;
+                  MOVE_SPEED = 0.6f;
                   
     private final int REVERSE = 180;
     
@@ -155,6 +155,7 @@ public class Arrow implements Projectile
     {
         speedY = f;
     }
+    
     @Override
     public void setXSpeed(float f)
     {
@@ -172,6 +173,7 @@ public class Arrow implements Projectile
     {
         /*oldX = getStartX();
         oldY = getStartY();*/
+        applyGravity();
         Mover.move(this);
     }
         
@@ -183,11 +185,11 @@ public class Arrow implements Projectile
     {
         System.out.println("stopping Arrow " + hashCode() + "; speed " +
                         speedX + ", " + speedY);
-        flying = false;
         resetAccelX();
         resetAccelY();
-        speedX = 0;
-        speedY = 0;
+        setXSpeed(0);
+        setYSpeed(0);
+        flying = false;
     }
     
     @Override
@@ -237,10 +239,28 @@ public class Arrow implements Projectile
      */ 
     public void applyGravity()
     {
+        /*float gravDist = gravity;
+        float travelled = 0f;
+        
+        while(!Collider.collidesLevel(this) && (travelled < gravDist) )
+        {
+            startY ++;
+            travelled ++;
+        }
+        */
+        if(!isFlying())
+        {
+            return;
+        }
+        
         startY += gravity;
         if(gravity < MAX_GRAVITY)
         {
             gravity += GRAVITY_INCR;
+        }
+        if(Collider.collidesLevel(this))
+        {
+            stop();
         }
         //System.out.println("gravity on arrow: " + gravity);
     }

@@ -25,6 +25,7 @@ import org.diediedie.actors.Collider;
  */ 
 public class Mover
 {    
+    static final int ITER = 6;
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
      * 
@@ -74,9 +75,11 @@ public class Mover
         return true;
     }
     
-    
+    /**
+     * For moving Projectiles. :)
+     */ 
     public static void move(Projectile p)
-    {
+    { 
         if(!p.isFlying())
         {
             return;
@@ -86,19 +89,33 @@ public class Mover
         // collisions 
         final float xTrav = p.getXSpeed() * p.getAirRes();
         final float yTrav = p.getYSpeed();
-
         
+        /*float xMoved = 0f;
+        float yMoved = 0f;*/
+        
+        p.adjustFacingAngle();
+        
+        
+        // spit the travelling in half, testing for collision each time        
+        
+        for(int i = 0; i < ITER && p.isFlying(); ++i)
+        {
+            doMove(p, xTrav/ITER, yTrav/ITER);
+        }
+    }
+    
+    private static boolean doMove(Projectile p, float xTrav, float yTrav)
+    {
         p.setX((float)(p.getX() + xTrav * 
                             FastTrig.sin(Math.toRadians(p.getAngle()))));
         p.setY((float)(p.getY() - yTrav * 
                             FastTrig.cos(Math.toRadians(p.getAngle()))));
-        p.applyGravity();       
-        p.adjustFacingAngle();
         p.calculateEndPos();
-        
         if(Collider.collidesLevel(p))
         {
             p.stop();
+            return false;
         }
+        return true;
     }
 }
