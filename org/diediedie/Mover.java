@@ -24,7 +24,7 @@ import org.diediedie.actors.Collider;
  */ 
 public class Mover
 {    
-    static final int MAX_ITER = 64;
+    static final int MAX_ITER = 4;
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
      * 
@@ -99,18 +99,17 @@ public class Mover
         p.setY(p.getY() + yTrav);
         p.calculateEndPos();
         
-        
         if(Collider.collidesLevel(p))
         {
             p.stop();
             while(Collider.collidesLevel(p))
             {
-                
                 p.setY(p.getY() - p.getGravityIncr());
                 p.calculateEndPos();
                 System.out.println("adjusting " + p);
             }
         }
+        
         System.out.println("applyGravity(p), yTrav: " + yTrav);
         p.increaseGravityEffect(); 
     }
@@ -138,15 +137,11 @@ public class Mover
      */ 
     private static void approximateMove(Projectile p, float xTrav, float yTrav)
     {
-        int i = 1;
-        do
+        // first test to see if we can move the whole way without colliding
+        if(!doMove(p, xTrav, yTrav))
         {
-            for(int k = 1; k <= i; k++)
-            {
-                doMove(p, xTrav/i, yTrav/i);
-            }
-            ++i;
-        }while(Collider.collidesLevel(p) && i <= MAX_ITER); 
+            p.stop();   
+        }
     }
     
     /*
@@ -189,8 +184,8 @@ public class Mover
 
         if(Collider.collidesLevel(p))
         {
-            p.setX(oldX);
-            p.setY(oldY);
+            //p.setX(oldX);
+            //p.setY(oldY);
             p.calculateEndPos();
             p.stop();
             return false;

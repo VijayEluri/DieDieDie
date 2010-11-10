@@ -39,7 +39,7 @@ public class Arrow implements Projectile
                   facingAngle = 0, angleChange = 0.1f;//, xTrav, yTrav;
                   
     private final float SIZE = 18f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
-                        MAX_GRAVITY = 18f, GRAVITY_INCR = 0.08f, 
+                        MAX_GRAVITY = 20f, GRAVITY_INCR = 0.08f, 
                         ANGLE_CHANGE_INCR = 0.075f, 
                         MAX_ANGLE_CHANGE = 1.12f, 
                         GRAVITY_LINE = 10.7f, MOVE_SPEED = 0.5f, 
@@ -192,9 +192,9 @@ public class Arrow implements Projectile
      */
     public void updatePosition()
     {
-        adjustFacingAngle();
-        Mover.applyGravity(this);
         Mover.move(this);
+        Mover.applyGravity(this);
+        adjustFacingAngle();
     }
         
         
