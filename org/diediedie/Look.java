@@ -22,10 +22,6 @@ import org.diediedie.actors.Player;
 import org.diediedie.Tile;
 import org.diediedie.actors.Direction;
 import org.newdawn.slick.geom.*;
-/*import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Transform;
-import org.newdawn.slick.geom.Path;*/
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import java.util.List;
@@ -103,8 +99,7 @@ public class Look implements Action
         if(playerIsVisible(e, sh, e.getLevel().getPlayer()))
         {
             e.setCanSeenPlayer(true);
-            //System.out.println("Player is visible to  " + e + "!");
-            
+            // System.out.println("Player is visible to  " + e + "!");
         }
         else
         {
@@ -160,7 +155,6 @@ public class Look implements Action
             return true;
         }
         
-        
         return false;
     }
          
@@ -186,8 +180,8 @@ public class Look implements Action
         
         private Line topLine, botLine;
         private Path fovShape;
-        private final int LINE_LEN = 350;
-        
+        //private final int LINE_LEN = 350;
+        private float viewSize;
        // private Transform trans;
         
         // view geometry components
@@ -210,12 +204,12 @@ public class Look implements Action
         
         private float fastSin(float x, float radians)
         {
-            return x + LINE_LEN * (float)FastTrig.sin(radians);
+            return x + viewSize * (float)FastTrig.sin(radians);
         }
 
         private float fastCos(float y, float radians)
         {
-            return y - LINE_LEN * (float)FastTrig.cos(radians);
+            return y - viewSize * (float)FastTrig.cos(radians);
         }
         
         /*
@@ -225,7 +219,8 @@ public class Look implements Action
         {            
             xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
-                       
+            viewSize = e.getViewSize();
+            
             if(e.getFacing().equals(Direction.LEFT))
             {
                 //System.out.println(e + " left view");

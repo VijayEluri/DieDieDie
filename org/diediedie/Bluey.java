@@ -37,7 +37,7 @@ public class Bluey implements Enemy, StateMachine
 {
     // constants
     public static final int MAX_HEALTH = 50;
-    
+    private float viewSize = 250f;
     public final String leftStandPath = "data/bluey_standing_left.png";
     
     private Graphics g;
@@ -59,6 +59,7 @@ public class Bluey implements Enemy, StateMachine
     // Variables    
     private State currentState = null;
     private Patrol patrol;
+    private Alert alert;
     
     private boolean setUp = false, canJump = false, moving = false,
                     canSeePlayer = false, hasSeenPlayer = false,
@@ -140,6 +141,7 @@ public class Bluey implements Enemy, StateMachine
     {
         System.out.println(this + "\n\tstartFSM()");
         fsmRunning = true;
+        setInitialState();
         currentState.enter();
     }
     
@@ -155,6 +157,12 @@ public class Bluey implements Enemy, StateMachine
         return WALK_SPEED;   
     }
     
+    @Override
+    public float getViewSize()
+    {
+        return viewSize;
+    }
+ 
     @Override
     public final float getRunSpeed()
     {
@@ -198,6 +206,7 @@ public class Bluey implements Enemy, StateMachine
     {
         System.out.println("creating states for " + this);
         patrol = new Patrol(this);
+        alert = new Alert(this);
         setInitialState();
     }
     
@@ -353,6 +362,9 @@ public class Bluey implements Enemy, StateMachine
         }*/
     }
     
+    /*
+     * 
+     */ 
     private void updateState()
     {
         // Start the machine!
@@ -361,14 +373,25 @@ public class Bluey implements Enemy, StateMachine
             startFSM();
         }
         
-        // finally
+        
         currentState.update();
         
+        if(currentState.equals(patrol))
+        {
+            if(canSeePlayer())
+            {
+                changeState(alert);
+            }
+        }
+        else if(currentState.equals(alert))
+        {
+            
+        }
     }
     
     public void updatePosition()
     {
-        applyGravity();
+        Mover.applyGravity(this);
         applyFriction();
         
         if(isMoving())
@@ -437,17 +460,7 @@ public class Bluey implements Enemy, StateMachine
         return moving;   
     }
 
-    /**
-     * Applies gravity to the player's position.
-     */ 
-    @Override
-    public void applyGravity()
-    {
-        if(getYSpeed() < getMaxFallSpeed())
-        {
-            setYSpeed(getYSpeed() + level.gravity);  
-        }
-    }
+   
     
     @Override
     public void setHasSeenPlayer(boolean b)

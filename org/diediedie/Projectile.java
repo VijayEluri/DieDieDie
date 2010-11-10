@@ -15,15 +15,18 @@ public interface Projectile extends MovableObject
     void release(float power);
     
     boolean isFlying();
-    
     float getAngle();
 
+    float getGravityLine();    
+    float getGravity();
+    float getMaxGravity();
+    float getGravityIncr();
+    void increaseGravityEffect();
+        
     float getEndX();
     float getEndY();    
-    
     float getAirRes();
     
     void calculateEndPos();
-    
     void adjustFacingAngle();
 }

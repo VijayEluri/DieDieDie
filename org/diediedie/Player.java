@@ -520,7 +520,7 @@ public class Player implements Actor, InputProviderListener
     @Override
     public void update()
     {
-        applyGravity();
+        Mover.applyGravity(this);
         applyFriction();
                 
         if(running)
@@ -626,17 +626,7 @@ public class Player implements Actor, InputProviderListener
         return facing;
     }
 
-    /**
-     * Applies gravity to the player's position.
-     */ 
-    @Override
-    public void applyGravity()
-    {
-        if(getYSpeed() < getMaxFallSpeed())
-        {
-            setYSpeed(getYSpeed() + level.gravity);  
-        }
-    }
+    
     
     @Override
     public float getYSpeed()

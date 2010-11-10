@@ -35,13 +35,15 @@ public class Arrow implements Projectile
     private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0, mouseX, mouseY, 
                   movementAngle = 90, 
-                  gravity = 0, oldX, oldY,
+                  gravity = 0f, oldX, oldY,
                   facingAngle = 0, angleChange = 0.1f;//, xTrav, yTrav;
                   
     private final float SIZE = 18f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
-                  MAX_GRAVITY = 20f, GRAVITY_INCR = 0.1f, 
-                  ANGLE_CHANGE_INCR = 0.07f, MAX_ANGLE_CHANGE = 1.11f, 
-                  GRAVITY_LINE = 2.7f, MOVE_SPEED = 0.6f;
+                        MAX_GRAVITY = 18f, GRAVITY_INCR = 0.08f, 
+                        ANGLE_CHANGE_INCR = 0.075f, 
+                        MAX_ANGLE_CHANGE = 1.12f, 
+                        GRAVITY_LINE = 10.7f, MOVE_SPEED = 0.5f, 
+                        MAX_Y_SPEED = 20.5f;
                   
     private final int REVERSE = 180;
     private Level level = null;
@@ -59,12 +61,30 @@ public class Arrow implements Projectile
         calculateEndPos();
     }
     
-    
-    
+    @Override
+    public void increaseGravityEffect()
+    {
+        if(gravity < MAX_GRAVITY)
+        {
+            gravity += GRAVITY_INCR;
+        } 
+    }
+        
+
     @Override
     public void setLevel(Level l)
     {
         level = l;
+    }
+    
+    public final float getGravityIncr()
+    {
+        return GRAVITY_INCR;
+    }
+    
+    public final float getMaxGravity()
+    {
+        return MAX_GRAVITY;
     }
 
     @Override
@@ -72,7 +92,6 @@ public class Arrow implements Projectile
     {
         return level;
     }
-    
     
     @Override
     public float getAirRes()
@@ -160,7 +179,11 @@ public class Arrow implements Projectile
         speedX = f;
     }
     
-   
+    @Override
+    public float getMaxFallSpeed()
+    {
+        return MAX_Y_SPEED;
+    }
 
     
     /**
@@ -169,10 +192,8 @@ public class Arrow implements Projectile
      */
     public void updatePosition()
     {
-        /*oldX = getStartX();
-        oldY = getStartY();*/
         adjustFacingAngle();
-        applyGravity();
+        Mover.applyGravity(this);
         Mover.move(this);
     }
         
@@ -182,8 +203,8 @@ public class Arrow implements Projectile
      */ 
     public void stop()
     {
-        System.out.println("stopping Arrow " + hashCode() + "; speed " +
-                        speedX + ", " + speedY);
+        /*System.out.println("stopping Arrow " + hashCode() + "; speed " +
+                        speedX + ", " + speedY);*/
         resetAccelX();
         resetAccelY();
         setXSpeed(0);
@@ -206,7 +227,27 @@ public class Arrow implements Projectile
     // applies 'gravity' to the arrow WHEN IT IS IN FLIGHT
     public void adjustFacingAngle()
     {
-        if(gravity > GRAVITY_LINE)
+        /*if(gravity > GRAVITY_LINE)
+        {
+            if(movementAngle > 0)
+            {
+                facingAngle += angleChange;
+            }
+            else
+            {
+                facingAngle -= angleChange;
+            }
+            if(angleChange < MAX_ANGLE_CHANGE)
+            {
+                angleChange += ANGLE_CHANGE_INCR;
+            }
+        }
+        if(isFlying())
+        {
+            System.out.printf("Arrow (%d) : facingAngle: %.2f " +
+                "angleChange: %.2f\n", hashCode(), facingAngle, angleChange);
+        }*/
+        if(getYSpeed() < GRAVITY_LINE)
         {
             if(movementAngle > 0)
             {
@@ -223,6 +264,12 @@ public class Arrow implements Projectile
         }
     }
     
+    @Override
+    public float getGravityLine()
+    {
+        return GRAVITY_LINE;
+    }
+    
     public boolean isGoingDown()
     {
         if(startY > oldY)
@@ -236,26 +283,9 @@ public class Arrow implements Projectile
      * Applies 'gravity' to the y-axis position once it has left the 
      * player
      */ 
-    public void applyGravity()
+    public float getGravity()
     {
-        if(!isFlying())
-        {
-            return;
-        }
-        
-        startY += gravity;
-        calculateEndPos();
-        
-        if(gravity < MAX_GRAVITY)
-        {
-            gravity += GRAVITY_INCR;
-        }
-     
-        if(Collider.collidesLevel(this))
-        {
-            stop();
-        }
-        //System.out.println("gravity on arrow: " + gravity);
+        return gravity;
     }
     
 

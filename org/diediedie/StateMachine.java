@@ -27,7 +27,6 @@ public interface StateMachine
 {
     boolean isFSMRunning();
     State getState();   
-    
     void createStates();
     void setInitialState();
     void startFSM();

@@ -21,17 +21,14 @@ import org.newdawn.slick.Graphics;
 import org.diediedie.Level;
 
 /**
- * 
+ * Super-interface for any interactive thing that exists on a Level. 
  */ 
 public interface LevelObject
 {
     void update();
-    
     void draw(Graphics g);
-    
     Level getLevel();
     void setLevel(Level l);
-    
     float getX();
     float getY();  
 }

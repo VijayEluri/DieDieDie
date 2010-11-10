@@ -33,7 +33,6 @@ public interface Actor extends MovableObject
     
     float getJumpSpeed();
     float getMoveSpeed();    
-    float getMaxFallSpeed();
     
     void resetAccelX();
     Animation getCurrentAnim(); 
