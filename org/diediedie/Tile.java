@@ -34,14 +34,18 @@ public class Tile
      */ 
     public Tile(TiledMap map, int xCoord, int yCoord, int layer)
     {
+        
         this.tiledMap = map;
+        tileWidth = map.getTileWidth();
+        tileHeight = map.getTileHeight();
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.layer = layer;
         this.id = map.getTileId(xCoord, yCoord, layer); 
         calculatePosition();
         extractProperties();
-       // System.out.println("new Tile: " + xCoord + " , " + yCoord);
+        
+        System.out.println("new " + this);
     }
     
     public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
@@ -49,6 +53,7 @@ public class Tile
     private TiledMap tiledMap;
     private Rectangle rect;
     public Map<String, String> properties = new HashMap<String, String>();
+    
     public static final String[] PROPERTIES = {"type", "name"};
     public static final String[] VALUES = {"exit", "enemy", "start",
                                            "bluey"};
@@ -66,11 +71,6 @@ public class Tile
                 properties.put(P, V);
             }
         }
-        for(Map.Entry<String, String> e : properties.entrySet())
-        {
-            
-            System.out.println(this + e.getKey() + " : " + e.getValue());
-        }
     }
     
     /**
@@ -78,8 +78,8 @@ public class Tile
      */ 
     private void calculatePosition()
     {
-        tileWidth = tiledMap.getTileWidth();
-        tileHeight = tiledMap.getTileHeight();
+        
+        
         
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
@@ -100,6 +100,9 @@ public class Tile
      */ 
     public String toString()
     {
-        return "Tile: x, y, index: " + xPos + ", " + yPos + ", " + layer;
+        return "Tile: [xPos, yPos], [endX, endY], layer: [" + xPos + ", " + 
+                yPos + "], [" + (xPos+tileWidth) + "], [" 
+                + (yPos+tileHeight) + "] " + layer;
+        
     }
 }
