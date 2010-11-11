@@ -26,6 +26,8 @@ import org.diediedie.actors.Aligner;
  */ 
 public class Mover
 {    
+    final int INTERVAL = 16;
+    
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
      * 
@@ -122,6 +124,8 @@ public class Mover
      */ 
     public static void move(Projectile p)
     { 
+        
+        
         if(Collider.collidesLevel(p))
         {
             p.stop();
@@ -135,15 +139,19 @@ public class Mover
         {
             return;
         }    
-
         
-        System.out.println("move(" + p + "):\t" + xTrav + ", " + yTrav);
         
-        doMove(p, xTrav, yTrav);
+        // System.out.println("move(" + p + "):\t" + xTrav + ", " + yTrav);
         
-        /*float x = 0.05f, y = 0f;
+        // doMove(p, xTrav, yTrav);
         
-        while(doMove(p, */
+        final float INCR = 0.01f;
+        
+        if(!doMove(p, xTrav, yTrav, p.getAngle()))
+        {
+            // collided! let's move back a bit
+            
+        }
     }
     
     
@@ -151,20 +159,20 @@ public class Mover
      * Returns the new horizontal position of p after hypothetically 
      * applying horizontal distance xTrav based upon p's getAngle().
      */ 
-    public static float getNewXPos(Projectile p, float xTrav)
+    public static float getNewXPos(Projectile p, float xTrav, float angle)
     {
         return p.getX() + xTrav * (float)FastTrig.sin(
-                            Math.toRadians(p.getAngle()));
+                            Math.toRadians(angle));
     }
     
     /*
      * Returns the new vertical position of p after hypothetically 
      * applying vertical distance yTrav based upon p's getAngle().
      */
-    public static float getNewYPos(Projectile p, float yTrav)
+    public static float getNewYPos(Projectile p, float yTrav, float angle)
     {
-       return p.getY() - yTrav * (float)FastTrig.cos(
-                            Math.toRadians(p.getAngle()));
+       return p.getY() - yTrav * (float)FastTrig.cos(Math.toRadians(
+                                                           angle));
     }
     
     /*
@@ -176,13 +184,15 @@ public class Mover
      * 
      * Otherwise leave p at its new position and return true.
      */ 
-    private static boolean doMove(Projectile p, float xTrav, float yTrav)
+    private static boolean doMove(Projectile p, float xTrav, float yTrav,    
+                                  float angle)
     {
         final float oldX = p.getX();
         final float oldY = p.getY();
         
-        p.setX(getNewXPos(p, xTrav));
-        p.setY(getNewYPos(p, yTrav));        
+        p.setX(getNewXPos(p, xTrav, angle));
+        p.setY(getNewYPos(p, yTrav, angle));        
+        
         p.calculateEndPos();
 
         if(Collider.collidesLevel(p))

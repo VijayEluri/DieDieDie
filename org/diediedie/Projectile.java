@@ -22,7 +22,9 @@ public interface Projectile extends MovableObject
     float getMaxGravity();
     float getGravityIncr();
     void increaseGravityEffect();
-        
+    
+    boolean isGoingDown();
+    
     float getEndX();
     float getEndY();    
     float getAirRes();

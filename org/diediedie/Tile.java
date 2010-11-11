@@ -45,7 +45,7 @@ public class Tile
         calculatePosition();
         extractProperties();
         
-        System.out.println("new " + this);
+        // System.out.println("new " + this);
     }
     
     public int xCoord, yCoord, tileWidth, tileHeight, layer, id;

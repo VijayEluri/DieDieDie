@@ -33,29 +33,28 @@ import org.newdawn.slick.util.FastTrig;
 public class Arrow implements Projectile
 {      
     private float mouseX, mouseY,
-                  startX, startY, 
+                  startX, startY, oldX, oldY, 
                   endX, endY, 
-                  oldX, oldY, 
                   accelX = 0, accelY = 0, 
                   speedX = 0, speedY = 0,  
                   movementAngle = 90, 
                   gravity = 0f, 
-                  facingAngle = 0, angleChange = 0.1f;
+                  facingAngle = 0, angleChange = 0.01f;
                   
     private final float SIZE = 18f, 
                         ACCEL_RATE = 0.089f, 
                         AIR_REST = 0.7f,
                         MAX_GRAVITY = 24f, 
-                        GRAVITY_INCR = 0.0899f, 
+                        GRAVITY_INCR = 0.07f, 
                         ANGLE_CHANGE_INCR = 0.05f, 
-                        MAX_ANGLE_CHANGE = 1.15f, 
-                        GRAVITY_LINE = 3.2f, 
+                        MAX_ANGLE_CHANGE = 1.5f, 
+                        GRAVITY_LINE = 2.2f, 
                         MOVE_SPEED = 0.5f, 
                         MAX_Y_SPEED = 20.5f;
                   
     private final int REVERSE = 180;
     private Level level = null;
-    private boolean flying = false, collided = false;
+    private boolean flying = false, collided = false, goingDown = false;
     
     /**
      * Creates a new arrow at the given position.
@@ -192,7 +191,6 @@ public class Arrow implements Projectile
     {
         return MAX_Y_SPEED;
     }
-
     
     /**
      * Updates the position of the Arrow on the screen after it has left
@@ -200,6 +198,9 @@ public class Arrow implements Projectile
      */
     public void updatePosition()
     {
+        oldX = startX;
+        oldY = startY;
+        
         Mover.move(this);
         Mover.applyGravity(this);
         adjustFacingAngle();
@@ -239,7 +240,8 @@ public class Arrow implements Projectile
         {
             return;
         }
-        if(gravity > GRAVITY_LINE && gravity < MAX_GRAVITY)
+        
+        if(isGoingDown())
         {
             if(movementAngle > 0)
             {
@@ -254,17 +256,36 @@ public class Arrow implements Projectile
                 angleChange += ANGLE_CHANGE_INCR;
             }
         }
+        
+        /*if(gravity > GRAVITY_LINE && gravity < MAX_GRAVITY)
+        {
+            if(movementAngle > 0)
+            {
+                facingAngle += angleChange;
+            }
+            else
+            {
+                facingAngle -= angleChange;
+            }
+            if(angleChange < MAX_ANGLE_CHANGE)
+            {
+                angleChange += ANGLE_CHANGE_INCR;
+            }
+        }*/
     }
-    
+
     @Override
     public float getGravityLine()
     {
         return GRAVITY_LINE;
     }
     
+    /**
+     * Guess.
+     */ 
     public boolean isGoingDown()
     {
-        if(startY > oldY)
+        if(oldY < startY)
         {
             return true;
         }
