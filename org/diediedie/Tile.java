@@ -77,14 +77,12 @@ public class Tile
      * Stores the coordinates and size of the current Tile. 
      */ 
     private void calculatePosition()
-    {
-        
-        
-        
+    {        
+        final float ROUNDING = 0.999f;
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
-
-        rect = new Rectangle(xPos, yPos, tileWidth, tileHeight);
+        rect = new Rectangle(xPos, yPos, tileWidth + ROUNDING, 
+                             tileHeight + ROUNDING);
     }
     
     /**
@@ -101,8 +99,7 @@ public class Tile
     public String toString()
     {
         return "Tile: [xPos, yPos], [endX, endY], layer: [" + xPos + ", " + 
-                yPos + "], [" + (xPos+tileWidth) + "], [" 
+                yPos + "], [" + (xPos+tileWidth) + ", " 
                 + (yPos+tileHeight) + "] " + layer;
-        
     }
 }
