@@ -15,16 +15,17 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+import java.lang.Math;
 import org.newdawn.slick.util.FastTrig;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Collider;
+import org.diediedie.actors.Aligner;
 
 /**
- * Class used to move Actors around a Level. 
+ * Class used to Actors and Projectiles around a Level. 
  */ 
 public class Mover
 {    
-    static final int MAX_ITER = 4;
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
      * 
@@ -37,6 +38,7 @@ public class Mover
         final float oldY = a.getY();
         
         // test new position
+        
         // vertical 
         a.setY(a.getY() + a.getYSpeed());
         
@@ -67,8 +69,6 @@ public class Mover
         }       
         if(a.getX() == oldX)
         {
-         /*   System.out.println("Mover.move(): " + a + "\n\t" + 
-                                "did not move horizontally"); */
             return false;
         }
         return true;
@@ -104,45 +104,48 @@ public class Mover
             p.stop();
             while(Collider.collidesLevel(p))
             {
-                p.setY(p.getY() - p.getGravityIncr());
+                final float oldY = p.getY();
+                p.setY(p.getY() - Aligner.INCR);
                 p.calculateEndPos();
-                System.out.println("adjusting " + p);
+                /*
+                System.out.print("adjusting [" + p); 
+                System.out.println("]\t oldY: " + oldY + ", newY: " + 
+                                   p.getY());*/
             }
         }
-        
-        System.out.println("applyGravity(p), yTrav: " + yTrav);
+        //System.out.println("applyGravity(p), yTrav: " + yTrav);
         p.increaseGravityEffect(); 
     }
-    
     
     /**
      * For publically moving Projectiles. :)
      */ 
     public static void move(Projectile p)
     { 
-        if(!p.isFlying())
+        if(Collider.collidesLevel(p))
         {
+            p.stop();
             return;
         }
+               
+        float xTrav = p.getXSpeed() * p.getAirRes();
+        float yTrav = p.getYSpeed();
         
-        final float xTrav = p.getXSpeed() * p.getAirRes();
-        final float yTrav = p.getYSpeed();
-                
-        approximateMove(p, xTrav, yTrav);        
+        if(xTrav <= 0 && yTrav <= 0)
+        {
+            return;
+        }    
+
+        
+        System.out.println("move(" + p + "):\t" + xTrav + ", " + yTrav);
+        
+        doMove(p, xTrav, yTrav);
+        
+        /*float x = 0.05f, y = 0f;
+        
+        while(doMove(p, */
     }
     
-    /*
-     * Moves Projectile p as close as possible to the given co-ords
-     * before colliding / reaching max iteration point.
-     */ 
-    private static void approximateMove(Projectile p, float xTrav, float yTrav)
-    {
-        // first test to see if we can move the whole way without colliding
-        if(!doMove(p, xTrav, yTrav))
-        {
-            p.stop();   
-        }
-    }
     
     /*
      * Returns the new horizontal position of p after hypothetically 
@@ -184,8 +187,6 @@ public class Mover
 
         if(Collider.collidesLevel(p))
         {
-            //p.setX(oldX);
-            //p.setY(oldY);
             p.calculateEndPos();
             p.stop();
             return false;

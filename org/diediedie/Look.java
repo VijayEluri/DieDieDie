@@ -99,7 +99,7 @@ public class Look implements Action
         if(playerIsVisible(e, sh, e.getLevel().getPlayer()))
         {
             e.setCanSeenPlayer(true);
-            // System.out.println("Player is visible to  " + e + "!");
+            System.out.println("Player is visible to  " + e + "!");
         }
         else
         {

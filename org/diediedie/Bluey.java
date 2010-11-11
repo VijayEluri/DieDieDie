@@ -37,7 +37,7 @@ public class Bluey implements Enemy, StateMachine
 {
     // constants
     public static final int MAX_HEALTH = 50;
-    private float viewSize = 250f;
+    private float viewSize = 500f;
     public final String leftStandPath = "data/bluey_standing_left.png";
     
     private Graphics g;
@@ -380,7 +380,8 @@ public class Bluey implements Enemy, StateMachine
         {
             if(canSeePlayer())
             {
-                changeState(alert);
+                //System.out.println("changing to alert");
+                //changeState(alert);
             }
         }
         else if(currentState.equals(alert))

@@ -32,17 +32,25 @@ import org.newdawn.slick.util.FastTrig;
  */ 
 public class Arrow implements Projectile
 {      
-    private float startX, startY, endX, endY, accelX = 0, accelY = 0, 
-                  speedX = 0, speedY = 0, mouseX, mouseY, 
+    private float mouseX, mouseY,
+                  startX, startY, 
+                  endX, endY, 
+                  oldX, oldY, 
+                  accelX = 0, accelY = 0, 
+                  speedX = 0, speedY = 0,  
                   movementAngle = 90, 
-                  gravity = 0f, oldX, oldY,
-                  facingAngle = 0, angleChange = 0.1f;//, xTrav, yTrav;
+                  gravity = 0f, 
+                  facingAngle = 0, angleChange = 0.1f;
                   
-    private final float SIZE = 18f, ACCEL_RATE = 0.089f, AIR_REST = 0.7f,
-                        MAX_GRAVITY = 20f, GRAVITY_INCR = 0.08f, 
-                        ANGLE_CHANGE_INCR = 0.075f, 
-                        MAX_ANGLE_CHANGE = 1.12f, 
-                        GRAVITY_LINE = 10.7f, MOVE_SPEED = 0.5f, 
+    private final float SIZE = 18f, 
+                        ACCEL_RATE = 0.089f, 
+                        AIR_REST = 0.7f,
+                        MAX_GRAVITY = 24f, 
+                        GRAVITY_INCR = 0.0899f, 
+                        ANGLE_CHANGE_INCR = 0.05f, 
+                        MAX_ANGLE_CHANGE = 1.15f, 
+                        GRAVITY_LINE = 3.2f, 
+                        MOVE_SPEED = 0.5f, 
                         MAX_Y_SPEED = 20.5f;
                   
     private final int REVERSE = 180;
@@ -104,8 +112,8 @@ public class Arrow implements Projectile
      */ 
     public void release(float power)
     {
-        accelX = power;
-        accelY = power;
+        accelX = (int)power;
+        accelY = (int)power;
         flying = true;
     }
     
@@ -140,7 +148,7 @@ public class Arrow implements Projectile
     private void setMovementAngle(float x, float y)
     {
         movementAngle = (float)Math.toDegrees(Math.atan2(x - startX, 
-                                              startY - y));
+                                                    startY - y));
     }
     
     @Override // boilerplate
@@ -227,27 +235,11 @@ public class Arrow implements Projectile
     // applies 'gravity' to the arrow WHEN IT IS IN FLIGHT
     public void adjustFacingAngle()
     {
-        /*if(gravity > GRAVITY_LINE)
+        if(!isFlying())
         {
-            if(movementAngle > 0)
-            {
-                facingAngle += angleChange;
-            }
-            else
-            {
-                facingAngle -= angleChange;
-            }
-            if(angleChange < MAX_ANGLE_CHANGE)
-            {
-                angleChange += ANGLE_CHANGE_INCR;
-            }
+            return;
         }
-        if(isFlying())
-        {
-            System.out.printf("Arrow (%d) : facingAngle: %.2f " +
-                "angleChange: %.2f\n", hashCode(), facingAngle, angleChange);
-        }*/
-        if(getYSpeed() < GRAVITY_LINE)
+        if(gravity > GRAVITY_LINE && gravity < MAX_GRAVITY)
         {
             if(movementAngle > 0)
             {
@@ -298,9 +290,9 @@ public class Arrow implements Projectile
     @Override
     public void calculateEndPos()
     {
-        endX = (float)(startX + SIZE * Math.sin(
+        endX = (float)(startX + SIZE * FastTrig.sin(
                         Math.toRadians(movementAngle + facingAngle)));
-        endY = (float)(startY - SIZE * Math.cos(
+        endY = (float)(startY - SIZE * FastTrig.cos(
                         Math.toRadians(movementAngle + facingAngle)));
     }
     
@@ -335,7 +327,7 @@ public class Arrow implements Projectile
     public void draw(Graphics g)
     {
         g.drawGradientLine(startX, startY, Color.black, endX, endY,
-                            Color.red);
+                           Color.red);
     }
     
     public float getAngle()
@@ -349,12 +341,9 @@ public class Arrow implements Projectile
         accelX = 0;
     }
     
-    
     @Override
     public void resetAccelY()
     {
         accelY = 0;
     }
-    
-    
 }
