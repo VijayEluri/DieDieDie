@@ -45,7 +45,7 @@ public class Arrow implements Projectile
                         ACCEL_RATE = 0.089f, 
                         AIR_REST = 0.7f,
                         MAX_GRAVITY = 24f, 
-                        GRAVITY_INCR = 0.07f, 
+                        GRAVITY_INCR = 0.06f, 
                         ANGLE_CHANGE_INCR = 0.05f, 
                         MAX_ANGLE_CHANGE = 1.5f, 
                         GRAVITY_LINE = 2.2f, 
@@ -241,7 +241,7 @@ public class Arrow implements Projectile
             return;
         }
         
-        if(isGoingDown())
+        if(isGoingDown() || gravity > GRAVITY_LINE)
         {
             if(movementAngle > 0)
             {
@@ -256,6 +256,7 @@ public class Arrow implements Projectile
                 angleChange += ANGLE_CHANGE_INCR;
             }
         }
+        
         
         /*if(gravity > GRAVITY_LINE && gravity < MAX_GRAVITY)
         {
