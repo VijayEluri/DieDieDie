@@ -84,6 +84,8 @@ public class Level extends TiledMap
         sortObjects();
     }   
     
+    
+    
     public void associatePlayer(Player p)
     {
         player = p;        
@@ -101,6 +103,16 @@ public class Level extends TiledMap
     public Tile getPlayerTile()
     {
         return playerTile;   
+    }
+    
+    /*
+     * Returns all enemies + the player
+     */ 
+    public List<Actor> getActors()
+    {
+        List<Actor> actors = new ArrayList<Actor>(enemies);
+        actors.add(player);
+        return actors;
     }
     
     /**

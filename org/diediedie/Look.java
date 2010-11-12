@@ -19,6 +19,7 @@ import org.diediedie.actors.actions.Action;
 import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.Player;
+import org.diediedie.actors.Actor;
 import org.diediedie.Tile;
 import org.diediedie.actors.Direction;
 import org.newdawn.slick.geom.*;
@@ -48,6 +49,9 @@ public class Look implements Action
         reset();
     }
     
+    /*
+     * Resets all the vars
+     */ 
     private void reset()
     {
         started = false;
@@ -92,28 +96,44 @@ public class Look implements Action
     }
     
     /*
-     * Analyses an Enemy's view Shape for presence of the Player. 
+     * Analyses an Enemy's view Shape for various LevelObjects. 
      */ 
     private void analyseView(Enemy e, Shape sh)
     {
-        if(playerIsVisible(e, sh, e.getLevel().getPlayer()))
+        //List<Actor> actors = e.getLevel().getActors();
+        
+        checkVisibleActors(e, sh, e.getLevel().getActors());
+        
+    }
+    
+    
+    /*
+     * Checks for the visibility of the other Actors on the Level to 
+     * this Enemy. 
+     */
+    private void checkVisibleActors(Enemy e, Shape sh, List<Actor> actors)
+    {
+        for(Actor a : actors)
         {
-            e.setCanSeenPlayer(true);
-            System.out.println("Player is visible to  " + e + "!");
+            if(actorIsVisible(e, sh, a))
+            {
+                if(a.getClass().equals(e.getLevel().getPlayer().getClass()))
+                {
+                    e.setCanSeenPlayer(true);
+                    System.out.println("Player is visible to  " + e + "!");
+                }
+            }
         }
-        else
-        {
-            e.setCanSeenPlayer(false);
-        }
+        e.setCanSeenPlayer(false);        
     }
     
     /*
-     * Returns true if any of the four points of the Player's Rectangle
-     * are inside the view Shape sh.
+     * Returns true if any of the four points of an Actor's containing
+     * Rectangle are inside the view Shape sh.
      */ 
-    private boolean playerInsideView(Shape sh, Player pl)
+    private boolean actorInView(Shape sh, Actor a)
     {
-        final Shape r = AnimCreator.getCurrentFrameRect(pl);
+        final Shape r = AnimCreator.getCurrentFrameRect(a);
       
         final float[][] points = 
         {
@@ -133,20 +153,24 @@ public class Look implements Action
         return false;
     }
     
-    private boolean playerIsVisible(Enemy e, Shape sh, Player pl)
+    /*
+     * Returns true if Actor a is visible to Enemy e.
+     */ 
+    public boolean actorIsVisible(Enemy e, Shape sh, Actor a)
     {
-        if(playerInsideView(sh, pl) && !isViewBlocked(e, sh, pl))
+        if(actorInView(sh, a) && !isViewBlocked(e, sh, a))
         {
             return true;
         }  
         return false;
     }
     
-    private boolean isViewBlocked(Enemy e, Shape sh, Player pl)
+    private boolean isViewBlocked(Enemy e, Shape sh, Actor a)
     {
-        // create lines from the view view start to the top and bottom of 
-        // the Player. if either are unobstructed, return false 
-        final float[] pos = AnimCreator.getCurrentFrameRect(pl).getCenter();
+        // create line from the view start to the Player. 
+        // if unobstructed, return false
+         
+        final float[] pos = AnimCreator.getCurrentFrameRect(a).getCenter();
         sightLine = new Line(e.getEyePosX(), e.getEyePosY(), pos[0], pos[1]);
        
         if(e.getLevel().collides(sightLine))
@@ -236,10 +260,8 @@ public class Look implements Action
             botEndY = fastCos(yViewStart, EYE_ANG_DOWN);   
                      
             fovShape = new Path(xViewStart, yViewStart);
-            
             fovShape.lineTo(endX, topEndY);
             fovShape.lineTo(endX, botEndY);
-            
             fovShape.close();
         }       
                

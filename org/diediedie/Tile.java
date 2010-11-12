@@ -28,6 +28,7 @@ import org.newdawn.slick.geom.Rectangle;
  */ 
 public class Tile
 {   
+    final float ROUNDING = 0.999f;
     /**
      * Creates a Tile from a tile at specified coordinates (x,y). If
      * this is a collision 
@@ -78,7 +79,7 @@ public class Tile
      */ 
     private void calculatePosition()
     {        
-        final float ROUNDING = 0.999f;
+        
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
         rect = new Rectangle(xPos, yPos, tileWidth + ROUNDING, 
