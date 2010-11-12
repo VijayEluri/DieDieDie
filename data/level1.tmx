@@ -55,7 +55,7 @@
    <property name="isvisible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2VSxKAMAhD6f0v7dYNyidA2umb6TZ5VsQlIks5DLB4aFy/HKf6dT3X9cvh6ZnYj5n763A82a8K7X/rma2In7XD4vfXP+3n7UJ+1xm/jv0yNX9Rlym/qJv1PVfBcn9f2Tv7WTPQvei9x+j37qoC5YfIiWSz7hdvRhWdfsjZ8TDhx3gejCeZxMASAAA=
+   H4sIAAAAAAAAA+2VSxLAIAhD8f6X7rYbWj4BomNmXJo8EXGJyFIWg1g4NF2+nE7l6zrX5cvJkzMxH0+qH2JfV04ln/bfenorwmfNsPD95U/zebOQ7zrD1zFfpvovyjLFF2Wz3nOVWOr35b0zn9UDnYuee4x876wqofgQPhFv1vni9ahSJx+ydzya4GNcDy3t/j7AEgAA
   </data>
  </layer>
  <layer name="platforms" width="40" height="30" visible="0">

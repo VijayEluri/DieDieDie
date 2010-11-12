@@ -26,7 +26,7 @@ import org.diediedie.actors.Aligner;
  */ 
 public class Mover
 {    
-    final int INTERVAL = 16;
+    static final int INTERVAL = 16;
     
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
@@ -124,8 +124,6 @@ public class Mover
      */ 
     public static void move(Projectile p)
     { 
-        
-        
         if(Collider.collidesLevel(p))
         {
             p.stop();
@@ -139,19 +137,23 @@ public class Mover
         {
             return;
         }    
-        
-        
-        // System.out.println("move(" + p + "):\t" + xTrav + ", " + yTrav);
-        
         // doMove(p, xTrav, yTrav);
         
-        final float INCR = 0.01f;
+        final float oldX = p.getX();
+        final float oldY = p.getY();
+
+        float xMove = xTrav / INTERVAL;
+        float yMove = yTrav / INTERVAL;
         
-        if(!doMove(p, xTrav, yTrav, p.getAngle()))
+        
+        
+        int i = 0;
+        
+        while(i < INTERVAL && doMove(p, xMove, yMove, p.getAngle()))
         {
-            // collided! let's move back a bit
-            
+            ++i;
         }
+        
     }
     
     
@@ -187,8 +189,7 @@ public class Mover
     private static boolean doMove(Projectile p, float xTrav, float yTrav,    
                                   float angle)
     {
-        final float oldX = p.getX();
-        final float oldY = p.getY();
+       
         
         p.setX(getNewXPos(p, xTrav, angle));
         p.setY(getNewYPos(p, yTrav, angle));        

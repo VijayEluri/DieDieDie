@@ -44,12 +44,12 @@ public class Arrow implements Projectile
     private final float SIZE = 18f, 
                         ACCEL_RATE = 0.089f, 
                         AIR_REST = 0.7f,
-                        MAX_GRAVITY = 24f, 
-                        GRAVITY_INCR = 0.06f, 
-                        ANGLE_CHANGE_INCR = 0.05f, 
-                        MAX_ANGLE_CHANGE = 1.5f, 
-                        GRAVITY_LINE = 2.1f, 
-                        MOVE_SPEED = 1f, 
+                        MAX_GRAVITY = 25f, 
+                        GRAVITY_INCR = 0.08f, 
+                        ANGLE_CHANGE_INCR = 0.2f,//0.05f, 
+                        MAX_ANGLE_CHANGE = 1.6f, 
+                        GRAVITY_LINE = 1.2f, 
+                        MOVE_SPEED = .999991f, 
                         MAX_Y_SPEED = 20.5f;
                   
     private final int REVERSE = 180;
@@ -111,8 +111,8 @@ public class Arrow implements Projectile
      */ 
     public void release(float power)
     {
-        accelX = (int)power * 0.9f;
-        accelY = (int)power * 0.9f;
+        accelX = (int)power;
+        accelY = (int)power;
         flying = true;
     }
     
@@ -150,7 +150,7 @@ public class Arrow implements Projectile
                                                     startY - y));
     }
     
-    @Override // boilerplate
+    @Override // boilerplate ignorable
     public void update(){ }
     
     /**
@@ -160,7 +160,6 @@ public class Arrow implements Projectile
     {          
         setXSpeed(MOVE_SPEED * accelX);
         setYSpeed(MOVE_SPEED * accelY);
-        
     }
     
     @Override
@@ -242,7 +241,7 @@ public class Arrow implements Projectile
             return;
         }
         
-        if(isGoingDown() || gravity > GRAVITY_LINE)
+        if(gravity > GRAVITY_LINE && gravity < MAX_GRAVITY)
         {
             if(movementAngle > 0)
             {
@@ -257,23 +256,6 @@ public class Arrow implements Projectile
                 angleChange += ANGLE_CHANGE_INCR;
             }
         }
-        
-        
-        /*if(gravity > GRAVITY_LINE && gravity < MAX_GRAVITY)
-        {
-            if(movementAngle > 0)
-            {
-                facingAngle += angleChange;
-            }
-            else
-            {
-                facingAngle -= angleChange;
-            }
-            if(angleChange < MAX_ANGLE_CHANGE)
-            {
-                angleChange += ANGLE_CHANGE_INCR;
-            }
-        }*/
     }
 
     @Override
