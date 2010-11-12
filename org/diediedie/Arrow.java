@@ -44,14 +44,15 @@ public class Arrow implements Projectile
     private final float SIZE = 18f, 
                         ACCEL_RATE = 0.089f, 
                         AIR_REST = 0.7f,
-                        MAX_GRAVITY = 25f, 
+                        MAX_GRAVITY = 26f, 
                         GRAVITY_INCR = 0.08f, 
                         ANGLE_CHANGE_INCR = 0.2f,//0.05f, 
                         MAX_ANGLE_CHANGE = 1.6f, 
                         GRAVITY_LINE = 1.2f, 
                         MOVE_SPEED = .999991f, 
-                        MAX_Y_SPEED = 20.5f;
-                  
+                        MAX_Y_SPEED = 20.5f,
+                        FALLING_ANGLE_CHANGE = 0.45f;
+                        
     private final int REVERSE = 180;
     private Level level = null;
     private boolean flying = false, collided = false, goingDown = false;
@@ -241,7 +242,7 @@ public class Arrow implements Projectile
             return;
         }
         
-        if(gravity > GRAVITY_LINE && gravity < MAX_GRAVITY)
+        if(!isGoingDown() && gravity > GRAVITY_LINE)// && gravity < MAX_GRAVITY)
         {
             if(movementAngle > 0)
             {
@@ -251,11 +252,25 @@ public class Arrow implements Projectile
             {
                 facingAngle -= angleChange;
             }
+            
             if(angleChange < MAX_ANGLE_CHANGE)
             {
                 angleChange += ANGLE_CHANGE_INCR;
             }
         }
+        else if(isGoingDown())
+        {
+            if(movementAngle > 0)
+            {
+                facingAngle += (angleChange * FALLING_ANGLE_CHANGE);
+            }
+            else
+            {
+                facingAngle -= (angleChange * FALLING_ANGLE_CHANGE);
+            }
+        }
+        /*System.out.println("arrow " + this.hashCode() + " facing: " + 
+                           facingAngle);*/
     }
 
     @Override
@@ -271,6 +286,7 @@ public class Arrow implements Projectile
     {
         if(oldY < startY)
         {
+            //System.out.println("going down");
             return true;
         }
         return false;
