@@ -26,7 +26,7 @@ import org.diediedie.actors.Aligner;
  */ 
 public class Mover
 {    
-    static final int INTERVAL = 16;
+    static final int INTERVAL = 32;
     
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.

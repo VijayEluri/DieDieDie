@@ -45,13 +45,13 @@ public class Arrow implements Projectile
                         ACCEL_RATE = 0.089f, 
                         AIR_REST = 0.7f,
                         MAX_GRAVITY = 26f, 
-                        GRAVITY_INCR = 0.08f, 
-                        ANGLE_CHANGE_INCR = 0.2f,//0.05f, 
+                        GRAVITY_INCR = 0.085f, 
+                        ANGLE_CHANGE_INCR = 0.2f,
                         MAX_ANGLE_CHANGE = 1.6f, 
-                        GRAVITY_LINE = 1.2f, 
-                        MOVE_SPEED = .999991f, 
+                        GRAVITY_LINE = 1f, 
+                        MOVE_SPEED = 0.5f, 
                         MAX_Y_SPEED = 20.5f,
-                        FALLING_ANGLE_CHANGE = 0.45f;
+                        FALLING_ANGLE_CHANGE = 0.25f;
                         
     private final int REVERSE = 180;
     private Level level = null;
@@ -112,8 +112,8 @@ public class Arrow implements Projectile
      */ 
     public void release(float power)
     {
-        accelX = (int)power;
-        accelY = (int)power;
+        accelX = power;
+        accelY = power;
         flying = true;
     }
     
