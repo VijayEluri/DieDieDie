@@ -390,6 +390,8 @@ public class Player implements Actor, InputProviderListener
         return yPos + ARROW_Y_OFFSET;
     } 
     
+    
+    
     /*
      * Fires an Arrow from the Player's position towards the X / Y
      * coordinates.
@@ -405,6 +407,14 @@ public class Player implements Actor, InputProviderListener
         
         System.out.println("released arrow, power " + bowCharge);        
         bowCharge = 0;
+    }
+    
+    /**
+     * Returns a list of the projectiles fired by this Player 
+     */ 
+    public List<Projectile> getFiredProjectiles()
+    {
+        return new ArrayList<Projectile>(firedArrows);
     }
     
     /*

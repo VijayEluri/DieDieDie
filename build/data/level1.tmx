@@ -42,7 +42,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="background" width="40" height="30">
+ <layer name="background" width="40" height="30" visible="0">
   <properties>
    <property name="isvisible" value="true"/>
   </properties>
@@ -58,7 +58,7 @@
    H4sIAAAAAAAAA+2VSxLAIAhD8f6X7rYbWj4BomNmXJo8EXGJyFIWg1g4NF2+nE7l6zrX5cvJkzMxH0+qH2JfV04ln/bfenorwmfNsPD95U/zebOQ7zrD1zFfpvovyjLFF2Wz3nOVWOr35b0zn9UDnYuee4x876wqofgQPhFv1vni9ahSJx+ydzya4GNcDy3t/j7AEgAA
   </data>
  </layer>
- <layer name="platforms" width="40" height="30">
+ <layer name="platforms" width="40" height="30" visible="0">
   <properties>
    <property name="isvisible" value="true"/>
   </properties>
@@ -66,7 +66,7 @@
    H4sIAAAAAAAAA+2VOw7AIAxDcwgYuf81u3RgIMKQDxbCUkbiR5uYIiJFKQaxcGh6fDbdypd1r8dn04pPlfx8vOn7eZzL8onk097bldna4UM9EL5Kzrfq5bnXFr6MfDk1fyO1vxCmbL4m+3zIf47SjKmBPaI0Y2PnQ3t4+nruxW6+ZPD1XlHy4tNq9jZaerPmC7oXfY8ojfIkis86O+x87PUBrKmyRsASAAA=
   </data>
  </layer>
- <layer name="objects" width="40" height="30">
+ <layer name="objects" width="40" height="30" visible="0">
   <properties>
    <property name="isvisible" value="false"/>
   </properties>

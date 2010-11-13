@@ -20,8 +20,7 @@ import org.diediedie.actors.Direction;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.State;
 import org.diediedie.actors.actions.*;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.newdawn.slick.Animation;
@@ -69,6 +68,8 @@ public class Bluey implements Enemy, StateMachine
     private Direction facing = null;
     private Level level;
     
+    private Set<LevelObject> visibleObjects;
+    
     private float xPos, yPos, tileHeight, moveSpeed = 0, oldX, oldY,
                   xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0;
    
@@ -91,6 +92,7 @@ public class Bluey implements Enemy, StateMachine
             hasSeenPlayer = false;
             setUp = true;
         }
+        visibleObjects = new HashSet<LevelObject>();
         setLevel(l);;
         xPos = t.xPos;
         yPos = t.yPos;
@@ -100,7 +102,11 @@ public class Bluey implements Enemy, StateMachine
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
-    
+    @Override
+    public Set<LevelObject> getVisibleObjects()
+    {
+        return visibleObjects;
+    }
     
     @Override
     public boolean isFSMRunning()
@@ -139,6 +145,7 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void startFSM()
     {
+        
         System.out.println(this + "\n\tstartFSM()");
         fsmRunning = true;
         setInitialState();
@@ -150,7 +157,13 @@ public class Bluey implements Enemy, StateMachine
     {
         return level;
     }
-    
+ 
+ 
+    public void addVisibleObject(LevelObject lo)
+    {
+        visibleObjects.add(lo);
+    }
+       
     @Override
     public final float getWalkSpeed()
     {

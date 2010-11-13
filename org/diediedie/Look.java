@@ -15,13 +15,8 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.actions;
-import org.diediedie.actors.actions.Action;
-import org.diediedie.actors.AnimCreator;
-import org.diediedie.actors.Enemy;
-import org.diediedie.actors.Player;
-import org.diediedie.actors.Actor;
+import org.diediedie.actors.*;
 import org.diediedie.Tile;
-import org.diediedie.actors.Direction;
 import org.newdawn.slick.geom.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
@@ -103,9 +98,33 @@ public class Look implements Action
         //List<Actor> actors = e.getLevel().getActors();
         
         checkVisibleActors(e, sh, e.getLevel().getActors());
-        
+        checkVisiblePlayerObjects(e, sh, e.getLevel().getPlayer());
     }
     
+    /*
+     * Checks the visibility of Player pl's Objects on this Level.
+     * 
+     * So far: Projectiles.
+     */ 
+    private void checkVisiblePlayerObjects(Enemy e, Shape sh, Player pl)
+    {
+
+        List<Point> points;
+        
+        for(Projectile pr : pl.getFiredProjectiles())
+        {
+            points = new ArrayList<Point>();
+            points.add(new Point(pr.getX(), pr.getY()));
+            points.add(new Point(pr.getEndX(), pr.getEndY()));
+         
+            if(hasPointInsideShape(points, sh) 
+                && (!isViewBlocked(e, sh, points.get(0)) 
+                ||  !isViewBlocked(e, sh, points.get(1))))
+            {
+                System.out.println(e + " can see " + pr);
+            }
+        }
+    }
     
     /*
      * Checks for the visibility of the other Actors on the Level to 
@@ -134,18 +153,22 @@ public class Look implements Action
     private boolean actorInView(Shape sh, Actor a)
     {
         final Shape r = AnimCreator.getCurrentFrameRect(a);
-      
-        final float[][] points = 
+        
+        List<Point> points = new ArrayList<Point>();
+        
+        points.add(new Point(r.getX(), r.getY()));
+        points.add(new Point(r.getX() + r.getWidth(), r.getY()));
+        points.add(new Point(r.getX() + r.getWidth(), r.getY() + r.getHeight()));
+        points.add(new Point(r.getX(), r.getY() + r.getHeight()));
+  
+        return hasPointInsideShape(points, sh);
+    }
+    
+    private boolean hasPointInsideShape(List<Point> points, Shape sh)
+    {
+        for(final Point p : points)
         {
-            { r.getX(), r.getY() },
-            { r.getX() + r.getWidth(), r.getY() },
-            { r.getX() + r.getWidth(), r.getY() + r.getHeight() },
-            { r.getX(), r.getY() + r.getHeight()}
-        };
-            
-        for(final float[] p : points)
-        {
-            if(sh.contains(p[0], p[1]))
+            if(sh.contains(p.x, p.y))
             {
                 return true;
             }
@@ -158,20 +181,22 @@ public class Look implements Action
      */ 
     public boolean actorIsVisible(Enemy e, Shape sh, Actor a)
     {
-        if(actorInView(sh, a) && !isViewBlocked(e, sh, a))
+        final float[] pos = AnimCreator.getCurrentFrameRect(a).getCenter();
+        final Point p = new Point(pos[0], pos[1]);
+        
+        if(actorInView(sh, a) && !isViewBlocked(e, sh, p))
         {
             return true;
         }  
         return false;
     }
     
-    private boolean isViewBlocked(Enemy e, Shape sh, Actor a)
+    
+    private boolean isViewBlocked(Enemy e, Shape sh, Point pos)
     {
-        // create line from the view start to the Player. 
-        // if unobstructed, return false
-         
-        final float[] pos = AnimCreator.getCurrentFrameRect(a).getCenter();
-        sightLine = new Line(e.getEyePosX(), e.getEyePosY(), pos[0], pos[1]);
+        // create line from the view start to the x/y coord pos. 
+        // if unobstructed, return false        
+        sightLine = new Line(e.getEyePosX(), e.getEyePosY(), pos.x, pos.y);
        
         if(e.getLevel().collides(sightLine))
         {

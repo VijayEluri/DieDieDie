@@ -14,11 +14,10 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
 package org.diediedie.actors;
-
 import org.diediedie.actors.Direction;
 import org.newdawn.slick.Graphics;
+import java.util.*;
 
 /**
  * Enemy ACTORS! The sheer bloody bastards!
@@ -38,6 +37,9 @@ public interface Enemy extends Actor
     
     void setHasSeenPlayer(boolean b);
     void setCanSeenPlayer(boolean b);
+    
+    Set<LevelObject> getVisibleObjects();
+    void addVisibleObject(LevelObject lo);
     
     boolean isMoving();  
     Graphics getGraphics();
