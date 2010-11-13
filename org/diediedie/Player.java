@@ -309,14 +309,14 @@ public class Player implements Actor, InputProviderListener
         if(currentArrow.getAngle() >= 0)
         {
             currentBow = bowRight;   
-            setFacingDir(Direction.RIGHT);
+            setFacing(Direction.RIGHT);
             bowX = xPos + BOW_X_OFFSET + (getCurrentFrameWidth() / 2);
             currentBow.setRotation(currentArrow.getAngle() 
                                    - BOW_ANGLE_OFFSET);
         }
         else
         {
-            setFacingDir(Direction.LEFT);
+            setFacing(Direction.LEFT);
             currentBow = bowLeft;   
             bowX = xPos - BOW_X_OFFSET;
             currentBow.setRotation(currentArrow.getAngle() 
@@ -420,7 +420,8 @@ public class Player implements Actor, InputProviderListener
     /*
      * Sets the direction the Player is facing
      */ 
-    private void setFacingDir(Direction dir)
+    @Override
+    public void setFacing(Direction dir)
     {
         facing = dir;
         if(!running)
@@ -439,7 +440,7 @@ public class Player implements Actor, InputProviderListener
             resetAccelX();
         }
         moving = dir;
-        setFacingDir(dir);
+        setFacing(dir);
         //System.out.println("setMovingDir: " + dir);
     }
     

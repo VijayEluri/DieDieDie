@@ -27,7 +27,8 @@ public interface Enemy extends Actor
     float getViewSize();
     void setMoveSpeed(float f);
     void setMoving(boolean b);
-    void setFacing(Direction d);
+    
+    
         
     float getEyePosX();
     float getEyePosY();

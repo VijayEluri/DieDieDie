@@ -40,6 +40,7 @@ public interface Actor extends MovableObject
     float getXSpeed();
 
     Direction getFacing();
+    void setFacing(Direction d);
     
     int getHealth();
     void die();

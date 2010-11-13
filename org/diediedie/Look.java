@@ -27,7 +27,8 @@ import java.lang.Math;
 import org.newdawn.slick.geom.GeomUtil;
 
 /**
- * Look at the immediate area in the current Direction. 
+ * Look at the immediate area in the current Direction for LevelObjects
+ * (enemies, Player...)
  */
 public class Look implements Action
 {
@@ -227,8 +228,8 @@ public class Look implements Action
     {
         //private final int EYE_ANG_UP = 50, EYE_ANG_DOWN = 140; 
         // now using stored radians instead of degrees
-        private final float EYE_ANG_UP = 0.872664625f, //0.7853982f, 
-                            EYE_ANG_DOWN = 2.44346095f; //2.3561945f;
+        private final float EYE_ANG_UP = 0.872664625f, 
+                            EYE_ANG_DOWN = 2.44346095f; 
         
         private Line topLine, botLine;
         private Path fovShape;
@@ -254,12 +255,12 @@ public class Look implements Action
             return (Shape)fovShape;
         }
         
-        private float fastSin(float x, float radians)
+        public float fastSin(float x, float radians)
         {
             return x + viewSize * (float)FastTrig.sin(radians);
         }
 
-        private float fastCos(float y, float radians)
+        public float fastCos(float y, float radians)
         {
             return y - viewSize * (float)FastTrig.cos(radians);
         }
