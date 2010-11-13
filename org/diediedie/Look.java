@@ -108,7 +108,6 @@ public class Look implements Action
      */ 
     private void checkVisiblePlayerObjects(Enemy e, Shape sh, Player pl)
     {
-
         List<Point> points;
         
         for(Projectile pr : pl.getFiredProjectiles())
@@ -118,10 +117,11 @@ public class Look implements Action
             points.add(new Point(pr.getEndX(), pr.getEndY()));
          
             if(hasPointInsideShape(points, sh) 
-                && (!isViewBlocked(e, sh, points.get(0)) 
-                ||  !isViewBlocked(e, sh, points.get(1))))
+                && (!isViewBlocked(e, points.get(0)) 
+                ||  !isViewBlocked(e, points.get(1))))
             {
-                System.out.println(e + " can see " + pr);
+                e.addVisibleObject(pr);
+                //System.out.println(e + " can see " + pr);
             }
         }
     }
@@ -184,15 +184,18 @@ public class Look implements Action
         final float[] pos = AnimCreator.getCurrentFrameRect(a).getCenter();
         final Point p = new Point(pos[0], pos[1]);
         
-        if(actorInView(sh, a) && !isViewBlocked(e, sh, p))
+        if(actorInView(sh, a) && !isViewBlocked(e, p))
         {
             return true;
         }  
         return false;
     }
     
-    
-    private boolean isViewBlocked(Enemy e, Shape sh, Point pos)
+    /*
+     * Returns true if a line from Enemy e's eye position to the given
+     * position collides with any obstacles on the Level.
+     */ 
+    private boolean isViewBlocked(Enemy e, Point pos)
     {
         // create line from the view start to the x/y coord pos. 
         // if unobstructed, return false        
@@ -222,10 +225,10 @@ public class Look implements Action
      */ 
     class View 
     {
-        //private final int EYE_ANG_UP = 45, EYE_ANG_DOWN = 135; 
+        //private final int EYE_ANG_UP = 50, EYE_ANG_DOWN = 140; 
         // now using stored radians instead of degrees
-        private final float EYE_ANG_UP = 0.7853982f, 
-                            EYE_ANG_DOWN = 2.3561945f;
+        private final float EYE_ANG_UP = 0.872664625f, //0.7853982f, 
+                            EYE_ANG_DOWN = 2.44346095f; //2.3561945f;
         
         private Line topLine, botLine;
         private Path fovShape;

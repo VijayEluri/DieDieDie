@@ -62,7 +62,7 @@ public class Bluey implements Enemy, StateMachine
     
     private boolean setUp = false, canJump = false, moving = false,
                     canSeePlayer = false, hasSeenPlayer = false,
-                    fsmRunning = false;
+                    fsmRunning = false, seenPlayerEvidence = false;
                     
     private int health;
     private Direction facing = null;
@@ -194,6 +194,19 @@ public class Bluey implements Enemy, StateMachine
         {
             currentAnim = rightWalkAnim;
         }
+    }
+    
+ 
+    @Override
+    public boolean hasSeenPlayerEvidence()
+    {
+        return seenPlayerEvidence;
+    }
+    
+    @Override
+    public void setSeenPlayerEvidence(boolean b)
+    {
+        seenPlayerEvidence = b;
     }
     
     @Override
