@@ -14,9 +14,7 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-
 package org.diediedie;
-
 import java.util.*;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
@@ -28,14 +26,24 @@ import org.newdawn.slick.geom.Rectangle;
  */ 
 public class Tile
 {   
-    final float ROUNDING = 0.999f;
+    final float ROUNDING = 0.9999f;    
+    public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
+    public float xPos, yPos, endX, endY;
+    private TiledMap tiledMap;
+    private Rectangle rect;
+    public Map<String, String> properties = new HashMap<String, String>();
+    
+    public static final String[] PROPERTIES = {"type", "name"};
+    public static final String[] VALUES = {"exit", "enemy", "start",
+                                           "bluey"};
+    public static final String NULL = "NULL";
+    
     /**
-     * Creates a Tile from a tile at specified coordinates (x,y). If
+     * Constructs a Tile from a tile at specified coordinates (x,y). If
      * this is a collision 
      */ 
     public Tile(TiledMap map, int xCoord, int yCoord, int layer)
     {
-        
         this.tiledMap = map;
         tileWidth = map.getTileWidth();
         tileHeight = map.getTileHeight();
@@ -48,17 +56,6 @@ public class Tile
         
         // System.out.println("new " + this);
     }
-    
-    public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
-    public float xPos, yPos;
-    private TiledMap tiledMap;
-    private Rectangle rect;
-    public Map<String, String> properties = new HashMap<String, String>();
-    
-    public static final String[] PROPERTIES = {"type", "name"};
-    public static final String[] VALUES = {"exit", "enemy", "start",
-                                           "bluey"};
-    public static final String NULL = "NULL";
     
         
     private void extractProperties()
@@ -82,17 +79,25 @@ public class Tile
         
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
+        
         rect = new Rectangle(xPos, yPos, tileWidth + ROUNDING, 
                              tileHeight + ROUNDING);
+        
+        endX = xPos + tileWidth + ROUNDING;
+        endY = yPos + tileHeight + ROUNDING;
+        
     }
+        
+    public float getXPos() { return xPos; }
+    public float getYPos() { return yPos; }
+
+    public int getXCoord() { return xCoord; }
+    public int getYCoord() { return yCoord; }
     
     /**
      * Returns the rectangular bounding box of this tile on the Level.
      */ 
-    public Rectangle getRect()
-    {
-        return rect;
-    }
+    public Rectangle getRect() { return rect; }
     
     /**
      * 

@@ -15,6 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie;
+
 import java.io.*;
 import java.util.*;
 import org.diediedie.actors.Direction;
@@ -94,6 +95,11 @@ public class Level extends TiledMap
     public Player getPlayer()
     {
         return player;
+    }
+    
+    public MapLayer getCollisionLayer()
+    {
+        return collisionLayer;
     }
     
     /**
@@ -266,6 +272,8 @@ public class Level extends TiledMap
         }
         return false;
     }
+    
+    
     
     /**
      * Returns true if the x / y coordinate position supplied is inside

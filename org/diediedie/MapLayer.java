@@ -41,6 +41,22 @@ public class MapLayer
         System.out.println(toString());
     }
     
+    /**
+     * Returns true if a Tile with the given coordinates exists in the
+     * MapLayer.
+     */ 
+    public boolean containsTile(int xCoord, int yCoord)
+    {
+        for(Tile t : tiles)
+        {
+            if(t.getXCoord() == xCoord && t.getYCoord() == yCoord)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public String toString()
     {
         return "MapLayer: tileCount " + tiles.size() + ", index " 

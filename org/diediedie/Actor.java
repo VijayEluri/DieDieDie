@@ -25,23 +25,24 @@ import org.newdawn.slick.Animation;
 public interface Actor extends MovableObject
 {            
     public static final int ANIM_DURATION = 100;
+    int getHealth();
+    
+    Animation getCurrentAnim();
     
     boolean canJump();
+    
     void setJump(boolean b);
     void applySpeed(Direction d);
     void jump();
+    void die();
+    void setFacing(Direction d);
+    void resetAccelX();
+    
+    Direction getFacing();
     
     float getJumpSpeed();
     float getMoveSpeed();    
-    
-    void resetAccelX();
-    Animation getCurrentAnim(); 
     float getYSpeed();
     float getXSpeed();
-
-    Direction getFacing();
-    void setFacing(Direction d);
     
-    int getHealth();
-    void die();
 }  
