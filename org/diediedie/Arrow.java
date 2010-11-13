@@ -50,7 +50,7 @@ public class Arrow implements Projectile
                         MAX_ANGLE_CHANGE = 1.6f, 
                         GRAVITY_LINE = 1f, 
                         MOVE_SPEED = 0.5f, 
-                        MAX_Y_SPEED = 20.5f,
+                        MAX_Y_SPEED = 24.5f,
                         FALLING_ANGLE_CHANGE = 0.25f;
                         
     private final int REVERSE = 180;

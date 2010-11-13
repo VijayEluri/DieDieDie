@@ -76,16 +76,14 @@ public class Tile
      */ 
     private void calculatePosition()
     {        
-        
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
         
         rect = new Rectangle(xPos, yPos, tileWidth + ROUNDING, 
-                             tileHeight + ROUNDING);
-        
+                                         tileHeight + ROUNDING);
+                                         
         endX = xPos + tileWidth + ROUNDING;
         endY = yPos + tileHeight + ROUNDING;
-        
     }
         
     public float getXPos() { return xPos; }
@@ -97,14 +95,15 @@ public class Tile
     /**
      * Returns the rectangular bounding box of this tile on the Level.
      */ 
-    public Rectangle getRect() { return rect; }
+    public Rectangle getRect() { return rect; }    
     
     /**
      * 
      */ 
     public String toString()
     {
-        return "Tile: [xPos, yPos], [endX, endY], layer: [" + xPos + ", " + 
+        return "Tile: [xCoord, yCoord], [xPos, yPos], [endX, endY], layer: [" 
+                + xCoord + ", " + yCoord + "], ["+ xPos + ", " + 
                 yPos + "], [" + (xPos+tileWidth) + ", " 
                 + (yPos+tileHeight) + "] " + layer;
     }

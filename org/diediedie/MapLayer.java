@@ -47,10 +47,16 @@ public class MapLayer
      */ 
     public boolean containsTile(int xCoord, int yCoord)
     {
+        if(xCoord < 0 || yCoord < 0)
+        {
+            return false;
+        }
         for(Tile t : tiles)
         {
             if(t.getXCoord() == xCoord && t.getYCoord() == yCoord)
             {
+                /*System.out.println(this + "|\tContains " +
+                                xCoord + ", " + yCoord);*/
                 return true;
             }
         }

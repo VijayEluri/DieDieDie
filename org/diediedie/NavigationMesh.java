@@ -44,7 +44,7 @@ public class NavigationMesh
     /**
      * Generates a NavigationMesh from a Level(TileBasedMap)
      */ 
-    public static class NavigationMeshMaker
+    public static class MeshMaker
     {
         /**
          * Generates a NavigationMesh for the given Level.
@@ -56,17 +56,53 @@ public class NavigationMesh
             return null;
         }
         
+        /*
+         * Examines collision tiles and saves those which have negative
+         * space above them, then sorts them into groups depending on
+         * their relative positions.
+         */ 
         private static void createWalkableZones(Level l)
         {           
             Set<Line> walkableZones = new HashSet<Line>();
-            List<Tile> ledgeTiles = getLedgeTiles(l);
+            List<Tile> ledgeTiles   = getLedgeTiles(l);
+            Set<Tile> checkedTiles  = new HashSet<Tile>();
+            
+            System.out.println("Entered createWalkableZones:");
             
             for(Tile t : ledgeTiles)
             {
-                
+                if(!checkedTiles.contains(t))
+                {
+                    /*System.out.println("\t" + "Checking collision "
+                                    + " tile " + t.getXCoord() + ", "
+                                    + t.getYCoord());
+                    */
+                    
+                    checkedTiles.add(t);
+                }
             }
-            
-            
+        }
+   
+        
+        /*
+         * Returns true if two given Tiles are +/- by one horizontally
+         * and equal vertically. [ | | | | ] 
+         */ 
+        private static boolean areHorizontalNeighbours(Tile original,
+                                                       Tile possible)
+        {
+            if(original.getYCoord() == possible.getYCoord())
+            {
+                if(possible.getXCoord() == (original.getXCoord()+1)
+                    ||
+                   possible.getXCoord() == (original.getXCoord()-1))
+                {
+                    System.out.println("hori neighbours: " + original +
+                                        ", " + possible);
+                    return true;   
+                }
+            }
+            return false;
         }
         
         /*
@@ -75,25 +111,41 @@ public class NavigationMesh
         private static List<Tile> getLedgeTiles(Level l)
         {
             MapLayer colls = l.getCollisionLayer();
-            List<Tile> tiles = colls.tiles;
             List<Tile> ledgeTiles = new ArrayList<Tile>();
-
-            for(Tile t : tiles)
+            
+            System.out.println("Entered getLedgeTiles(Level):");
+            
+            for(Tile t : colls.tiles)
             { 
-                // check if there is negative space above this Tile
-                // naturally if at vertical position 0, there can't be an 
-                // 'above'
+                // naturally if at vertical position 0, there can't be a
+                // 'higher' level
                 if(t.getYCoord() > 0)
-                {
-                    if(!colls.containsTile(t.getYCoord() - 1, t.getXCoord()))
+                {        
+                    if(isLedgeTile(t, colls))
                     {
                         // ok got an empty space so add t to ledgeTiles
                         ledgeTiles.add(t);
                     }
                 }
             }
+            
             return ledgeTiles;
         }
         
+        /*
+         * Returns true if there is no collision tile above a given 
+         * collision tile.
+         */
+        private static boolean isLedgeTile(Tile test, MapLayer colls)
+        {
+            if(!colls.containsTile(test.getXCoord(), test.getYCoord()-1))
+            {
+                /*System.out.println("Tile " + test.getXCoord() + ", "
+                                           + test.getYCoord()
+                                           + " is ledge tile");*/
+                return true;
+            }
+            return false;
+        } 
     }
 }

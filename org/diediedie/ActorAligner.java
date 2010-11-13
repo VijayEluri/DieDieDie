@@ -11,14 +11,6 @@ public class ActorAligner
 {
     public static final float INCR = 0.01f;
     
-    public static boolean collides(Actor a)
-    {
-        if(a.getLevel().collides(AnimCreator.getCurrentFrameRect(a)))
-        {
-            return true;
-        }
-        return false;
-    }
     
     /**
      * Aligns a collided Actor to a non-colliding part of the Level.
@@ -26,7 +18,7 @@ public class ActorAligner
     public static void alignToObstacle(Actor a)
     {
         // finally, put the Player as close to the obstacle as possible
-        while(!collides(a))
+        while(!Collider.collidesLevel(a))
         {
             // here 'canJump' is used to discern the direction of the
             // collision; i.e. a 'true' value indicates (hopefully) 

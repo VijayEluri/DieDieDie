@@ -17,6 +17,7 @@
  
 package org.diediedie.actors;
 import org.diediedie.Level;
+import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Collider;
 import org.diediedie.actors.Aligner;
@@ -196,8 +197,17 @@ public class Player implements Actor, InputProviderListener
         {
             public void	mousePressed(int button, int x, int y) 
             {
+                
                 if(button == BOW_BUTTON)
-                {
+                {       
+                    Tile c = getLevel().getCollisionTileAt(x, y);
+                    if(c != null)
+                    {
+                        System.out.println("Mouse pressed Tile " +
+                                            c.getXCoord() + ", " + 
+                                            c.getYCoord());
+                    }
+                    
                     mouseX = x;
                     mouseY = y;  
                     readyArrow();

@@ -18,6 +18,8 @@ package org.diediedie;
 
 import java.io.*;
 import java.util.*;
+import org.diediedie.NavigationMesh;
+import org.diediedie.NavigationMesh.MeshMaker;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.*;
 import org.newdawn.slick.tiled.TiledMap;
@@ -49,7 +51,7 @@ public class Level extends TiledMap
     public final Direction playerFacing;
     
     private String name;
-    
+    private NavigationMesh navMesh;
     private final String VIS_STR = "isvisible", TRUE_STR = "true", 
                          FALSE_STR = "false", PLATFORM_STR = "platforms";
     
@@ -81,11 +83,16 @@ public class Level extends TiledMap
         platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
         enemies = new ArrayList<Actor>();
-        
         sortObjects();
+        createNavMesh();
     }   
     
+    private void createNavMesh()
+    {
+        navMesh = MeshMaker.generateMesh(this);
+    }
     
+   
     
     public void associatePlayer(Player p)
     {
@@ -202,6 +209,11 @@ public class Level extends TiledMap
             {
                 if(getTileId(x, y, index) != NOT_PRESENT)
                 {
+                    if(index == getLayerIndex("collisions"))
+                    {
+                        System.out.println("new collision Tile. Coords: "
+                                          + x + ", " + y);
+                    }
                     tiles.add(new Tile(this, x, y, index));
                 }
             }
@@ -228,6 +240,8 @@ public class Level extends TiledMap
     {
         return p1.intersects(p2);
     }
+    
+    
     
     public void render(int x, int y)
     {
@@ -267,6 +281,13 @@ public class Level extends TiledMap
         {
             if(t.getRect().intersects(p))
             {
+                
+                /*System.out.println("[Shape [origin " + 
+                                new Throwable().fillInStackTrace()
+                                .getStackTrace()[3].getFileName()
+                                  + "] collision with Tile " +
+                                t.getXCoord() + ", " + t.getYCoord()
+                                + "]"); */
                 return true;
             }
         }
@@ -289,6 +310,18 @@ public class Level extends TiledMap
             }
         }
         return false;
+    }
+    
+    public Tile getCollisionTileAt(float x, float y)
+    {
+        for(Tile t : collisionLayer.tiles)
+        {
+           if(t.getRect().contains(x, y))
+           {
+               return t;
+           }   
+        }
+        return null;
     }
     
 }
