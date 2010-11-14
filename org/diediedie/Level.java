@@ -209,11 +209,11 @@ public class Level extends TiledMap
             {
                 if(getTileId(x, y, index) != NOT_PRESENT)
                 {
-                    if(index == getLayerIndex("collisions"))
+                    /*if(index == getLayerIndex("collisions"))
                     {
                         System.out.println("new collision Tile. Coords: "
                                           + x + ", " + y);
-                    }
+                    }*/
                     tiles.add(new Tile(this, x, y, index));
                 }
             }
@@ -240,9 +240,7 @@ public class Level extends TiledMap
     {
         return p1.intersects(p2);
     }
-    
-    
-    
+        
     public void render(int x, int y)
     {
         // keep the ordering!
@@ -283,11 +281,11 @@ public class Level extends TiledMap
             {
                 
                 /*System.out.println("[Shape [origin " + 
-                                new Throwable().fillInStackTrace()
-                                .getStackTrace()[3].getFileName()
-                                  + "] collision with Tile " +
-                                t.getXCoord() + ", " + t.getYCoord()
-                                + "]"); */
+                                    new Throwable().fillInStackTrace()
+                                    .getStackTrace()[3].getFileName()
+                                      + "] collision with Tile " +
+                                    t.getXCoord() + ", " + t.getYCoord()
+                                    + "]"); */
                 return true;
             }
         }

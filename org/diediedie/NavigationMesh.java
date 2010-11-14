@@ -29,13 +29,14 @@ import java.util.*;
  */ 
 public class NavigationMesh
 {
-    List<Line> walkableZones;
-    public NavigationMesh(Level l)
+    Collection<Line> walkableZones;
+    
+    public NavigationMesh()
     {
         
     }
 
-    public List<Line> getWalkableZones()
+    public Collection<Line> getWalkableZones()
     {
         return walkableZones;
     }
@@ -46,6 +47,9 @@ public class NavigationMesh
      */ 
     public static class MeshMaker
     {
+        static Collection<Tile> ledgeTiles;
+        static Collection<Line> walkableZones;
+        
         /**
          * Generates a NavigationMesh for the given Level.
          */ 
@@ -63,26 +67,64 @@ public class NavigationMesh
          */ 
         private static void createWalkableZones(Level l)
         {           
-            Set<Line> walkableZones = new HashSet<Line>();
-            List<Tile> ledgeTiles   = getLedgeTiles(l);
-            Set<Tile> checkedTiles  = new HashSet<Tile>();
-            
-            System.out.println("Entered createWalkableZones:");
+            ledgeTiles = getLedgeTiles(l);
+            walkableZones = linkLedgeTiles(ledgeTiles);            
+        }
+        
+        
+        private static void printTileCollection(Collection<Tile> c)
+        {
+            for(Tile t : c)
+            {
+                System.out.println("\t" + t.getXCoord() + ", " +
+                                          t.getYCoord());
+            }
+        }
+        
+        /*
+         * Links together adjacent the Tiles found with getLedgeTiles.
+         */ 
+        private static Collection<Line> linkLedgeTiles(Collection<Tile> 
+                                                             ledgeTiles)
+        {
+            Collection<Tile> checkedTiles = new HashSet<Tile>();
+            Collection<Line> platforms;
+            Collection<Tile> neighbours;
             
             for(Tile t : ledgeTiles)
             {
                 if(!checkedTiles.contains(t))
                 {
-                    /*System.out.println("\t" + "Checking collision "
-                                    + " tile " + t.getXCoord() + ", "
-                                    + t.getYCoord());
-                    */
-                    
-                    checkedTiles.add(t);
+                    neighbours = new HashSet<Tile>();
+                    getNeighbours(t, ledgeTiles, neighbours);
+                    checkedTiles.addAll(neighbours); 
+                    //System.out.println("Ledge row: " );
+                    //printTileCollection(neighbours);                  
+                }
+            }
+            
+            return null;
+        }
+        
+        /*
+         * Returns the Tiles in a given collection that form a ledge,
+         * starting from a given Tile.
+         */ 
+        private static void getNeighbours(Tile t, Collection<Tile> 
+                                          ledgeTiles, Collection<Tile> dest)
+        {            
+            for(Tile l : ledgeTiles)
+            {
+                if(!dest.contains(l))
+                {
+                    if(areHorizontalNeighbours(t, l))
+                    {
+                        dest.add(l);
+                        getNeighbours(l, ledgeTiles, dest);
+                    }
                 }
             }
         }
-   
         
         /*
          * Returns true if two given Tiles are +/- by one horizontally
@@ -97,8 +139,8 @@ public class NavigationMesh
                     ||
                    possible.getXCoord() == (original.getXCoord()-1))
                 {
-                    System.out.println("hori neighbours: " + original +
-                                        ", " + possible);
+                   /* System.out.println("hori neighbours: " + original +
+                                        ", " + possible);*/
                     return true;   
                 }
             }
@@ -106,24 +148,22 @@ public class NavigationMesh
         }
         
         /*
-         * Returns collision Tiles from the Level which  
+         * Finds the collision Tiles from the Level that can be used as
+         * ledges.   
          */ 
-        private static List<Tile> getLedgeTiles(Level l)
+        private static Collection<Tile> getLedgeTiles(Level l)
         {
             MapLayer colls = l.getCollisionLayer();
-            List<Tile> ledgeTiles = new ArrayList<Tile>();
-            
-            System.out.println("Entered getLedgeTiles(Level):");
+            Collection<Tile> ledgeTiles = new ArrayList<Tile>();
             
             for(Tile t : colls.tiles)
             { 
                 // naturally if at vertical position 0, there can't be a
-                // 'higher' level
+                // 'higher' level (read: lower number)
                 if(t.getYCoord() > 0)
                 {        
                     if(isLedgeTile(t, colls))
                     {
-                        // ok got an empty space so add t to ledgeTiles
                         ledgeTiles.add(t);
                     }
                 }
@@ -141,8 +181,7 @@ public class NavigationMesh
             if(!colls.containsTile(test.getXCoord(), test.getYCoord()-1))
             {
                 /*System.out.println("Tile " + test.getXCoord() + ", "
-                                           + test.getYCoord()
-                                           + " is ledge tile");*/
+                             + test.getYCoord() + " is ledge tile");*/
                 return true;
             }
             return false;
