@@ -45,15 +45,15 @@ public class MapLayer
      * Returns true if a Tile with the given coordinates exists in the
      * MapLayer.
      */ 
-    public boolean containsTile(int xCoord, int yCoord)
+    public boolean containsTile(int x, int y)
     {
-        if(xCoord < 0 || yCoord < 0)
+        if(x < 0 || y < 0)
         {
             return false;
         }
         for(Tile t : tiles)
         {
-            if(t.getXCoord() == xCoord && t.getYCoord() == yCoord)
+            if(t.xCoord == x && t.yCoord == y)
             {
                 /*System.out.println(this + "|\tContains " +
                                 xCoord + ", " + yCoord);*/

@@ -76,8 +76,8 @@ public class NavigationMesh
         {
             for(Tile t : c)
             {
-                System.out.println("\t" + t.getXCoord() + ", " +
-                                          t.getYCoord());
+                System.out.println("\t" + t.xCoord + ", " +
+                                          t.yCoord);
             }
         }
         
@@ -88,7 +88,7 @@ public class NavigationMesh
                                                              ledgeTiles)
         {
             Collection<Tile> checkedTiles = new HashSet<Tile>();
-            Collection<Line> platforms;
+            Collection<Line> platforms = new HashSet<Line>();;
             Collection<Tile> neighbours;
             
             for(Tile t : ledgeTiles)
@@ -98,6 +98,8 @@ public class NavigationMesh
                     neighbours = new HashSet<Tile>();
                     getNeighbours(t, ledgeTiles, neighbours);
                     checkedTiles.addAll(neighbours); 
+                    
+                    platforms.add(getLedgeLine(neighbours));
                     //System.out.println("Ledge row: " );
                     //printTileCollection(neighbours);                  
                 }
@@ -106,10 +108,53 @@ public class NavigationMesh
             return null;
         }
         
-        
+        /*
+         * Returns a Line from the start to the end of a collection
+         * of connected ledge Tiles. 
+         */ 
         private static Line getLedgeLine(Collection<Tile> ledge)
         {
-            return null;
+            if(ledge.isEmpty())
+            {
+                return null;
+            }
+            // get the first and last tiles on the horizontal plain
+            Tile first = null, last = null;
+            
+            for(Tile t : ledge)
+            {
+                if(first == null)
+                {
+                    first = t;
+                }
+                else
+                {
+                    if(t.xCoord < first.xCoord)
+                    {
+                        first = t;
+                    }
+                }
+                if(last == null)
+                {
+                    last = t;
+                }
+                else
+                {
+                    if(t.xCoord > first.xCoord)
+                    {
+                        last = t;
+                    }
+                }
+            }
+            
+            System.out.println("Ledge: tiles [" +  first.xCoord +
+                                ", " + first.yCoord + "], to [" +
+                                last.xCoord + ", " + last.yCoord + "]");
+                                
+            System.out.println("\tLine: [" + first.xPos + ", " + 
+                                first.yPos + "], " + " [" + last.endX +
+                                ", " + last.endY);
+            return new Line(first.xPos, first.yPos, last.endX, last.endY);
         }
         
         /*
@@ -139,11 +184,11 @@ public class NavigationMesh
         private static boolean areHorizontalNeighbours(Tile original,
                                                        Tile possible)
         {
-            if(original.getYCoord() == possible.getYCoord())
+            if(original.yCoord == possible.yCoord)
             {
-                if(possible.getXCoord() == (original.getXCoord()+1)
+                if(possible.xCoord == (original.xCoord + 1)
                     ||
-                   possible.getXCoord() == (original.getXCoord()-1))
+                   possible.xCoord == (original.xCoord - 1))
                 {
                    /* System.out.println("hori neighbours: " + original +
                                         ", " + possible);*/
@@ -166,7 +211,7 @@ public class NavigationMesh
             { 
                 // naturally if at vertical position 0, there can't be a
                 // 'higher' level (read: lower number)
-                if(t.getYCoord() > 0)
+                if(t.yCoord > 0)
                 {        
                     if(isLedgeTile(t, colls))
                     {
@@ -174,7 +219,6 @@ public class NavigationMesh
                     }
                 }
             }
-            
             return ledgeTiles;
         }
         
@@ -184,10 +228,10 @@ public class NavigationMesh
          */
         private static boolean isLedgeTile(Tile test, MapLayer colls)
         {
-            if(!colls.containsTile(test.getXCoord(), test.getYCoord()-1))
+            if(!colls.containsTile(test.xCoord, test.yCoord - 1))
             {
-                /*System.out.println("Tile " + test.getXCoord() + ", "
-                             + test.getYCoord() + " is ledge tile");*/
+                /*System.out.println("Tile " + test.xCoord + ", "
+                             + test.yCoord + " is ledge tile");*/
                 return true;
             }
             return false;

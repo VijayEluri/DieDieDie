@@ -284,7 +284,7 @@ public class Level extends TiledMap
                                     new Throwable().fillInStackTrace()
                                     .getStackTrace()[3].getFileName()
                                       + "] collision with Tile " +
-                                    t.getXCoord() + ", " + t.getYCoord()
+                                    t.xCoord + ", " + t.yCoord
                                     + "]"); */
                 return true;
             }

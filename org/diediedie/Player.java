@@ -204,8 +204,8 @@ public class Player implements Actor, InputProviderListener
                     if(c != null)
                     {
                         System.out.println("Mouse pressed Tile " +
-                                            c.getXCoord() + ", " + 
-                                            c.getYCoord());
+                                            c.xCoord + ", " + 
+                                            c.yCoord);
                     }
                     
                     mouseX = x;
