@@ -45,13 +45,13 @@ public class Arrow implements Projectile
                         ACCEL_RATE = 0.089f, 
                         AIR_REST = 0.7f,
                         MAX_GRAVITY = 26f, 
-                        GRAVITY_INCR = 0.085f, 
-                        ANGLE_CHANGE_INCR = 0.2f,
+                        GRAVITY_INCR = 0.1f, 
+                        ANGLE_CHANGE_INCR = 0.15f,
                         MAX_ANGLE_CHANGE = 1.6f, 
                         GRAVITY_LINE = 1f, 
                         MOVE_SPEED = 0.6f, 
                         MAX_Y_SPEED = 24.5f,
-                        FALLING_ANGLE_CHANGE = 0.25f;
+                        FALLING_ANGLE_CHANGE = 0.26f;
                         
     private final int REVERSE = 180;
     private Level level = null;
@@ -76,6 +76,7 @@ public class Arrow implements Projectile
         {
             gravity += GRAVITY_INCR;
         } 
+        // System.out.println(this + "| grav: " + gravity);
     }
         
 

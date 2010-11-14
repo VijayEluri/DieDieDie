@@ -106,6 +106,12 @@ public class NavigationMesh
             return null;
         }
         
+        
+        private static Line getLedgeLine(Collection<Tile> ledge)
+        {
+            return null;
+        }
+        
         /*
          * Returns the Tiles in a given collection that form a ledge,
          * starting from a given Tile.
