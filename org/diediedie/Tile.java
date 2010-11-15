@@ -26,7 +26,7 @@ import org.newdawn.slick.geom.Rectangle;
  */ 
 public class Tile
 {   
-    final float ROUNDING = 0.9999f;    
+    final float ROUNDING = 0.999f;    
     public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
     public float xPos, yPos, endX, endY;
     private TiledMap tiledMap;
@@ -58,6 +58,10 @@ public class Tile
         // System.out.println("new " + this);
     }
     
+    public String getCoords()
+    {
+        return new String("[" + xCoord + ", " + yCoord + "]");
+    }
         
     private void extractProperties()
     {

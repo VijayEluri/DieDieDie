@@ -21,14 +21,10 @@ import org.newdawn.slick.Graphics;
 import org.diediedie.Level;
 
 /**
- * Super-interface for any interactive thing that exists on a Level. 
+ * Something drawable on a Level.
  */ 
-public interface LevelObject extends Drawable
+public interface Drawable
 {
-    void update();
     void draw(Graphics g);
-    Level getLevel();
-
-    float getX();
-    float getY();  
+    void setLevel(Level l);
 }

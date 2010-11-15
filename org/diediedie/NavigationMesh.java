@@ -15,28 +15,52 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie;
+import org.diediedie.actors.*;
 import java.io.*;
 import java.util.*;
 import org.diediedie.actors.*;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.*;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Color;
 
 import java.util.*;
 
 /**
  * A single level...
  */ 
-public class NavigationMesh
+public class NavigationMesh implements Drawable
 {
-    Collection<Line> walkableZones;
+    private Collection<Shape> walkableZones;
+    private Level level; 
+    private Color color = Color.green;
     
-    public NavigationMesh()
+    public NavigationMesh(Level l, Collection<Shape> walkables)
     {
-        
+        level = l;
+        walkableZones = walkables;
     }
-
-    public Collection<Line> getWalkableZones()
+    
+    @Override
+    public void setLevel(Level l)
+    {
+        level = l;
+    }
+    
+    @Override
+    public void draw(Graphics g)
+    {
+        g.setColor(color);
+        for(Shape l : walkableZones)
+        {
+            if(l != null)
+            {
+                g.draw(l);
+            }
+        }
+    }
+    
+    public Collection<Shape> getWalkableZones()
     {
         return walkableZones;
     }
@@ -48,7 +72,7 @@ public class NavigationMesh
     public static class MeshMaker
     {
         static Collection<Tile> ledgeTiles;
-        static Collection<Line> walkableZones;
+        static Collection<Shape> walkableZones;
         
         /**
          * Generates a NavigationMesh for the given Level.
@@ -57,20 +81,66 @@ public class NavigationMesh
         {
             createWalkableZones(l);
             
-            return null;
+            return new NavigationMesh(l, walkableZones);
         }
         
         /*
          * Examines collision tiles and saves those which have negative
-         * space above them, then sorts them into groups depending on
-         * their relative positions.
-         */ 
+         * space above them. 
+         */
         private static void createWalkableZones(Level l)
-        {           
+        {   
+            Line line;        
             ledgeTiles = getLedgeTiles(l);
-            walkableZones = linkLedgeTiles(ledgeTiles);            
+            Set<Tile> checked = new HashSet<Tile>();
+            walkableZones = new HashSet<Shape>();
+            
+            Tile end = null;
+
+            
+            for(Tile start : ledgeTiles)
+            {
+                if(!checked.contains(start) && start != null)
+                {
+                    end = getEndTile(start, ledgeTiles);
+                    line = makeWalkLine(start, end);
+                    walkableZones.add(line);
+                }
+            }
         }
         
+        /*
+         * Returns the last Tile linked to the right of the given Tile.  
+         * Recursively. B)
+         */ 
+        private static Tile getEndTile(Tile start, Collection<Tile> tiles)
+        {
+            for(Tile t : tiles)
+            {
+                if(t.yCoord == start.yCoord)
+                {
+                    if(t.xCoord == start.xCoord + 1)
+                    {
+                        return getEndTile(t, tiles);
+                    }
+                }
+                
+            }
+            return start;
+        }
+        
+        /*
+         * Returns a line from the top surface of 2 (collision) Tiles
+         */ 
+        private static Line makeWalkLine(Tile start, Tile prev)
+        {
+            System.out.println("\tnew walk line from " 
+                    + start.getCoords() + " | to | " + prev.getCoords()); 
+            Line line = new Line(start.xPos, start.yPos, prev.endX, prev.yPos);
+            start = null;
+            prev = null;
+            return line;
+        }
         
         private static void printTileCollection(Collection<Tile> c)
         {
@@ -78,102 +148,6 @@ public class NavigationMesh
             {
                 System.out.println("\t" + t.xCoord + ", " +
                                           t.yCoord);
-            }
-        }
-        
-        /*
-         * Links together adjacent the Tiles found with getLedgeTiles.
-         */ 
-        private static Collection<Line> linkLedgeTiles(Collection<Tile> 
-                                                             ledgeTiles)
-        {
-            Collection<Tile> checkedTiles = new HashSet<Tile>();
-            Collection<Line> platforms = new HashSet<Line>();;
-            Collection<Tile> neighbours;
-            
-            for(Tile t : ledgeTiles)
-            {
-                if(!checkedTiles.contains(t))
-                {
-                    neighbours = new HashSet<Tile>();
-                    getNeighbours(t, ledgeTiles, neighbours);
-                    checkedTiles.addAll(neighbours); 
-                    
-                    platforms.add(getLedgeLine(neighbours));
-                    //System.out.println("Ledge row: " );
-                    //printTileCollection(neighbours);                  
-                }
-            }
-            
-            return null;
-        }
-        
-        /*
-         * Returns a Line from the start to the end of a collection
-         * of connected ledge Tiles. 
-         */ 
-        private static Line getLedgeLine(Collection<Tile> ledge)
-        {
-            if(ledge.isEmpty())
-            {
-                return null;
-            }
-            // get the first and last tiles on the horizontal plain
-            Tile first = null, last = null;
-            
-            for(Tile t : ledge)
-            {
-                if(first == null)
-                {
-                    first = t;
-                }
-                else
-                {
-                    if(t.xCoord < first.xCoord)
-                    {
-                        first = t;
-                    }
-                }
-                if(last == null)
-                {
-                    last = t;
-                }
-                else
-                {
-                    if(t.xCoord > first.xCoord)
-                    {
-                        last = t;
-                    }
-                }
-            }
-            
-            System.out.println("Ledge: tiles [" +  first.xCoord +
-                                ", " + first.yCoord + "], to [" +
-                                last.xCoord + ", " + last.yCoord + "]");
-                                
-            System.out.println("\tLine: [" + first.xPos + ", " + 
-                                first.yPos + "], " + " [" + last.endX +
-                                ", " + last.endY);
-            return new Line(first.xPos, first.yPos, last.endX, last.endY);
-        }
-        
-        /*
-         * Returns the Tiles in a given collection that form a ledge,
-         * starting from a given Tile.
-         */ 
-        private static void getNeighbours(Tile t, Collection<Tile> 
-                                          ledgeTiles, Collection<Tile> dest)
-        {            
-            for(Tile l : ledgeTiles)
-            {
-                if(!dest.contains(l))
-                {
-                    if(areHorizontalNeighbours(t, l))
-                    {
-                        dest.add(l);
-                        getNeighbours(l, ledgeTiles, dest);
-                    }
-                }
             }
         }
         
@@ -219,6 +193,7 @@ public class NavigationMesh
                     }
                 }
             }
+            
             return ledgeTiles;
         }
         

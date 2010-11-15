@@ -139,10 +139,20 @@ public class Look implements Action
             {
                 if(a.getClass().equals(e.getLevel().getPlayer().getClass()))
                 {
+                    // first check if this has already been set; 
+                    if(!e.canSeePlayer())
+                    {
+                      // if so, we don't print out the following
+                        System.out.println("Player is now visible to  " + e + "!");
+                    }
                     e.setCanSeenPlayer(true);
-                    System.out.println("Player is visible to  " + e + "!");
                 }
             }
+        }
+        // again, check if it's been set already for debugging info
+        if(e.canSeePlayer())
+        {
+            System.out.println("Player is no long visible to  " + e + "!");
         }
         e.setCanSeenPlayer(false);        
     }

@@ -91,9 +91,7 @@ public class Level extends TiledMap
     {
         navMesh = MeshMaker.generateMesh(this);
     }
-    
-   
-    
+        
     public void associatePlayer(Player p)
     {
         player = p;        
@@ -255,6 +253,7 @@ public class Level extends TiledMap
     public void draw(Graphics g)
     {
         render(0, 0);
+        navMesh.draw(g);
         drawEnemies(g);
     }
     
