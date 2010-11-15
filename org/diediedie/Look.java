@@ -135,25 +135,18 @@ public class Look implements Action
     {
         for(Actor a : actors)
         {
-            if(actorIsVisible(e, sh, a))
+            if(a.hashCode() != e.hashCode())
             {
-                if(a.getClass().equals(e.getLevel().getPlayer().getClass()))
+                if(actorIsVisible(e, sh, a))
                 {
-                    // first check if this has already been set; 
-                    if(!e.canSeePlayer())
+                    if(a.getClass().equals(e.getLevel().getPlayer().getClass()))
                     {
-                      // if so, we don't print out the following
-                        System.out.println("Player is now visible to  " + e + "!");
+                        e.setCanSeenPlayer(true);
                     }
-                    e.setCanSeenPlayer(true);
                 }
             }
         }
-        // again, check if it's been set already for debugging info
-        if(e.canSeePlayer())
-        {
-            System.out.println("Player is no long visible to  " + e + "!");
-        }
+       
         e.setCanSeenPlayer(false);        
     }
     
@@ -171,7 +164,7 @@ public class Look implements Action
         points.add(new Point(r.getX() + r.getWidth(), r.getY()));
         points.add(new Point(r.getX() + r.getWidth(), r.getY() + r.getHeight()));
         points.add(new Point(r.getX(), r.getY() + r.getHeight()));
-  
+        
         return hasPointInsideShape(points, sh);
     }
     
@@ -181,9 +174,11 @@ public class Look implements Action
         {
             if(sh.contains(p.x, p.y))
             {
+           
                 return true;
             }
         }        
+        
         return false;
     }
     
@@ -197,6 +192,7 @@ public class Look implements Action
         
         if(actorInView(sh, a) && !isViewBlocked(e, p))
         {
+            System.out.println(a + " | is visible to | " + e);
             return true;
         }  
         return false;

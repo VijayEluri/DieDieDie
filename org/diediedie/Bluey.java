@@ -93,7 +93,7 @@ public class Bluey implements Enemy, StateMachine
             setUp = true;
         }
         visibleObjects = new HashSet<LevelObject>();
-        setLevel(l);;
+        setLevel(l);
         xPos = t.xPos;
         yPos = t.yPos;
         yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 

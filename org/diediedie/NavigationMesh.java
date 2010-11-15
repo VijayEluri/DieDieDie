@@ -134,9 +134,10 @@ public class NavigationMesh implements Drawable
          */ 
         private static Line makeWalkLine(Tile start, Tile prev)
         {
-            System.out.println("\tnew walk line from " 
-                    + start.getCoords() + " | to | " + prev.getCoords()); 
-            Line line = new Line(start.xPos, start.yPos, prev.endX, prev.yPos);
+            /*System.out.println("\tnew walk line from " 
+                    + start.getCoords() + " | to | " + prev.getCoords()); */
+            Line line = new Line(start.xPos, start.yPos,
+                                 prev.endX, prev.yPos);
             start = null;
             prev = null;
             return line;
