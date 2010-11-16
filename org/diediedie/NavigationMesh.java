@@ -24,23 +24,29 @@ import org.newdawn.slick.geom.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 
-import java.util.*;
 
 /**
  * NavMesh. Generated for a Level using inner class MeshMaker.
  */ 
 public class NavigationMesh implements Drawable
 {
+    // walkable zones (Lines, as we're in 2D)
     private Collection<Shape> walkableZones;
-    private Collection<Shape> airZones;
-    
+    private Collection<Shape> negativeSpace;
     private Level level; 
     private Color walkableColor = Color.green;
+    private Color negativeColor = Color.orange;
     
-    public NavigationMesh(Level l, Collection<Shape> walkables)
+    
+    /**
+     * A mesh created by MeshMaker.
+     */ 
+    public NavigationMesh(Level l, Collection<Shape> walkables,
+                                   Collection<Shape> space)
     {
-        level = l;
+        setLevel(l);
         walkableZones = walkables;
+        negativeSpace = space;
     }
     
     @Override
@@ -60,6 +66,13 @@ public class NavigationMesh implements Drawable
                 g.draw(l);
             }
         }
+        for(Shape n : negativeSpace)
+        {
+            if(n != null)
+            {
+                g.draw(n);
+            }
+        }
     }
     
     /*
@@ -70,14 +83,23 @@ public class NavigationMesh implements Drawable
         return walkableZones;
     }
 
+    /*
+     * Returns the negative space zones
+     */
+    public Collection<Shape> getNegativeSpace()
+    {
+        return negativeSpace;
+    }
     
     /**
-     * Generates a NavigationMesh from a Level(TileBasedMap)
+     * Inner class that generates a NavigationMesh from a game
+     * Level
      */ 
     public static class MeshMaker
     {
         static Collection<Tile> ledgeTiles;
         static Collection<Shape> walkableZones;
+        static Collection<Shape> negativeSpace;
         
         /**
          * Generates a NavigationMesh for the given Level.
@@ -85,7 +107,8 @@ public class NavigationMesh implements Drawable
         public static NavigationMesh generateMesh(Level l)
         {
             createWalkableZones(l);
-            return new NavigationMesh(l, walkableZones);
+            createNegativeSpace(l);
+            return new NavigationMesh(l, walkableZones, negativeSpace);
         }
         
         /*
@@ -109,6 +132,99 @@ public class NavigationMesh implements Drawable
                     walkableZones.add(line);
                 }
             }
+        }
+        
+        /*
+         * Discovers and assembles a collection of negative space for
+         * a given Level
+         */ 
+        private static void createNegativeSpace(Level l)
+        {
+            negativeSpace = new ArrayList<Shape>();
+            // ^ polygons
+            
+            List<Tile> spaces = getSpaceTiles(l);
+            List<List<Tile>> slices = slicespaces(spaces);
+            
+            for(List<Tile> sl : slices)
+            {
+                System.out.println("Slice Tiles:");
+                printTileCollection(sl);
+            }
+        }
+        
+        /*
+         * Slices up the collection of negative space Tiles into
+         * continuous vertical 'slices' for later analysis 
+         */ 
+        private static List<List<Tile>> slicespaces(List<Tile> spaces)
+        {
+            Set<Tile> checked = new HashSet<Tile>(); 
+            
+            List<List<Tile>> slices = new ArrayList<List<Tile>>();
+            
+            for(int i = 0; i < spaces.size(); ++i)
+            {
+                if(!checked.contains(spaces.get(i)))
+                {
+                    List<Tile> current = createNewVerticalSlice(
+                                                        spaces, i);
+                    checked.addAll(current);
+                    slices.add(current);
+                }
+            }
+            return slices;
+        }
+        
+        
+        /*
+         * Creates a new vertical 'slice' of Tiles starting from the 
+         * Tile at the given start position.
+         */ 
+        private static List<Tile> createNewVerticalSlice(List<Tile> 
+                                                  spaceTiles, int start)
+        {
+            int currentX = spaceTiles.get(start).xCoord;
+            int currentY = spaceTiles.get(start).yCoord;
+            
+            List<Tile> slice = new ArrayList<Tile>();
+            slice.add(spaceTiles.get(start));
+            
+            for(int i = start+1; i < spaceTiles.size(); ++i)
+            {
+                Tile t = spaceTiles.get(i);
+                if(t.xCoord == currentX)
+                {
+                    if(t.yCoord == currentY + 1)
+                    {
+                        slice.add(t);
+                        currentY = t.yCoord;
+                    }
+                } 
+            }
+            return slice;
+        }
+        
+        /*
+         * Returns a list of tiles from the background layer that do
+         * not have a copy (i.e. same coordinates) in the collision
+         * layer.
+         */ 
+        private static List<Tile> getSpaceTiles(Level l)
+        {
+            MapLayer colls = l.getCollisionLayer();
+            MapLayer bgrnd = l.getBackgroundLayer();
+            
+            List<Tile> spaceTiles = new ArrayList<Tile>();
+
+            for(Tile b : bgrnd.tiles)
+            {
+                if(!colls.containsTile(b.xCoord, b.yCoord))
+                {
+                    spaceTiles.add(b);
+                }
+            }
+            return spaceTiles;
         }
         
         /*
@@ -136,7 +252,7 @@ public class NavigationMesh implements Drawable
         private static Line makeWalkLine(Tile start, Tile prev)
         {
             /*System.out.println("\tnew walk line from " 
-                    + start.getCoords() + " | to | " + prev.getCoords()); */
+                    + start.getCoords() + " | to | " + prev.getCoords());*/
             Line line = new Line(start.xPos, start.yPos,
                                  prev.endX, prev.yPos);
             start = null;
@@ -144,12 +260,16 @@ public class NavigationMesh implements Drawable
             return line;
         }
         
+        /*
+         * Prints out information about a collection of Tiles for
+         * debugging 
+         */ 
         private static void printTileCollection(Collection<Tile> c)
         {
             for(Tile t : c)
             {
-                System.out.println("\t" + t.xCoord + ", " +
-                                          t.yCoord);
+                System.out.println("\tx: " + t.xCoord + ", y: " +
+                                   t.yCoord);
             }
         }
         
@@ -175,6 +295,29 @@ public class NavigationMesh implements Drawable
         }
         
         /*
+         * Returns true if two given Tiles are +/- by one vertically
+         * and equal horizontally
+         */ 
+        private static boolean areVerticalNeighbours(Tile original,
+                                                     Tile possible)
+        {
+            if(original.xCoord == possible.xCoord)
+            {
+                if(possible.yCoord == (original.yCoord + 1)
+                    ||
+                   possible.yCoord == (original.yCoord - 1))
+                {
+                   /* System.out.println("vert neighbours: " + original +
+                                        ", " + possible);*/
+                    return true;   
+                }
+            }
+            
+            return false;
+        }
+
+        
+        /*
          * Finds the collision Tiles from the Level that can be used as
          * ledges.   
          */ 
@@ -195,13 +338,12 @@ public class NavigationMesh implements Drawable
                     }
                 }
             }
-            
             return ledgeTiles;
         }
         
         /*
-         * Returns true if there is no collision tile above a given 
-         * collision tile.
+         * Returns true if there is no collision tile directly above a 
+         * given collision tile.
          */
         private static boolean isLedgeTile(Tile test, MapLayer colls)
         {

@@ -28,7 +28,7 @@ import org.diediedie.NavigationMesh.MeshMaker;
  */ 
 public class Mover
 {    
-    static final int INTERVAL = 32;
+    static final int INTERVAL = 8;
     
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
@@ -95,7 +95,7 @@ public class Mover
         if(!p.isFlying())
         {
             return;
-         }
+        }
         
         // calc out how much gravity we should try to apply
         final float MOST = p.getGravity();        
@@ -121,13 +121,7 @@ public class Mover
      * For publically moving Projectiles. :)
      */ 
     public static void move(Projectile p)
-    { 
-        if(Collider.collidesLevel(p))
-        {
-            p.stop();
-            return;
-        }
-               
+    {   
         float xTrav = p.getXSpeed() * p.getAirRes();
         float yTrav = p.getYSpeed();
         
@@ -135,7 +129,6 @@ public class Mover
         {
             return;
         }    
-        // doMove(p, xTrav, yTrav);
         
         final float oldX = p.getX();
         final float oldY = p.getY();

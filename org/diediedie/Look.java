@@ -48,7 +48,8 @@ public class Look implements Action
     /*
      * Resets all the vars
      */ 
-    private void reset()
+    @Override
+    public void reset()
     {
         started = false;
         finished = false;
@@ -110,7 +111,6 @@ public class Look implements Action
     private void checkVisiblePlayerObjects(Enemy e, Shape sh, Player pl)
     {
         List<Point> points;
-        
         for(Projectile pr : pl.getFiredProjectiles())
         {
             points = new ArrayList<Point>();
@@ -119,7 +119,7 @@ public class Look implements Action
          
             if(hasPointInsideShape(points, sh) 
                 && (!isViewBlocked(e, points.get(0)) 
-                ||  !isViewBlocked(e, points.get(1))))
+                    ||  !isViewBlocked(e, points.get(1))))
             {
                 e.addVisibleObject(pr);
                 //System.out.println(e + " can see " + pr);

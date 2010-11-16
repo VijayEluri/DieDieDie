@@ -97,6 +97,11 @@ public class Level extends TiledMap
         player = p;        
     }
     
+    public MapLayer getBackgroundLayer()
+    {
+        return backgroundLayer;
+    }
+    
     /**
      * Returns the shape in the nav mesh that this actor is in/on, if
      * one exists
@@ -325,6 +330,9 @@ public class Level extends TiledMap
         return false;
     }
     
+    /**
+     * Returns the collision Tile containing the given point, or null.
+     */ 
     public Tile getCollisionTileAt(float x, float y)
     {
         for(Tile t : collisionLayer.tiles)

@@ -43,7 +43,7 @@ public class Arrow implements Projectile
                   
     private final float SIZE = 18f, 
                         ACCEL_RATE = 0.089f, 
-                        AIR_REST = 0.7f,
+                        AIR_REST = 0.75f,
                         MAX_GRAVITY = 26f, 
                         GRAVITY_INCR = 0.115f, 
                         ANGLE_CHANGE_INCR = 0.15f,
@@ -51,7 +51,7 @@ public class Arrow implements Projectile
                         GRAVITY_LINE = 1f, 
                         MOVE_SPEED = 0.6f, 
                         MAX_Y_SPEED = 24.5f,
-                        FALLING_ANGLE_CHANGE = 0.375f;
+                        FALLING_ANGLE_CHANGE = 0.54f;
                         
     private final int REVERSE = 180;
     private Level level = null;
@@ -203,16 +203,16 @@ public class Arrow implements Projectile
      */
     public void updatePosition()
     {
-        oldX = startX;
-        oldY = startY;
-        
-        Mover.move(this);
         
         /*System.out.println("Arrow(" + hashCode() + ")updatePosition(): "
                             + "oldX, oldY: " + oldX + ", " + oldY
                             + "new: " + startX + ", " + startY);*/
-        Mover.applyGravity(this);
         adjustFacingAngle();
+        oldX = startX;
+        oldY = startY;
+        Mover.move(this);
+        Mover.applyGravity(this);
+        
     }
         
         

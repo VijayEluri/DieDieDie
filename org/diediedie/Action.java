@@ -28,4 +28,5 @@ public interface Action
     boolean hasFinished(); 
     void update(Enemy e);
     void draw(Graphics g);
+    void reset();
 }

@@ -39,7 +39,7 @@ public class StopWalking implements Action
     }
     
     
-    private void reset()
+    public void reset()
     {
         started = false;
         finished = false;

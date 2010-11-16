@@ -20,7 +20,7 @@ import org.newdawn.slick.Graphics;
 import java.util.*;
 
 /**
- * Enemy ACTORS! The sheer bloody bastards!
+ * Enemy. Actors with a few methods related to 'AI'.
  */ 
 public interface Enemy extends Actor
 {
@@ -28,10 +28,10 @@ public interface Enemy extends Actor
     
     void setMoveSpeed(float f);
     void setMoving(boolean b);
-        
     
     float getEyePosX();
     float getEyePosY();
+
     
     boolean canSeePlayer();
     boolean hasSeenPlayer();

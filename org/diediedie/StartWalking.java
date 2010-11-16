@@ -35,7 +35,7 @@ public class StartWalking implements Action
          reset();
     }
     
-    private void reset()
+    public void reset()
     {
         started = false;
         finished = false;
