@@ -32,6 +32,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.command.BasicCommand;
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProvider;
@@ -171,6 +172,12 @@ public class Player implements Actor, InputProviderListener
           bowRight = bowLeft.getFlippedCopy(true, false);
           currentBow = bowLeft;
     }    
+    
+    @Override
+    public Shape getZone()
+    {
+        return getLevel().getActorZone(this);
+    }
     
     @Override
     public float getMoveSpeed()

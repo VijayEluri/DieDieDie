@@ -45,17 +45,19 @@ public class Arrow implements Projectile
                         ACCEL_RATE = 0.089f, 
                         AIR_REST = 0.7f,
                         MAX_GRAVITY = 26f, 
-                        GRAVITY_INCR = 0.1f, 
+                        GRAVITY_INCR = 0.115f, 
                         ANGLE_CHANGE_INCR = 0.15f,
                         MAX_ANGLE_CHANGE = 1.6f, 
                         GRAVITY_LINE = 1f, 
                         MOVE_SPEED = 0.6f, 
                         MAX_Y_SPEED = 24.5f,
-                        FALLING_ANGLE_CHANGE = 0.27f;
+                        FALLING_ANGLE_CHANGE = 0.375f;
                         
     private final int REVERSE = 180;
     private Level level = null;
-    private boolean flying = false, collided = false, goingDown = false;
+    private boolean flying = false, 
+                    collided = false, 
+                    goingDown = false;
     
     /**
      * Creates a new arrow at the given position.
@@ -68,6 +70,7 @@ public class Arrow implements Projectile
         setMovementAngle(mouseX, mouseY);
         calculateEndPos();
     }
+    
     
     @Override
     public void increaseGravityEffect()
@@ -113,7 +116,7 @@ public class Arrow implements Projectile
      */ 
     public void release(float power)
     {
-        accelX = power;
+        accelX = power * AIR_REST;
         accelY = power;
         flying = true;
     }

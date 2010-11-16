@@ -146,7 +146,6 @@ public class Look implements Action
                 }
             }
         }
-       
         e.setCanSeenPlayer(false);        
     }
     

@@ -21,6 +21,7 @@ import org.diediedie.actors.Direction;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.geom.Shape;
 
 public interface Actor extends MovableObject
 {            
@@ -37,6 +38,8 @@ public interface Actor extends MovableObject
     void die();
     void setFacing(Direction d);
     void resetAccelX();
+    Shape getZone();
+    
     
     Direction getFacing();
     

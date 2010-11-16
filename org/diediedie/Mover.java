@@ -17,10 +17,12 @@
 package org.diediedie.actors;
 import java.lang.Math;
 import org.newdawn.slick.util.FastTrig;
+import org.newdawn.slick.geom.*;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Collider;
 import org.diediedie.actors.Aligner;
-
+import org.diediedie.NavigationMesh;
+import org.diediedie.NavigationMesh.MeshMaker;
 /**
  * Class used to Actors and Projectiles around a Level. 
  */ 
@@ -45,7 +47,7 @@ public class Mover
         a.setY(a.getY() + a.getYSpeed());
         
         if(Collider.collidesLevel(a))
-        {            
+        {        
             if(a.getY() >= oldY)
             {
                 a.setJump(true);
@@ -93,7 +95,7 @@ public class Mover
         if(!p.isFlying())
         {
             return;
-        }
+         }
         
         // calc out how much gravity we should try to apply
         final float MOST = p.getGravity();        
@@ -106,13 +108,9 @@ public class Mover
             p.stop();
             while(Collider.collidesLevel(p))
             {
-                final float oldY = p.getY();
+                //final float oldY = p.getY();
                 p.setY(p.getY() - Aligner.INCR);
                 p.calculateEndPos();
-                /*
-                System.out.print("adjusting [" + p); 
-                System.out.println("]\t oldY: " + oldY + ", newY: " + 
-                                   p.getY());*/
             }
         }
         //System.out.println("applyGravity(p), yTrav: " + yTrav);
@@ -144,8 +142,6 @@ public class Mover
 
         float xMove = xTrav / INTERVAL;
         float yMove = yTrav / INTERVAL;
-        
-        
         
         int i = 0;
         

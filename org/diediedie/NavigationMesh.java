@@ -27,13 +27,15 @@ import org.newdawn.slick.Color;
 import java.util.*;
 
 /**
- * A single level...
+ * NavMesh. Generated for a Level using inner class MeshMaker.
  */ 
 public class NavigationMesh implements Drawable
 {
     private Collection<Shape> walkableZones;
+    private Collection<Shape> airZones;
+    
     private Level level; 
-    private Color color = Color.green;
+    private Color walkableColor = Color.green;
     
     public NavigationMesh(Level l, Collection<Shape> walkables)
     {
@@ -50,7 +52,7 @@ public class NavigationMesh implements Drawable
     @Override
     public void draw(Graphics g)
     {
-        g.setColor(color);
+        g.setColor(walkableColor);
         for(Shape l : walkableZones)
         {
             if(l != null)
@@ -60,6 +62,9 @@ public class NavigationMesh implements Drawable
         }
     }
     
+    /*
+     * Returns the walkable zones (excluding non-surface negative spaces)  
+     */
     public Collection<Shape> getWalkableZones()
     {
         return walkableZones;
@@ -80,7 +85,6 @@ public class NavigationMesh implements Drawable
         public static NavigationMesh generateMesh(Level l)
         {
             createWalkableZones(l);
-            
             return new NavigationMesh(l, walkableZones);
         }
         
@@ -94,9 +98,7 @@ public class NavigationMesh implements Drawable
             ledgeTiles = getLedgeTiles(l);
             Set<Tile> checked = new HashSet<Tile>();
             walkableZones = new HashSet<Shape>();
-            
             Tile end = null;
-
             
             for(Tile start : ledgeTiles)
             {
@@ -124,7 +126,6 @@ public class NavigationMesh implements Drawable
                         return getEndTile(t, tiles);
                     }
                 }
-                
             }
             return start;
         }

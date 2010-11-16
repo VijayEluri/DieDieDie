@@ -97,6 +97,23 @@ public class Level extends TiledMap
         player = p;        
     }
     
+    /**
+     * Returns the shape in the nav mesh that this actor is in/on, if
+     * one exists
+     */ 
+    public Shape getActorZone(Actor a)
+    {
+        Rectangle r = AnimCreator.getCurrentFrameRect(a);
+        for(Shape s : getNavMesh().getWalkableZones())
+        {
+            if(r.intersects(s))
+            {
+                return s;
+            }
+        }
+        return null;
+    }
+    
     public Player getPlayer()
     {
         return player;
@@ -193,25 +210,24 @@ public class Level extends TiledMap
         return name;
     }
     
+    public NavigationMesh getNavMesh()
+    {
+        return navMesh;
+    }
+    
     /*
      * Creates a map layer by retrieving the data from the Tiled file
      * at the given index
      */ 
     private MapLayer createMapLayer(int index)
     {
-        List<Tile> tiles = new ArrayList<Tile>();
-                
+        List<Tile> tiles = new ArrayList<Tile>();  
         for(int x = 0; x < getWidth(); x++)
         {
             for(int y = 0; y < getHeight(); y++)
             {
                 if(getTileId(x, y, index) != NOT_PRESENT)
                 {
-                    /*if(index == getLayerIndex("collisions"))
-                    {
-                        System.out.println("new collision Tile. Coords: "
-                                          + x + ", " + y);
-                    }*/
                     tiles.add(new Tile(this, x, y, index));
                 }
             }
@@ -253,7 +269,7 @@ public class Level extends TiledMap
     public void draw(Graphics g)
     {
         render(0, 0);
-        //navMesh.draw(g);
+        navMesh.draw(g);
         drawEnemies(g);
     }
     

@@ -25,11 +25,11 @@ import java.util.*;
 public interface Enemy extends Actor
 {
     float getViewSize();
+    
     void setMoveSpeed(float f);
     void setMoving(boolean b);
-    
-    
         
+    
     float getEyePosX();
     float getEyePosY();
     
