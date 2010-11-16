@@ -28,7 +28,7 @@ import org.diediedie.NavigationMesh.MeshMaker;
  */ 
 public class Mover
 {    
-    static final int INTERVAL = 8;
+    static final int INTERVAL = 2;
     
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.

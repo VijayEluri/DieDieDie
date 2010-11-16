@@ -145,12 +145,29 @@ public class NavigationMesh implements Drawable
             
             List<Tile> spaces = getSpaceTiles(l);
             List<List<Tile>> slices = slicespaces(spaces);
+            Map<Shape, List<Tile>> sliceMap = mapSlices(slices);
+        }
+        
+        /*
+         * Combines together compatible slices of Tiles, then creates
+         * a Shape mesh for each new group, then finally returns a 
+         * <Shape, List<Tile>> map.
+         */ 
+        private static Map<Shape, List<Tile>> mapSlices(List<List<Tile>>
+                                                                 slices)
+        {       
+            int currentX, currentY;
+            System.out.println("demarcate()");
             
-            for(List<Tile> sl : slices)
+            for(List<Tile> tl : slices)
             {
-                System.out.println("Slice Tiles:");
-                printTileCollection(sl);
-            }
+                currentX = tl.get(0).xCoord;
+                currentY = tl.get(0).yCoord;
+                System.out.println("Vert.Slice:\n\t" + "currentX: " + currentX + ", "
+                                   + "currentY: " + currentY);
+            }   
+            
+            return null;
         }
         
         /*
