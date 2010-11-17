@@ -3,7 +3,7 @@ import org.diediedie.actors.Direction;
 import org.diediedie.Level;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.*;
 
 // arrow / bullet etc
 public interface Projectile extends MovableObject
@@ -16,11 +16,13 @@ public interface Projectile extends MovableObject
     
     boolean isFlying();
     float getAngle();
-
+    
+    Shape getShape();
+    
     float getGravityLine();    
     float getGravity();
     float getMaxGravity();
-    float getGravityIncr();
+
     void increaseGravityEffect();
     
     boolean isGoingDown();

@@ -19,7 +19,7 @@ package org.diediedie.actors;
 import org.diediedie.Level;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.*;
 import org.newdawn.slick.util.FastTrig;
  
 /**
@@ -32,6 +32,18 @@ import org.newdawn.slick.util.FastTrig;
  */ 
 public class Arrow implements Projectile
 {      
+    // constants
+    private final float SIZE = 18f, 
+                        AIR_REST = 0.85f,
+                        MAX_GRAVITY = 26f, 
+                        GRAVITY_INCR = 0.115f, 
+                        ANGLE_CHANGE_INCR = 0.15f,
+                        MAX_ANGLE_CHANGE = 1.6f, 
+                        GRAVITY_LINE = 1f, 
+                        MOVE_SPEED = 0.6f, 
+                        MAX_Y_SPEED = 24.5f,
+                        FALLING_ANGLE_CHANGE = 0.44f;
+                        
     private float mouseX, mouseY,
                   startX, startY, oldX, oldY, 
                   endX, endY, 
@@ -40,21 +52,9 @@ public class Arrow implements Projectile
                   movementAngle = 90, 
                   gravity = 0f, 
                   facingAngle = 0, angleChange = 0.01f;
-                  
-    private final float SIZE = 18f, 
-                        ACCEL_RATE = 0.089f, 
-                        AIR_REST = 0.75f,
-                        MAX_GRAVITY = 26f, 
-                        GRAVITY_INCR = 0.115f, 
-                        ANGLE_CHANGE_INCR = 0.15f,
-                        MAX_ANGLE_CHANGE = 1.6f, 
-                        GRAVITY_LINE = 1f, 
-                        MOVE_SPEED = 0.6f, 
-                        MAX_Y_SPEED = 24.5f,
-                        FALLING_ANGLE_CHANGE = 0.54f;
-                        
-    private final int REVERSE = 180;
+                                      
     private Level level = null;
+
     private boolean flying = false, 
                     collided = false, 
                     goingDown = false;
@@ -80,19 +80,14 @@ public class Arrow implements Projectile
             gravity += GRAVITY_INCR;
         } 
         // System.out.println(this + "| grav: " + gravity);
-    }
-        
+    }  
 
     @Override
     public void setLevel(Level l)
     {
         level = l;
     }
-    
-    public final float getGravityIncr()
-    {
-        return GRAVITY_INCR;
-    }
+
     
     public final float getMaxGravity()
     {
@@ -117,7 +112,7 @@ public class Arrow implements Projectile
     public void release(float power)
     {
         accelX = power * AIR_REST;
-        accelY = power;
+        accelY = power * AIR_REST;
         flying = true;
     }
     
@@ -166,6 +161,13 @@ public class Arrow implements Projectile
         setXSpeed(MOVE_SPEED * accelX);
         setYSpeed(MOVE_SPEED * accelY);
     }
+    
+    @Override
+    public Shape getShape()
+    {
+        return new Line(startX, startY, endX, endY);   
+    }
+    
     
     @Override
     public void setX(float f)

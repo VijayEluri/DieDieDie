@@ -91,9 +91,56 @@ public class NavigationMesh implements Drawable
         return negativeSpace;
     }
     
+    /*
+     * Utility class for dealing with a vertical line of adjacent Tiles
+     */ 
+    public static class Slice 
+    {
+        public List<Tile> tiles = null;
+         
+        public Slice(List<Tile> t)
+        {
+            tiles = t;
+            if(!hasValidTiles())
+            {
+                throw new IllegalStateException("Invalid Slice");
+            }
+        }
+        
+        /*
+         * Returns true if the Tile list is invalid (i.e. each tile has 
+         * the same xCoord as the previous one and its yCoord == the 
+         * previous yCoord + 1
+         */ 
+        public boolean hasValidTiles()
+        {
+            if(tiles.isEmpty())
+            {
+                return false;
+            }
+            if(tiles.size() == 1)
+            {
+                return true;
+            }
+            
+            int x = tiles.get(0).xCoord;
+            int y = tiles.get(0).yCoord;
+            
+            for(int i = 1; i < tiles.size(); ++i)
+            {
+                Tile cur = tiles.get(i);
+                if(cur.xCoord != x || cur.yCoord != y + 1)
+                {
+                    return false;    
+                }
+                y = cur.yCoord;
+            }
+            return true;
+        }
+    }
+    
     /**
-     * Inner class that generates a NavigationMesh from a game
-     * Level
+     * Inner class that generates a NavigationMesh from a Level
      */ 
     public static class MeshMaker
     {
@@ -142,51 +189,66 @@ public class NavigationMesh implements Drawable
         {
             negativeSpace = new ArrayList<Shape>();
             // ^ polygons
-            
             List<Tile> spaces = getSpaceTiles(l);
-            List<List<Tile>> slices = slicespaces(spaces);
+            List<Slice> slices = sliceSpaces(spaces);
             Map<Shape, List<Tile>> sliceMap = mapSlices(slices);
         }
         
         /*
-         * Combines together compatible slices of Tiles, then creates
-         * a Shape mesh for each new group, then finally returns a 
-         * <Shape, List<Tile>> map.
+         * Combines compatible slices of Tiles together, then creates
+         * a Shape mesh for each new group, finally returning a 
+         * map, with Shape keys to slice values.
          */ 
-        private static Map<Shape, List<Tile>> mapSlices(List<List<Tile>>
-                                                                 slices)
+        private static Map<Shape, List<Tile>> mapSlices(List<Slice> 
+                                                        slices)
         {       
-            int currentX, currentY;
-            System.out.println("demarcate()");
+            Slice prevSlice;
+            Tile tile;
+            boolean started = false;
             
-            for(List<Tile> tl : slices)
-            {
-                currentX = tl.get(0).xCoord;
-                currentY = tl.get(0).yCoord;
-                System.out.println("Vert.Slice:\n\t" + "currentX: " + currentX + ", "
-                                   + "currentY: " + currentY);
+            System.out.println("mapSlices(): ");
+            
+            for(Slice s: slices)
+            { 
+
+                if(!started)
+                {
+                    tile = s.tiles.get(0);
+                    
+                    System.out.println("\tStart slice: " + 
+                             tile.xCoord + ", " + tile.yCoord + " to " 
+                                + s.tiles.get(s.tiles.size()-1).yCoord);
+                    
+                    // save reference to first slice 
+                    prevSlice = s;
+                    started = true;
+                }
+                else
+                {
+                    
+                }
             }   
             
             return null;
         }
         
+        
+        
         /*
          * Slices up the collection of negative space Tiles into
          * continuous vertical 'slices' for later analysis 
          */ 
-        private static List<List<Tile>> slicespaces(List<Tile> spaces)
+        private static List<Slice> sliceSpaces(List<Tile> spaces)
         {
             Set<Tile> checked = new HashSet<Tile>(); 
-            
-            List<List<Tile>> slices = new ArrayList<List<Tile>>();
+            List<Slice> slices = new ArrayList<Slice>();
             
             for(int i = 0; i < spaces.size(); ++i)
             {
                 if(!checked.contains(spaces.get(i)))
                 {
-                    List<Tile> current = createNewVerticalSlice(
-                                                        spaces, i);
-                    checked.addAll(current);
+                    Slice current = createNewVerticalSlice(spaces, i);
+                    checked.addAll(current.tiles);
                     slices.add(current);
                 }
             }
@@ -198,14 +260,14 @@ public class NavigationMesh implements Drawable
          * Creates a new vertical 'slice' of Tiles starting from the 
          * Tile at the given start position.
          */ 
-        private static List<Tile> createNewVerticalSlice(List<Tile> 
+        private static Slice createNewVerticalSlice(List<Tile> 
                                                   spaceTiles, int start)
         {
             int currentX = spaceTiles.get(start).xCoord;
             int currentY = spaceTiles.get(start).yCoord;
             
-            List<Tile> slice = new ArrayList<Tile>();
-            slice.add(spaceTiles.get(start));
+            List<Tile> sliceTiles = new ArrayList<Tile>();
+            sliceTiles.add(spaceTiles.get(start));
             
             for(int i = start+1; i < spaceTiles.size(); ++i)
             {
@@ -214,12 +276,13 @@ public class NavigationMesh implements Drawable
                 {
                     if(t.yCoord == currentY + 1)
                     {
-                        slice.add(t);
+                        sliceTiles.add(t);
                         currentY = t.yCoord;
                     }
                 } 
             }
-            return slice;
+            Slice sl = new Slice(sliceTiles);
+            return sl;
         }
         
         /*
