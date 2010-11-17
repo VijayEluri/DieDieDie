@@ -23,12 +23,12 @@ import org.diediedie.actors.Collider;
 import org.diediedie.actors.Aligner;
 import org.diediedie.NavigationMesh;
 import org.diediedie.NavigationMesh.MeshMaker;
+
 /**
  * Class used to Actors and Projectiles around a Level. 
  */ 
 public class Mover
 {    
-    // keep INTERVAL a prime number. 
     static final int INTERVAL = 11;
     
     /**
@@ -131,7 +131,15 @@ public class Mover
             return;
         }    
         
-        final float oldX = p.getX();
+        if(!doMove(p, xTrav, yTrav, p.getAngle()))
+        {
+            float reverse = p.getAngle() + 180;
+            float xMove = xTrav / INTERVAL; 
+            float yMove = xTrav / INTERVAL;
+            while(!doMove(p, xMove, yMove, reverse));
+        }
+        
+        /*final float oldX = p.getX();
         final float oldY = p.getY();
 
         float xMove = xTrav / INTERVAL;
@@ -142,7 +150,7 @@ public class Mover
         while(i < INTERVAL && doMove(p, xMove, yMove, p.getAngle()))
         {
             ++i;
-        }
+        }*/
         
     }
     
@@ -163,8 +171,8 @@ public class Mover
      */
     public static float getNewYPos(Projectile p, float yTrav, float angle)
     {
-       return p.getY() - yTrav * (float)FastTrig.cos(Math.toRadians(
-                                                           angle));
+       return p.getY() - yTrav * 
+                (float)FastTrig.cos(Math.toRadians(angle));
     }
     
     /*
@@ -179,16 +187,12 @@ public class Mover
     private static boolean doMove(Projectile p, float xTrav, float yTrav,    
                                   float angle)
     {
-       
-        
         p.setX(getNewXPos(p, xTrav, angle));
         p.setY(getNewYPos(p, yTrav, angle));        
-        
         p.calculateEndPos();
 
         if(Collider.collidesLevel(p))
         {
-            p.calculateEndPos();
             p.stop();
             return false;
         }

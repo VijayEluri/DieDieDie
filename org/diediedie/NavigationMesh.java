@@ -140,6 +140,19 @@ public class NavigationMesh implements Drawable
     }
     
     /**
+     * A bunch of connected, identically-shaped Slices.
+     */ 
+    public static class SliceGroup
+    {
+        public List<Slice> slices;
+        
+        public SliceGroup(List<Slice> s)
+        {
+            slices = s;
+        }
+    }
+    
+    /**
      * Inner class that generates a NavigationMesh from a Level
      */ 
     public static class MeshMaker
@@ -202,7 +215,7 @@ public class NavigationMesh implements Drawable
         private static Map<Shape, List<Tile>> mapSlices(List<Slice> 
                                                         slices)
         {       
-            Slice prevSlice;
+            Slice prevSlice = null;
             Tile tile;
             boolean started = false;
             
@@ -210,29 +223,48 @@ public class NavigationMesh implements Drawable
             
             for(Slice s: slices)
             { 
-
                 if(!started)
                 {
-                    tile = s.tiles.get(0);
-                    
-                    System.out.println("\tStart slice: " + 
-                             tile.xCoord + ", " + tile.yCoord + " to " 
-                                + s.tiles.get(s.tiles.size()-1).yCoord);
-                    
-                    // save reference to first slice 
+                    // save reference to current slice 
                     prevSlice = s;
+                    
+                    // and the starting tile inside it for future
+                    // comparisons
+                    tile = s.tiles.get(0);                    
                     started = true;
                 }
                 else
                 {
-                    
+                    if(areCompatible(prevSlice, s))
+                    {
+                        System.out.println("Compatible Slices");
+                        printTileCollection(prevSlice.tiles);
+                        System.out.println("\t-----------");
+                        printTileCollection(s.tiles);
+                    }
                 }
             }   
             
             return null;
         }
         
-        
+        /*
+         * Returns true if two given Slices can be joined to make a 
+         * Rectangle.
+         */ 
+        private static boolean areCompatible(Slice a, Slice b)
+        {
+            
+            Tile aTile = a.tiles.get(0), bTile = b.tiles.get(0);            
+            if(b.tiles.size() == a.tiles.size())
+            {
+                if(bTile.xCoord == aTile.xCoord + 1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         
         /*
          * Slices up the collection of negative space Tiles into
