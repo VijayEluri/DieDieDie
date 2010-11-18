@@ -18,8 +18,8 @@ package org.diediedie;
 
 import java.io.*;
 import java.util.*;
-import org.diediedie.NavigationMesh;
-import org.diediedie.NavigationMesh.MeshMaker;
+import org.diediedie.NavMesh;
+import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.*;
 import org.newdawn.slick.tiled.TiledMap;
@@ -51,7 +51,7 @@ public class Level extends TiledMap
     public final Direction playerFacing;
     
     private String name;
-    private NavigationMesh navMesh;
+    private NavMesh navMesh;
     private final String VIS_STR = "isvisible", TRUE_STR = "true", 
                          FALSE_STR = "false", PLATFORM_STR = "platforms";
     
@@ -215,7 +215,7 @@ public class Level extends TiledMap
         return name;
     }
     
-    public NavigationMesh getNavMesh()
+    public NavMesh getNavMesh()
     {
         return navMesh;
     }

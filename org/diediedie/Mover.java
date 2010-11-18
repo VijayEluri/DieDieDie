@@ -21,8 +21,8 @@ import org.newdawn.slick.geom.*;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Collider;
 import org.diediedie.actors.Aligner;
-import org.diediedie.NavigationMesh;
-import org.diediedie.NavigationMesh.MeshMaker;
+import org.diediedie.NavMesh;
+import org.diediedie.NavMesh.MeshMaker;
 
 /**
  * Class used to Actors and Projectiles around a Level. 
