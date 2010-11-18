@@ -168,7 +168,8 @@ public class NavMesh implements Drawable
     }
     
     /**
-     * A bunch of connected, identically-shaped Slices.
+     * A bunch of connected, identically-shaped and horizontally 
+     * adjacent Slices.
      */ 
     public static class SliceGroup
     {
@@ -176,7 +177,7 @@ public class NavMesh implements Drawable
         private Shape rect = null;
         
         /**
-         * 
+         * Assembles a group from a list.
          */ 
         public SliceGroup(List<Slice> s)
         {
@@ -187,9 +188,7 @@ public class NavMesh implements Drawable
             slices = s;
             createShape();
         }
-        
-        
-        
+                
         /*
          * Creates a Shape encompassing the 
          */ 
@@ -226,32 +225,52 @@ public class NavMesh implements Drawable
             return false;
         }
         
+        /**
+         * Returns the last slice from this group
+         */ 
         public Slice getEndSlice()
         {
             return slices.get(slices.size() - 1);
         }
         
+        
+        /**
+         * Returns the first slice from this group
+         */ 
         public Slice getStartSlice()
         {
             return slices.get(0);
         }
         
         /**
-         * Returns the Shape encompassing this group of Slices
+         * Returns a Shape encompassing this group of Slices
          */ 
         public Shape getShape()
         {
             return rect;
         }
         
-        /*
+        /**
+         * Attempts to add the contents of the given SliceGroup to 
+         * this. 
+         * 
+         * Returns the amount of Slices from the given SliceGroup
+         * that have been successfully moved.
+         */ 
+        public int addGroup(SliceGroup other)
+        {
+            
+            return 0;
+        }
+        
+        /**
          * Prints out the contents of each slice in the group
          */ 
         public void printGroupInfo()
         {
             PrintStream out = System.out;
-            out.println("SliceGroup " + hashCode() + " (" + slices.size()
-                            + " slices) : ");
+            out.println("SliceGroup " + hashCode() + 
+                        " (" + slices.size() + " slices) : ");
            
             for(Slice s : slices)
             {
@@ -318,15 +337,22 @@ public class NavMesh implements Drawable
             
             /*final int ITER = 10;
             int size = 0;*/
-            
             groups.addAll(combineSlices(slices));
-            System.out.println("\tSliceGroups: " + groups.size());   
+            combineGroups(groups);
                                                
             for(SliceGroup g : groups)
             {
-                g.printGroupInfo();
                 negativeSpace.add(g.getShape());
-            }
+            }            
+        }
+        
+        /*
+         * Attempts to combine any (and all) of the given SliceGroups
+         * together.
+         */ 
+        private static void combineGroups(List<SliceGroup> groups)
+        {
+            
         }
         
         /*
@@ -337,34 +363,22 @@ public class NavMesh implements Drawable
          */
         private static List<SliceGroup> combineSlices(List<Slice> slices)
         {                   
-            ListIterator<Slice> slit = slices.listIterator();
             List<SliceGroup> groups = new ArrayList<SliceGroup>();
-             
-            // store the current lot of compatible Slices here when
-            // traversing the given list
-            List<Slice> currentSlices = new ArrayList<Slice>();
-            
-            // store successfully combined slices here so we can remove
-            // them from the given list
-            List<Slice> combinedSlices = new ArrayList<Slice>();
-            
+               
             
             while(!slices.isEmpty())
             {
                 System.out.println("createNewGroup (" + slices.size() +
                                 " slices left)");
-                SliceGroup sg = createNewGroup(slices);
-                
-                groups.add(sg);
+                groups.add(createNewGroup(slices));
             }
             
             return groups;
         }
         
+        
         /*
-         * Creates a new SliceGroup from the given Slice list
-         * 
-         * 
+         * Creates a new SliceGroup from the first given Slice list
          */ 
         private static SliceGroup createNewGroup(List<Slice> allSlices)
         {
@@ -375,70 +389,15 @@ public class NavMesh implements Drawable
             
             Slice first = allSlices.get(0);
             allSlices.remove(0);
+            
             List<Slice> currentSlices = new LinkedList<Slice>();
             currentSlices.add(first);
             
             SliceGroup sg = new SliceGroup(currentSlices);
-            
-            while(addAllPossible(sg, allSlices) > 0);
-            
-            
+         
             return sg;
         }
         
-        
-        /**
-         * Adds as many slices to the given SliceGroup as possible.
-         * 
-         * Any slices added to the given group are removed from the
-         * given List.
-         * 
-         * If the group is empty the first element from the given 
-         * list is used
-         * 
-         * Returns the amount added (zero of higher). 
-         */ 
-        private static int addAllPossible(SliceGroup g, 
-                                          List<Slice> slices)
-        {
-            boolean addition = false;
-            int count = 0;
-            
-            if(slices.isEmpty())
-            {
-                return 0;
-            }
-            
-            if(g.slices.isEmpty())
-            {
-                g.addSlice(slices.get(0));
-                slices.remove(0);
-                ++count;
-                addition = true;
-                
-            }
-            
-            ListIterator<Slice> slit = slices.listIterator();
-            
-            while(slit.hasNext())
-            {
-                Slice s = slit.next();
-                
-                if(g.addSlice(s))
-                {
-                    ++count;
-                    addition = true;
-                    slit.remove();
-                }
-            }
-            
-            if(addition)
-            {
-                count += addAllPossible(g, slices);
-            }
-            return count;
-        }
-            
         
         private static void addSlicesToGroups(List<Slice> slices,
                                               List<SliceGroup> groups)
@@ -473,10 +432,10 @@ public class NavMesh implements Drawable
             }
             
             Tile aTile = a.tiles.get(0), bTile = b.tiles.get(0);            
+            
             if(b.tiles.size() == a.tiles.size() 
                 && 
-              (bTile.xCoord == aTile.xCoord + 1 || 
-               bTile.xCoord == aTile.xCoord - 1)  )
+               bTile.xCoord == aTile.xCoord + 1)
             {
                 return true;
             }
