@@ -81,7 +81,7 @@ public class Look implements Action
     {
         if(viewCreated)
         {
-            view.draw(g);
+            // view.draw(g);
         }
     }
          
