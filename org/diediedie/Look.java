@@ -184,14 +184,14 @@ public class Look implements Action
     /*
      * Returns true if Actor a is visible to Enemy e.
      */ 
-    public boolean actorIsVisible(Enemy e, Shape sh, Actor a)
+    public final boolean actorIsVisible(Enemy e, Shape sh, Actor a)
     {
         final float[] pos = AnimCreator.getCurrentFrameRect(a).getCenter();
         final Point p = new Point(pos[0], pos[1]);
         
         if(actorInView(sh, a) && !isViewBlocked(e, p))
         {
-            System.out.println(a + " | is visible to | " + e);
+            //System.out.println(a + " | is visible to | " + e);
             return true;
         }  
         return false;

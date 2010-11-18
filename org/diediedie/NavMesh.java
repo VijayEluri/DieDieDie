@@ -37,7 +37,6 @@ public class NavMesh implements Drawable
     private Color walkableColor = Color.green;
     private Color negativeColor = Color.orange;
     
-    
     /**
      * A mesh created by MeshMaker.
      */ 
@@ -152,17 +151,39 @@ public class NavMesh implements Drawable
             slices = s;
         }
         
-        public boolean addSlice(Slice s)
-        {
-            return false;
-        }
-        
         /*
          * Returns the Shape encompassing this group of Slices
          */ 
         public Shape getShape()
         {
             return rect;
+        }
+        
+        /*
+         * Prints out the contents of each slice in the group
+         */ 
+        public void printGroupInfo()
+        {
+            PrintStream out = System.out;
+            out.println("SliceGroup " + hashCode() + " (" + slices.size()
+                            + " slices) : ");
+            
+            if(slices.isEmpty())
+            {
+                throw new IllegalStateException();
+            }
+            
+            int i = 1;
+            
+            for(Slice s : slices)
+            {
+                out.println("\tSlice " + (i++) + ": ");
+                for(Tile t : s.tiles)
+                {
+                    out.println("\t\t[x] " + t.xCoord + ", [y] " +
+                                         t.yCoord);             
+                }
+            }
         }
     }
     
@@ -218,93 +239,84 @@ public class NavMesh implements Drawable
             // ^ polygons
             List<Tile> spaces = getSpaceTiles(l);
             List<Slice> slices = sliceSpaces(spaces);
-            Map<Shape, List<Tile>> sliceMap = mapSlices(slices);
+            Map<SliceGroup, Shape> sliceMap = mapSlices(slices);
         }
         
         /*
          * Combines compatible slices of Tiles together into 
          * SliceGroups
          */
-        private static Map<Shape, List<Tile>> mapSlices(List<Slice> 
+        private static Map<SliceGroup, Shape> mapSlices(List<Slice> 
                                                         slices)
         {       
+         //   boolean started = false;
             Slice prevSlice = null;
             Tile tile;
-            boolean started = false, isGroup = false;
             
-            System.out.println("mapSlices(): ");
+            System.out.println("\nmapSlices(): ");
             
             List<Slice> groupSlices = null;
             List<SliceGroup> groups = new ArrayList<SliceGroup>();
             
             for(Slice s: slices)
             { 
-                if(!started)
+                if(prevSlice == null)
                 {
-                    // start new group
-                   /* System.out.println("new slice starting " +
-                            s.tiles.get(0).xCoord + ", " + 
-                            s.tiles.get(0).yCoord); */
+                    // start new slice list
                     groupSlices = new ArrayList<Slice>();
                     
-                    
-                    // save reference to current slice for next iteration
+                    // save reference to current slice so that we can
+                    // add it to the list on the next iteration if 
+                    // necessary
                     prevSlice = s;             
-                    started = true;
+
                 }
                 else if(areCompatible(prevSlice, s))
                 {
-                    /*System.out.println("Compatible Slices");
-                    printTileCollection(prevSlice.tiles);
-                    System.out.println("\t-----------");
-                    printTileCollection(s.tiles);
-                    
-                    System.out.println("adding to group next slice " +
-                            s.tiles.get(0).xCoord + ", " + 
-                            s.tiles.get(0).yCoord);*/
-                            
+                    groupSlices.add(prevSlice);                  
                     groupSlices.add(s);  
-                                      
                     // update 'previous' marker
                     prevSlice = s;
                 }
                 else
                 {
-                    /*System.out.println("current slice incompatible: "
-                                + " end of group");*/
-                    // non-compatible slices
-
-                    groups.add(new SliceGroup(groupSlices));
-                    
+                    // non-compatible slice found; end of group 
+                    if(!groupSlices.isEmpty())
+                    {
+                        groups.add(new SliceGroup(groupSlices));
+                    }
                      // start new group
-                    /*System.out.println("new slice starting " +
-                            s.tiles.get(0).xCoord + ", " + 
-                            s.tiles.get(0).yCoord);*/
                     groupSlices = new ArrayList<Slice>();
-                    
                     
                     // save reference to current slice for next iteration
                     prevSlice = s;             
                 }
             }   
             
+            // debugging - print out info
+            for(SliceGroup g : groups)
+            {
+                g.printGroupInfo();
+            }
+            
             return null;
         }
         
         /*
-         * Returns true if two given Slices can be joined to make a 
-         * Rectangle.
+         * Returns true if two given vertical Slices can be joined.
          */ 
         private static boolean areCompatible(Slice a, Slice b)
         {
-            
-            Tile aTile = a.tiles.get(0), bTile = b.tiles.get(0);            
-            if(b.tiles.size() == a.tiles.size())
+            Tile aTile = a.tiles.get(0), bTile = b.tiles.get(0);
+                        
+            if(b.tiles.size() == a.tiles.size() && 
+               bTile.xCoord == aTile.xCoord + 1)
             {
-                if(bTile.xCoord == aTile.xCoord + 1)
-                {
-                    return true;
-                }
+               /* System.out.println("Compatible: \n\ta: " + a.hashCode());
+                printTileCollection(a.tiles);
+                System.out.println("\t---------\n\tb: " + b.hashCode());
+                printTileCollection(b.tiles);*/
+                return true;
             }
             return false;
         }
