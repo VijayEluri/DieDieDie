@@ -457,15 +457,9 @@ public class NavMesh implements Drawable
          * start Slice of b.
          */ 
         private static boolean areCompatible(SliceGroup a, SliceGroup b)
-        {
-            /*System.out.println("comparing two SliceGroups: ");
-            a.printGroupInfo();
-            System.out.println(" with : ");
-            b.printGroupInfo();*/
-            
+        {    
             if(areCompatible(a.getEndSlice(), b.getStartSlice()))
             {
-                //System.out.println("compatible");
                 return true;
             }
             return false;
@@ -500,30 +494,17 @@ public class NavMesh implements Drawable
             {
                 System.out.println("end of slices; end of groups");
                 return null;
-            }
-                        
+            }      
             List<Slice> currentSlices = new LinkedList<Slice>();
             currentSlices.add(allSlices.remove(0));        
-            
             SliceGroup g = new SliceGroup(currentSlices);
             
-           
-            
-            //boolean sequential = false;
-            
-            System.out.println("new group : ");
-            g.printGroupInfo();
-            
-            
             int added = 0;
-            
             do{
-                
-                //sequential = true;
                 
                 ListIterator<Slice> lit = allSlices.listIterator();
                 added = 0;
-                while(lit.hasNext())// && sequential)
+                while(lit.hasNext())
                 {
                     Slice s = lit.next();
                     
@@ -534,10 +515,6 @@ public class NavMesh implements Drawable
                         s.printSliceInfo();
                         lit.remove();
                     }
-                   /* else
-                    {
-                        sequential = false;
-                    }*/
                 }
             } while(added > 0);
             return g;
