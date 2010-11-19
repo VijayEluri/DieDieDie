@@ -214,12 +214,19 @@ public class NavMesh implements Drawable
          */ 
         public boolean addSlice(Slice s)
         {
+            System.out.println("SliceGroup.(" + hashCode() + 
+                               "(addSlice:");
             if(MeshMaker.areCompatible(getEndSlice(), s))
             {
                 if(slices.add(s))
                 {
+                    System.out.println("\t[successfully added slice]");
                     createShape();
                     return true;
+                }
+                else
+                {
+                    System.exit(0);
                 }
             }
             return false;
@@ -230,16 +237,26 @@ public class NavMesh implements Drawable
          */ 
         public Slice getEndSlice()
         {
-            return slices.get(slices.size() - 1);
+            Slice s = slices.get(slices.size() - 1);
+           /* System.out.println("SliceGroup(" + hashCode() + 
+                               ").getEndSlice(): {");
+            s.printSliceInfo();
+            System.out.println("}");*/
+            
+            return s;
         }
-        
         
         /**
          * Returns the first slice from this group
          */ 
         public Slice getStartSlice()
         {
-            return slices.get(0);
+            Slice s = slices.get(0);
+            /*System.out.println("SliceGroup(" + hashCode() + 
+                               ").getStartSlice(): {");
+            s.printSliceInfo(); 
+            System.out.println("}");*/
+            return s;
         }
         
         /**
@@ -254,13 +271,38 @@ public class NavMesh implements Drawable
          * Attempts to add the contents of the given SliceGroup to 
          * this. 
          * 
-         * Returns the amount of Slices from the given SliceGroup
-         * that have been successfully moved.
+         * Returns true if
          */ 
-        public int addGroup(SliceGroup other)
+        public boolean addGroup(SliceGroup other)
         {
+            if(MeshMaker.areCompatible(this, other))
+            {
+                printGroupInfo();
+                System.out.println("addGroup: ");
+                
+                other.printGroupInfo();
+                
+                for(Slice s : other.slices)
+                {
+                    if(!addSlice(s))
+                    {
+                        throw new IllegalStateException("Not compatible?");
+                    }
+                    else
+                    {
+                        System.out.println(
+                            "added slice from other group: ");
+                        s.printSliceInfo();
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                System.out.println("addGroup: incompatible");
+            }
             
-            return 0;
+            return false;
         }
         
         /**
@@ -335,8 +377,6 @@ public class NavMesh implements Drawable
             List<Slice> slices = sliceSpaces(getSpaceTiles(l));
             List<SliceGroup> groups = new ArrayList<SliceGroup>();
             
-            /*final int ITER = 10;
-            int size = 0;*/
             groups.addAll(combineSlices(slices));
             combineGroups(groups);
                                                
@@ -352,7 +392,57 @@ public class NavMesh implements Drawable
          */ 
         private static void combineGroups(List<SliceGroup> groups)
         {
+            System.out.println("combineGroups: looking at " +
+                                groups.size());
+                                
+            SliceGroup prev = null;
+            SliceGroup curr = null;
             
+            ListIterator<SliceGroup> it = groups.listIterator();
+            
+            while(it.hasNext())
+            {
+                if(it.hasPrevious())
+                {
+                    prev = it.previous();
+                    it.next();
+                    curr = it.next();
+                   
+                    if(curr.equals(prev))
+                    {
+                        throw new IllegalStateException();
+                    }
+                    
+                    if(areCompatible(prev, curr))
+                    {
+                        prev.addGroup(curr);
+                        it.remove();
+                    }
+                }
+                else
+                {
+                    it.next();       
+                }
+            }
+        }
+             
+        /*
+         * Returns true if the end Slice of a is compatible with the
+         * start Slice of b.
+         */ 
+        private static boolean areCompatible(SliceGroup a, SliceGroup b)
+        {
+            System.out.println("comparing two SliceGroups: ");
+            a.printGroupInfo();
+            System.out.println(" with : ");
+            b.printGroupInfo();
+            
+            if(areCompatible(a.getEndSlice(), b.getStartSlice()))
+            {
+                System.out.println("compatible");
+                return true;
+            }
+            return false;
         }
         
         /*
@@ -364,12 +454,9 @@ public class NavMesh implements Drawable
         private static List<SliceGroup> combineSlices(List<Slice> slices)
         {                   
             List<SliceGroup> groups = new ArrayList<SliceGroup>();
-               
             
             while(!slices.isEmpty())
             {
-                System.out.println("createNewGroup (" + slices.size() +
-                                " slices left)");
                 groups.add(createNewGroup(slices));
             }
             
@@ -393,33 +480,10 @@ public class NavMesh implements Drawable
             List<Slice> currentSlices = new LinkedList<Slice>();
             currentSlices.add(first);
             
-            SliceGroup sg = new SliceGroup(currentSlices);
-         
-            return sg;
+            return new SliceGroup(currentSlices);
         }
         
         
-        private static void addSlicesToGroups(List<Slice> slices,
-                                              List<SliceGroup> groups)
-        {
-            if(!slices.isEmpty())
-            {
-                for(SliceGroup sg : groups)
-                {
-                    ListIterator<Slice> lit = slices.listIterator();
-                    while(lit.hasNext())
-                    {
-                        Slice s = lit.next();
-                        
-                        // try to add s to the current group
-                        if(sg.addSlice(s))
-                        {
-                            lit.remove();
-                        }
-                    }
-                }
-            }      
-        }
         
         /*
          * Returns true if two given vertical Slices can be joined.
