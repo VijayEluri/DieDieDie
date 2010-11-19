@@ -442,6 +442,7 @@ public class NavMesh implements Drawable
                     {
                         prev.addGroup(curr);
                         it.remove();
+                        it.next();
                     }
                 }
                 else
@@ -482,7 +483,8 @@ public class NavMesh implements Drawable
             
             while(!slices.isEmpty())
             {
-                groups.add(createNewGroup(slices));
+                SliceGroup sg = createNewGroup(slices);
+                groups.add(sg);
             }
             
             return groups;
@@ -505,29 +507,39 @@ public class NavMesh implements Drawable
             
             SliceGroup g = new SliceGroup(currentSlices);
             
-            ListIterator<Slice> lit = allSlices.listIterator();
+           
             
-            boolean sequential = true;
+            //boolean sequential = false;
             
             System.out.println("new group : ");
             g.printGroupInfo();
             
-            while(lit.hasNext() && sequential)
-            {
-                Slice s = lit.next();
-                
-                if(g.addSlice(s))
-                {
-                    System.out.println("|--adding Slice : ");
-                    s.printSliceInfo();
-                    lit.remove();
-                }
-                else
-                {
-                    sequential = false;
-                }
-            }
             
+            int added = 0;
+            
+            do{
+                
+                //sequential = true;
+                
+                ListIterator<Slice> lit = allSlices.listIterator();
+                added = 0;
+                while(lit.hasNext())// && sequential)
+                {
+                    Slice s = lit.next();
+                    
+                    if(g.addSlice(s))
+                    {
+                        added++;
+                        System.out.println("|--adding Slice : ");
+                        s.printSliceInfo();
+                        lit.remove();
+                    }
+                   /* else
+                    {
+                        sequential = false;
+                    }*/
+                }
+            } while(added > 0);
             return g;
         }
         
