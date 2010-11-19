@@ -188,7 +188,9 @@ public class NavMesh implements Drawable
             slices = s;
             createShape();
         }
-                
+        
+        
+        
         /*
          * Creates a Shape encompassing the 
          */ 
@@ -206,21 +208,43 @@ public class NavMesh implements Drawable
             rect = new Rectangle(first.xPos, first.yPos, 
                                  (last.endX - first.xPos),
                                   (last.endY - first.yPos));
+            check();
         }        
         
+        private void check()
+        {
+            if(slices.size() == 1)
+            {
+                return;
+            }
+            
+            Slice prev, curr;
+            
+            for(int i = 1; i < slices.size(); ++i)
+            {
+                prev = slices.get(i-1);
+                curr = slices.get(i);
+                
+                if(!MeshMaker.areCompatible(prev, curr))
+                {
+                    throw new IllegalStateException();
+                }
+            }
+        }
+    
         /**
          * Tries to add a Slice to the end of this Group. Returns true
          * if successful.
          */ 
         public boolean addSlice(Slice s)
         {
-            System.out.println("SliceGroup.(" + hashCode() + 
-                               "(addSlice:");
+            /*System.out.println("SliceGroup.(" + hashCode() + 
+                               "(addSlice:");*/
             if(MeshMaker.areCompatible(getEndSlice(), s))
             {
                 if(slices.add(s))
                 {
-                    System.out.println("\t[successfully added slice]");
+                    /*System.out.println("\t[successfully added slice]");*/
                     createShape();
                     return true;
                 }
@@ -277,10 +301,9 @@ public class NavMesh implements Drawable
         {
             if(MeshMaker.areCompatible(this, other))
             {
-                printGroupInfo();
+                /*printGroupInfo();
                 System.out.println("addGroup: ");
-                
-                other.printGroupInfo();
+                other.printGroupInfo();*/
                 
                 for(Slice s : other.slices)
                 {
@@ -288,19 +311,19 @@ public class NavMesh implements Drawable
                     {
                         throw new IllegalStateException("Not compatible?");
                     }
-                    else
+                    /*else
                     {
                         System.out.println(
                             "added slice from other group: ");
                         s.printSliceInfo();
-                    }
+                    }*/
                 }
                 return true;
             }
-            else
+            /*else
             {
                 System.out.println("addGroup: incompatible");
-            }
+            }*/
             
             return false;
         }
@@ -323,21 +346,23 @@ public class NavMesh implements Drawable
     }
     
     /**
-     * Inner class that generates a NavMesh from a Level
+     * Inner factory class that generates a NavMesh from a Level
      */ 
     public static class MeshMaker
     {
-        static Collection<Tile> ledgeTiles;
-        static Collection<Shape> walkableZones;
-        static Collection<Shape> negativeSpace;
+        static Collection<Tile> ledgeTiles = null;
+        static Collection<Shape> walkableZones = null;
+        static Collection<Shape> negativeSpace = null;
+        static Level l = null;
         
         /**
          * Generates a NavMesh for the given Level.
          */ 
-        public static NavMesh generateMesh(Level l)
+        public static NavMesh generateMesh(Level lev)
         {
-            createWalkableZones(l);
-            createNegativeSpace(l);
+            l = lev;
+            createWalkableZones();
+            createNegativeSpace();
             return new NavMesh(l, walkableZones, negativeSpace);
         }
         
@@ -345,7 +370,7 @@ public class NavMesh implements Drawable
          * Examines collision tiles and saves those which have negative
          * space above them. 
          */
-        private static void createWalkableZones(Level l)
+        private static void createWalkableZones()
         {   
             Line line;        
             ledgeTiles = getLedgeTiles(l);
@@ -368,7 +393,7 @@ public class NavMesh implements Drawable
          * Discovers and assembles a collection of negative space Shapes
          * for a given Level
          */ 
-        private static void createNegativeSpace(Level l)
+        private static void createNegativeSpace()
         {
             // movable area polygons
             negativeSpace = new ArrayList<Shape>();
@@ -392,8 +417,8 @@ public class NavMesh implements Drawable
          */ 
         private static void combineGroups(List<SliceGroup> groups)
         {
-            System.out.println("combineGroups: looking at " +
-                                groups.size());
+           /* System.out.println("combineGroups: looking at " +
+                                groups.size());*/
                                 
             SliceGroup prev = null;
             SliceGroup curr = null;
@@ -432,14 +457,14 @@ public class NavMesh implements Drawable
          */ 
         private static boolean areCompatible(SliceGroup a, SliceGroup b)
         {
-            System.out.println("comparing two SliceGroups: ");
+            /*System.out.println("comparing two SliceGroups: ");
             a.printGroupInfo();
             System.out.println(" with : ");
-            b.printGroupInfo();
+            b.printGroupInfo();*/
             
             if(areCompatible(a.getEndSlice(), b.getStartSlice()))
             {
-                System.out.println("compatible");
+                //System.out.println("compatible");
                 return true;
             }
             return false;
@@ -471,16 +496,39 @@ public class NavMesh implements Drawable
         {
             if(allSlices.isEmpty())
             {
+                System.out.println("end of slices; end of groups");
                 return null;
             }
-            
-            Slice first = allSlices.get(0);
-            allSlices.remove(0);
-            
+                        
             List<Slice> currentSlices = new LinkedList<Slice>();
-            currentSlices.add(first);
+            currentSlices.add(allSlices.remove(0));        
             
-            return new SliceGroup(currentSlices);
+            SliceGroup g = new SliceGroup(currentSlices);
+            
+            ListIterator<Slice> lit = allSlices.listIterator();
+            
+            boolean sequential = true;
+            
+            System.out.println("new group : ");
+            g.printGroupInfo();
+            
+            while(lit.hasNext() && sequential)
+            {
+                Slice s = lit.next();
+                
+                if(g.addSlice(s))
+                {
+                    System.out.println("|--adding Slice : ");
+                    s.printSliceInfo();
+                    lit.remove();
+                }
+                else
+                {
+                    sequential = false;
+                }
+            }
+            
+            return g;
         }
         
         
@@ -497,9 +545,9 @@ public class NavMesh implements Drawable
             
             Tile aTile = a.tiles.get(0), bTile = b.tiles.get(0);            
             
-            if(b.tiles.size() == a.tiles.size() 
-                && 
-               bTile.xCoord == aTile.xCoord + 1)
+            if(areHorizontalNeighbours(aTile, bTile) 
+                &&
+               b.tiles.size() == a.tiles.size()     )
             {
                 return true;
             }
