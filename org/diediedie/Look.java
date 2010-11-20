@@ -27,8 +27,8 @@ import java.lang.Math;
 import org.newdawn.slick.geom.GeomUtil;
 
 /**
- * Look at the immediate area in the current Direction for LevelObjects
- * (enemies, Player...)
+ * Looks at the immediate area in the current Direction, relaying
+ * information back to the Enemy's FSM
  */
 public class Look implements Action
 {
@@ -81,7 +81,7 @@ public class Look implements Action
     {
         if(viewCreated)
         {
-            // view.draw(g);
+            view.draw(g);
         }
     }
          
@@ -238,9 +238,11 @@ public class Look implements Action
         
         private Line topLine, botLine;
         private Path fovShape;
-        //private final int LINE_LEN = 350;
+
         private float viewSize;
-       // private Transform trans;
+
+        
+        private Color color = Color.white;
         
         // view geometry components
         private float xViewStart, yViewStart, topEndX, topEndY, 
@@ -251,6 +253,7 @@ public class Look implements Action
         */
         View(Enemy e)
         {
+            viewSize = e.getViewSize();
             constructFOV(e);
             //System.out.println("constructed view");
         } 
@@ -277,7 +280,7 @@ public class Look implements Action
         {            
             xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
-            viewSize = e.getViewSize();
+            
             
             if(e.getFacing().equals(Direction.LEFT))
             {
@@ -304,7 +307,8 @@ public class Look implements Action
          */ 
         public void draw(Graphics g)
         {
-            g.setColor(Color.white);
+            g.setColor(color);
+            
             g.draw(fovShape);
             if(sightLine != null)
             {

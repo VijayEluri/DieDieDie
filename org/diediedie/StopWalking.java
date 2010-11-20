@@ -33,11 +33,7 @@ public class StopWalking implements Action
     }
     
     @Override
-    public void draw(Graphics g)
-    {
-        
-    }
-    
+    public void draw(Graphics g){} 
     
     public void reset()
     {

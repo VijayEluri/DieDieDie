@@ -396,7 +396,8 @@ public class Bluey implements Enemy, StateMachine
     }
     
     /*
-     * 
+     * Updates the current State (in turn performing its current Action)
+     * and looking for any changes to Bluey.
      */ 
     private void updateState()
     {
@@ -406,13 +407,13 @@ public class Bluey implements Enemy, StateMachine
             startFSM();
         }
         
-        
         currentState.update();
         
         if(currentState.equals(patrol))
         {
             if(canSeePlayer())
             {
+
                 //System.out.println("changing to alert");
                 //changeState(alert);
             }
@@ -522,6 +523,11 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public boolean hasSeenPlayer()
     {
+        if(!hasSeenPlayer)
+        {
+            System.out.println("so startled! - " + this);
+            jump();
+        }
         return hasSeenPlayer;
     }
     
