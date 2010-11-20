@@ -42,7 +42,7 @@ public class NavMesh implements Drawable
      * A mesh created by MeshMaker.
      */ 
     public NavMesh(Level l, Collection<Shape> walkables,
-                                   Collection<Shape> space)
+                            Collection<Shape> space)
     {
         setLevel(l);
         walkableZones = walkables;
