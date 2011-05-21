@@ -20,13 +20,14 @@ import org.diediedie.actors.Direction;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.State;
 import org.diediedie.actors.actions.*;
-import java.util.*;
+import java.util.Set;
+import java.util.HashSet;
 import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.*;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.Graphics;
 
 /*

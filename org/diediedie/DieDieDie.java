@@ -13,12 +13,12 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
- */
+*/
 package org.diediedie;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.Direction;
-import java.io.*;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.File;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -27,7 +27,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.tiled.*;
 import org.newdawn.slick.command.BasicCommand;
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProvider;
@@ -42,8 +41,10 @@ public class DieDieDie extends BasicGame
     
     private InputProvider inputProv = null;    
     
-    private static int xSize = 640, ySize = 480;
-	private Level level1 = null, currentLevel = null;	
+    private static int xSize = 640, 
+                       ySize = 480;
+	private Level level1 = null, 
+                  currentLevel = null;	
     
     private final String TILE_SETS_PATH = "data", 
                          LEVEL_1_PATH = "data/level1.tmx",
@@ -64,7 +65,6 @@ public class DieDieDie extends BasicGame
      */ 
 	public void init(GameContainer container) throws SlickException 
     {
-        
 		container.setVSync(true);    
         //container.setTargetFrameRate(60);
         inputProv = new InputProvider(container.getInput());
@@ -99,7 +99,9 @@ public class DieDieDie extends BasicGame
     {
         try 
         {
-            FileInputStream in = new FileInputStream(new File(levelPath));
+            FileInputStream in = new FileInputStream(
+                new File(levelPath));
+            
             return new Level(name, in, tileSetsPath, startDir, grav);
         }
         catch(Exception e)

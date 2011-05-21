@@ -12,13 +12,11 @@ public class GroundChecker
 {
     public static boolean canMove(Actor a)
     {
-        
         return false;
     }
     
     /*public static boolean canMoveTo(Actor a, float x, float y)
     {
-            
         return false;
     }*/
 }

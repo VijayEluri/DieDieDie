@@ -15,9 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie;
-
-import java.io.*;
-import java.util.*;
+import java.util.List;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 
@@ -33,11 +31,11 @@ public class MapLayer
     /**
      * Constructs a new map layer from a List of Tiles.  
      */
-    public MapLayer(List<Tile> layerTiles, final int in, boolean visible)
+    public MapLayer(List<Tile> layerTiles, final int in, boolean vis)
     {
         tiles = layerTiles;
         index = in;
-        isVisible = visible;
+        isVisible = vis;
         System.out.println(toString());
     }
     

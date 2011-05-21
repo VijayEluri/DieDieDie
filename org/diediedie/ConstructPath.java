@@ -18,7 +18,7 @@ package org.diediedie.actors.actions;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.Point;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.util.pathfinding.*;
+//import org.newdawn.slick.util.pathfinding.*;
 
 /**
  * 

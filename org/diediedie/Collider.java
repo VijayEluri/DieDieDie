@@ -15,10 +15,6 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
-import org.diediedie.actors.Direction;
-import org.diediedie.actors.MovableObject;
-import org.diediedie.actors.AnimCreator;
-import org.newdawn.slick.geom.Line;
 
 /**
  * Used to discern whether or not a MovableObject is going to hit

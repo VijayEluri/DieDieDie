@@ -17,13 +17,16 @@
 
 package org.diediedie.actors;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * Utility class with Animation creation and Image handling methods.

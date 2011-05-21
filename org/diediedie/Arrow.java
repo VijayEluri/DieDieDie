@@ -19,7 +19,8 @@ package org.diediedie.actors;
 import org.diediedie.Level;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.geom.*;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.util.FastTrig;
  
 /**
@@ -44,10 +45,16 @@ public class Arrow implements Projectile
                         MAX_Y_SPEED = 24.5f,
                         FALLING_ANGLE_CHANGE = 0.44f;
                         
-    private float mouseX, mouseY,
-                  startX, startY, oldX, oldY, 
-                  endX, endY, 
-                  accelX = 0, accelY = 0, 
+    private float mouseX = 0, 
+                  mouseY = 0,
+                  startX = 0, 
+                  startY = 0, 
+                  oldX = 0, 
+                  oldY = 0, 
+                  endX = 0, 
+                  endY = 0, 
+                  accelX = 0, 
+                  accelY = 0, 
                   speedX = 0, speedY = 0,  
                   movementAngle = 90, 
                   gravity = 0f, 

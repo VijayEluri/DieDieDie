@@ -15,8 +15,6 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
-import java.io.*;
-import java.util.*;
 import org.newdawn.slick.Graphics;
 import org.diediedie.Level;
 
