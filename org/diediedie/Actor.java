@@ -25,27 +25,21 @@ import org.newdawn.slick.geom.Shape;
 
 public interface Actor extends MovableObject
 {            
-    public static final int ANIM_DURATION = 100;
-    int getHealth();
+    public static int ANIM_DURATION = 100;
     
-    Animation getCurrentAnim();
-    
-    boolean canJump();
-    
-    void setJump(boolean b);
     void applySpeed(Direction d);
-    void jump();
+    boolean canJump();
     void die();
-    void setFacing(Direction d);
-    void resetAccelX();
-    Shape getZone();
-    
-    
+    Animation getCurrentAnim();
     Direction getFacing();
-    
+    int getHealth();    
     float getJumpSpeed();
     float getMoveSpeed();    
-    float getYSpeed();
     float getXSpeed();
-    
+    float getYSpeed();
+    Shape getZone();    
+    void setJump(boolean b);
+    void jump();
+    void setFacing(Direction d);
+    void resetAccelX();
 }  

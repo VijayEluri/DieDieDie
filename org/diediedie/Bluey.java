@@ -97,7 +97,7 @@ public class Bluey implements Enemy, StateMachine
         xPos = t.xPos;
         yPos = t.yPos;
         yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
-                 t.tileHeight);
+                                                     t.tileHeight);
         yPos--;
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }

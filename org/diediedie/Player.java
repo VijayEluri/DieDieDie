@@ -14,16 +14,12 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
- 
 package org.diediedie.actors;
-import org.diediedie.Level;
-import org.diediedie.Tile;
-import org.diediedie.actors.AnimCreator;
-import org.diediedie.actors.Collider;
-import org.diediedie.actors.Aligner;
-import java.io.*;
-import java.util.*;
-import java.lang.Math.*;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Collections;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -39,6 +35,15 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
 import org.newdawn.slick.command.MouseButtonControl;
+
+import org.diediedie.Level;
+import org.diediedie.Tile;
+import org.diediedie.actors.AnimCreator;
+import org.diediedie.actors.Collider;
+import org.diediedie.actors.Aligner;
+
+
+
 
 /**
  * ..where *YOU* are the HERO!
@@ -166,6 +171,7 @@ public class Player implements Actor, InputProviderListener
                            " at position x: " + xPos + ", y: " + yPos);              
     }
     
+    
     private void initBow()
     {
           bowLeft = AnimCreator.loadImage(bowLeftPath);
@@ -214,7 +220,6 @@ public class Player implements Actor, InputProviderListener
                                             c.xCoord + ", " + 
                                             c.yCoord);
                     }
-                    
                     mouseX = x;
                     mouseY = y;  
                     readyArrow();

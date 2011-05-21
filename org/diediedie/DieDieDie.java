@@ -34,14 +34,12 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 
 /**
- * DieDieDie AKA Captain EXCITEMENT
+ * DieDieDie
  */ 
 public class DieDieDie extends BasicGame 
 {   
-    // where YOU are the HERO
     private Player player;
     
-    // object to send input to the Player object
     private InputProvider inputProv = null;    
     
     private static int xSize = 640, ySize = 480;
@@ -54,7 +52,7 @@ public class DieDieDie extends BasicGame
     public static final float GRAVITY = 0.20f;
     
     /**
-     * Creates the GAME...
+     * Create the game
      */ 
 	public DieDieDie() 
     {

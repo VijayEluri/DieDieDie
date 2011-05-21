@@ -5,7 +5,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.*;
 
-// arrow / bullet etc
+/**
+ * Public Interface for all moving weaponary. 
+ **/
 public interface Projectile extends MovableObject
 {
     void updatePosition();
