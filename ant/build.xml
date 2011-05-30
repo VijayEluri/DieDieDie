@@ -1,6 +1,7 @@
 <project name="DieDieDie" default="compile" basedir="..">
 	<property file="ant/build.properties"/>
-
+    <property name="main-class"  value="org.diediedie.DieDieDie"/>
+    
     <path id="build-classpath">
  	    <fileset dir="${lib.dir}"/>
     </path>
@@ -13,23 +14,25 @@
     <target name="init" depends="clean">
         <echo>Creating the build directory</echo>
         <mkdir dir="${build.dir}/org/diediedie"/>
-        <mkdir dir="${build.dir}/lib"/>
+        <mkdir dir="${build.dir}/lib"/>        
     </target>
 
     <target name="compile" depends="init">
         <echo>Compile the source files</echo>
-        <javac srcdir="${src.dir}" 
-               destdir="${build.dir}" 
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
                debug="true"
                optimize="on">
             <classpath refid="build-classpath"/>
         </javac>
+            
 
         <echo>Copy the third-party jars to build dir</echo>
         <copy todir="${build.dir}/lib">
             <fileset dir="${lib.dir}"/>
         </copy>
-
+        
+        
         <echo>Copy the game data</echo>
         <copy todir="${build.dir}/data">
             <fileset dir="${basedir}/data"/>
@@ -39,21 +42,55 @@
         <copy file="run-linux" todir="${build.dir}"/>
         <copy file="run-windows.bat" todir="${build.dir}"/>
     </target>
+    
+    <target name='jar' depends='compile'>
+        <jar destfile="${build.dir}/DieDieDie.jar"
+             basedir="${build.dir}"
+             excludes='*.jar' >
+            <manifest>
+                <attribute name="Main-Class" value="org.diediedie.DieDieDie"/>
+            </manifest>
+        </jar>
+    </target>
+    
+    <target name="run" depends="jar" >
+        <java jar='${build.dir}/DieDieDie.jar'
+              dir="${build.dir}"
+              fork="true">
+        <jvmarg value='-Djava.library.path="lib"'/>
         
+            <classpath>
+                <pathelement location="${build.dir}/lib"/>
+                <pathelement path="${build.dir}/lib/slick.jar"/>
+                <pathelement path="${build.dir}/lib/lwjgl.jar"/>
+                <pathelement path="${build.dir}/lib/natives-linux.jar"/>
+                <pathelement path="${build.dir}/lib/libjinput-linux.so"/>
+                <pathelement path="${build.dir}/lib/liblwjgl.so"/>
+                <pathelement path="${build.dir}/lib/libjinput-linux.so"/>
+            </classpath>
+       </java>
+    </target>
     <!-- This doesn't work! Use run-linux / run-windows instead -->
+    <!--
     <target name="run" depends="compile" >
-    <java dir="${build.dir}" 
-          fork="true" 
+    <java dir="${build.dir}"
+          fork="true"
           classname="org.diediedie.DieDieDie" >
-        <classpath>            
+        <jvmarg value='-Djava.library.path=lib/lwjgl.jar:lib/natives-linux.jar:' />
+        <classpath>
             <pathelement location="${build.dir}"/>
             <pathelement location="${build.dir}/lib"/>
             <pathelement path="${build.dir}/lib/slick.jar"/>
+            <pathelement path="${build.dir}/lib/lwjgl.jar"/>
+            <pathelement path="${build.dir}/lib/jinput.jar"/>
+            <pathelement path="${build.dir}/lib/ibxm.jar"/>
+            <pathelement path="${build.dir}/lib/slick-util.jar"/>
             <pathelement path="${build.dir}/lib/natives-linux.jar"/>
-            <pathelement path="${build.dir}/lib/"/>
             <pathelement path="${build.dir}/lib/natives-win32.jar"/>
+            <pathelement path="${build.dir}/lib/natives-max.jar"/>
             <pathelement path="${java.class.path}/"/>
         </classpath>
     </java>
     </target>
+-->
 </project>

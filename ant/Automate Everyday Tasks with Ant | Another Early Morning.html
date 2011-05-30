@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"><head profile="http://gmpg.org/xfn/11">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="distribution" content="global">
+<meta name="robots" content="follow, all">
+<meta name="language" content="en">
+
+<title>Automate Everyday Tasks with Ant | Another Early Morning</title>
+<link rel="Shortcut Icon" href="http://www.anotherearlymorning.com/favicon.ico" type="image/x-icon">
+
+<link rel="stylesheet" href="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/style.css" type="text/css" media="screen">
+<link rel="alternate" type="application/rss+xml" title="Another Early Morning RSS Feed" href="http://www.anotherearlymorning.com/feed/">
+<link rel="alternate" type="application/atom+xml" title="Another Early Morning Atom Feed" href="http://www.anotherearlymorning.com/feed/atom/">
+<link rel="pingback" href="http://www.anotherearlymorning.com/wordpress/xmlrpc.php">
+
+<link rel="alternate" type="application/rss+xml" title="Another Early Morning » Feed" href="http://www.anotherearlymorning.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="Another Early Morning » Comments Feed" href="http://www.anotherearlymorning.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Another Early Morning » Automate Everyday Tasks with Ant Comments Feed" href="http://www.anotherearlymorning.com/2008/09/automate-everyday-tasks-with-ant/feed/">
+<script src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/swfobject_002.js"></script>
+<script type="text/javascript" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/comment-reply.js"></script>
+<script type="text/javascript" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/jquery_002.js"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.anotherearlymorning.com/wordpress/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.anotherearlymorning.com/wordpress/wp-includes/wlwmanifest.xml"> 
+<link rel="index" title="Another Early Morning" href="http://www.anotherearlymorning.com/">
+<link rel="start" title="Game Design Patterns" href="http://www.anotherearlymorning.com/2008/06/game-design-patterns/">
+<link rel="prev" title="Game Design and Iterative Development" href="http://www.anotherearlymorning.com/2008/09/game-design-and-iterative-development/">
+<link rel="next" title="Physical Queries for the Math Challenged: Real-time Shadows" href="http://www.anotherearlymorning.com/2008/09/physical-queries-for-the-math-challenged-real-time-shadows/">
+<meta name="generator" content="WordPress 3.0.4">
+<link rel="shortlink" href="http://www.anotherearlymorning.com/?p=57">
+
+<!-- All in One SEO Pack 1.6.13.1 by Michael Torbert of Semper Fi Web Design[430,495] -->
+<link rel="canonical" href="http://www.anotherearlymorning.com/2008/09/automate-everyday-tasks-with-ant/">
+<!-- /all in one seo pack -->
+<style type="text/css">
+<!-- Silverlight WordPress Plugin -->
+#silverlightControlHost{height:100%;}
+</style>
+<!-- WP-SWFObject 2.3 by unijimpe -->
+<script src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/swfobject.js" type="text/javascript"></script>
+<style type="text/css">
+#header #title a {
+background: url(http://www.anotherearlymorning.com/wordpress/wp-content/themes/organic_portfolio_white/images/logo.png) no-repeat;
+}
+</style>
+<!-- Vipers Video Quicktags v6.3.0 | http://www.viper007bond.com/wordpress-plugins/vipers-video-quicktags/ -->
+<style type="text/css">
+.vvqbox { display: block; max-width: 100%; visibility: visible !important; margin: 10px auto; } .vvqbox img { max-width: 100%; height: 100%; } .vvqbox object { max-width: 100%; } 
+</style>
+<script type="text/javascript">
+// <![CDATA[
+	var vvqflashvars = {};
+	var vvqparams = { wmode: "opaque", allowfullscreen: "true", allowscriptaccess: "always" };
+	var vvqattributes = {};
+	var vvqexpressinstall = "http://www.anotherearlymorning.com/wordpress/wp-content/plugins/vipers-video-quicktags/resources/expressinstall.swf";
+// ]]>
+</script>
+<style type="text/css">.broken_link, a.broken_link {
+	text-decoration: line-through;
+}</style>
+<script type="text/javascript" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/superfish.js"></script>
+<script type="text/javascript" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/hoverIntent.js"></script>
+<script type="text/javascript" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/jquery.js"></script>
+<script type="text/javascript" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/iepngfix_tilebg.js"></script>
+
+<!--IE6 Fix-->
+<style type="text/css">
+	img, div, a, input, body, span { 
+		behavior: url(http://www.anotherearlymorning.com/wordpress/wp-content/themes/organic_portfolio_white/images/iepngfix.htc);
+	}
+</style>
+
+<script type="text/javascript">
+    var $j = jQuery.noConflict();
+	$j(function() {
+        $j("div#controller").jFlow({
+            slides: "#slides",
+            width: "960px",
+            height: "480px",
+			timer: 20000,
+	    	duration: 400
+        });
+    });
+</script>
+
+<script type="text/javascript"> 
+    $j(document).ready(function() { 
+        $j('.menu').superfish(); 
+    }); 
+</script>
+
+</head>
+
+<body class="single single-post postid-57">
+
+<div id="wrap">
+
+<div id="header">
+
+	<div class="headercenter">
+        <p id="title"><a href="http://www.anotherearlymorning.com/" title="Another Early Morning">Another Early Morning</a></p>
+	</div>
+
+</div>
+
+<div id="navbar">
+    
+    	<div id="navbarleft">
+            <div class="menu sf-js-enabled sf-shadow"><ul class="menu sf-js-enabled sf-shadow"><li class="page_item page-item-253"><a href="http://www.anotherearlymorning.com/about/" title="About">About</a></li><li class="page_item page-item-9"><a href="http://www.anotherearlymorning.com/" title="Home">Home</a></li><li class="page_item page-item-7"><a href="http://www.anotherearlymorning.com/blog/" title="Blog">Blog</a></li></ul></div>
+        </div>
+
+</div>
+
+<div style="clear:both;"></div>
+
+
+<div id="content">
+
+
+  <div id="contentleft">
+  
+  
+    <div class="postarea">
+    
+            
+      
+      <h3>
+        Automate Everyday Tasks with Ant      </h3>
+      
+      
+      <div class="postauthor">
+      
+        <p>Posted by          <a href="http://www.anotherearlymorning.com/author/aschearer/" title="Posts by Alex Schearer">Alex Schearer</a>          on          Monday, September 22, 2008          · <a href="http://www.anotherearlymorning.com/2008/09/automate-everyday-tasks-with-ant/#comments">
+          Leave a Comment          </a>&nbsp;
+                  </p>
+        
+      </div>
+      
+      <p>Alright, so I’ve got to confess that I love to write makefiles and similar
+things. There’s something immediately rewarding about automating commonly
+performed tasks. That’s why I thought I would share some of the cool
+things you can do with <a href="http://ant.apache.org/">ant</a>.</p>
+
+<p><span id="more-57"></span></p>
+
+<p>Ant is a tool written in Java which aims to improve the build process. It
+does this by providing a layer of abstraction so that your build files can
+run across platforms. In addition, ant provides a lot of useful tasks to
+bear on the build process effectively letting you write mini-scripts.
+Awesome.</p>
+
+<p>Enough talk, let’s take a look at how ant can speed up developing your
+next (<a href="http://slick.cokeandcode.com/">Slick</a>) game.</p>
+
+<h3>Setting up your development environment</h3>
+
+<p>Pesky native libraries make setting up Slick a real pain, especially for
+beginners…</p>
+
+<pre><code>&lt;!-- Set up the game environment by preparing the natives. --&gt;
+&lt;target name="setup" depends="check-setup" unless="setup.exists"&gt;
+    &lt;mkdir dir="lib/natives" /&gt;
+    &lt;unzip src="lib/natives-win32.jar" dest="lib/natives" /&gt;
+    &lt;unzip src="lib/natives-mac.jar" dest="lib/natives" /&gt;
+    &lt;unzip src="lib/natives-linux.jar" dest="lib/natives" /&gt;
+&lt;/target&gt;
+
+&lt;!-- Determines whether setup has been run. --&gt;
+&lt;target name="check-setup"&gt;
+    &lt;condition property="setup.exists"&gt;
+        &lt;available file="lib/natives" type="dir" /&gt;
+    &lt;/condition&gt;
+&lt;/target&gt;
+</code></pre>
+
+<p>So, let’s say you’ve got a directory, <code>lib</code> which has three jar files in
+it:</p>
+
+<ul>
+<li><code>lib/natives-win32.jar</code></li>
+<li><code>lib/natives-mac.jar</code></li>
+<li><code>lib/natives-linux.jar</code></li>
+</ul>
+
+<p>Wouldn’t it be nice if you could extract all of the native libraries and
+dump them into a <code>lib/natives</code> directory? Well that’s exactly what the
+above script does. Even better it will only create the <code>lib/natives</code>
+directory <em>once</em>! The <code>check-setup</code> target looks for the <code>lib/natives</code>
+directory and if it exists sets the property <code>setup.exists</code> to true thus
+aborting the process. Great!</p>
+
+<h3>Compiling and archiving</h3>
+
+<p>Next up the hello world of build processes. Let’s say you want to compile
+all your code in <code>src</code> into class files in <code>bin</code>. Naturally, the next step
+is to archive your bytecode and any resources in <code>res</code> so you can
+distribute everything…</p>
+
+<pre><code>&lt;!-- Compile and archive the game. --&gt;
+&lt;target name="build"&gt;
+    &lt;antcall target="compile" /&gt;
+    &lt;antcall target="archive" /&gt;
+&lt;/target&gt;
+
+&lt;!-- Compile the code put results into bin. --&gt;
+&lt;target name="compile"&gt;
+    &lt;mkdir dir="bin" /&gt;
+    &lt;javac destdir="bin" debug="on"&gt;
+        &lt;src path="bin" /&gt;
+        &lt;classpath&gt;
+            &lt;!-- Assumes Slick is in your lib dir! --&gt;
+            &lt;pathelement path="lib/slick.jar" /&gt;
+        &lt;/classpath&gt;
+    &lt;/javac&gt;
+&lt;/target&gt;
+
+&lt;!-- Jar compiled code and place result into current dir. --&gt;
+&lt;target name="archive"&gt;
+    &lt;jar destfile="./game.jar" manifest="manifest.txt"&gt;
+        &lt;fileset dir="bin" /&gt;
+        &lt;fileset dir="res" /&gt;
+    &lt;/jar&gt;
+&lt;/target&gt;
+</code></pre>
+
+<p>Alright, so now you can call <code>ant build</code> to compile and archive the code!
+Notice that this will include a manifest saved as <code>manifest.txt</code>. If
+you’re using Slick then I encourage you to adopt my manifest as a
+template, <a href="http://github.com/aschearer/shade/tree/master/script/manifest.txt">here it is</a>. Finally, notice that this creates <code>game.jar</code>
+feel free to rename things, but make sure things are consistent across
+your ant file!</p>
+
+<h3>Running the game</h3>
+
+<p>Last in this brief tutorial is a task to automate running the game. It
+turns out that you need to pass some command line arguments to the JVM in
+order to run Slick. This is necessary for lwjgl to find its native libraries,
+yuck. However, with this simple script you (or the noobs who want to play
+your game) will never have to worry about it.</p>
+
+<pre><code>&lt;!-- Run the game. --&gt;
+&lt;target name="run" depends="setup,build"&gt;
+    &lt;java jar="./game.jar" fork="true" failonerror="true"&gt;
+        &lt;jvmarg value="-Djava.library.path=lib/natives" /&gt;
+    &lt;/java&gt;
+&lt;/target&gt;
+</code></pre>
+
+<p>This last command will try to execute the jar created by the build command
+passing the JVM the necessary arguments. Notice that it “depends” on setup
+and build. That’s because it wouldn’t work if the natives weren’t in place
+and the jar didn’t exist, so it makes sure they are by calling those tasks
+first.</p>
+
+<p>So there you have it; just a few handy tricks for playing with Slick. If
+you want to see some more cool tricks then check out <a href="http://github.com/aschearer/shade/tree/master/build.xml">my build file</a>.
+I’ve got some additional commands such as cleaning the workspace and
+preparing your jar for distribution as a webstart. If you have any cool
+ant tricks let me know in the comments!</p>
+
+<p>Finally, here’s the build file we just created. <a href="http://www.anotherearlymorning.com/downloads/build.xml">build.xml</a></p>
+
+
+<p>Related posts:</p><ol><li><a href="http://www.anotherearlymorning.com/2009/06/new-archive-available/" rel="bookmark" title="Permanent Link: New Archive Available">New Archive Available</a></li>
+<li><a href="http://www.anotherearlymorning.com/2009/01/slick-gui-with-sticky-buttons/" rel="bookmark" title="Permanent Link: Slick GUI with Sticky Buttons">Slick GUI with Sticky Buttons</a></li>
+</ol>      
+      <div style="clear:both;"></div>
+      
+      <!--
+			<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+		<rdf:Description rdf:about="http://www.anotherearlymorning.com/2008/09/automate-everyday-tasks-with-ant/"
+    dc:identifier="http://www.anotherearlymorning.com/2008/09/automate-everyday-tasks-with-ant/"
+    dc:title="Automate Everyday Tasks with Ant"
+    trackback:ping="http://www.anotherearlymorning.com/2008/09/automate-everyday-tasks-with-ant/trackback/" />
+</rdf:RDF>			-->
+                       
+      <div class="postmeta">
+      
+        <p>
+        Tags:         </p>
+        
+      </div>
+      
+      
+    </div>
+    
+    
+    <div class="postcomments">
+      
+<!-- You can start editing here. -->
+
+	
+			<!-- If comments are open, but there are no comments. -->
+
+	 
+
+
+<div id="respond">
+
+<h4>Leave A Comment</h4>
+
+<div class="cancel-comment-reply">
+	<small><a rel="nofollow" id="cancel-comment-reply-link" href="http://www.anotherearlymorning.com/2008/09/automate-everyday-tasks-with-ant/#respond" style="display: none;">Click here to cancel reply.</a></small>
+</div>
+
+
+<form action="http://www.anotherearlymorning.com/wordpress/wp-comments-post.php" method="post" id="commentform">
+
+
+<p><input name="author" id="author" size="22" tabindex="1" aria-required="true" type="text">
+<label for="author"><small>Name (required)</small></label></p>
+
+<p><input name="email" id="email" size="22" tabindex="2" aria-required="true" type="text">
+<label for="email"><small>Mail (will not be published) (required)</small></label></p>
+
+<p><input name="url" id="url" size="22" tabindex="3" type="text">
+<label for="url"><small>Website</small></label></p>
+
+
+<!--<p><small><strong>XHTML:</strong> You can use these tags: <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></small></p>-->
+
+<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
+
+<p><input name="submit" id="submit" tabindex="5" value="Submit Comment" type="submit">
+<input name="comment_post_ID" value="57" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+</p>
+<p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="d660ff678a" type="hidden"></p>
+</form>
+</div>
+
+
+    </div>
+    
+    
+        
+    
+  </div>
+  
+    
+  <!-- begin right sidebar -->
+
+<div id="sidebar">
+
+	
+    <div class="subscribe">
+        <h4>Subscribe</h4>
+        <p>Receive news and updates from me.</p><form id="subscribe" action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=http://feeds.feedburner.com/AnotherEarlyMorning', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true"><input value="Enter your email address..." id="subbox" onfocus="if (this.value == 'Enter your email address...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Enter your email address...';}" name="email" type="text"><input value="http://feeds.feedburner.com/AnotherEarlyMorning" name="uri" type="hidden"><input name="loc" value="en_US" type="hidden"><input value="Submit" id="subbutton" type="submit"><input value="eNews Subscribe" name="title" type="hidden"></form>
+    </div>
+    
+     
+	<div id="text-4" class="widget widget_text"><h4>About Me</h4>			<div class="textwidget"><p><img alt-"alex="" schearer"="" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/gamejam2010-small.jpg" style="float: left; margin: 8px; border: 1px solid rgb(204, 204, 204);"> Hello, my name is Alex Schearer. I grew up in New York and currently live in Seattle. </p>
+<p>I am a software engineer who works on Microsoft Exchange by day and 
+indie games at night, and this is my blog about game development.</p>
+<p>More details <a href="http://www.anotherearlymorning.com/about">about me</a>.</p>
+</div>
+		</div><div id="yarpp_widget-7" class="widget widget_yarpp_widget"><h4>Related Posts</h4>
+
+<ol><li><a href="http://www.anotherearlymorning.com/2009/06/new-archive-available/" rel="bookmark">New Archive Available</a></li><li><a href="http://www.anotherearlymorning.com/2009/01/slick-gui-with-sticky-buttons/" rel="bookmark">Slick GUI with Sticky Buttons</a></li></ol></div><div id="linkcat-2" class="widget widget_links"><h4>Blogroll</h4>
+	<ul class="xoxo blogroll">
+<li><a href="http://lostgarden.com/">Daniel Cook</a></li>
+<li><a href="http://illogictree.com/" rel="friend">Eddie Lee</a></li>
+<li><a href="http://www.programexperts.com/" rel="friend">Raphael Mun</a></li>
+<li><a href="http://blog.touchmypixel.com/">Touch My Pixel</a></li>
+
+	</ul>
+</div>
+    
+</div>
+
+<!-- end right sidebar -->
+  
+  
+</div>
+
+
+<!-- The main column ends  -->
+
+
+<!-- begin footer -->
+
+<div style="clear:both;"></div>
+
+	<div id="footer">
+
+    	<div class="footerright">
+			<a href="http://www.organicthemes.com/" target="_blank"><img style="margin-bottom: 3px;" src="Automate%20Everyday%20Tasks%20with%20Ant%20%7C%20Another%20Early%20Morning_files/footer_logo.png" alt="Organic Themes"></a>
+        </div>
+
+		<div class="footertop">
+
+			<p>Copyright © 2011 · All Rights Reserved · Another Early Morning</p>
+
+		</div>
+
+		<div class="footerbottom">
+
+			<p><a href="http://www.organicthemes.com/themes/portfolio-theme/" target="_blank">Portfolio Theme</a> by <a href="http://www.organicthemes.com/" target="_blank">Organic Themes</a> · <a href="http://kahunahost.com/" target="_blank" title="WordPress Hosting">WordPress Hosting</a> · <a href="http://www.anotherearlymorning.com/feed/" target="_blank">RSS Feed</a> · <a href="http://www.anotherearlymorning.com/wordpress/wp-login.php">Log in</a></p>
+
+		</div>	
+
+	</div>
+    
+</div>
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4841289-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</body></html>

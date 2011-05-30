@@ -1,1 +1,1 @@
-java -Djava.library.path="lib" -cp :../lib/slick.jar:../lib/lwjgl.jar:../lib/natives-linux.jar: org.diediedie.DieDieDie
+java -Djava.library.path="lib" -cp :../lib/jinput.jar:../lib/slick.jar:../lib/lwjgl.jar:../lib/natives-linux.jar:../lib/libjinput-linux.so:../lib/jnlp.jar:../lib/libjinput-linux.so:../lib/liblwjgl.so:../lib/libjinput-linux64.so:../lib/:../lib/libjinput-osx.jnilib:../lib/liblwjgl64.so:../lib/openal.dylib org.diediedie.DieDieDie
