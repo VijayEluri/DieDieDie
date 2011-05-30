@@ -42,10 +42,18 @@
         
     <!-- This doesn't work! Use run-linux / run-windows instead -->
     <target name="run" depends="compile" >
-        <java dir="${build.dir}"
-              fork="true"
-              classname="org.diediedie.DieDieDie">
-            <jvmarg value="-Djava.library.path=${build.dir}/lib"/>
-        </java>
+    <java dir="${build.dir}" 
+          fork="true" 
+          classname="org.diediedie.DieDieDie" >
+        <classpath>            
+            <pathelement location="${build.dir}"/>
+            <pathelement location="${build.dir}/lib"/>
+            <pathelement path="${build.dir}/lib/slick.jar"/>
+            <pathelement path="${build.dir}/lib/natives-linux.jar"/>
+            <pathelement path="${build.dir}/lib/"/>
+            <pathelement path="${build.dir}/lib/natives-win32.jar"/>
+            <pathelement path="${java.class.path}/"/>
+        </classpath>
+    </java>
     </target>
 </project>
