@@ -134,8 +134,8 @@ public class DieDieDie extends BasicGame
      */ 
 	public static void main(String[] argv) throws SlickException 
     {
-		AppGameContainer container 
-            = new AppGameContainer(new DieDieDie(), xSize, ySize, false);
+		AppGameContainer container = new AppGameContainer(
+            new DieDieDie(), xSize, ySize, false);
 		container.start();
 	}
 }

@@ -18,7 +18,10 @@
 
     <target name="compile" depends="init">
         <echo>Compile the source files</echo>
-        <javac srcdir="${src.dir}" destdir="${build.dir}" debug="true">
+        <javac srcdir="${src.dir}" 
+               destdir="${build.dir}" 
+               debug="true"
+               optimize="on">
             <classpath refid="classpath"/>
         </javac>
 
@@ -35,19 +38,14 @@
         <echo>Copy the run scripts</echo>
         <copy file="run-linux" todir="${build.dir}"/>
         <copy file="run-windows.bat" todir="${build.dir}"/>
-        
     </target>
-
-    <target name="jar" depends="compile">
-        <jar basedir=".."
-             destfile="${build.dir}/diediedie.jar"
-             includes="${build.dir}">
-        </jar>
-        <manifest>
-            <attribute name="Main-Class"
-                       value="org.diediedie.DieDieDie"/>
-            <attribute name="Class-path"
-                       value="${build.dir}/lib"/>
-        </manifest>
+        
+    <target name="run" depends="compile" >
+        <java dir="${build.dir}"
+              fork="true"
+              classname="org.diediedie.DieDieDie">
+            <jvmarg value="-Djava.library.path='lib' -cp :../lib/slick.jar:../lib/lwjgl.jar:../lib/natives-linux.jar: org.diediedie.DieDieDie"/>
+           
+        </java>
     </target>
 </project>
