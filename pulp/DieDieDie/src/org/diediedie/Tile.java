@@ -23,6 +23,9 @@ import pulpcore.math.Rect;
 /**
  * Acts as a bridge between a TiledMap and the individual tiles so they
  * can be accessed easily (for collision det. etc).
+ * 
+ * Hopefully this can still be used without problems in the translation
+ * from Slick to Pulpcore.
  */ 
 public class Tile
 {   

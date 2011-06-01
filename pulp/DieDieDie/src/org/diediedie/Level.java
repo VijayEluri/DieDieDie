@@ -14,13 +14,14 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie;
-
+package org.diediedie; 
+import java.io.InputStream;
 import org.diediedie.NavMesh;
 import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Player;
+// Still using the TiledMap from Slick. So there. >#:-)
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 import pulpcore.math.Rect;
@@ -31,26 +32,31 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * A single level...
+ * A Level in a DieDieDie.
  */ 
 public class Level extends TiledMap
 {
-    // where the exit of the level is
+    // Obviously, the exit point of the map.
     public float exitX, exitY;
     
-    // friction. lower number == more friction, because the horizontal
-    // speed is multiplied by this (<1)number
+    // Friction. Lower number means greater friction (hence being < 1).
+    // The horizontal speed is multiplied (i.e. shrunk) by this.
     public static final float FRICTION = 0.91f;
     
-    // other way with gravity because gravity is added to the Actors' 
-    // ySpeed
+    // It's the other way around with gravity because it's added to the
+    // Actors' vertical speed (ySpeed)
     public float gravity;
     
-    // initial direction player faces 
+    // The initial direction the player is facing.
     public final Direction playerFacing;
     
+    // What's the dude called?
     private String name;
+    
+    // I had the idea of adding a navigation mesh to levels for dealing
+    // with AI pathfinding. Might happen, one day... :D
     private NavMesh navMesh;
+    
     private final String VIS_STR = "isvisible", TRUE_STR = "true", 
                          FALSE_STR = "false", PLATFORM_STR = "platforms";
     
@@ -66,7 +72,9 @@ public class Level extends TiledMap
     /**
      * Create a Level
      */ 
-    public Level(String name, InputStream in, String tileSetsPath, 
+    public Level(String name, 
+                 InputStream in, 
+                 String tileSetsPath, 
                  Direction facing, float grav) throws SlickException
     {
         super(in, tileSetsPath);
@@ -150,10 +158,12 @@ public class Level extends TiledMap
     /**
      * Updates the contents of the level, if any.
      */ 
-    public void update()
+    public void update(int elapsedTime)
     {
         updateEnemies();
     }
+    
+    
     
     /**
      * Updates the behaviour and position etc of all enemies on the
@@ -267,10 +277,10 @@ public class Level extends TiledMap
     }
     
     /**
-     * Draw using Graphics object g this Level at 0,0 plus any 
+     * Draw using CoreGraphics object g this Level at 0,0 plus any 
      * inhabiting enemies. 
      */ 
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         render(0, 0);
         navMesh.draw(g);
@@ -278,9 +288,9 @@ public class Level extends TiledMap
     }
     
     /**
-     * Draw using Graphics object g any visible enemies. 
+     * Draw using CoreGraphics object g any visible enemies. 
      */ 
-    private void drawEnemies(Graphics g)
+    private void drawEnemies(CoreGraphics g)
     {
         for(Actor a : enemies)
         {

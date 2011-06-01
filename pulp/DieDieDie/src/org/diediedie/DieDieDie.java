@@ -41,7 +41,7 @@ import pulpcore.sprite.Sprite;
 import pulpcore.sprite.FilledSprite;
 import pulpcore.Input;
 /**
- * DieDieDie
+ * DieDieDie - This is the main class that ru(i)ns the game.
  */ 
 public class DieDieDie extends Scene2D 
 {   
@@ -71,9 +71,10 @@ public class DieDieDie extends Scene2D
     /**
      * Initialises the game. Of course.
      */ 
-	public void init(GameContainer container) throws SlickException 
+    /*
+    public void init(GameContainer container) throws SlickException 
     {
-		container.setVSync(true);    
+        container.setVSync(true);    
         //container.setTargetFrameRate(60);
         inputProv = new InputProvider(container.getInput());
 
@@ -86,15 +87,32 @@ public class DieDieDie extends Scene2D
         
         // hook up the player to the input provider
         player.associateInputProvider(inputProv, container.getInput());
-	}
+    }
+*/  
+    /*
+     * Load the game components.
+     */ 
+    public void load()
+    {
+        // set up levels
+        createLevels();
+        currentLevel = level1;
+        // load player and associate with the level data
+        player = new Player(level1);
+    }
     
     /*
      * Sets up the Levels objects
      */ 
     private void createLevels()
     {
-        level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
-                           Direction.LEFT, GRAVITY);          
+        level1 = loadLevel(
+                    LEVEL_ONE_NAME, 
+                    LEVEL_1_PATH, 
+                    TILE_SETS_PATH,
+                    Direction.LEFT,
+                    
+                    GRAVITY);          
     }
  
     /*

@@ -14,6 +14,14 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
+ 
+/*
+    
+
+
+*/
+ 
+ 
 package org.diediedie.actors;
 
 import java.util.List;
@@ -22,33 +30,41 @@ import java.util.Iterator;
 import java.util.Collections;
 import pulpcore.animation.Animation;
 import pulpcore.image.CoreGraphics;
+import pulpcore.math.Rect;
+import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.geom.Shape;
+
+// http://www.interactivepulp.com/pulpcore/api/pulpcore/Input.html
+/*
+ 
+ http://slick.cokeandcode.com/javadoc/org/newdawn/slick/command/BasicCommand.html
+ * 
+
+/*
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.Image;
-import pulpcore.math.Rect;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.command.BasicCommand;
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
 import org.newdawn.slick.command.MouseButtonControl;
-
+*/
+import pulpcore.image.CoreImage;
 import org.diediedie.Level;
 import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Collider;
 import org.diediedie.actors.Aligner;
-
-
-
+// NEW
+import pulpcore.Input;
 
 /**
  * ..where *YOU* are the HERO!
  */ 
-public class Player implements Actor, InputProviderListener 
+public class Player implements Actor//, InputProviderListener 
 {    
     private boolean setUp = false, canJump = false;
     final boolean autoUpdate = true;
@@ -72,14 +88,16 @@ public class Player implements Actor, InputProviderListener
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;   
                     
     // Movement
-    private Command jump;
-    private Command left; 
-    private Command right;    
+    /*
+        private Command jump;
+        private Command left; 
+        private Command right;    
+    */
     
     
     private Arrow currentArrow = null; 
-    private List<Arrow> firedArrows = Collections.synchronizedList(new
-                                                    ArrayList<Arrow>());
+    private List<Arrow> firedArrows = Collections.synchronizedList(
+                            new ArrayList<Arrow>());
     
     private boolean leftMoveDown = false, rightMoveDown = false,
                     isChargingArrow = false, isFiringArrow = false;
@@ -122,8 +140,11 @@ public class Player implements Actor, InputProviderListener
         "data/STICKMAN_RIGHT_STAND.png"        
     };
     private Animation leftWalk, rightWalk, leftStand, rightStand,
-                      currentAnim;
-    private Image bowLeft, bowRight, currentBow;
+            currentAnim;
+    
+    
+    //private Image bowLeft, bowRight, currentBow;
+    private CoreImage bowLeft, bowRight, currentBow;
     
     // associated level for collision / item collection reference
     private Level level = null;
@@ -163,10 +184,9 @@ public class Player implements Actor, InputProviderListener
     private void setUpStartPosition()
     {
         this.xPos = level.getPlayerTile().xPos;
-        this.yPos = level.getPlayerTile().yPos - level.getPlayerTile()
-                                                           .tileHeight;
+        this.yPos = level.getPlayerTile().yPos
+                    - level.getPlayerTile().tileHeight;
         yPos--;
-        
         System.out.println("Player is on level " + level + 
                            " at position x: " + xPos + ", y: " + yPos);              
     }
@@ -191,16 +211,30 @@ public class Player implements Actor, InputProviderListener
         return MOVE_SPEED;
     }
     
+    /*
+     
+    API NOTE >> http://www.interactivepulp.com/pulpcore/api/pulpcore/Input.html
+    
+    ========
+    Mouse buttons and keyboard keys are both treated as "virtual keys". 
+    Virtual keys have four states: UP, DOWN, PRESSED, and RELEASED. The
+    states only change when polled, which occurs before each call to
+    Scene.update().
+    
+    */
+    
     /**
      * Links the game's InputProvider to the Player obkect
      */ 
+    /*
     public void associateInputProvider(InputProvider prov, Input in)
     {
+        // http://www.interactivepulp.com/pulpcore/api/pulpcore/Input.html
         prov.addListener(this); 
         
-        jump = new BasicCommand("jump");
-        left = new BasicCommand("left");
-        right = new BasicCommand("right");
+        //jump = new BasicCommand("jump");
+        //left = new BasicCommand("left");
+        //right = new BasicCommand("right");
         
         prov.bindCommand(new KeyControl(Input.KEY_A), left);
         prov.bindCommand(new KeyControl(Input.KEY_D), right);
@@ -254,10 +288,12 @@ public class Player implements Actor, InputProviderListener
         });
     }
     
+    */
     /**
      * Defines the routines carried out for when each command is 
      * released.
      */ 
+    /*
     public void controlReleased(Command com)
     {
         //System.out.println("released: " + com);
@@ -279,10 +315,12 @@ public class Player implements Actor, InputProviderListener
             }
         }
     }
+    */
     
     /**
      * Defines the routines carried out for when each command is pressed.
      */ 
+    /*
     public void controlPressed(Command com)
     {
         //System.out.println("pressed: " + com);
@@ -304,6 +342,7 @@ public class Player implements Actor, InputProviderListener
             jump();
         }
     }
+    */
     
     /*
      * Starts the player aiming an arrow towards the

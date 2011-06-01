@@ -1,0 +1,17 @@
+...aka 'Christ What A Job' aka 'Refactoring the shitty demo I've already
+========================================================================
+written into a new library, because it's going to be better that way. 
+========================================================================
+Honest'
+======
+
+Intro
+-----
+I'm moving almost all of the code that uses one library (Slick) to a 
+different one (PulpCore). That is, just the code that interacts with 
+the Slick library, apart from those that use the Tiled Map Editor, 
+which Slick supports. The main code will be the same (or translated as
+closely as possible).
+
+ 
+

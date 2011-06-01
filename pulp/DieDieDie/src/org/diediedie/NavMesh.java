@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 import org.diediedie.actors.*;
 import pulpcore.image.CoreGraphics;
 import pulpcore.image.Colors;
-
+import org.newdawn.slick.geom.Shape;
 /**
  * NavMesh. Generated for a Level using inner class MeshMaker.
  */ 
@@ -53,7 +53,7 @@ public class NavMesh implements Drawable
     }
     
     @Override
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         g.setColor(walkableColor);
         for(Shape l : walkableZones)
@@ -468,7 +468,8 @@ public class NavMesh implements Drawable
          * 
          * Slices combined are removed from the given list.
          */
-        private static List<SliceGroup> combineSlices(List<Slice> slices)
+        private static List<SliceGroup> combineSlices(
+            List<Slice> slices)
         {                   
             List<SliceGroup> groups = new ArrayList<SliceGroup>();
             
