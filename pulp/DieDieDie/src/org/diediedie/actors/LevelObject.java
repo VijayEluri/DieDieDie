@@ -14,35 +14,19 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
- 
 package org.diediedie.actors;
-import org.diediedie.actors.LevelObject;
-import org.diediedie.actors.Direction;
 import pulpcore.image.CoreGraphics;
-import pulpcore.image.AnimatedImage;
-import pulpcore.math.Rect;
-//import org.newdawn.slick.geom.Shape;
-import java.util.Set;
+import org.diediedie.Level;
+import org.diediedie.Drawable;
 
-/*
- * Actor - interface for Players and Enemies.
- */
-public interface Actor extends MovableObject
-{            
-    public static int ANIM_DURATION = 100;
-    void applySpeed(Direction d);
-    boolean canJump();
-    void die();
-    AnimatedImage getCurrentAnim();
-    Direction getFacing();
-    int getHealth();    
-    float getJumpSpeed();
-    float getMoveSpeed();    
-    float getXSpeed();
-    float getYSpeed();
-    Rect getZone();    
-    void setJump(boolean b);
-    void jump();
-    void setFacing(Direction d);
-    void resetAccelX();
-}  
+/**
+ * Super-interface for any interactive thing that exists on a Level. 
+ */ 
+public interface LevelObject extends Drawable
+{
+    void update();
+    void draw(CoreGraphics g);
+    Level getLevel();
+    int getX();
+    int getY();  
+}

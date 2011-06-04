@@ -31,7 +31,7 @@ public class Tile
 {   
     final float ROUNDING = 0.999f;    
     public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
-    public float xPos, yPos, endX, endY;
+    public int xPos, yPos, endX, endY;
     private TiledMap tiledMap;
     private Rect rect;
     
@@ -89,11 +89,11 @@ public class Tile
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
         
-        rect = new Rect(xPos, yPos, tileWidth + ROUNDING, 
-                                         tileHeight + ROUNDING);
+        rect = new Rect(xPos, yPos, tileWidth, //+ ROUNDING, 
+                                     tileHeight);// + ROUNDING);
                                          
-        endX = xPos + tileWidth + ROUNDING;
-        endY = yPos + tileHeight + ROUNDING;
+        endX = xPos + tileWidth;// + ROUNDING;
+        endY = yPos + tileHeight;// + ROUNDING;
     }
         
     public float getXPos() 

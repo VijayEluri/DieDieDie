@@ -28,6 +28,7 @@ import pulpcore.CoreSystem;
 import pulpcore.image.Colors;
 import pulpcore.animation.Color;
 import pulpcore.math.Rect;
+
 //import org.newdawn.slick.geom.Shape;
 /**
  * NavMesh. Generated for a Level using inner class MeshMaker.
@@ -219,9 +220,9 @@ public class NavMesh implements Drawable
                                 + first + "\n\t to " + last);*/
 
             rect = new Rect(
-                 (int)first.xPos, (int)first.yPos, 
-                ((int)last.endX - (int)first.xPos),
-                ((int)last.endY - (int)first.yPos));
+                 first.xPos, first.yPos, 
+                (last.endX - first.xPos),
+                (last.endY - first.yPos));
             check();
         }        
         
@@ -661,8 +662,8 @@ public class NavMesh implements Drawable
         {
             CoreSystem.print("\tnew walk line from " 
                 + start.getCoords() + " to " + prev.getCoords());
-            Line line = new Line((int)start.xPos, (int)start.yPos,
-                                 (int)prev.endX,  (int)prev.yPos);
+            Line line = new Line(start.xPos, start.yPos,
+                                 prev.endX,  prev.yPos);
             start = null;
             prev = null;
             return line;

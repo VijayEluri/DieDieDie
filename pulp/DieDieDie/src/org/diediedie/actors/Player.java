@@ -22,16 +22,17 @@ import java.util.Iterator;
 import java.util.Collections;
 import pulpcore.animation.Animation;
 import pulpcore.image.CoreGraphics;
-import pulpcore.image.ImageSprite;
+import pulpcore.sprite.ImageSprite;
 import pulpcore.CoreSystem;
 import pulpcore.math.Rect;
 import pulpcore.image.CoreImage;
+import pulpcore.image.AnimatedImage;
 import org.diediedie.Level;
 import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Collider;
 import org.diediedie.actors.Aligner;
-//import pulpcore.Input;
+import pulpcore.Input;
 
 /**
  * ..where *YOU* are the HERO!
@@ -44,22 +45,25 @@ public class Player implements Actor
     private ImageSprite sprite;
     
     private float accelX = 0f, 
-                  bowCharge = 0, 
-                  oldX, oldY, 
-                  bowX, bowY, 
-                  bowYCurrentOffset, bowXCurrentOffset;
+                  bowCharge = 0;
+                  
                   
     public final float MAX_CHARGE = 20.34f, CHARGE_INCR = 0.3f, 
-                       BOW_Y_OFFSET_NORMAL = -2f, 
-                       BOW_Y_OFFSET_AIM_UP = -10, MAX_Y_SPEED = 20.5f,
+                       MAX_Y_SPEED = 20.5f,
                        MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
-                       BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
-                       MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
+                       MOVE_SPEED = 0.9f, 
                        ACCEL_RATE = 0.03f;
                         
-    private final int MAX_HEALTH = 20, BOW_AIM_UP_TRIGGER = 50,
-                      BOW_AIM_DOWN_TRIGGER = 110, BOW_X_OFFSET = 5,
-                      BOW_ANGLE_OFFSET = 90; 
+    private final int MAX_HEALTH = 20, 
+                      BOW_AIM_UP_TRIGGER = 50,
+                      BOW_AIM_DOWN_TRIGGER = 110, 
+                      BOW_X_OFFSET = 5,
+                      BOW_ANGLE_OFFSET = 90, 
+                      BOW_Y_OFFSET_AIM_UP = -10,
+                      BOW_Y_OFFSET_NORMAL = -2,
+                      BOW_Y_OFFSET_AIM_DOWN = 6, 
+                      ARROW_Y_OFFSET = 15,
+                      MAX_ACCEL = 4;
                       
     private int health = MAX_HEALTH, 
                 arrowCount = 0;    
@@ -70,7 +74,13 @@ public class Player implements Actor
     
     private boolean isChargingArrow = false, isFiringArrow = false;
     
-    private float xPos, yPos, xSpeed, ySpeed;
+    private float xSpeed, ySpeed;
+    
+    private int xPos, yPos, 
+                oldX, oldY, 
+                bowX, bowY,
+                bowYCurrentOffset, 
+                bowXCurrentOffset;
     
     public Direction facing = Direction.LEFT, 
                      moving = Direction.LEFT; 
@@ -102,7 +112,7 @@ public class Player implements Actor
     
     private String leftStandPath = "data/STICKMAN_LEFT_STAND.png";
     
-    private Animation leftWalk, rightWalk, currentAnim;
+    private AnimatedImage leftWalk, rightWalk, currentAnim;
             
     private CoreImage leftStand, rightStand, 
                       bowLeft, bowRight, 
@@ -163,7 +173,7 @@ public class Player implements Actor
     private void initBow()
     {
           bowLeft = AnimCreator.loadImage(bowLeftPath);
-          bowRight = bowLeft.getFlippedCopy(true, false);
+          bowRight = bowLeft.mirror();
           currentBow = bowLeft;
     }    
     
@@ -272,7 +282,7 @@ public class Player implements Actor
      * Charges the arrow and updates the Direction the player faces.
      * -- Used by Player.update().
      */ 
-    public void chargeArrow()
+    public void chargeArrow(int mouseX, int mouseY)
     {
         if(bowCharge < MAX_CHARGE)
         {
@@ -286,15 +296,17 @@ public class Player implements Actor
             currentBow = bowRight;   
             setFacing(Direction.RIGHT);
             bowX = xPos + BOW_X_OFFSET + (getCurrentFrameWidth() / 2);
-            currentBow.setRotation(currentArrow.getAngle() 
-                                   - BOW_ANGLE_OFFSET);
+            //currentBow.setRotation(
+            currentBow.rotate(
+                currentArrow.getAngle() - BOW_ANGLE_OFFSET);
         }
         else
         {
             setFacing(Direction.LEFT);
             currentBow = bowLeft;   
             bowX = xPos - BOW_X_OFFSET;
-            currentBow.setRotation(currentArrow.getAngle() 
+            //currentBow.setRotation(currentArrow.getAngle() 
+            currentBow.rotate(currentArrow.getAngle() 
                                     + BOW_ANGLE_OFFSET);
         }
         updateBowPosition();
@@ -354,25 +366,23 @@ public class Player implements Actor
      * Returns the x position of the arrow when being held by the 
      * player.
      */ 
-    public float getHoldingArrowX()
+    public int getHoldingArrowX()
     {
         return xPos + getCurrentFrameWidth() / 2;
     } 
     
-    public float getCurrentFrameWidth()
+    public int getCurrentFrameWidth()
     {
-        return AnimCreator.getCurrentFrameRect(this).getWidth();
+        return AnimCreator.getCurrentFrameRect(this).width;
     }
     
     /*
      * Returns the y position of the arrow when being held by the player
      */
-    public float getHoldingArrowY()
+    public int getHoldingArrowY()
     {
         return yPos + ARROW_Y_OFFSET;
     } 
-    
-    
     
     /*
      * Fires an Arrow from the Player's position towards the X / Y
@@ -431,12 +441,12 @@ public class Player implements Actor
     /**
      * Returns the x position
      */ 
-    public float getX() { return xPos; }
+    public int getX() { return xPos; }
     /**
      * Returns the y position
      */ 
-    public float getY() { return yPos; } 
-    
+    public int getY() { return yPos; } 
+
     
     /**
      * Stops the Player's animation var to 'standing'. 
@@ -446,12 +456,12 @@ public class Player implements Actor
         if(facing.equals(Direction.RIGHT))
         {
             //currentAnim = rightStand;
-            sprite = rightStand
+            sprite.setImage(rightStand);
         }
         else if(facing.equals(Direction.LEFT))
         {
             //currentAnim = leftStand;   
-            sprite = leftStand
+            sprite.setImage(leftStand);
         }
         else throw new IllegalStateException(
             "standing dir neither left or right");
@@ -536,7 +546,8 @@ public class Player implements Actor
         // Update Arrow information depending on state
         if(isChargingArrow)
         {
-            chargeArrow();
+            chargeArrow(
+                Input.getMouseX(), Input.getMouseY());
         }
         updateFiredArrows();
         Mover.move(this);
@@ -549,7 +560,7 @@ public class Player implements Actor
     }
     
     @Override
-    public Animation getCurrentAnim()
+    public AnimatedImage getCurrentAnim()
     {
         return currentAnim;
     }
@@ -582,13 +593,13 @@ public class Player implements Actor
     }
     
     @Override
-    public void setX(float x)
+    public void setX(int x)
     {
         xPos = x;
     }
     
     @Override
-    public void setY(float y)
+    public void setY(int y)
     {
         yPos = y;
     }
@@ -656,7 +667,9 @@ public class Player implements Actor
     @Override
     public void draw(CoreGraphics g)
     {
-        g.drawAnimation(currentAnim, getX(), getY());
+        //g.drawAnimation(currentAnim, getX(), getY());
+        g.drawImage(currentAnim, getX(), getY());
+        
         drawArrows(g);
         
         if(isChargingArrow)
@@ -700,7 +713,7 @@ public class Player implements Actor
             Actor.ANIM_DURATION, leftStandPath);                
         */
         
-        currentAnim = leftStand;
+        sprite.setImage(leftStand);
         
         // get initial direction from the level
         facing = level.playerFacing;

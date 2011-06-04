@@ -152,7 +152,11 @@ public class DieDieDie extends Scene2D
         }
     }
         
-    
+    private void updateMousePosition()
+    {
+        mouseX = Input.getMousePressX();
+        mouseY = Input.getMousePressY();
+    }
     
     /*
      * Reads mouse input and updates the player accordingly.
@@ -161,16 +165,13 @@ public class DieDieDie extends Scene2D
     {
         if(Input.isMouseMoving())
         {
-            mouseX = newx;
-            mouseY = newy;
+           updateMousePosition();
         }
         if(Input.isMousePressed())
-        {
-            mouseX = Input.getMousePressX();
-            mouseY = Input.getMousePressY();
-            
+        {    
+            //updateMousePosition()
             Tile c = player.getLevel().getCollisionTileAt(
-                mouseX, mouseY);
+                        mouseX, mouseY);
             
             if(c != null)
             {

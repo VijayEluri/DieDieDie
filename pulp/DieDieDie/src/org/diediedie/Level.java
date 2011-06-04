@@ -113,23 +113,22 @@ public class Level extends TiledMap
     }
     
     /**
-     * Returns the shape in the nav mesh that this actor is in/on, if
+     * Returns the Line in the nav mesh that this actor is in/on, if
      * one exists
      */ 
-/*
-    public Line getActorZone(Actor a)
+    public Rect getActorZone(Actor a)
     {
         Rect r = AnimCreator.getCurrentFrameRect(a);
-        for(Line l : getNavMesh().getWalkableZones())
+        
+        for(Rect rect : getNavMesh().getNegativeSpace())
         {
-            if(r.intersects(l))
+            if(rect.intersects(r))
             {
-                return l;
+                return rect;
             }
         }
         return null;
     }
-*/
     
     public Player getPlayer()
     {
