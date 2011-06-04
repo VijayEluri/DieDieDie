@@ -68,7 +68,7 @@ public class Look implements Action
             started = true;
             update(e);
             viewCreated = true;
-            System.out.println("Look.perform()");
+            CoreSystem.print("Look.perform()");
         }
         else if(started && !finished)
         {
@@ -77,7 +77,7 @@ public class Look implements Action
     }
     
     @Override
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         if(viewCreated)
         {
@@ -122,7 +122,7 @@ public class Look implements Action
                     ||  !isViewBlocked(e, points.get(1))))
             {
                 e.addVisibleObject(pr);
-                //System.out.println(e + " can see " + pr);
+                //CoreSystem.print(e + " can see " + pr);
             }
         }
     }
@@ -151,7 +151,7 @@ public class Look implements Action
     
     /*
      * Returns true if any of the four points of an Actor's containing
-     * Rectangle are inside the view Shape sh.
+     * Rect are inside the view Shape sh.
      */ 
     private boolean actorInView(Shape sh, Actor a)
     {
@@ -191,7 +191,7 @@ public class Look implements Action
         
         if(actorInView(sh, a) && !isViewBlocked(e, p))
         {
-            //System.out.println(a + " | is visible to | " + e);
+            //CoreSystem.print(a + " | is visible to | " + e);
             return true;
         }  
         return false;
@@ -255,7 +255,7 @@ public class Look implements Action
         {
             viewSize = e.getViewSize();
             constructFOV(e);
-            //System.out.println("constructed view");
+            //CoreSystem.print("constructed view");
         } 
         
         public Shape getShape()
@@ -284,12 +284,12 @@ public class Look implements Action
             
             if(e.getFacing().equals(Direction.LEFT))
             {
-                //System.out.println(e + " left view");
+                //CoreSystem.print(e + " left view");
                 endX = fastSin(xViewStart, -EYE_ANG_UP);
             }
             else if(e.getFacing().equals(Direction.RIGHT))
             {
-               //System.out.println(e + " right view");
+               //CoreSystem.print(e + " right view");
                 endX = fastSin(xViewStart, EYE_ANG_UP);    
             }
             
@@ -305,7 +305,7 @@ public class Look implements Action
         /*
          * For testing purposes, draw the field of vision lines.
          */ 
-        public void draw(Graphics g)
+        public void draw(CoreGraphics g)
         {
             g.setColor(color);
             

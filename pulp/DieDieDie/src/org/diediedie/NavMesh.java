@@ -22,6 +22,7 @@ import java.util.concurrent.*;
 import org.diediedie.actors.*;
 import pulpcore.image.CoreGraphics;
 import pulpcore.image.Colors;
+import pulpcore.math.Rect;
 import org.newdawn.slick.geom.Shape;
 /**
  * NavMesh. Generated for a Level using inner class MeshMaker.
@@ -127,8 +128,8 @@ public class NavMesh implements Drawable
             s = tiles.get(0);
             e = tiles.get(tiles.size() - 1);
             
-            System.out.println("Slice " + hashCode());
-            System.out.println("\t" + s.xCoord + ", " + s.yCoord + " to "
+            CoreSystem.print("Slice " + hashCode());
+            CoreSystem.print("\t" + s.xCoord + ", " + s.yCoord + " to "
                                + e.xCoord + ", " + e.yCoord);            
         }
         
@@ -199,10 +200,10 @@ public class NavMesh implements Drawable
             Tile first = startSlice.tiles.get(0);
             Tile last = endSlice.tiles.get(endSlice.tiles.size() - 1);
             
-            /*System.out.println("SliceGroup: createShape() \n\tfrom "
+            /*CoreSystem.print("SliceGroup: createShape() \n\tfrom "
                                 + first + "\n\t to " + last);*/
 
-            rect = new Rectangle(first.xPos, first.yPos, 
+            rect = new Rect(first.xPos, first.yPos, 
                                  (last.endX - first.xPos),
                                   (last.endY - first.yPos));
             check();
@@ -235,13 +236,13 @@ public class NavMesh implements Drawable
          */ 
         public boolean addSlice(Slice s)
         {
-            /*System.out.println("SliceGroup.(" + hashCode() + 
+            /*CoreSystem.print("SliceGroup.(" + hashCode() + 
                                "(addSlice:");*/
             if(MeshMaker.areCompatible(getEndSlice(), s))
             {
                 if(slices.add(s))
                 {
-                    /*System.out.println("\t[successfully added slice]");*/
+                    /*CoreSystem.print("\t[successfully added slice]");*/
                     createShape();
                     return true;
                 }
@@ -259,10 +260,10 @@ public class NavMesh implements Drawable
         public Slice getEndSlice()
         {
             Slice s = slices.get(slices.size() - 1);
-           /* System.out.println("SliceGroup(" + hashCode() + 
+           /* CoreSystem.print("SliceGroup(" + hashCode() + 
                                ").getEndSlice(): {");
             s.printSliceInfo();
-            System.out.println("}");*/
+            CoreSystem.print("}");*/
             
             return s;
         }
@@ -273,10 +274,10 @@ public class NavMesh implements Drawable
         public Slice getStartSlice()
         {
             Slice s = slices.get(0);
-            /*System.out.println("SliceGroup(" + hashCode() + 
+            /*CoreSystem.print("SliceGroup(" + hashCode() + 
                                ").getStartSlice(): {");
             s.printSliceInfo(); 
-            System.out.println("}");*/
+            CoreSystem.print("}");*/
             return s;
         }
         
@@ -299,7 +300,7 @@ public class NavMesh implements Drawable
             if(MeshMaker.areCompatible(this, other))
             {
                 /*printGroupInfo();
-                System.out.println("addGroup: ");
+                CoreSystem.print("addGroup: ");
                 other.printGroupInfo();*/
                 
                 for(Slice s : other.slices)
@@ -310,7 +311,7 @@ public class NavMesh implements Drawable
                     }
                     /*else
                     {
-                        System.out.println(
+                        CoreSystem.print(
                             "added slice from other group: ");
                         s.printSliceInfo();
                     }*/
@@ -319,7 +320,7 @@ public class NavMesh implements Drawable
             }
             /*else
             {
-                System.out.println("addGroup: incompatible");
+                CoreSystem.print("addGroup: incompatible");
             }*/
             
             return false;
@@ -414,7 +415,7 @@ public class NavMesh implements Drawable
          */ 
         private static void combineGroups(List<SliceGroup> groups)
         {
-           /* System.out.println("combineGroups: looking at " +
+           /* CoreSystem.print("combineGroups: looking at " +
                                 groups.size());*/
                                 
             SliceGroup prev = null;
@@ -490,7 +491,7 @@ public class NavMesh implements Drawable
         {
             if(allSlices.isEmpty())
             {
-                System.out.println("end of slices; end of groups");
+                CoreSystem.print("end of slices; end of groups");
                 return null;
             }      
             List<Slice> currentSlices = new LinkedList<Slice>();
@@ -509,7 +510,7 @@ public class NavMesh implements Drawable
                     if(g.addSlice(s))
                     {
                         added++;
-                        System.out.println("|--adding Slice : ");
+                        CoreSystem.print("|--adding Slice : ");
                         s.printSliceInfo();
                         lit.remove();
                     }
@@ -639,7 +640,7 @@ public class NavMesh implements Drawable
          */ 
         private static Line makeWalkLine(Tile start, Tile prev)
         {
-            /*System.out.println("\tnew walk line from " 
+            /*CoreSystem.print("\tnew walk line from " 
                     + start.getCoords() + " | to | " + prev.getCoords());*/
             Line line = new Line(start.xPos, start.yPos,
                                  prev.endX, prev.yPos);
@@ -656,7 +657,7 @@ public class NavMesh implements Drawable
         {
             for(Tile t : c)
             {
-                System.out.println("\tx: " + t.xCoord + ", y: " +
+                CoreSystem.print("\tx: " + t.xCoord + ", y: " +
                                    t.yCoord);
             }
         }
@@ -674,7 +675,7 @@ public class NavMesh implements Drawable
                     ||
                    possible.xCoord == (original.xCoord - 1))
                 {
-                   /* System.out.println("hori neighbours: " + original +
+                   /* CoreSystem.print("hori neighbours: " + original +
                                         ", " + possible);*/
                     return true;   
                 }
@@ -695,7 +696,7 @@ public class NavMesh implements Drawable
                     ||
                    possible.yCoord == (original.yCoord - 1))
                 {
-                   /* System.out.println("vert neighbours: " + original +
+                   /* CoreSystem.print("vert neighbours: " + original +
                                         ", " + possible);*/
                     return true;   
                 }
@@ -737,7 +738,7 @@ public class NavMesh implements Drawable
         {
             if(!colls.containsTile(test.xCoord, test.yCoord - 1))
             {
-                /*System.out.println("Tile " + test.xCoord + ", "
+                /*CoreSystem.print("Tile " + test.xCoord + ", "
                              + test.yCoord + " is ledge tile");*/
                 return true;
             }

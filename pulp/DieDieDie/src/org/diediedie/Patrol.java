@@ -73,7 +73,7 @@ public class Patrol implements State
         if(!running)
         {
             running = true;
-            System.out.println("\tstarted " + this);
+            CoreSystem.print("\tstarted " + this);
             currentAction.perform(host);
         }
     }
@@ -85,13 +85,13 @@ public class Patrol implements State
     public void update()
     {
         final Class cls = currentAction.getClass();
-        //System.out.println("Patrol.update(): currentAction: " currentAction);
+        //CoreSystem.print("Patrol.update(): currentAction: " currentAction);
         
         // NOT STARTED *OR* FINISHED
         if(!currentAction.hasStarted())
         {
             currentAction.perform(host);
-            System.out.println("Patrol.update(): started " + currentAction);
+            CoreSystem.print("Patrol.update(): started " + currentAction);
         }
         // STARTED BUT *NOT* FINISHED
         else if(!currentAction.hasFinished())
@@ -104,7 +104,7 @@ public class Patrol implements State
         {
             if(cls.equals(startWalking.getClass()))
             {
-                System.out.println("Patrol.update(): changing state");   
+                CoreSystem.print("Patrol.update(): changing state");   
                 currentAction = new Look();    
             }
         }

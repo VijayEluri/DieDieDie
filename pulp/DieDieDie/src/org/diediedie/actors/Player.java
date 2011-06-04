@@ -187,7 +187,7 @@ public class Player implements Actor//, InputProviderListener
         this.yPos = level.getPlayerTile().yPos
                     - level.getPlayerTile().tileHeight;
         yPos--;
-        System.out.println("Player is on level " + level + 
+        CoreSystem.print("Player is on level " + level + 
                            " at position x: " + xPos + ", y: " + yPos);              
     }
     
@@ -250,7 +250,7 @@ public class Player implements Actor//, InputProviderListener
                     Tile c = getLevel().getCollisionTileAt(x, y);
                     if(c != null)
                     {
-                        System.out.println("Mouse pressed Tile " +
+                        CoreSystem.print("Mouse pressed Tile " +
                                             c.xCoord + ", " + 
                                             c.yCoord);
                     }
@@ -263,7 +263,7 @@ public class Player implements Actor//, InputProviderListener
             {
                 if(button == BOW_BUTTON)
                 {
-                    //System.out.println("left mouse released");
+                    //CoreSystem.print("left mouse released");
                     releaseArrow();
                 }
             }
@@ -296,7 +296,7 @@ public class Player implements Actor//, InputProviderListener
     /*
     public void controlReleased(Command com)
     {
-        //System.out.println("released: " + com);
+        //CoreSystem.print("released: " + com);
         
         if(com.equals(left))
         {
@@ -323,7 +323,7 @@ public class Player implements Actor//, InputProviderListener
     /*
     public void controlPressed(Command com)
     {
-        //System.out.println("pressed: " + com);
+        //CoreSystem.print("pressed: " + com);
                 
         if(com.equals(left))
         {
@@ -350,7 +350,7 @@ public class Player implements Actor//, InputProviderListener
      */ 
     private void readyArrow()
     {
-        System.out.println("Readying arrow");
+        CoreSystem.print("Readying arrow");
         currentArrow = new Arrow(xPos, yPos, level, mouseX, mouseY);
         isChargingArrow = true;
     }
@@ -364,7 +364,7 @@ public class Player implements Actor//, InputProviderListener
         {
             bowCharge += CHARGE_INCR;
         }
-        //System.out.println("bowCharge " + bowCharge);
+        //CoreSystem.print("bowCharge " + bowCharge);
         currentArrow.updateAiming(mouseX, mouseY);
 
         if(currentArrow.getAngle() >= 0)
@@ -402,13 +402,13 @@ public class Player implements Actor//, InputProviderListener
     @Override
     public void die()
     {
-        System.out.println("Player is dead!");
+        CoreSystem.print("Player is dead!");
     }
     
     private float getMiddleXPos()
     {
         final float midX = xPos + (getCurrentFrameWidth() / 2);
-        //System.out.println("xPos: " + xPos + ", midX: " + midX);
+        //CoreSystem.print("xPos: " + xPos + ", midX: " + midX);
         return midX;
     }
     
@@ -466,7 +466,7 @@ public class Player implements Actor//, InputProviderListener
         firedArrows.add(currentArrow);
         currentArrow = null;
         
-        System.out.println("released arrow, power " + bowCharge);        
+        CoreSystem.print("released arrow, power " + bowCharge);        
         bowCharge = 0;
     }
     
@@ -502,7 +502,7 @@ public class Player implements Actor//, InputProviderListener
         }
         moving = dir;
         setFacing(dir);
-        //System.out.println("setMovingDir: " + dir);
+        //CoreSystem.print("setMovingDir: " + dir);
     }
     
     /**
@@ -639,13 +639,13 @@ public class Player implements Actor//, InputProviderListener
     
     public void printSpeed()
     {
-        System.out.println("accelX==" + accelX + ", " + "xSpeed==" 
+        CoreSystem.print("accelX==" + accelX + ", " + "xSpeed==" 
                             + xSpeed + ", ySpeed==" + ySpeed);
     }
     
     public void printPosition()
     {
-        System.out.println("xPos==" + xPos + ", yPos==" + yPos); 
+        CoreSystem.print("xPos==" + xPos + ", yPos==" + yPos); 
     }
     
     @Override
@@ -731,7 +731,7 @@ public class Player implements Actor//, InputProviderListener
     }
     
     @Override
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         g.drawAnimation(currentAnim, getX(), getY());
         drawArrows(g);
@@ -745,7 +745,7 @@ public class Player implements Actor//, InputProviderListener
     /*
      * Draw all the arrows that still exist 
      */
-    private void drawArrows(Graphics g)
+    private void drawArrows(CoreGraphics g)
     {
         if(currentArrow != null)
         {

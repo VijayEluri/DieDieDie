@@ -47,7 +47,7 @@ public class DieDieDie extends Scene2D
 {   
     private Player player;
     
-    private InputProvider inputProv = null;    
+    //private InputProvider inputProv = null;    
     
     private static int xSize = 640, 
                        ySize = 480;
@@ -140,7 +140,7 @@ public class DieDieDie extends Scene2D
     /**
      * Updates the game's state.
      */ 
-	public void update(GameContainer container, int delta) 
+	public void update(/*GameContainer container, */int delta) 
     { 
         player.update();
         currentLevel.update();
@@ -149,7 +149,7 @@ public class DieDieDie extends Scene2D
     /**
      * Render the updated game state.
      */ 
-	public void render(GameContainer container, Graphics g)  
+	public void render(/*GameContainer container,*/ CoreGraphics g)  
     {
 		currentLevel.draw(g);
         player.draw(g);
@@ -158,10 +158,17 @@ public class DieDieDie extends Scene2D
     /**
      * For running the program from the command line. 
      */ 
-	public static void main(String[] argv) throws SlickException 
+	public static void main(String[] argv) //throws SlickException 
     {
-		AppGameContainer container = new AppGameContainer(
-            new DieDieDie(), xSize, ySize, false);
-		container.start();
+		//AppGameContainer container = new AppGameContainer(
+          //  new DieDieDie(), xSize, ySize, false);
+		//container.start();
+        DieDieDie newGame = new DieDieDie();
+        newGame.invokeLater(new Runnable() {
+            public void run() {
+                myLabel.setText(message);
+                myLabel.visible.set(true);
+            }
+        });
 	}
 }

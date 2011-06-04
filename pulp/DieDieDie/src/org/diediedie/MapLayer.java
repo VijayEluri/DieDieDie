@@ -38,7 +38,7 @@ public class MapLayer
         tiles = layerTiles;
         index = in;
         isVisible = vis;
-        System.out.println(toString());
+        CoreSystem.print(toString());
     }
     
     /**
@@ -55,7 +55,7 @@ public class MapLayer
         {
             if(t.xCoord == x && t.yCoord == y)
             {
-                /*System.out.println(this + "|\tContains " +
+                /*CoreSystem.print(this + "|\tContains " +
                                 xCoord + ", " + yCoord);*/
                 return true;
             }

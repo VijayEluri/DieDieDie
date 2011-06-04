@@ -33,13 +33,14 @@ public class Tile
     public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
     public float xPos, yPos, endX, endY;
     private TiledMap tiledMap;
-    private Rectangle rect;
+    private Rect rect;
     
     public Map<String, String> properties = new HashMap<String, String>();
     
     public static final String[] PROPERTIES = {"type", "name"};
     public static final String[] VALUES = {
-        "exit", "enemy", "start", "bluey"};
+        "exit", "enemy", "start", "bluey"
+    };
     public static final String NULL = "NULL";
     
     /**
@@ -58,7 +59,7 @@ public class Tile
         calculatePosition();
         extractProperties();
         
-        // System.out.println("new " + this);
+        // CoreSystem.print("new " + this);
     }
     
     public String getCoords()
@@ -87,7 +88,7 @@ public class Tile
         xPos = (xCoord) * tileWidth;
         yPos = (yCoord) * tileHeight;
         
-        rect = new Rectangle(xPos, yPos, tileWidth + ROUNDING, 
+        rect = new Rect(xPos, yPos, tileWidth + ROUNDING, 
                                          tileHeight + ROUNDING);
                                          
         endX = xPos + tileWidth + ROUNDING;
@@ -100,7 +101,7 @@ public class Tile
     /**
      * Returns the rectangular bounding box of this tile on the Level.
      */ 
-    public Rectangle getRect() { return rect; }    
+    public Rect getRect() { return rect; }    
     
     /**
      * 

@@ -39,7 +39,7 @@ public class ConstructPath implements Action
     
     public void perform(Enemy e)
     {
-        System.out.println("ConstructPath: perform");
+        CoreSystem.print("ConstructPath: perform");
     }
     
     public boolean hasStarted()
@@ -57,7 +57,7 @@ public class ConstructPath implements Action
         
     }
         
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         
     }

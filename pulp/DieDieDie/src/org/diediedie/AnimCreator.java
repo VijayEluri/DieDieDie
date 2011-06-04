@@ -115,10 +115,10 @@ public class AnimCreator
     /**
      * Returns an Animation frame's rectangular bounding box.
      */ 
-    public static Rectangle getCurrentFrameRect(Actor actr)
+    public static Rect getCurrentFrameRect(Actor actr)
     {
         Image img = actr.getCurrentAnim().getCurrentFrame();
-        return new Rectangle(actr.getX(), actr.getY(), img.getWidth(), 
+        return new Rect(actr.getX(), actr.getY(), img.getWidth(), 
                              img.getHeight());
     }
 }

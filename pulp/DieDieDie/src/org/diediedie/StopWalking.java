@@ -33,7 +33,7 @@ public class StopWalking implements Action
     }
     
     @Override
-    public void draw(Graphics g){} 
+    public void draw(CoreGraphics g){} 
     
     public void reset()
     {
@@ -47,7 +47,7 @@ public class StopWalking implements Action
         {
             started = true;
             
-            System.out.println("\tperforming StopWalking for " 
+            CoreSystem.print("\tperforming StopWalking for " 
                 + new Throwable().fillInStackTrace()
                                 .getStackTrace()[1].getClassName());
             host.setMoving(false);

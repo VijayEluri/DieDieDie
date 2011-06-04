@@ -27,7 +27,7 @@ public interface Action
     boolean hasStarted();
     boolean hasFinished(); 
     void update(Enemy e);
-    //void draw(Graphics g);
+    //void draw(CoreGraphics g);
     void draw(CoreGraphics g);
     void reset();
 }

@@ -82,7 +82,7 @@ public class Level extends TiledMap
         this.gravity = grav;
         this.playerFacing = facing;
         
-        System.out.println("Level " + name + " has " + getLayerCount() +
+        CoreSystem.print("Level " + name + " has " + getLayerCount() +
                            " tile layers");
         
         collisionLayer = createMapLayer(getLayerIndex("collisions"));
@@ -115,7 +115,7 @@ public class Level extends TiledMap
      */ 
     public Rect getActorZone(Actor a)
     {
-        Rectangle r = AnimCreator.getCurrentFrameRect(a);
+        Rect r = AnimCreator.getCurrentFrameRect(a);
         for(Shape s : getNavMesh().getWalkableZones())
         {
             if(r.intersects(s))
@@ -198,7 +198,7 @@ public class Level extends TiledMap
                 else if(t.properties.get("type").equalsIgnoreCase("enemy"))
                 {
                     System.out.print("read enemy... ");
-                    System.out.println(" name: " 
+                    CoreSystem.print(" name: " 
                                        + t.properties.get("name"));
                     
                     if(t.properties.get("name").equalsIgnoreCase("bluey"))
@@ -209,11 +209,11 @@ public class Level extends TiledMap
             }
             catch(NullPointerException e)
             {
-                //System.out.println("sortObjects: ignoring np exception");
+                //CoreSystem.print("sortObjects: ignoring np exception");
                 e.printStackTrace();
             }
         }
-        System.out.println("level has " + enemies.size() + " enemies");
+        CoreSystem.print("level has " + enemies.size() + " enemies");
     }
     
     /**
@@ -309,7 +309,7 @@ public class Level extends TiledMap
             if(t.getRect().intersects(p))
             {
                 
-                /*System.out.println("[Shape [origin " + 
+                /*CoreSystem.print("[Shape [origin " + 
                                     new Throwable().fillInStackTrace()
                                     .getStackTrace()[3].getFileName()
                                       + "] collision with Tile " +

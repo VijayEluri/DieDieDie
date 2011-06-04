@@ -86,7 +86,7 @@ public class Arrow implements Projectile
         {
             gravity += GRAVITY_INCR;
         } 
-        // System.out.println(this + "| grav: " + gravity);
+        // CoreSystem.print(this + "| grav: " + gravity);
     }  
 
     @Override
@@ -213,7 +213,7 @@ public class Arrow implements Projectile
     public void updatePosition()
     {
         
-        /*System.out.println("Arrow(" + hashCode() + ")updatePosition(): "
+        /*CoreSystem.print("Arrow(" + hashCode() + ")updatePosition(): "
                             + "oldX, oldY: " + oldX + ", " + oldY
                             + "new: " + startX + ", " + startY);*/
         adjustFacingAngle();
@@ -230,7 +230,7 @@ public class Arrow implements Projectile
      */ 
     public void stop()
     {
-        /*System.out.println("stopping Arrow " + hashCode() + "; speed " +
+        /*CoreSystem.print("stopping Arrow " + hashCode() + "; speed " +
                         speedX + ", " + speedY);*/
         resetAccelX();
         resetAccelY();
@@ -286,7 +286,7 @@ public class Arrow implements Projectile
                 facingAngle -= (angleChange * FALLING_ANGLE_CHANGE);
             }
         }
-        /*System.out.println("arrow " + this.hashCode() + " facing: " + 
+        /*CoreSystem.print("arrow " + this.hashCode() + " facing: " + 
                            facingAngle);*/
     }
 
@@ -303,7 +303,7 @@ public class Arrow implements Projectile
     {
         if(oldY < startY)
         {
-            //System.out.println("going down");
+            //CoreSystem.print("going down");
             return true;
         }
         return false;
@@ -359,10 +359,10 @@ public class Arrow implements Projectile
     }
     
     /**
-     * Public method for receiving Graphics object from Slick.
+     * Public method for receiving CoreGraphics object from Slick.
      */ 
     @Override
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         g.drawGradientLine(startX, startY, Color.black, endX, endY,
                            Color.red);

@@ -48,7 +48,7 @@ public class StartWalking implements Action
         {
             started = true;
             
-            System.out.println("\tperforming StartWalking for " 
+            CoreSystem.print("\tperforming StartWalking for " 
                 + new Throwable().fillInStackTrace()
                                 .getStackTrace()[1].getClassName());
             
@@ -61,7 +61,7 @@ public class StartWalking implements Action
     }
     
     @Override
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         
     }

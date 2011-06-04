@@ -70,7 +70,7 @@ public class Alert implements State
         if(!running)
         {
             running = true;
-            System.out.println("\tstarted " + this);
+            CoreSystem.print("\tstarted " + this);
             currentAction.perform(host);
         }
     }

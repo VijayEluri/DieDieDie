@@ -38,7 +38,7 @@ public class Mover
      */ 
     public static boolean move(final Actor a)
     {
-        //System.out.println("moving " + a);
+        //CoreSystem.print("moving " + a);
         final float oldX = a.getX();
         final float oldY = a.getY();
         
@@ -114,7 +114,7 @@ public class Mover
                 p.calculateEndPos();
             }
         }
-        //System.out.println("applyGravity(p), yTrav: " + yTrav);
+        //CoreSystem.print("applyGravity(p), yTrav: " + yTrav);
         p.increaseGravityEffect(); 
     }
     
