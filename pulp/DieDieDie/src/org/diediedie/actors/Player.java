@@ -15,61 +15,38 @@
  *      MA 02110-1301, USA.
  */
  
-/*
-    
-
-
-*/
- 
- 
 package org.diediedie.actors;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collections;
 import pulpcore.animation.Animation;
 import pulpcore.image.CoreGraphics;
+import pulpcore.image.ImageSprite;
+import pulpcore.CoreSystem;
 import pulpcore.math.Rect;
-import org.newdawn.slick.tiled.TiledMap;
-import org.newdawn.slick.geom.Shape;
-
-// http://www.interactivepulp.com/pulpcore/api/pulpcore/Input.html
-/*
- 
- http://slick.cokeandcode.com/javadoc/org/newdawn/slick/command/BasicCommand.html
- * 
-
-/*
-import org.newdawn.slick.Input;
-import org.newdawn.slick.MouseListener;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.command.BasicCommand;
-import org.newdawn.slick.command.Command;
-import org.newdawn.slick.command.InputProvider;
-import org.newdawn.slick.command.InputProviderListener;
-import org.newdawn.slick.command.KeyControl;
-import org.newdawn.slick.command.MouseButtonControl;
-*/
 import pulpcore.image.CoreImage;
 import org.diediedie.Level;
 import org.diediedie.Tile;
 import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Collider;
 import org.diediedie.actors.Aligner;
-// NEW
-import pulpcore.Input;
+//import pulpcore.Input;
 
 /**
  * ..where *YOU* are the HERO!
  */ 
-public class Player implements Actor//, InputProviderListener 
+public class Player implements Actor
 {    
+    //final boolean autoUpdate = true;
     private boolean setUp = false, canJump = false;
-    final boolean autoUpdate = true;
-     
-    private float accelX = 0f, bowCharge = 0, oldX, oldY, bowX, bowY, 
+    
+    private ImageSprite sprite;
+    
+    private float accelX = 0f, 
+                  bowCharge = 0, 
+                  oldX, oldY, 
+                  bowX, bowY, 
                   bowYCurrentOffset, bowXCurrentOffset;
                   
     public final float MAX_CHARGE = 20.34f, CHARGE_INCR = 0.3f, 
@@ -84,26 +61,19 @@ public class Player implements Actor//, InputProviderListener
                       BOW_AIM_DOWN_TRIGGER = 110, BOW_X_OFFSET = 5,
                       BOW_ANGLE_OFFSET = 90; 
                       
-    private int health = MAX_HEALTH, arrowCount = 0, mouseX, mouseY,
-                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;   
-                    
-    // Movement
-    /*
-        private Command jump;
-        private Command left; 
-        private Command right;    
-    */
-    
+    private int health = MAX_HEALTH, 
+                arrowCount = 0;    
     
     private Arrow currentArrow = null; 
     private List<Arrow> firedArrows = Collections.synchronizedList(
                             new ArrayList<Arrow>());
     
-    private boolean leftMoveDown = false, rightMoveDown = false,
-                    isChargingArrow = false, isFiringArrow = false;
+    private boolean isChargingArrow = false, isFiringArrow = false;
     
     private float xPos, yPos, xSpeed, ySpeed;
-    private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
+    
+    public Direction facing = Direction.LEFT, 
+                     moving = Direction.LEFT; 
         
     // running: indicates the user is holding a directional button
     private boolean running = false;
@@ -130,21 +100,13 @@ public class Player implements Actor//, InputProviderListener
         "data/STICKMAN_RIGHT_WALK_6.png"
     }; 
     
-    private String[] leftStandPaths =
-    {
-        "data/STICKMAN_LEFT_STAND.png"        
-    };
+    private String leftStandPath = "data/STICKMAN_LEFT_STAND.png";
     
-    private String[] rightStandPaths = 
-    {
-        "data/STICKMAN_RIGHT_STAND.png"        
-    };
-    private Animation leftWalk, rightWalk, leftStand, rightStand,
-            currentAnim;
-    
-    
-    //private Image bowLeft, bowRight, currentBow;
-    private CoreImage bowLeft, bowRight, currentBow;
+    private Animation leftWalk, rightWalk, currentAnim;
+            
+    private CoreImage leftStand, rightStand, 
+                      bowLeft, bowRight, 
+                      currentBow;
     
     // associated level for collision / item collection reference
     private Level level = null;
@@ -156,6 +118,7 @@ public class Player implements Actor//, InputProviderListener
     {
         setLevel(l);
         setUpStartPosition();
+        
         if(!setUp)
         {            
             initAnim();   
@@ -163,6 +126,11 @@ public class Player implements Actor//, InputProviderListener
             setUp = true;
         }
     }    
+    
+    public void setRunning(boolean b)
+    {
+        running = b;
+    }
     
     @Override
     public void setJump(boolean b)
@@ -176,7 +144,7 @@ public class Player implements Actor//, InputProviderListener
         level = l;
         level.associatePlayer(this);
     }
-
+    
     /*
      * Places the Player at the designated start position according to
      * the Level associated with it. 
@@ -188,9 +156,9 @@ public class Player implements Actor//, InputProviderListener
                     - level.getPlayerTile().tileHeight;
         yPos--;
         CoreSystem.print("Player is on level " + level + 
-                           " at position x: " + xPos + ", y: " + yPos);              
+                           " at position x: " + xPos + 
+                                      ", y: " + yPos);              
     }
-    
     
     private void initBow()
     {
@@ -200,7 +168,7 @@ public class Player implements Actor//, InputProviderListener
     }    
     
     @Override
-    public Shape getZone()
+    public Rect getZone()
     {
         return getLevel().getActorZone(this);
     }
@@ -287,68 +255,13 @@ public class Player implements Actor//, InputProviderListener
             public void setInput(Input input) {} 
         });
     }
-    
-    */
-    /**
-     * Defines the routines carried out for when each command is 
-     * released.
-     */ 
-    /*
-    public void controlReleased(Command com)
-    {
-        //CoreSystem.print("released: " + com);
-        
-        if(com.equals(left))
-        {
-            //leftMoveDown = false;
-            if(moving.equals(Direction.LEFT))
-            {
-                running = false;   
-            }
-        }
-        else if(com.equals(right))
-        {
-            //rightMoveDown = false;
-            if(moving.equals(Direction.RIGHT))
-            {
-                running = false;   
-            }
-        }
-    }
-    */
-    
-    /**
-     * Defines the routines carried out for when each command is pressed.
-     */ 
-    /*
-    public void controlPressed(Command com)
-    {
-        //CoreSystem.print("pressed: " + com);
-                
-        if(com.equals(left))
-        {
-            //leftMoveDown = true;
-            setMovingDir(Direction.LEFT);
-            running = true;
-        }
-        else if(com.equals(right))
-        {
-            //rightMoveDown = true; 
-            setMovingDir(Direction.RIGHT);
-            running = true;
-        }
-        else if(com.equals(jump))
-        {
-            jump();
-        }
-    }
-    */
+   
     
     /*
      * Starts the player aiming an arrow towards the
      * Mouse Pointer
      */ 
-    private void readyArrow()
+    public void readyArrow(int mouseX, int mouseY)
     {
         CoreSystem.print("Readying arrow");
         currentArrow = new Arrow(xPos, yPos, level, mouseX, mouseY);
@@ -357,14 +270,15 @@ public class Player implements Actor//, InputProviderListener
     
     /*
      * Charges the arrow and updates the Direction the player faces.
+     * -- Used by Player.update().
      */ 
-    private void chargeArrow()
+    public void chargeArrow()
     {
         if(bowCharge < MAX_CHARGE)
         {
             bowCharge += CHARGE_INCR;
         }
-        //CoreSystem.print("bowCharge " + bowCharge);
+        CoreSystem.print("bowCharge " + bowCharge);
         currentArrow.updateAiming(mouseX, mouseY);
 
         if(currentArrow.getAngle() >= 0)
@@ -405,13 +319,17 @@ public class Player implements Actor//, InputProviderListener
         CoreSystem.print("Player is dead!");
     }
     
-    private float getMiddleXPos()
+    public float getMiddleXPos()
     {
         final float midX = xPos + (getCurrentFrameWidth() / 2);
         //CoreSystem.print("xPos: " + xPos + ", midX: " + midX);
         return midX;
     }
     
+    /*
+     * Updates the position of the Player's Bow. 
+     * Used by: Player.chargeArrow()
+     */
     private void updateBowPosition()
     {
         final float ANGLE = Math.abs(currentArrow.getAngle());
@@ -432,8 +350,11 @@ public class Player implements Actor//, InputProviderListener
         bowY = yPos + bowYCurrentOffset;   
     }
     
-    // returns the x position of the arrow when being held by the player
-    private float getHoldingArrowX()
+    /*
+     * Returns the x position of the arrow when being held by the 
+     * player.
+     */ 
+    public float getHoldingArrowX()
     {
         return xPos + getCurrentFrameWidth() / 2;
     } 
@@ -446,7 +367,7 @@ public class Player implements Actor//, InputProviderListener
     /*
      * Returns the y position of the arrow when being held by the player
      */
-    private float getHoldingArrowY()
+    public float getHoldingArrowY()
     {
         return yPos + ARROW_Y_OFFSET;
     } 
@@ -487,22 +408,24 @@ public class Player implements Actor//, InputProviderListener
         facing = dir;
         if(!running)
         {
-            setStandingAnim();
+            setStandingImage();
         }
     }
     
     /*
-     * Sets the direction the Player is moving
+     * Sets the direction the Player is moving.
+     * Called by 
      */ 
-    private void setMovingDir(Direction dir)
+    public void setMovingDir(Direction dir)
     {
         if(moving != dir)
         {
+            // changed direction, reset horizontal acceleration.
             resetAccelX();
         }
         moving = dir;
         setFacing(dir);
-        //CoreSystem.print("setMovingDir: " + dir);
+        CoreSystem.print("Player.setMovingDir: " + dir);
     }
     
     /**
@@ -516,22 +439,27 @@ public class Player implements Actor//, InputProviderListener
     
     
     /**
-     * Sets the Player's current Animation var to 'standing'. 
+     * Stops the Player's animation var to 'standing'. 
      */ 
-    private void setStandingAnim()
+    private void setStandingImage()
     {
         if(facing.equals(Direction.RIGHT))
         {
-            currentAnim = rightStand;
+            //currentAnim = rightStand;
+            sprite = rightStand
         }
         else if(facing.equals(Direction.LEFT))
         {
-            currentAnim = leftStand;   
+            //currentAnim = leftStand;   
+            sprite = leftStand
         }
         else throw new IllegalStateException(
-                            "standing dir neither left or right");
+            "standing dir neither left or right");
     }
     
+    /*
+     * Applies speed to the Player -- called by player.update()
+     */    
     @Override
     public void applySpeed(Direction dir)
     {
@@ -550,7 +478,8 @@ public class Player implements Actor//, InputProviderListener
     }
     
     /*
-     * Increases walk speed.
+     * Increases walk speed. 
+     *  -- Called by player.applySpeed()
      */ 
     private void accelerate()
     {
@@ -624,12 +553,6 @@ public class Player implements Actor//, InputProviderListener
     {
         return currentAnim;
     }
-
-    /*
-     * Closely aligns the Player to an object following a collision.
-     * This is done to stop it looking like the player is 'hovering'
-     * before landing due to having a high falling speed.
-     */ 
     
     @Override
     public boolean canJump()
@@ -689,7 +612,7 @@ public class Player implements Actor//, InputProviderListener
     public void resetAccelX()
     {
         accelX = 0;
-        setStandingAnim();
+        setStandingImage();
     }
     
     @Override
@@ -763,14 +686,20 @@ public class Player implements Actor//, InputProviderListener
     private void initAnim()
     {
         
-        leftWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, leftWalkPaths);
-        rightWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, rightWalkPaths);           
-        rightStand = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, rightStandPaths);
-        leftStand = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, leftStandPaths);                
+        leftWalk = AnimCreator.createAnimFromPaths(
+            Actor.ANIM_DURATION, /*autoUpdate,*/ leftWalkPaths);
+        
+        rightWalk = AnimCreator.createAnimFromPaths(
+            Actor.ANIM_DURATION, /*autoUpdate,*/ rightWalkPaths);           
+        
+        /*
+        rightStand = AnimCreator.createAnimFromPaths(
+            Actor.ANIM_DURATION, rightStandPaths);
+        
+        leftStand = AnimCreator.createAnimFromPaths(
+            Actor.ANIM_DURATION, leftStandPath);                
+        */
+        
         currentAnim = leftStand;
         
         // get initial direction from the level

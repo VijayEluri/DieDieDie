@@ -55,7 +55,8 @@ public class Arrow implements Projectile
                   endY = 0, 
                   accelX = 0, 
                   accelY = 0, 
-                  speedX = 0, speedY = 0,  
+                  speedX = 0, 
+                  speedY = 0,  
                   movementAngle = 90, 
                   gravity = 0f, 
                   facingAngle = 0, angleChange = 0.01f;

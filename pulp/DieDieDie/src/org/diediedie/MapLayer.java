@@ -16,10 +16,10 @@
  */
 package org.diediedie;
 import java.util.List;
-/*
+import pulpcore.CoreSystem;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
-*/
+
 
 /**
  * Represents a layer of Tiles

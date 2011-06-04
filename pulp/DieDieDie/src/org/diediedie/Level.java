@@ -20,14 +20,17 @@ import org.diediedie.NavMesh;
 import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.Actor;
+import org.diediedie.actors.Bluey;
+import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Player;
 // Still using the TiledMap from Slick. So there. >#:-)
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 import pulpcore.math.Rect;
-import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Shape;
+//import org.newdawn.slick.geom.Polygon;
+//import org.newdawn.slick.geom.Shape;
 import pulpcore.image.CoreGraphics;
+import pulpcore.CoreSystem;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -113,18 +116,20 @@ public class Level extends TiledMap
      * Returns the shape in the nav mesh that this actor is in/on, if
      * one exists
      */ 
-    public Rect getActorZone(Actor a)
+/*
+    public Line getActorZone(Actor a)
     {
         Rect r = AnimCreator.getCurrentFrameRect(a);
-        for(Shape s : getNavMesh().getWalkableZones())
+        for(Line l : getNavMesh().getWalkableZones())
         {
-            if(r.intersects(s))
+            if(r.intersects(l))
             {
-                return s;
+                return l;
             }
         }
         return null;
     }
+*/
     
     public Player getPlayer()
     {
@@ -191,17 +196,20 @@ public class Level extends TiledMap
                     exitX = t.xPos;
                     exitY = t.yPos;
                 }
-                else if(t.properties.get("type").equalsIgnoreCase("start"))
+                else if(
+                    t.properties.get("type").equalsIgnoreCase("start"))
                 {
                     playerTile = t;
                 }
-                else if(t.properties.get("type").equalsIgnoreCase("enemy"))
+                else if(
+                    t.properties.get("type").equalsIgnoreCase("enemy"))
                 {
                     System.out.print("read enemy... ");
                     CoreSystem.print(" name: " 
                                        + t.properties.get("name"));
                     
-                    if(t.properties.get("name").equalsIgnoreCase("bluey"))
+                    if(t.properties.get(
+                        "name").equalsIgnoreCase("bluey"))
                     {                       
                         enemies.add(new Bluey(this, t));
                     }
@@ -264,10 +272,12 @@ public class Level extends TiledMap
     /**
      * Returns true if two Shapes intersect.
      */ 
+/*
     public boolean intersection(Shape p1, Shape p2)
     {
         return p1.intersects(p2);
     }
+*/
         
     public void render(int x, int y)
     {
@@ -299,35 +309,34 @@ public class Level extends TiledMap
     }
     
     /**
-     * Returns true if Shape p intersects with a collision tile on the
+     * Returns true if Rect r intersects with a collision tile on the
      * Level.
-     */ 
-    public boolean collides(Shape p)
+     */
+    public boolean collides(Rect r)
     {
+        
         for(Tile t : collisionLayer.tiles)
         {
-            if(t.getRect().intersects(p))
+            if(t.getRect().intersects(r))
             {
                 
-                /*CoreSystem.print("[Shape [origin " + 
+                CoreSystem.print("[Rect [origin " + 
                                     new Throwable().fillInStackTrace()
                                     .getStackTrace()[3].getFileName()
                                       + "] collision with Tile " +
                                     t.xCoord + ", " + t.yCoord
-                                    + "]"); */
+                                    + "]"); 
                 return true;
             }
         }
         return false;
     }
     
-    
-    
-    /**
-     * Returns true if the x / y coordinate position supplied is inside
-     * a collision tile
-     */ 
-    public boolean isInCollisionTile(float x, float y)
+   /*
+    * Returns true if the x / y coordinate position supplied is inside
+    * a collision tile
+    */
+    public boolean isInCollisionTile(int x, int y)
     {
         for(Tile t : collisionLayer.tiles)
         {
@@ -341,8 +350,8 @@ public class Level extends TiledMap
     
     /**
      * Returns the collision Tile containing the given point, or null.
-     */ 
-    public Tile getCollisionTileAt(float x, float y)
+     */
+    public Tile getCollisionTileAt(/*float*/int x, /*float*/int y)
     {
         for(Tile t : collisionLayer.tiles)
         {

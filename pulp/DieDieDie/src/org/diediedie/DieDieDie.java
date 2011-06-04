@@ -19,21 +19,9 @@ import org.diediedie.actors.Player;
 import org.diediedie.actors.Direction;
 import java.io.FileInputStream;
 import java.io.File;
-/*
-import pulpcore.animation.Animation;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.GameContainer;
-import pulpcore.image.CoreGraphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.command.BasicCommand;
-import org.newdawn.slick.command.Command;
-import org.newdawn.slick.command.InputProvider;
-import org.newdawn.slick.command.InputProviderListener;
-*/
+//import org.newdawn.slick.SlickException;
 import pulpcore.scene.Scene2D;
+import pulpcore.Stage;
 import pulpcore.image.CoreFont;
 import pulpcore.image.CoreGraphics;
 import pulpcore.sprite.Label;
@@ -49,16 +37,26 @@ public class DieDieDie extends Scene2D
     
     //private InputProvider inputProv = null;    
     
-    private static int xSize = 640, 
-                       ySize = 480;
-	private Level level1 = null, 
+    private static int xSize  = 640, 
+                       ySize  = 480,
+                       mouseX = 0, 
+                       mouseY = 0;
+	
+    // Only 1 level so far. 
+    private Level level1       = null, 
                   currentLevel = null;	
     
     private final String TILE_SETS_PATH = "data", 
-                         LEVEL_1_PATH = "data/level1.tmx",
+                         LEVEL_1_PATH   = "data/level1.tmx",
                          LEVEL_ONE_NAME = "Level 1";
                          
     public static final float GRAVITY = 0.20f;
+    
+    // Game Controls
+    public final int KEY_LEFT  = Input.KEY_A;
+    public final int KEY_RIGHT = Input.KEY_D;
+    public final int KEY_JUMP  = Input.KEY_W;
+    public final int KEY_FIRE  = Input.KEY_MOUSE_BUTTON_1;
     
     /**
      * Create the game
@@ -68,27 +66,6 @@ public class DieDieDie extends Scene2D
 		super("DieDieDie");
 	}
     
-    /**
-     * Initialises the game. Of course.
-     */ 
-    /*
-    public void init(GameContainer container) throws SlickException 
-    {
-        container.setVSync(true);    
-        //container.setTargetFrameRate(60);
-        inputProv = new InputProvider(container.getInput());
-
-        // set up levels
-        createLevels();
-        currentLevel = level1;
-
-        // load player and associate with the level data
-        player = new Player(level1);
-        
-        // hook up the player to the input provider
-        player.associateInputProvider(inputProv, container.getInput());
-    }
-*/  
     /*
      * Load the game components.
      */ 
@@ -106,13 +83,11 @@ public class DieDieDie extends Scene2D
      */ 
     private void createLevels()
     {
-        level1 = loadLevel(
-                    LEVEL_ONE_NAME, 
-                    LEVEL_1_PATH, 
-                    TILE_SETS_PATH,
-                    Direction.LEFT,
-                    
-                    GRAVITY);          
+        level1 = loadLevel(LEVEL_ONE_NAME,         
+                           LEVEL_1_PATH, 
+                           TILE_SETS_PATH,
+                           Direction.LEFT,
+                           GRAVITY);          
     }
  
     /*
@@ -137,11 +112,87 @@ public class DieDieDie extends Scene2D
         return null;
     }
     
+        
+    /*
+     * Reads keyboard input and updates the player accordingly.
+     */
+    private void checkKeyboardInput()
+    {
+        // LEFT Control Key
+        if(Input.getState(KEY_LEFT) == Input.UP)
+        {
+            if(player.moving.equals(Direction.LEFT))
+            {
+                player.setRunning(false);   
+            }
+        }
+        else if(Input.getState(KEY_LEFT) == Input.DOWN)
+        {
+
+            player.setMovingDir(Direction.LEFT);
+            player.setRunning(true);
+        }
+        // RIGHT Control Key
+        if(Input.getState(KEY_RIGHT) == Input.UP)
+        {
+            if(player.moving.equals(Direction.RIGHT))
+            {
+                player.setRunning(false);   
+            }
+        }
+        else if(Input.getState(KEY_RIGHT) == Input.DOWN)
+        {
+            player.setMovingDir(Direction.RIGHT);
+            player.setRunning(true);
+        }
+        // UP (Jump)
+        if(Input.getState(KEY_JUMP) == Input.PRESSED)
+        {
+            player.jump();
+        }
+    }
+        
+    
+    
+    /*
+     * Reads mouse input and updates the player accordingly.
+     */
+    private void checkMouseInput()
+    {
+        if(Input.isMouseMoving())
+        {
+            mouseX = newx;
+            mouseY = newy;
+        }
+        if(Input.isMousePressed())
+        {
+            mouseX = Input.getMousePressX();
+            mouseY = Input.getMousePressY();
+            
+            Tile c = player.getLevel().getCollisionTileAt(
+                mouseX, mouseY);
+            
+            if(c != null)
+            {
+                CoreSystem.print(
+                    "Mouse pressed Tile " + c.xCoord + ", " + c.yCoord);
+            }
+              
+            player.readyArrow(mouseX, mouseY);
+        }
+        else if(Input.getState(KEY_FIRE) == Input.RELEASED)
+        {
+            player.releaseArrow();
+        }
+    }
+    
     /**
      * Updates the game's state.
      */ 
 	public void update(/*GameContainer container, */int delta) 
     { 
+        checkMouseInput();
+        checkKeyboardInput();
         player.update();
         currentLevel.update();
 	}

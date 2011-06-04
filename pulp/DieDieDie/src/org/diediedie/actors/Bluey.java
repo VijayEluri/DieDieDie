@@ -28,7 +28,7 @@ import pulpcore.animation.Animation;
 //import org.newdawn.slick.Image;
 import pulpcore.image.CoreGraphics;
 import org.newdawn.slick.geom.Shape;
-import pulpcore.image.CoreGraphics;
+
 
 /*
  * Blue stick-enemy wielding 2 pistols. 
@@ -40,7 +40,7 @@ public class Bluey implements Enemy, StateMachine
     private float viewSize = 500f;
     public final String leftStandPath = "data/bluey_standing_left.png";
     
-    private Graphics g;
+    private CoreGraphics g;
     
     public final String[] leftWalkPaths = 
     {
@@ -558,7 +558,7 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public void draw(Graphics g)
+    public void draw(CoreGraphics g)
     {
         //System.out.println("drawing Bluey: " + getX() + ", " + getY());
         g.drawAnimation(currentAnim, getX(), getY());
@@ -575,12 +575,12 @@ public class Bluey implements Enemy, StateMachine
         }
     }
 
-    public Graphics getGraphics()
+    public CoreGraphics getGraphics()
     {
         return g;
     }
     
-    private void drawProjectiles(Graphics g)
+    private void drawProjectiles(CoreGraphics g)
     {
         
     }

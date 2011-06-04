@@ -35,7 +35,8 @@ public class Tile
     private TiledMap tiledMap;
     private Rect rect;
     
-    public Map<String, String> properties = new HashMap<String, String>();
+    public Map<String, String> properties = new 
+        HashMap<String, String>();
     
     public static final String[] PROPERTIES = {"type", "name"};
     public static final String[] VALUES = {
@@ -95,13 +96,23 @@ public class Tile
         endY = yPos + tileHeight + ROUNDING;
     }
         
-    public float getXPos() { return xPos; }
-    public float getYPos() { return yPos; }
+    public float getXPos() 
+    {
+        return xPos; 
+    }
+    
+    public float getYPos() 
+    { 
+        return yPos;
+    }
         
     /**
      * Returns the rectangular bounding box of this tile on the Level.
      */ 
-    public Rect getRect() { return rect; }    
+    public Rect getRect() 
+    { 
+        return rect; 
+    }    
     
     /**
      * 

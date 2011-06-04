@@ -24,6 +24,9 @@ import pulpcore.animation.Animation;
 //import org.newdawn.slick.geom.Shape;
 import java.util.Set;
 
+/*
+ * Actor - interface for Players and Enemies.
+ */
 public interface Actor extends MovableObject
 {            
     public static int ANIM_DURATION = 100;

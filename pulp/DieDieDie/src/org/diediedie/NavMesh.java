@@ -18,29 +18,40 @@ package org.diediedie;
 //import org.diediedie.actors.*;
 import java.io.*;
 import java.util.*;
+//import java.awt.geom.Line;
 import java.util.concurrent.*;
-import org.diediedie.actors.*;
+import org.diediedie.Line;
+//import org.diediedie.actors.Player;
+//import org.diediedie.actors.Enemy;
 import pulpcore.image.CoreGraphics;
+import pulpcore.CoreSystem;
 import pulpcore.image.Colors;
+import pulpcore.animation.Color;
 import pulpcore.math.Rect;
-import org.newdawn.slick.geom.Shape;
+//import org.newdawn.slick.geom.Shape;
 /**
  * NavMesh. Generated for a Level using inner class MeshMaker.
  */ 
+
 public class NavMesh implements Drawable
 {
     // walkable zones (Lines, as we're in 2D)
-    private Collection<Shape> walkableZones;
-    private Collection<Shape> negativeSpace;
-    private Level level; 
-    private Colors walkableColor = Colors.green;
-    private Colors negativeColor = Colors.orange;
+    
+    private Collection<Line> walkableZones;
+    private Collection<Rect> negativeSpace;
+    private Level level;
+    
+    private int walkableColorInt = Colors.GREEN;
+    private Color walkableColor = new Color(walkableColorInt);
+    
+    private int negativeColorInt = Colors.ORANGE;
+    private Color negativeColor = new Color(Colors.ORANGE);
     
     /**
      * A mesh created by MeshMaker.
      */ 
-    public NavMesh(Level l, Collection<Shape> walkables,
-                            Collection<Shape> space)
+    public NavMesh(Level l, Collection<Line> walkables,
+                            Collection<Rect> space)
     {
         setLevel(l);
         walkableZones = walkables;
@@ -56,37 +67,42 @@ public class NavMesh implements Drawable
     @Override
     public void draw(CoreGraphics g)
     {
-        g.setColor(walkableColor);
-        for(Shape l : walkableZones)
+        g.setColor(walkableColorInt);
+        for(Line l : walkableZones)
         {
             if(l != null)
             {
-                g.draw(l);
+                g.drawLine(l.startX, l.startY,
+                           l.endX, l.endY);
             }
         }
         
-        g.setColor(negativeColor);
-        for(Shape n : negativeSpace)
+        g.setColor(negativeColorInt);
+        for(Rect r : negativeSpace)
         {
-            if(n != null)
+            if(r != null)
             {
-                g.draw(n);
+                g.drawRect(r.x, 
+                           r.y, 
+                           r.width, 
+                           r.height);
             }
         }
     }
     
     /*
-     * Returns the walkable zones (excluding non-surface negative spaces)  
+     * Returns the walkable zones (excluding non-surface negative 
+     * spaces) as a series of horizontal lines
      */
-    public Collection<Shape> getWalkableZones()
+    public Collection<Line> getWalkableZones()
     {
         return walkableZones;
     }
 
     /*
-     * Returns the negative space zones
+     * Returns the negative space zones (rectangles)
      */
-    public Collection<Shape> getNegativeSpace()
+    public Collection<Rect> getNegativeSpace()
     {
         return negativeSpace;
     }
@@ -172,7 +188,7 @@ public class NavMesh implements Drawable
     public static class SliceGroup
     {
         public List<Slice> slices;
-        private Shape rect = null;
+        private Rect rect = null;
         
         /**
          * Assembles a group from a list.
@@ -184,15 +200,14 @@ public class NavMesh implements Drawable
                 throw new IllegalStateException();
             }
             slices = s;
-            createShape();
+            //createSlicesRect();
+            createRect();
         }
         
-        
-        
         /*
-         * Creates a Shape encompassing the 
+         * Creates a Shape encompassing the mesh
          */ 
-        private void createShape()
+        private void createRect()
         {
             Slice startSlice = getStartSlice();
             Slice endSlice = getEndSlice();
@@ -203,9 +218,10 @@ public class NavMesh implements Drawable
             /*CoreSystem.print("SliceGroup: createShape() \n\tfrom "
                                 + first + "\n\t to " + last);*/
 
-            rect = new Rect(first.xPos, first.yPos, 
-                                 (last.endX - first.xPos),
-                                  (last.endY - first.yPos));
+            rect = new Rect(
+                 (int)first.xPos, (int)first.yPos, 
+                ((int)last.endX - (int)first.xPos),
+                ((int)last.endY - (int)first.yPos));
             check();
         }        
         
@@ -243,7 +259,8 @@ public class NavMesh implements Drawable
                 if(slices.add(s))
                 {
                     /*CoreSystem.print("\t[successfully added slice]");*/
-                    createShape();
+                    //createShape();
+                    createRect();
                     return true;
                 }
                 else
@@ -284,7 +301,7 @@ public class NavMesh implements Drawable
         /**
          * Returns a Shape encompassing this group of Slices
          */ 
-        public Shape getShape()
+        public Rect getSlicesRect()
         {
             return rect;
         }
@@ -349,8 +366,8 @@ public class NavMesh implements Drawable
     public static class MeshMaker
     {
         static Collection<Tile> ledgeTiles = null;
-        static Collection<Shape> walkableZones = null;
-        static Collection<Shape> negativeSpace = null;
+        static Collection<Line> walkableZones = null;
+        static Collection<Rect> negativeSpace = null;
         static Level l = null;
         
         /**
@@ -365,15 +382,15 @@ public class NavMesh implements Drawable
         }
         
         /*
-         * Examines collision tiles and saves those which have negative
-         * space above them. 
+         * Examines collision tiles and saves those which have enough
+         * negative space above them for the player to move through. 
          */
         private static void createWalkableZones()
         {   
             Line line;        
             ledgeTiles = getLedgeTiles(l);
             Set<Tile> checked = new HashSet<Tile>();
-            walkableZones = new HashSet<Shape>();
+            walkableZones = new HashSet<Line>();
             Tile end = null;
             
             for(Tile start : ledgeTiles)
@@ -393,8 +410,8 @@ public class NavMesh implements Drawable
          */ 
         private static void createNegativeSpace()
         {
-            // movable area polygons
-            negativeSpace = new ArrayList<Shape>();
+            // movable area rects
+            negativeSpace = new ArrayList<Rect>();
                         
             // slice the spaces and combine where possible
             List<Slice> slices = sliceSpaces(getSpaceTiles(l));
@@ -405,7 +422,9 @@ public class NavMesh implements Drawable
                                                
             for(SliceGroup g : groups)
             {
-                negativeSpace.add(g.getShape());
+                //negativeSpace.add(g.getShape());
+                negativeSpace.add(g.getSlicesRect());
+                
             }            
         }
         
@@ -640,10 +659,10 @@ public class NavMesh implements Drawable
          */ 
         private static Line makeWalkLine(Tile start, Tile prev)
         {
-            /*CoreSystem.print("\tnew walk line from " 
-                    + start.getCoords() + " | to | " + prev.getCoords());*/
-            Line line = new Line(start.xPos, start.yPos,
-                                 prev.endX, prev.yPos);
+            CoreSystem.print("\tnew walk line from " 
+                + start.getCoords() + " to " + prev.getCoords());
+            Line line = new Line((int)start.xPos, (int)start.yPos,
+                                 (int)prev.endX,  (int)prev.yPos);
             start = null;
             prev = null;
             return line;

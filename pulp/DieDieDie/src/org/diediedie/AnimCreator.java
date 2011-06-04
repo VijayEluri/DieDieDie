@@ -19,9 +19,10 @@ package org.diediedie.actors;
 
 import java.util.List;
 import java.util.ArrayList;
-import pulpcore.animation.Animation;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import pulpcore.image.AnimatedImage;
+import pulpcore.image.CoreImage;
+//import org.newdawn.slick.Image;
+//import org.newdawn.slick.SlickException;
 import pulpcore.math.Rect;
 
 import java.io.FileInputStream;
@@ -39,19 +40,20 @@ public class AnimCreator
      * the list of file paths given. If flip is true, flip the images 
      * on load. 
      */ 
-    public static Animation createAnimFromPaths(int duration, 
-                                    boolean autoUpdate, String... paths)
+    public static AnimatedImage createAnimFromPaths(int duration, 
+                        /*boolean autoUpdate,*/ String... paths)
     {
         List<Image> images = getImagesFromPaths(paths);
-        Image[] imgArr = new Image[images.size()];
+        CoreImage[] imgArr = new CoreImage[images.size()];
         images.toArray(imgArr);
-        return new Animation(imgArr, duration, autoUpdate);
+        Animation anim = new Animation(imgArr); //, duration, autoUpdate);
+        anim.setFrameDuration(duration)
     }  
                              
     /**
-     * Load an Image from a given path String.
+     * Load an CoreImage from a given path String.
      */ 
-    public static Image loadImage(String path)
+    public static CoreImage loadImage(String path)
     {
         try
         {

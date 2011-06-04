@@ -37,5 +37,12 @@ Notes blah blah etc.
 + Slick Image -> pulpcore CoreImage 
     --- What about pulpcore.sprite.ImageSprite ?
     --> Suitable?
+    --> check out class Group: A container of Sprites.
 + Use pulpcore.Assets http://www.interactivepulp.com/pulpcore/api/ 
     --- tells pulpcore where all the game data is held
++ The Stage is responsible for invoking the Scene's methods, 
+  with the exception of reload().
++ 
+
+
+
