@@ -21,10 +21,12 @@ import java.io.File;
 import diediedie.level.actors.Player;
 import diediedie.level.Direction;
 import diediedie.level.Level;
+import diediedie.level.Tile;
 import pulpcore.scene.Scene2D;
 import pulpcore.Stage;
 import pulpcore.image.CoreFont;
 import pulpcore.image.CoreGraphics;
+import pulpcore.CoreSystem;
 import pulpcore.sprite.Label;
 import pulpcore.sprite.Sprite;
 import pulpcore.sprite.FilledSprite;
@@ -64,7 +66,7 @@ public class DieDieDie extends Scene2D
      */ 
 	public DieDieDie() 
     {
-		super("DieDieDie");
+		super();
 	}
     
     /*
@@ -192,7 +194,7 @@ public class DieDieDie extends Scene2D
      * Updates the game's state.
      */ 
 	public void update(/*GameContainer container, */int delta) 
-    { 
+    {
         checkMouseInput();
         checkKeyboardInput();
         player.update();
@@ -219,8 +221,9 @@ public class DieDieDie extends Scene2D
         DieDieDie newGame = new DieDieDie();
         newGame.invokeLater(new Runnable() {
             public void run() {
-                myLabel.setText(message);
-                myLabel.visible.set(true);
+                CoreSystem.print("running...");   
+                /*myLabel.setText(message);
+                myLabel.visible.set(true);*/
             }
         });
 	}

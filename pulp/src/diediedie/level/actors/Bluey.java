@@ -20,17 +20,23 @@ import java.util.Set;
 import java.util.HashSet;
 import diediedie.level.Level;
 import diediedie.level.LevelObject;
-import diediedie.actors.Direction;
-import diediedie.actors.Player;
-import diediedie.actors.states.State;
-import diediedie.actors.states.Patrol;
-import diediedie.actors.states.Alert;
-import diediedie.util.StateMachine;
-import diediedie.actors.actions.Look;
+import diediedie.level.Direction;
+import diediedie.level.actors.Player;
+import diediedie.level.actions.Action;
+import diediedie.level.states.State;
+import diediedie.level.states.Patrol;
+import diediedie.level.states.Alert;
+import diediedie.level.states.StateMachine;
+import diediedie.level.actions.Look;
 import diediedie.level.Tile;
 import diediedie.util.AnimCreator;
+import diediedie.util.Mover;
 import pulpcore.animation.Animation;
+import pulpcore.math.Rect;
+import pulpcore.sprite.ImageSprite;
 import pulpcore.image.CoreGraphics;
+import pulpcore.image.CoreImage;
+import pulpcore.image.AnimatedImage;
 import org.newdawn.slick.geom.Shape;
 
 /*
@@ -68,17 +74,20 @@ public class Bluey implements Enemy, StateMachine
                     canSeePlayer = false, hasSeenPlayer = false,
                     fsmRunning = false, seenPlayerEvidence = false;
                     
-    private int health;
+    private int health, xPos, yPos;
     private Direction facing = null;
     private Level level;
     
     private Set<LevelObject> visibleObjects;
     
-    private float xPos, yPos, tileHeight, moveSpeed = 0, oldX, oldY,
+    private float tileHeight, moveSpeed = 0, oldX, oldY,
                   xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0;
    
-    private Animation leftWalkAnim, rightWalkAnim, leftStandAnim, 
-                      rightStandAnim, currentAnim = null;
+    private /*Animation*/ AnimatedImage leftWalkAnim,
+                                        rightWalkAnim, 
+                                        leftStandAnim, 
+                                        rightStandAnim;
+    private ImageSprite sprite;
        
     /**
      * Constructor. The object is associated with a Level and is
@@ -100,7 +109,7 @@ public class Bluey implements Enemy, StateMachine
         setLevel(l);
         xPos = t.xPos;
         yPos = t.yPos;
-        yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - 
+        yPos -= (AnimCreator.getCurrentFrameRect(this).height - 
                                                      t.tileHeight);
         yPos--;
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
@@ -135,6 +144,12 @@ public class Bluey implements Enemy, StateMachine
     public void setMoving(boolean m)
     {
         moving = m;
+    }
+    
+    @Override
+    public ImageSprite getCurrentAnim()
+    {
+        return sprite;
     }
     
     @Override
@@ -192,11 +207,11 @@ public class Bluey implements Enemy, StateMachine
         facing = d;
         if(d.equals(Direction.LEFT))
         {
-            currentAnim = leftWalkAnim;
+            sprite.setImage(leftWalkAnim);
         }
         else
         {
-            currentAnim = rightWalkAnim;
+            sprite.setImage(rightWalkAnim);
         }
     }
     
@@ -220,13 +235,13 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public void setX(float x)
+    public void setX(int x)
     {
         xPos = x;
     }
     
     @Override
-    public void setY(float y)
+    public void setY(int y)
     {
         yPos = y;
     }
@@ -310,13 +325,13 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public float getYSpeed()
+    public int getYSpeed()
     {
         return ySpeed;
     }
     
     @Override
-    public float getXSpeed()
+    public int getXSpeed()
     {
         return xSpeed;
     }
@@ -331,30 +346,34 @@ public class Bluey implements Enemy, StateMachine
     {
         System.out.println("bluey -> creating animations");
         
-        Image leftStand1 = AnimCreator.loadImage(leftStandPath);
-        Image rightStand1 = leftStand1.getFlippedCopy(true, false);        
+        CoreImage leftStand1 = AnimCreator.loadImage(leftStandPath);
+        CoreImage rightStand1 = leftStand1.mirror();        
         
         // standing anims
-        Image[] leftStandImages = { leftStand1 };
-        Image[] rightStandImages = { rightStand1 };  
-              
+        /*
+        CoreImage[] leftStandImages = { leftStand1 };
+        CoreImage[] rightStandImages = { rightStand1 };  
+
         leftStandAnim = new Animation(leftStandImages, 
                                       Actor.ANIM_DURATION, true);
         rightStandAnim = new Animation(rightStandImages,
                                       Actor.ANIM_DURATION, true);
+        */
                                                 
         // walking anims
-        Image[] leftWalkImages = AnimCreator.getImagesFromPaths(
-                               leftWalkPaths).toArray(rightStandImages);
-        Image[] rightWalkImages = AnimCreator
-                            .getHorizontallyFlippedCopy(leftWalkImages)
-                                            .toArray(rightStandImages);
-        leftWalkAnim = new Animation(leftWalkImages, 
-                                      Actor.ANIM_DURATION, true);
-        rightWalkAnim = new Animation(rightWalkImages,
-                                       Actor.ANIM_DURATION, true);
+        CoreImage[] leftWalkImages = 
+            AnimCreator.getImagesFromPaths(
+                leftWalkPaths).toArray(leftWalkImages);
+            
+        CoreImage[] rightWalkImages = 
+            AnimCreator.getHorizontallyFlippedCopy(
+                rightWalkImages).toArray(rightWalkImages);
+        
+        leftWalkAnim = new AnimatedImage(leftWalkImages);
+        rightWalkAnim = new AnimatedImage(rightWalkImages);
+        
         facing = Direction.LEFT;
-        currentAnim = leftStandAnim;
+        sprite.setImage(leftStandAnim);
     }
         
     /*
@@ -380,7 +399,7 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public Shape getZone()
+    public Rect getZone()
     {
         return getLevel().getActorZone(this);
     }
@@ -427,6 +446,7 @@ public class Bluey implements Enemy, StateMachine
             
         }
     }
+        
     
     public void updatePosition()
     {
@@ -450,11 +470,11 @@ public class Bluey implements Enemy, StateMachine
     {
         if(getFacing().equals(Direction.RIGHT))
         {
-            currentAnim = rightStandAnim;
+            sprite.setImage(rightStandAnim);
         }
         else if(getFacing().equals(Direction.LEFT))
         {
-            currentAnim = leftStandAnim;   
+            sprite.setImage(leftStandAnim);   
         }
         else throw new IllegalStateException(
                             "standing dir neither left or right");
@@ -480,14 +500,13 @@ public class Bluey implements Enemy, StateMachine
         }  
     }
     
-    @Override
     public float getEyePosX()
     {
-       return xPos + (AnimCreator.getCurrentFrameRect(this)
-                                 .getWidth() / 2);
+        return xPos + (
+            AnimCreator.getCurrentFrameRect(this).width / 2);
     }
     
-    @Override
+    
     public float getEyePosY()
     {
         return yPos + EYE_OFFSET_HEIGHT;
@@ -553,18 +572,11 @@ public class Bluey implements Enemy, StateMachine
     {
         
     }
-    
-    @Override
-    public Animation getCurrentAnim()
-    {
-        return currentAnim;
-    }
-    
     @Override
     public void draw(CoreGraphics g)
     {
         //System.out.println("drawing Bluey: " + getX() + ", " + getY());
-        g.drawAnimation(currentAnim, getX(), getY());
+        g.drawImage(sprite.getImage(), getX(), getY());
 
         drawProjectiles(g);
 
@@ -578,16 +590,19 @@ public class Bluey implements Enemy, StateMachine
         }
     }
 
+/*
+    @Override
     public CoreGraphics getGraphics()
     {
         return g;
     }
+*/
     
     private void drawProjectiles(CoreGraphics g)
     {
         
     }
     
-    public float getX(){ return xPos; }   
-    public float getY(){ return yPos; } 
+    public int getX(){ return xPos; }   
+    public int getY(){ return yPos; } 
 }

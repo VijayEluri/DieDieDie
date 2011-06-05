@@ -14,18 +14,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
-package diediedie.level;
-import pulpcore.image.CoreGraphics;
-import diediedie.level.Level;
+package diediedie.level.states;
+
+import diediedie.level.actors.Actor;
+import diediedie.level.actions.Action;
+import java.lang.Class;
 
 /**
- * Something drawable on a Level.
+ * Interface design for use when creating States for a (finite)
+ * StateMachine 
  */ 
-public interface Drawable
+public interface State
 {
-    void draw(CoreGraphics g);
-    Level getLevel(); 
-    void setLevel(Level l);
-    int getX();
-    int getY(); 
+    State getNextState();
+    Actor getHost();
+    String toString();
+    void update();
+    void enter();
+    void exit();
+    boolean isRunning();      
+    Class getCurrentActionType();    
+    Action getCurrentAction();
 }
+

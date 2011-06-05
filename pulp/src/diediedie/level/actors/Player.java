@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
- 
+
 package diediedie.level.actors;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Collections;
 import pulpcore.animation.Animation;
 import pulpcore.image.CoreGraphics;
+import pulpcore.CoreSystem;
 import pulpcore.sprite.ImageSprite;
 import pulpcore.CoreSystem;
 import pulpcore.math.Rect;
@@ -29,7 +30,11 @@ import pulpcore.image.CoreImage;
 import pulpcore.image.AnimatedImage;
 import diediedie.level.Level;
 import diediedie.level.Tile;
+import diediedie.level.Direction;
+import diediedie.level.Arrow;
+import diediedie.level.Projectile;
 import diediedie.util.AnimCreator;
+import diediedie.util.Mover;
 import diediedie.util.Collider;
 import diediedie.util.Aligner;
 import pulpcore.Input;
@@ -388,7 +393,7 @@ public class Player implements Actor
      * Fires an Arrow from the Player's position towards the X / Y
      * coordinates.
      */ 
-    private void releaseArrow()
+    public void releaseArrow()
     {
         isChargingArrow = false;
         isFiringArrow = true;
@@ -441,11 +446,11 @@ public class Player implements Actor
     /**
      * Returns the x position
      */ 
-    public float getX() { return xPos; }
+    public int getX() { return xPos; }
     /**
      * Returns the y position
      */ 
-    public float getY() { return yPos; } 
+    public int getY() { return yPos; } 
 
     
     /**
@@ -529,7 +534,6 @@ public class Player implements Actor
         xSpeed *= level.FRICTION;
     }
     
-    @Override
     public void update()
     {
         Mover.applyGravity(this);
@@ -561,9 +565,9 @@ public class Player implements Actor
     }
     
     @Override
-    public AnimatedImage getCurrentAnim()
+    public ImageSprite getCurrentAnim()
     {
-        return currentAnim;
+        return sprite;
     }
     
     @Override
@@ -636,13 +640,13 @@ public class Player implements Actor
     
     
     @Override
-    public float getYSpeed()
+    public int getYSpeed()
     {
         return ySpeed;
     }
     
     @Override
-    public float getXSpeed()
+    public int getXSpeed()
     {
         return xSpeed;
     }
@@ -669,8 +673,8 @@ public class Player implements Actor
     public void draw(CoreGraphics g)
     {
         //g.drawAnimation(currentAnim, getX(), getY());
-        //g.drawImage(currentAnim, (int)getX(), (int)getY());
-        sprite.drawSprite(g);
+        g.drawImage(currentAnim, (int)getX(), (int)getY());
+
         drawArrows(g);
         
         if(isChargingArrow)

@@ -20,7 +20,7 @@ import diediedie.level.LevelObject;
 import diediedie.level.Direction;
 import diediedie.level.MovableObject;
 import pulpcore.image.CoreGraphics;
-import pulpcore.image.AnimatedImage;
+import pulpcore.sprite.ImageSprite;
 import pulpcore.math.Rect;
 
 import java.util.Set;
@@ -34,14 +34,14 @@ public interface Actor extends MovableObject
     void applySpeed(Direction d);
     boolean canJump();
     void die();
-    AnimatedImage getCurrentAnim();
+    ImageSprite getCurrentAnim();
     Direction getFacing();
     int getHealth();    
     float getJumpSpeed();
     float getMoveSpeed();    
-    float getXSpeed();
-    float getYSpeed();
-    Rect getZone();    
+    int getXSpeed();
+    int getYSpeed();
+    Rect getZone(); //returns the Actor's zone on the current map
     void setJump(boolean b);
     void jump();
     void setFacing(Direction d);

@@ -23,9 +23,11 @@ public interface MovableObject extends LevelObject
     void setY(int y);   
     void setYSpeed(float y);
     void setXSpeed(float x);
-    float getYSpeed();
-    float getXSpeed();
+    int getYSpeed();
+    int getXSpeed();
     float getMaxFallSpeed();
     void resetAccelX();
     void resetAccelY();
+    
+    
 }

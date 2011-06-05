@@ -14,18 +14,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
-package diediedie.level;
+package diediedie.level.actions;
+import diediedie.level.actors.Actor;
+import diediedie.level.LevelObject;
 import pulpcore.image.CoreGraphics;
-import diediedie.level.Level;
-
 /**
- * Something drawable on a Level.
- */ 
-public interface Drawable
+ * An Action performed by something on a level. 
+ */
+public interface Action
 {
+    void perform();
+    boolean hasStarted();
+    boolean hasFinished(); 
+    void update();
     void draw(CoreGraphics g);
-    Level getLevel(); 
-    void setLevel(Level l);
-    int getX();
-    int getY(); 
+    void reset();
+    void setHost(LevelObject lo);
 }

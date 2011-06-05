@@ -16,16 +16,17 @@
  */
 
 package diediedie.util;
-import diediedie.actors.Actor;
+import diediedie.level.Level;
+import diediedie.level.LevelObject;
 /**
- * Used to discern whether or not a MovableObject is going to hit
- * something else (i.e. collision, another collidable....)
+ * Used to discern whether or not a LevelObject has hit
+ * something else.
  */ 
 public class Collider
 {
-    public static boolean collidesLevel(Actor m)
+    public static boolean collidesLevel(LevelObject lo)
     {
-        if(m.getLevel().collides(AnimCreator.getCurrentFrameRect(m)))
+        if(lo.getLevel().collides(lo))
         {
             return true;
         }
@@ -36,7 +37,7 @@ public class Collider
      * Returns true if the arrow intersects with collision Tile on the
      * Level
      */ 
-    public static boolean collidesLevel(Projectile p)
+   /* public static boolean collidesLevel(Projectile p)
     {
         /*if(p.getLevel().isInCollisionTile(p.getX(), p.getY()) 
            ||
@@ -44,11 +45,11 @@ public class Collider
         {
             return true;
         }*/
-        if(p.getLevel().collides(p.getShape()))
+      /* if(p.getLevel().collides(p.getShape()))
         {
             return true;
         }
         return false;
-    }
+    }*/
     
 }

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import pulpcore.image.AnimatedImage;
 import pulpcore.image.CoreImage;
 import pulpcore.math.Rect;
-import diediedie.actors.Actor;
+import diediedie.level.actors.Actor;
 
 /**
  * Utility class with Animation creation and CoreImage handling methods.
@@ -90,7 +90,8 @@ public class AnimCreator
         List<CoreImage> flipped = getEmptyImageList();        
         for(CoreImage i : images)
         {
-            flipped.add(i.getFlippedCopy(true, false));
+            //flipped.add(i.getFlippedCopy(true, false));
+            flipped.add(i.mirror());
         }
         return flipped;
     }

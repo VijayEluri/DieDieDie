@@ -96,12 +96,12 @@ public class Tile
         endY = yPos + tileHeight;// + ROUNDING;
     }
         
-    public float getXPos() 
+    public int getXPos() 
     {
         return xPos; 
     }
     
-    public float getYPos() 
+    public int getYPos() 
     { 
         return yPos;
     }

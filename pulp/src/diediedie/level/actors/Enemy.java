@@ -15,9 +15,10 @@
  *  MA 02110-1301, USA.
  */
 package diediedie.level.actors;
-import diediedie.actors.Actor;
+
+import diediedie.level.actors.Actor;
 import diediedie.level.LevelObject;
-import diediedie.actors.Direction;
+import diediedie.level.Direction;
 import java.util.Set;
 import pulpcore.image.CoreGraphics;
 
@@ -42,7 +43,7 @@ public interface Enemy extends Actor
     void addVisibleObject(LevelObject lo);
     
     boolean isMoving();  
-    CoreGraphics getGraphics();
+    //CoreGraphics getGraphics();
     float getWalkSpeed();
     float getRunSpeed();
 }

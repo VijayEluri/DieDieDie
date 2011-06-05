@@ -18,9 +18,9 @@
 package diediedie.util;
 
 import java.lang.Math;
-import org.newdawn.slick.util.FastTrig;
-import org.newdawn.slick.geom.*;
 import diediedie.level.actors.Actor;
+import diediedie.level.MovableObject;
+import diediedie.level.Projectile;
 import diediedie.util.Collider;
 import diediedie.util.Aligner;
 import diediedie.level.NavMesh;
@@ -31,6 +31,16 @@ import diediedie.level.NavMesh;
 public class Mover
 {    
     static final int INTERVAL = 10;
+    
+    /**
+     * Set an Actor moving 
+     */
+    /*
+        public static void setMoving(Actor a, boolean b)
+        {
+            a.setMoving(b);
+        }
+    */
     
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.

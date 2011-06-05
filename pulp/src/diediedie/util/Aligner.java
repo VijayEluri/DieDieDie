@@ -16,10 +16,10 @@
  */
  
 
-package diediedie.actors.util;
+package diediedie.util;
 
 import diediedie.level.Direction;
-import diediedie.actors.Actor;
+import diediedie.level.actors.Actor;
 
 /**
  * Utility class for aligning an Actor against a Tile following a

@@ -17,6 +17,7 @@
 package diediedie.level;
 
 import pulpcore.image.CoreGraphics;
+import pulpcore.math.Rect;
 import diediedie.level.Level;
 import diediedie.level.Drawable;
 
@@ -25,9 +26,6 @@ import diediedie.level.Drawable;
  */ 
 public interface LevelObject extends Drawable
 {
-    void update();
     void draw(CoreGraphics g);
-    Level getLevel();
-    float getX();
-    float getY();  
+    void update();
 }

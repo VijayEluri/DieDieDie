@@ -31,7 +31,7 @@ import diediedie.level.Line;
  * NavMesh. Generated for a Level using inner class MeshMaker.
  */ 
 
-public class NavMesh implements Drawable
+public class NavMesh 
 {
     // walkable zones (Lines, as we're in 2D)
     
@@ -56,13 +56,12 @@ public class NavMesh implements Drawable
         negativeSpace = space;
     }
     
-    @Override
+    
     public void setLevel(Level l)
     {
         level = l;
-    }
+    }    
     
-    @Override
     public void draw(CoreGraphics g)
     {
         g.setColor(walkableColorInt);

@@ -14,11 +14,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
+ 
 package diediedie.level;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.InputStream;
 import diediedie.level.NavMesh;
 import diediedie.level.NavMesh.MeshMaker;
-import diediedie.level.actors.Direction;
+import diediedie.level.Direction;
 import diediedie.level.actors.Actor;
 import diediedie.level.actors.Bluey;
 import diediedie.util.AnimCreator;
@@ -27,12 +30,9 @@ import diediedie.level.actors.Player;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 import pulpcore.math.Rect;
-//import org.newdawn.slick.geom.Polygon;
-//import org.newdawn.slick.geom.Shape;
 import pulpcore.image.CoreGraphics;
 import pulpcore.CoreSystem;
-import java.util.List;
-import java.util.ArrayList;
+
 
 /**
  * A Level in a DieDieDie.
@@ -162,7 +162,7 @@ public class Level extends TiledMap
     /**
      * Updates the contents of the level, if any.
      */ 
-    public void update(int elapsedTime)
+    public void update()
     {
         updateEnemies();
     }
@@ -313,7 +313,6 @@ public class Level extends TiledMap
      */
     public boolean collides(Rect r)
     {
-        
         for(Tile t : collisionLayer.tiles)
         {
             if(t.getRect().intersects(r))

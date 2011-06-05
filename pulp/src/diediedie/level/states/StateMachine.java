@@ -14,18 +14,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
-package diediedie.level;
-import pulpcore.image.CoreGraphics;
-import diediedie.level.Level;
+package diediedie.level.states;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
- * Something drawable on a Level.
+ * A basic (finite) state machine
  */ 
-public interface Drawable
+public interface StateMachine
 {
-    void draw(CoreGraphics g);
-    Level getLevel(); 
-    void setLevel(Level l);
-    int getX();
-    int getY(); 
+    boolean isFSMRunning();
+    State getState();   
+    void createStates();
+    void setInitialState();
+    void startFSM();
+    void changeState(State nextState);
+    void stopFSM();
 }
+
