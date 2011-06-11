@@ -50,8 +50,12 @@ public class Mover
     public static boolean move(final Actor a)
     {
         //CoreSystem.print("moving " + a);
+/*
         final float oldX = a.getX();
         final float oldY = a.getY();
+*/
+        final int oldX = a.getX();
+        final int oldY = a.getY();
         
         // test new position
         
@@ -75,6 +79,7 @@ public class Mover
         }
         
         // horizontal 
+        System.out.println(a);
         a.setX(a.getX() + a.getXSpeed());
         
         if(Collider.collidesLevel(a))

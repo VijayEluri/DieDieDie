@@ -17,17 +17,17 @@
 
 package diediedie.level;
 
+/*
+ * Interface for moveable objects in Levels. 
+ */
 public interface MovableObject extends LevelObject
 {
-    void setX(int x);
-    void setY(int y);   
+    
     void setYSpeed(float y);
     void setXSpeed(float x);
-    int getYSpeed();
-    int getXSpeed();
+    float getYSpeed();
+    float getXSpeed();
     float getMaxFallSpeed();
     void resetAccelX();
     void resetAccelY();
-    
-    
 }

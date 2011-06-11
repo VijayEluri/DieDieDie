@@ -1,0 +1,181 @@
+Buildfile: build.xml
+
+-init:
+   [delete] Deleting directory /home/sean/slick-games/DieDieDie/pulp/build/temp/classes
+    [mkdir] Created dir: /home/sean/slick-games/DieDieDie/pulp/build/temp/classes
+
+res:
+   [delete] Deleting: /home/sean/slick-games/DieDieDie/pulp/build/DieDieDie.zip
+      [zip] Building zip: /home/sean/slick-games/DieDieDie/pulp/build/DieDieDie.zip
+
+compile:
+    [javac] Compiling 31 source files to /home/sean/slick-games/DieDieDie/pulp/build/temp/classes
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/Arrow.java:345: possible loss of precision
+    [javac] found   : float
+    [javac] required: int
+    [javac]         return startX;
+    [javac]                ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/Arrow.java:351: possible loss of precision
+    [javac] found   : float
+    [javac] required: int
+    [javac]         return startY;
+    [javac]                ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/Bluey.java:45: diediedie.level.actors.Bluey is not abstract and does not override abstract method getYSpeed() in diediedie.level.actors.Actor
+    [javac] public class Bluey implements Enemy, StateMachine
+    [javac]        ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/Bluey.java:328: getYSpeed() in diediedie.level.actors.Bluey cannot implement getYSpeed() in diediedie.level.actors.Actor; attempting to use incompatible return type
+    [javac] found   : int
+    [javac] required: float
+    [javac]     public int getYSpeed()
+    [javac]                ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/Bluey.java:334: getXSpeed() in diediedie.level.actors.Bluey cannot implement getXSpeed() in diediedie.level.actors.Actor; attempting to use incompatible return type
+    [javac] found   : int
+    [javac] required: float
+    [javac]     public int getXSpeed()
+    [javac]                ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/Bluey.java:330: possible loss of precision
+    [javac] found   : float
+    [javac] required: int
+    [javac]         return ySpeed;
+    [javac]                ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/Bluey.java:327: method does not override or implement a method from a supertype
+    [javac]     @Override
+    [javac]     ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/Bluey.java:336: possible loss of precision
+    [javac] found   : float
+    [javac] required: int
+    [javac]         return xSpeed;
+    [javac]                ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/Bluey.java:333: method does not override or implement a method from a supertype
+    [javac]     @Override
+    [javac]     ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:53: cannot find symbol
+    [javac] symbol  : variable CoreSystem
+    [javac] location: class diediedie.level.states.Patrol
+    [javac]         CoreSystem.print(this + "not creating Look");
+    [javac]         ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:82: cannot find symbol
+    [javac] symbol  : variable CoreSystem
+    [javac] location: class diediedie.level.states.Patrol
+    [javac]             CoreSystem.print("\tstarted " + this);
+    [javac]             ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:83: perform() in diediedie.level.actions.Action cannot be applied to (diediedie.level.actors.Actor)
+    [javac]             currentAction.perform(host);
+    [javac]                          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:99: perform() in diediedie.level.actions.Action cannot be applied to (diediedie.level.actors.Actor)
+    [javac]             currentAction.perform(host);
+    [javac]                          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:100: cannot find symbol
+    [javac] symbol  : variable CoreSystem
+    [javac] location: class diediedie.level.states.Patrol
+    [javac]             CoreSystem.print("Patrol.update(): started " + currentAction);
+    [javac]             ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:106: update() in diediedie.level.actions.Action cannot be applied to (diediedie.level.actors.Actor)
+    [javac]             currentAction.update(host);
+    [javac]                          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:111: non-static method getClass() cannot be referenced from a static context
+    [javac]             if(cls.equals(StartMoving.getClass()))
+    [javac]                                      ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Patrol.java:113: cannot find symbol
+    [javac] symbol  : variable CoreSystem
+    [javac] location: class diediedie.level.states.Patrol
+    [javac]                 CoreSystem.print("Patrol.update(): changing state");   
+    [javac]                 ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Alert.java:75: cannot find symbol
+    [javac] symbol  : variable CoreSystem
+    [javac] location: class diediedie.level.states.Alert
+    [javac]             CoreSystem.print("\tstarted " + this);
+    [javac]             ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/states/Alert.java:76: perform() in diediedie.level.actions.Action cannot be applied to (diediedie.level.actors.Actor)
+    [javac]             currentAction.perform(host);
+    [javac]                          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/PathConstructor.java:32: cannot find symbol
+    [javac] symbol  : constructor Point(float,float)
+    [javac] location: class diediedie.level.Point
+    [javac]         this(e, new Point(xDest, yDest));
+    [javac]                 ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/level/actors/PathConstructor.java:41: cannot find symbol
+    [javac] symbol  : variable CoreSystem
+    [javac] location: class diediedie.level.actors.PathConstructor
+    [javac]         CoreSystem.print("ConstructPath: perform");
+    [javac]         ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Aligner.java:46: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]                 m.setY(m.getY() + INCR);
+    [javac]                  ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Aligner.java:50: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]                 m.setY(m.getY() - INCR);
+    [javac]                  ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Aligner.java:55: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]             m.setY(m.getY() - INCR);
+    [javac]              ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Aligner.java:59: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]             m.setY(m.getY() + INCR);
+    [javac]              ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/AnimCreator.java:47: cannot find symbol
+    [javac] symbol  : class Animation
+    [javac] location: class diediedie.util.AnimCreator
+    [javac]         Animation anim = new Animation(imgArr); //, duration, autoUpdate);
+    [javac]         ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/AnimCreator.java:47: cannot find symbol
+    [javac] symbol  : class Animation
+    [javac] location: class diediedie.util.AnimCreator
+    [javac]         Animation anim = new Animation(imgArr); //, duration, autoUpdate);
+    [javac]                              ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/AnimCreator.java:58: cannot find symbol
+    [javac] symbol  : constructor CoreImage(java.io.FileInputStream,java.lang.String,boolean)
+    [javac] location: class pulpcore.image.CoreImage
+    [javac]             return new CoreImage(new FileInputStream(
+    [javac]                    ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/AnimCreator.java:65: cannot find symbol
+    [javac] symbol  : class SlickException
+    [javac] location: class diediedie.util.AnimCreator
+    [javac]         catch(SlickException e)
+    [javac]               ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/AnimCreator.java:82: cannot find symbol
+    [javac] symbol  : method getScaledCopy(float)
+    [javac] location: class pulpcore.image.CoreImage
+    [javac]             scaled.add(i.getScaledCopy(scale));
+    [javac]                         ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/AnimCreator.java:121: cannot find symbol
+    [javac] symbol  : method getCurrentFrame()
+    [javac] location: class pulpcore.sprite.ImageSprite
+    [javac]         CoreImage img = actr.getCurrentAnim().getCurrentFrame();
+    [javac]                                              ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Collider.java:29: collides(pulpcore.math.Rect) in diediedie.level.Level cannot be applied to (diediedie.level.LevelObject)
+    [javac]         if(lo.getLevel().collides(lo))
+    [javac]                         ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:59: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]         a.setY(a.getY() + a.getYSpeed());
+    [javac]          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:68: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]             a.setY(oldY);
+    [javac]              ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:78: setX(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]         a.setX(a.getX() + a.getXSpeed());
+    [javac]          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:82: setX(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]             a.setX(oldX);
+    [javac]              ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:115: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]         p.setY(p.getY() + yTrav);
+    [javac]          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:124: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]                 p.setY(p.getY() - Aligner.INCR);
+    [javac]                  ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:175: cannot find symbol
+    [javac] symbol  : variable FastTrig
+    [javac] location: class diediedie.util.Mover
+    [javac]         return p.getX() + xTrav * (float)FastTrig.sin(
+    [javac]                                          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:186: cannot find symbol
+    [javac] symbol  : variable FastTrig
+    [javac] location: class diediedie.util.Mover
+    [javac]                 (float)FastTrig.cos(Math.toRadians(angle));
+    [javac]                        ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:201: setX(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]         p.setX(getNewXPos(p, xTrav, angle));
+    [javac]          ^
+    [javac] /home/sean/slick-games/DieDieDie/pulp/src/diediedie/util/Mover.java:202: setY(int) in diediedie.level.MovableObject cannot be applied to (float)
+    [javac]         p.setY(getNewYPos(p, yTrav, angle));        
+    [javac]          ^
+    [javac] 42 errors

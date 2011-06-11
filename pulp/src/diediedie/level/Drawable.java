@@ -16,6 +16,8 @@
  */
 package diediedie.level;
 import pulpcore.image.CoreGraphics;
+import pulpcore.math.Rect;
+import pulpcore.sprite.Sprite;
 import diediedie.level.Level;
 
 /**
@@ -26,6 +28,10 @@ public interface Drawable
     void draw(CoreGraphics g);
     Level getLevel(); 
     void setLevel(Level l);
-    int getX();
-    int getY(); 
+    float getX();
+    float getY();
+    void setX(float x);
+    void setY(float y); 
+    
+    Sprite getSprite();
 }

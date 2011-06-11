@@ -26,7 +26,7 @@ public class Collider
 {
     public static boolean collidesLevel(LevelObject lo)
     {
-        if(lo.getLevel().collides(lo))
+        if(lo.getLevel().collides(lo.getSprite()))
         {
             return true;
         }

@@ -23,6 +23,7 @@ import diediedie.level.actions.Look;
 import diediedie.level.actions.StartMoving;
 import diediedie.level.actions.StopMoving;
 import diediedie.level.actors.Actor;
+import pulpcore.CoreSystem;
 import java.lang.Class;
 
 /**
@@ -80,7 +81,7 @@ public class Patrol implements State
         {
             running = true;
             CoreSystem.print("\tstarted " + this);
-            currentAction.perform(host);
+            currentAction.perform();
         }
     }
     
@@ -96,19 +97,19 @@ public class Patrol implements State
         // NOT STARTED *OR* FINISHED
         if(!currentAction.hasStarted())
         {
-            currentAction.perform(host);
+            currentAction.perform();
             CoreSystem.print("Patrol.update(): started " + currentAction);
         }
         // STARTED BUT *NOT* FINISHED
         else if(!currentAction.hasFinished())
         {
             // update all started but non-finished actions
-            currentAction.update(host);
+            currentAction.update();
         }
         // STARTED *AND* FINISHED
         else if(currentAction.hasFinished())
         {
-            if(cls.equals(StartMoving.getClass()))
+            if(cls.equals(startMoving.getClass()))
             {
                 CoreSystem.print("Patrol.update(): changing state");   
                 currentAction = new Look();    

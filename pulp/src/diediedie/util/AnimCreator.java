@@ -44,35 +44,28 @@ public class AnimCreator
         List<CoreImage> images = getImagesFromPaths(paths);
         CoreImage[] imgArr = new CoreImage[images.size()];
         images.toArray(imgArr);
-        Animation anim = new Animation(imgArr); //, duration, autoUpdate);
-        anim.setFrameDuration(duration);
+        //Animation anim = new Animation(imgArr); //, duration, autoUpdate);
+        AnimatedImage anim = new AnimatedImage(imgArr); //, duration, autoUpdate);
+        //anim.setFrameDuration(duration);
+        boolean loop = true;
+        anim.setFrameDuration(duration, loop);
+        return anim;
     }  
                              
-    /**
+/*
+    *
      * Load an CoreImage from a given path String.
-     */ 
+   
+*/  
     public static CoreImage loadImage(String path)
     {
-        try
-        {
-            return new CoreImage(new FileInputStream(
-                new File(path)), path, false);
-        }
-        catch(FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        catch(SlickException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        return CoreImage.load(path);
     }
     
     /**
      * Returns a cloned, scaled version of a given list by a given
      * scale. 
-     */ 
+     
     public static List<CoreImage> scaleImages(float scale, CoreImage... imgs)
     {
         List<CoreImage> scaled = getEmptyImageList();
@@ -83,7 +76,7 @@ public class AnimCreator
         }
         
         return scaled;
-    }
+    }*/ 
     
     public static List<CoreImage> getHorizontallyFlippedCopy(CoreImage[] images)
     {
@@ -118,7 +111,7 @@ public class AnimCreator
      */ 
     public static Rect getCurrentFrameRect(Actor actr)
     {
-        CoreImage img = actr.getCurrentAnim().getCurrentFrame();
+        CoreImage img = actr.getCurrentImage();//.getCurrentFrame();
         return new Rect(actr.getX(), actr.getY(), img.getWidth(), 
                              img.getHeight());
     }

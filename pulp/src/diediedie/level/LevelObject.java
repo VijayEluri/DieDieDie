@@ -22,10 +22,9 @@ import diediedie.level.Level;
 import diediedie.level.Drawable;
 
 /**
- * Super-interface for any interactive thing that exists on a Level. 
+ * Super-interface for any Level object that can change its state.
  */ 
 public interface LevelObject extends Drawable
 {
-    void draw(CoreGraphics g);
     void update();
 }

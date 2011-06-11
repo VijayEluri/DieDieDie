@@ -37,8 +37,7 @@ import pulpcore.sprite.ImageSprite;
 import pulpcore.image.CoreGraphics;
 import pulpcore.image.CoreImage;
 import pulpcore.image.AnimatedImage;
-import org.newdawn.slick.geom.Shape;
-
+import pulpcore.sprite.Sprite;
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */ 
@@ -74,21 +73,22 @@ public class Bluey implements Enemy, StateMachine
                     canSeePlayer = false, hasSeenPlayer = false,
                     fsmRunning = false, seenPlayerEvidence = false;
                     
-    private int health, xPos, yPos;
+    private int health;
     private Direction facing = null;
     private Level level;
     
     private Set<LevelObject> visibleObjects;
     
     private float tileHeight, moveSpeed = 0, oldX, oldY,
-                  xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0;
+                  xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0,
+                  xPos, yPos;
    
     private /*Animation*/ AnimatedImage leftWalkAnim,
                                         rightWalkAnim, 
                                         leftStandAnim, 
                                         rightStandAnim;
     private ImageSprite sprite;
-       
+    
     /**
      * Constructor. The object is associated with a Level and is
      * positioned as near to Tile t on it as possible.
@@ -147,7 +147,13 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public ImageSprite getCurrentAnim()
+    public CoreImage getCurrentImage()
+    {
+        return sprite.getImage();
+    }
+    
+    @Override
+    public Sprite getSprite()
     {
         return sprite;
     }
@@ -235,13 +241,13 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public void setX(int x)
+    public void setX(float x)
     {
         xPos = x;
     }
     
     @Override
-    public void setY(int y)
+    public void setY(float y)
     {
         yPos = y;
     }
@@ -325,13 +331,13 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public int getYSpeed()
+    public float getYSpeed()
     {
         return ySpeed;
     }
     
     @Override
-    public int getXSpeed()
+    public float getXSpeed()
     {
         return xSpeed;
     }
@@ -346,7 +352,8 @@ public class Bluey implements Enemy, StateMachine
     {
         System.out.println("bluey -> creating animations");
         
-        CoreImage leftStand1 = AnimCreator.loadImage(leftStandPath);
+        //CoreImage leftStand1 = AnimCreator.loadImage(leftStandPath);
+        CoreImage leftStand1 = CoreImage.load(leftStandPath);
         CoreImage rightStand1 = leftStand1.mirror();        
         
         // standing anims
@@ -361,12 +368,15 @@ public class Bluey implements Enemy, StateMachine
         */
                                                 
         // walking anims
-        CoreImage[] leftWalkImages = 
-            AnimCreator.getImagesFromPaths(
-                leftWalkPaths).toArray(leftWalkImages);
+        //CoreImage[] type;
+        CoreImage[] leftWalkImages = new CoreImage[
+            leftWalkPaths.length];
+        leftWalkImages = AnimCreator.getImagesFromPaths(
+            leftWalkPaths).toArray(leftWalkImages);
             
-        CoreImage[] rightWalkImages = 
-            AnimCreator.getHorizontallyFlippedCopy(
+        CoreImage[] rightWalkImages = new CoreImage[
+            leftWalkPaths.length];
+        rightWalkImages = AnimCreator.getHorizontallyFlippedCopy(
                 rightWalkImages).toArray(rightWalkImages);
         
         leftWalkAnim = new AnimatedImage(leftWalkImages);
@@ -576,7 +586,7 @@ public class Bluey implements Enemy, StateMachine
     public void draw(CoreGraphics g)
     {
         //System.out.println("drawing Bluey: " + getX() + ", " + getY());
-        g.drawImage(sprite.getImage(), getX(), getY());
+        g.drawImage(sprite.getImage(), (int)getX(), (int)getY());
 
         drawProjectiles(g);
 
@@ -603,6 +613,6 @@ public class Bluey implements Enemy, StateMachine
         
     }
     
-    public int getX(){ return xPos; }   
-    public int getY(){ return yPos; } 
+    public float getX(){ return xPos; }   
+    public float getY(){ return yPos; } 
 }

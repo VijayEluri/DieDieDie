@@ -27,7 +27,8 @@ import diediedie.level.actors.Actor;
  */ 
 public class Aligner
 {
-    public static final float INCR = 0.01f;
+    // ARgh! What to do!
+    public static final int/*float*/ INCR = 1/*0.01f*/;
     
     /**
      * Aligns a collided Actor adjacently colliding part of the Level.

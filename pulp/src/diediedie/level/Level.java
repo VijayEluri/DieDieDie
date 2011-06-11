@@ -30,6 +30,7 @@ import diediedie.level.actors.Player;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 import pulpcore.math.Rect;
+import pulpcore.sprite.Sprite;
 import pulpcore.image.CoreGraphics;
 import pulpcore.CoreSystem;
 
@@ -311,11 +312,12 @@ public class Level extends TiledMap
      * Returns true if Rect r intersects with a collision tile on the
      * Level.
      */
-    public boolean collides(Rect r)
+    public boolean collides(Sprite s)//Rect r)
     {
         for(Tile t : collisionLayer.tiles)
         {
-            if(t.getRect().intersects(r))
+            //if(t.getRect().intersects(s))
+            if(t.intersects(s))
             {
                 
                 CoreSystem.print("[Rect [origin " + 

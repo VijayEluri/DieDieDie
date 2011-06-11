@@ -24,6 +24,7 @@ import pulpcore.animation.Animation;
 import pulpcore.image.CoreGraphics;
 import pulpcore.CoreSystem;
 import pulpcore.sprite.ImageSprite;
+import pulpcore.sprite.Sprite;
 import pulpcore.CoreSystem;
 import pulpcore.math.Rect;
 import pulpcore.image.CoreImage;
@@ -79,13 +80,12 @@ public class Player implements Actor
     
     private boolean isChargingArrow = false, isFiringArrow = false;
     
-    private float xSpeed, ySpeed;
-    
-    private int xPos, yPos, 
-                oldX, oldY, 
-                bowX, bowY,
-                bowYCurrentOffset, 
-                bowXCurrentOffset;
+    private float xSpeed, ySpeed, 
+                  xPos, yPos, 
+                  oldX, oldY, 
+                  bowX, bowY,
+                  bowYCurrentOffset, 
+                  bowXCurrentOffset;
     
     public Direction facing = Direction.LEFT, 
                      moving = Direction.LEFT; 
@@ -123,6 +123,8 @@ public class Player implements Actor
                       bowLeft, bowRight, 
                       currentBow;
     
+    
+    
     // associated level for collision / item collection reference
     private Level level = null;
     
@@ -141,6 +143,11 @@ public class Player implements Actor
             setUp = true;
         }
     }    
+    
+    public Sprite getSprite()
+    {
+        return sprite;
+    }
     
     public void setRunning(boolean b)
     {
@@ -276,7 +283,7 @@ public class Player implements Actor
      * Starts the player aiming an arrow towards the
      * Mouse Pointer
      */ 
-    public void readyArrow(int mouseX, int mouseY)
+    public void readyArrow(float mouseX, float mouseY)
     {
         CoreSystem.print("Readying arrow");
         currentArrow = new Arrow(xPos, yPos, level, mouseX, mouseY);
@@ -287,7 +294,7 @@ public class Player implements Actor
      * Charges the arrow and updates the Direction the player faces.
      * -- Used by Player.update().
      */ 
-    public void chargeArrow(int mouseX, int mouseY)
+    public void chargeArrow(float mouseX, float mouseY)
     {
         if(bowCharge < MAX_CHARGE)
         {
@@ -371,12 +378,12 @@ public class Player implements Actor
      * Returns the x position of the arrow when being held by the 
      * player.
      */ 
-    public int getHoldingArrowX()
+    public float getHoldingArrowX()
     {
         return xPos + getCurrentFrameWidth() / 2;
     } 
     
-    public int getCurrentFrameWidth()
+    public float getCurrentFrameWidth()
     {
         return AnimCreator.getCurrentFrameRect(this).width;
     }
@@ -384,7 +391,7 @@ public class Player implements Actor
     /*
      * Returns the y position of the arrow when being held by the player
      */
-    public int getHoldingArrowY()
+    public float getHoldingArrowY()
     {
         return yPos + ARROW_Y_OFFSET;
     } 
@@ -446,11 +453,11 @@ public class Player implements Actor
     /**
      * Returns the x position
      */ 
-    public int getX() { return xPos; }
+    public float getX() { return xPos; }
     /**
      * Returns the y position
      */ 
-    public int getY() { return yPos; } 
+    public float getY() { return yPos; } 
 
     
     /**
@@ -565,9 +572,9 @@ public class Player implements Actor
     }
     
     @Override
-    public ImageSprite getCurrentAnim()
+    public CoreImage getCurrentImage()
     {
-        return sprite;
+        return sprite.getImage();
     }
     
     @Override
@@ -598,13 +605,13 @@ public class Player implements Actor
     }
     
     @Override
-    public void setX(int x)
+    public void setX(float x)
     {
         xPos = x;
     }
     
     @Override
-    public void setY(int y)
+    public void setY(float y)
     {
         yPos = y;
     }
@@ -640,13 +647,13 @@ public class Player implements Actor
     
     
     @Override
-    public int getYSpeed()
+    public float getYSpeed()
     {
         return ySpeed;
     }
     
     @Override
-    public int getXSpeed()
+    public float getXSpeed()
     {
         return xSpeed;
     }
@@ -679,7 +686,7 @@ public class Player implements Actor
         
         if(isChargingArrow)
         {
-            g.drawImage(currentBow, bowX, bowY);
+            g.drawImage(currentBow, (int)bowX, (int)bowY);
         }        
     }
     
@@ -723,4 +730,6 @@ public class Player implements Actor
         // get initial direction from the level
         facing = level.playerFacing;
     }    
+    
+
 }

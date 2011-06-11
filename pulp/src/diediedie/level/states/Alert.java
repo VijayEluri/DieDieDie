@@ -17,6 +17,7 @@
 package diediedie.level.states;
 
 import java.lang.Class;
+import pulpcore.CoreSystem;
 import diediedie.level.Level;
 import diediedie.level.actions.Action;
 import diediedie.level.states.State;
@@ -73,7 +74,7 @@ public class Alert implements State
         {
             running = true;
             CoreSystem.print("\tstarted " + this);
-            currentAction.perform(host);
+            currentAction.perform();
         }
     }
     

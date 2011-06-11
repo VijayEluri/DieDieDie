@@ -27,9 +27,11 @@ import pulpcore.Stage;
 import pulpcore.image.CoreFont;
 import pulpcore.image.CoreGraphics;
 import pulpcore.CoreSystem;
+/*
 import pulpcore.sprite.Label;
 import pulpcore.sprite.Sprite;
 import pulpcore.sprite.FilledSprite;
+*/
 import pulpcore.Input;
 /**
  * DieDieDie - This is the main class that ru(i)ns the game.

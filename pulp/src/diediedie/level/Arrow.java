@@ -20,6 +20,7 @@ import diediedie.util.Mover;
 import pulpcore.math.CoreMath;
 import pulpcore.image.CoreGraphics;
 import pulpcore.image.Colors;
+import pulpcore.sprite.Sprite;
 import pulpcore.animation.Color;
  
 /**
@@ -43,26 +44,26 @@ public class Arrow implements Projectile
                         MAX_Y_SPEED = 24.5f,
                         FALLING_ANGLE_CHANGE = 0.44f;
                   
-    private int mouseX = 0, 
-                mouseY = 0;
-                
+
                 
     public static final int SIZE = 18;
     
-    private float accelX = 0, 
-                  accelY = 0, 
-                  speedX = 0, 
-                  speedY = 0,  
+    private float accelX = 0f, 
+                  accelY = 0f, 
+                  speedX = 0f, 
+                  speedY = 0f,  
                   movementAngle = 90f, 
                   gravity = 0f, 
                   facingAngle = 0f, 
                   angleChange = 0.01f,
-                  startX = 0, 
-                  startY = 0, 
                   oldX = 0, 
                   oldY = 0, 
                   endX = 0, 
-                  endY = 0;
+                  endY = 0,
+                  mouseX = 0, 
+                  mouseY = 0, 
+                  startX = 0, 
+                  startY = 0;
                                       
     private Level level = null;
 
@@ -70,11 +71,13 @@ public class Arrow implements Projectile
                     collided = false, 
                     goingDown = false;
     
+    private Sprite sprite;
+    
     /**
      * Creates a new arrow at the given position.
      */ 
-    public Arrow(int xPos, int yPos, Level lev, int mouseX, 
-                 int mouseY)
+    public Arrow(float xPos, float yPos, Level lev, float mouseX, 
+                 float mouseY)
     {
         setLevel(lev);
         setPosition(xPos, yPos);
@@ -136,7 +139,7 @@ public class Arrow implements Projectile
     /**
      * Sets the x/y coordinate position of the Arrow
      */ 
-    public void setPosition(int x, int y)
+    public void setPosition(float x, float y)
     {
         startX = x;
         startY = y;
@@ -175,15 +178,21 @@ public class Arrow implements Projectile
     
     
     @Override
-    public void setX(int f)
+    public void setX(float f)
     {
         startX = f;
     }
     
     @Override
-    public void setY(int f)
+    public void setY(float f)
     {
         startY = f;
+    }
+    
+    @Override
+    public Sprite getSprite()
+    {
+        return sprite;
     }
     
     @Override
@@ -238,13 +247,13 @@ public class Arrow implements Projectile
     }
     
     @Override
-    public int getYSpeed()
+    public float getYSpeed()
     {
         return speedY;
     }
     
     @Override
-    public int getXSpeed()
+    public float getXSpeed()
     {
         return speedX;
     }
@@ -340,13 +349,13 @@ public class Arrow implements Projectile
     
     
     @Override
-    public int getX()
+    public float getX()
     {
         return startX;
     }
     
     @Override
-    public int getY()
+    public float getY()
     {
         return startY;
     }

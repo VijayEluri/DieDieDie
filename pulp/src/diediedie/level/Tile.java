@@ -19,6 +19,7 @@ import java.util.*;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 import pulpcore.math.Rect;
+import pulpcore.sprite.Sprite;
 
 /**
  * Acts as a bridge between a TiledMap and the individual tiles so they
@@ -34,6 +35,10 @@ public class Tile
     public int xPos, yPos, endX, endY;
     private TiledMap tiledMap;
     private Rect rect;
+    
+    // new
+    private Sprite sprite;
+    // end new
     
     public Map<String, String> properties = new 
         HashMap<String, String>();
@@ -67,7 +72,16 @@ public class Tile
     {
         return new String("[" + xCoord + ", " + yCoord + "]");
     }
-        
+    
+    public boolean intersects(Sprite s)
+    {
+        if(s.intersects(this.sprite))
+        {
+            return true;
+        }
+        return false;
+    }
+    
     private void extractProperties()
     {
         for(final String P : PROPERTIES)

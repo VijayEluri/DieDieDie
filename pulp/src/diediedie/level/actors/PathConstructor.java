@@ -18,6 +18,7 @@ package diediedie.level.actors;
 import diediedie.level.actors.Actor;
 import diediedie.level.Point;
 import pulpcore.image.CoreGraphics;
+import pulpcore.CoreSystem;
 
 /**
  * Pathfinding construction for Actor AI.
@@ -27,7 +28,7 @@ public class PathConstructor
     private boolean started, finished;
     private Point dest;
     
-    public PathConstructor(Actor e, float xDest, float yDest)
+    public PathConstructor(Actor e, int xDest, int yDest)
     {
         this(e, new Point(xDest, yDest));
     }
