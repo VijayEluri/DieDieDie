@@ -479,7 +479,7 @@ public class Bluey implements Enemy, StateMachine
     // this is just a dupe of the one from Player, give or take...
     private void setStandingAnim()
     {
-        f = getFaci();
+        int f = getFacing();
         if(f == Direction.RIGHT)
         {
             sprite.setImage(rightStandAnim);
@@ -502,11 +502,11 @@ public class Bluey implements Enemy, StateMachine
     public void applySpeed(int dir)
     {
         setFacing(dir);
-        if(dir.equals(Direction.RIGHT))
+        if(dir == Direction.RIGHT)
         {
             xSpeed = (moveSpeed);
         }
-        else if(dir.equals(Direction.LEFT))
+        else if(dir == Direction.LEFT)
         {            
             xSpeed = -(moveSpeed);
         }  

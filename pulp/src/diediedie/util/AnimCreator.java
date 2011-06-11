@@ -82,10 +82,9 @@ public class AnimCreator
     {
         List flipped = getEmptyImageList();        
         //for(CoreImage i : images)
-        for(int i = 0; i < image.length; ++i)
+        for(int i = 0; i < images.length; ++i)
         {
-            //flipped.add(i.getFlippedCopy(true, false));
-            flipped.add(images.get(i).mirror());
+            flipped.add(images[i].mirror());
         }
         return flipped;
     }
@@ -104,7 +103,7 @@ public class AnimCreator
         //for(String p : paths)
         for(int i = 0; i < paths.length; ++i)
         {
-            images.add(loadImage(paths.get(i)));               
+            images.add((CoreImage)loadImage(paths[i]));               
         }
         return images;
     }
