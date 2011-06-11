@@ -17,15 +17,14 @@
 package diediedie.level;
 
 import java.util.List;
+import pulpcore.sprite.Group;
 import pulpcore.CoreSystem;
-import org.newdawn.slick.tiled.TiledMap;
-import org.newdawn.slick.SlickException;
 
 
 /**
  * Represents a layer of Tiles
  */ 
-public class MapLayer 
+public class MapLayer extends Group
 {
     protected List/**/ tiles;
     protected int index;

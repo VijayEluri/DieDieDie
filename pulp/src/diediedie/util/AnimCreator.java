@@ -103,7 +103,7 @@ public class AnimCreator
         //for(String p : paths)
         for(int i = 0; i < paths.length; ++i)
         {
-            images.add((CoreImage)loadImage(paths[i]));               
+            images.add(loadImage(paths[i]));               
         }
         return images;
     }

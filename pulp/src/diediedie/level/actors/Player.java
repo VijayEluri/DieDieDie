@@ -135,7 +135,6 @@ public class Player implements Actor
     {
         setLevel(l);
         setUpStartPosition();
-        
         if(!setUp)
         {            
             initAnim();   

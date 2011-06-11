@@ -33,12 +33,12 @@ import pulpcore.math.Rect;
 import pulpcore.sprite.Sprite;
 import pulpcore.image.CoreGraphics;
 import pulpcore.CoreSystem;
-
-
+import pulpcore.scene.Scene2D;
+import org.newdawn.slick.SlickException;
 /**
  * A Level in a DieDieDie.
  */ 
-public class Level extends TiledMap
+public class Level extends Scene2D
 {
     // Obviously, the exit point of the map.
     public float exitX, exitY;
@@ -54,8 +54,7 @@ public class Level extends TiledMap
     // The initial direction the player is facing.
     public final int playerFacing;
     
-    // What's the dude called?
-    private String name;
+    private String name, tileSetsPath;
     
     // I had the idea of adding a navigation mesh to levels for dealing
     // with AI pathfinding. Might happen, one day... :D
@@ -72,7 +71,7 @@ public class Level extends TiledMap
     private Player player;
     private List/*<Actor>*/ enemies;
     private Tile playerTile = null;
-    
+    private TiledMap map;
     /**
      * Create a Level
      */ 
@@ -81,19 +80,26 @@ public class Level extends TiledMap
                  String tileSetsPath, 
                  int facing, float grav) throws SlickException
     {
-        super(in, tileSetsPath);
+        super();
+        this.map = new TiledMap(name, tileSetsPath);
+        this.tileSetsPath = tileSetsPath;
         this.name = name;
         this.gravity = grav;
         this.playerFacing = facing;
         
-        CoreSystem.print("Level " + name + " has " + getLayerCount() +
-                           " tile layers");
+        CoreSystem.print("Level " + name + " has " 
+                        + map.getLayerCount() 
+                        + " tile layers");
         
-        collisionLayer = createMapLayer(getLayerIndex("collisions"));
-        objectLayer = createMapLayer(getLayerIndex("objects"));
-        platformLayer = createMapLayer(getLayerIndex("platforms"));
-        backgroundLayer = createMapLayer(getLayerIndex("background"));    
-        enemies = new ArrayList/*<Actor>*/();
+        collisionLayer = createMapLayer(
+                            map.getLayerIndex("collisions"));
+        objectLayer = createMapLayer(
+                        map.getLayerIndex("objects"));
+        platformLayer = createMapLayer(
+                            map.getLayerIndex("platforms"));
+        backgroundLayer = createMapLayer(
+                            map.getLayerIndex("background"));    
+        enemies = new ArrayList();
         sortObjects();
         createNavMesh();
     }   
@@ -105,6 +111,7 @@ public class Level extends TiledMap
         
     public void associatePlayer(Player p)
     {
+        add(p.getSprite());
         player = p;        
     }
     
@@ -255,19 +262,20 @@ public class Level extends TiledMap
     private MapLayer createMapLayer(int index)
     {
         List/**/ tiles = new ArrayList/**/();  
-        for(int x = 0; x < getWidth(); x++)
+        for(int x = 0; x < map.getWidth(); x++)
         {
-            for(int y = 0; y < getHeight(); y++)
+            for(int y = 0; y < map.getHeight(); y++)
             {
-                if(getTileId(x, y, index) != NOT_PRESENT)
+                if(map.getTileId(x, y, index) != NOT_PRESENT)
                 {
-                    tiles.add(new Tile(this, x, y, index));
+                    tiles.add(new Tile(map, x, y, index));
                 }
             }
         }   
         
         final boolean VISIBLE; 
-        final String v = getLayerProperty(index, VIS_STR, Tile.NULL);
+        final String v = map.getLayerProperty(
+                                index, VIS_STR, Tile.NULL);
         
         if(v.equals(TRUE_STR))
         {
@@ -290,24 +298,28 @@ public class Level extends TiledMap
     }
 */
         
+/*
     public void render(int x, int y)
-    {
+    {// old slick code
         // keep the ordering!
         render(x, y, backgroundLayer.index);
         render(x, y, platformLayer.index);
     }
+*/
     
     /**
      * Draw using CoreGraphics object g this Level at 0,0 plus any 
      * inhabiting enemies. 
      */ 
+/*
     public void draw(CoreGraphics g)
-    {
+    { //old slick c ode
         render(0, 0);
         navMesh.draw(g);
         drawEnemies(g);
     }
     
+*/
     /**
      * Draw using CoreGraphics object g any visible enemies. 
      */ 

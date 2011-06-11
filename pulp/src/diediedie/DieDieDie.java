@@ -36,7 +36,7 @@ import pulpcore.Input;
 /**
  * DieDieDie - This is the main class that ru(i)ns the game.
  */ 
-public class DieDieDie extends Scene2D 
+public class DieDieDie //extends Stage 
 {   
     private Player player;
     
@@ -81,6 +81,7 @@ public class DieDieDie extends Scene2D
         currentLevel = level1;
         // load player and associate with the level data
         player = new Player(level1);
+        System.out.println("loaded!");
     }
     
     /*
@@ -92,7 +93,8 @@ public class DieDieDie extends Scene2D
                            LEVEL_1_PATH, 
                            TILE_SETS_PATH,
                            Direction.LEFT,
-                           GRAVITY);          
+                           GRAVITY);   
+        Stage.pushScene(level1);
     }
  
     /*
@@ -206,12 +208,15 @@ public class DieDieDie extends Scene2D
     /**
      * Render the updated game state.
      */ 
-	public void render(/*GameContainer container,*/ CoreGraphics g)  
+/*
+	public void render( CoreGraphics g)  
     {
+        // old slick code!
 		currentLevel.draw(g);
         player.draw(g);
 	}
     
+*/
     /**
      * For running the program from the command line. 
      */ 
@@ -221,12 +226,6 @@ public class DieDieDie extends Scene2D
           //  new DieDieDie(), xSize, ySize, false);
 		//container.start();
         DieDieDie newGame = new DieDieDie();
-        newGame.invokeLater(new Runnable() {
-            public void run() {
-                CoreSystem.print("running...");   
-                /*myLabel.setText(message);
-                myLabel.visible.set(true);*/
-            }
-        });
+        
 	}
 }
