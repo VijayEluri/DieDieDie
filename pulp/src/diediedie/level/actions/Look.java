@@ -49,7 +49,7 @@ public class Look implements Action
     /*
      * Resets all the vars
      */ 
-    @Override
+    
     public void reset()
     {
         started = false;
@@ -58,7 +58,7 @@ public class Look implements Action
         sightLine = null;
     }
     
-    @Override
+    
     public void setHost(LevelObject lo)
     {
         
@@ -67,7 +67,7 @@ public class Look implements Action
     /*
      * Rem: perform() is the entry point for States. 
      */ 
-    @Override
+    
     public void perform()
     {
         if(!started && !finished)
@@ -83,7 +83,7 @@ public class Look implements Action
         }
     }
     
-    @Override
+    
     public void draw(CoreGraphics g)
     {
         CoreSystem.print(this + "not draw()ing");
@@ -93,7 +93,7 @@ public class Look implements Action
         }*/
     }
          
-    @Override
+    
     public void update()
     {
         //view = new View(e);
@@ -340,13 +340,13 @@ public class Look implements Action
         } 
     }
 */
-     @Override
+     
     public boolean hasStarted() 
     { 
         return started; 
     }
     
-    @Override
+    
     public boolean hasFinished() 
     { 
         return finished; 

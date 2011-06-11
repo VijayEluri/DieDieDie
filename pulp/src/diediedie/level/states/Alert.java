@@ -42,32 +42,32 @@ public class Alert implements State
         host = e;
     }
     
-    @Override
+    
     public State getNextState()
     {
         return nextState;
     }
     
     
-    @Override
+    
     public Actor getHost()
     {
         return host;
     }
     
-    @Override
+    
     public String toString()
     {
         return "Alert";        
     }
     
-    @Override
+    
     public void update()
     {
         
     }
     
-    @Override
+    
     public void enter()
     {
         if(!running)
@@ -78,25 +78,25 @@ public class Alert implements State
         }
     }
     
-    @Override
+    
     public void exit()
     {
         running = false;
     }
     
-    @Override
+    
     public boolean isRunning()
     {
         return running;
     }
     
-    @Override
+    
     public Class getCurrentActionType()
     {
         return currentAction.getClass();
     }
     
-    @Override
+    
     public Action getCurrentAction()
     {
         return currentAction;

@@ -18,6 +18,7 @@
 package diediedie.util;
 
 import java.lang.Math;
+import pulpcore.math.CoreMath;
 import diediedie.level.actors.Actor;
 import diediedie.level.MovableObject;
 import diediedie.level.Projectile;
@@ -54,8 +55,8 @@ public class Mover
         final float oldX = a.getX();
         final float oldY = a.getY();
 */
-        final int oldX = a.getX();
-        final int oldY = a.getY();
+        final float oldX = a.getX();
+        final float oldY = a.getY();
         
         // test new position
         
@@ -175,10 +176,12 @@ public class Mover
      * Returns the new horizontal position of p after hypothetically 
      * applying horizontal distance xTrav based upon p's getAngle().
      */ 
-    public static float getNewXPos(Projectile p, float xTrav, float angle)
+    public static float getNewXPos(Projectile p, 
+                                   float xTrav, 
+                                   float angle)
     {
-        return p.getX() + xTrav * (float)FastTrig.sin(
-                            Math.toRadians(angle));
+        return p.getX() + xTrav * (float)CoreMath.sin(
+                            (int)Math.toRadians(angle));
     }
     
     /*
@@ -187,8 +190,8 @@ public class Mover
      */
     public static float getNewYPos(Projectile p, float yTrav, float angle)
     {
-       return p.getY() - yTrav * 
-                (float)FastTrig.cos(Math.toRadians(angle));
+        return p.getY() + yTrav * (float)CoreMath.cos(
+                            (int)Math.toRadians(angle));
     }
     
     /*

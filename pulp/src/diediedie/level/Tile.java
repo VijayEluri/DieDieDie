@@ -40,8 +40,7 @@ public class Tile
     private Sprite sprite;
     // end new
     
-    public Map<String, String> properties = new 
-        HashMap<String, String>();
+    public Map properties = new HashMap();
     
     public static final String[] PROPERTIES = {"type", "name"};
     public static final String[] VALUES = {
@@ -84,8 +83,10 @@ public class Tile
     
     private void extractProperties()
     {
-        for(final String P : PROPERTIES)
+        //for(final String P : PROPERTIES)
+        for(int i = 0; i < PROPERTIES.length; ++i)
         {
+            final String P = PROPERTIES[i];
             final String V = tiledMap.getTileProperty(id, P, NULL);
             
             if(!V.equals(NULL))

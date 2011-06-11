@@ -34,13 +34,13 @@ public class StopMoving implements Action
         reset();
     }
     
-    @Override
+    
     public void setHost(LevelObject lo)
     {
         host = lo;
     }
     
-    @Override
+    
     public void draw(CoreGraphics g){} 
     
     public void reset()
@@ -48,7 +48,7 @@ public class StopMoving implements Action
         started = false;
         finished = false;
     }  
-    @Override
+    
     public void perform()
     {
         if(!started && !finished)
@@ -77,25 +77,25 @@ public class StopMoving implements Action
         
     }
     
-    @Override
+    
     public void update()
     {
         // this action doesn't require that any further steps be taken
     }
     
-    @Override
+    
     public boolean hasFinished() 
     {
         return started;
     }
     
-    @Override
+    
     public boolean hasStarted() 
     {
         return started;
     }
     
-    @Override
+    
     public String toString()
     {
         return "StartMoving";

@@ -100,7 +100,7 @@ public class DieDieDie extends Scene2D
      * acts as a nice wrapper for the lavel path.
      */ 
     private Level loadLevel(String name, String levelPath, 
-                            String tileSetsPath, Direction startDir, 
+                            String tileSetsPath, int startDir, 
                             float grav)
     {
         try 
@@ -126,7 +126,7 @@ public class DieDieDie extends Scene2D
         // LEFT Control Key
         if(Input.getState(KEY_LEFT) == Input.UP)
         {
-            if(player.moving.equals(Direction.LEFT))
+            if(player.moving == Direction.LEFT)
             {
                 player.setRunning(false);   
             }
@@ -140,7 +140,7 @@ public class DieDieDie extends Scene2D
         // RIGHT Control Key
         if(Input.getState(KEY_RIGHT) == Input.UP)
         {
-            if(player.moving.equals(Direction.RIGHT))
+            if(player.moving == Direction.RIGHT)
             {
                 player.setRunning(false);   
             }

@@ -74,10 +74,10 @@ public class Bluey implements Enemy, StateMachine
                     fsmRunning = false, seenPlayerEvidence = false;
                     
     private int health;
-    private Direction facing = null;
+    private int facing = Direction.LEFT;
     private Level level;
     
-    private Set<LevelObject> visibleObjects;
+    private Set visibleObjects;
     
     private float tileHeight, moveSpeed = 0, oldX, oldY,
                   xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0,
@@ -105,7 +105,7 @@ public class Bluey implements Enemy, StateMachine
             hasSeenPlayer = false;
             setUp = true;
         }
-        visibleObjects = new HashSet<LevelObject>();
+        visibleObjects = new HashSet();
         setLevel(l);
         xPos = t.xPos;
         yPos = t.yPos;
@@ -115,50 +115,50 @@ public class Bluey implements Enemy, StateMachine
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
     
-    @Override
-    public Set<LevelObject> getVisibleObjects()
+    
+    public Set getVisibleObjects()
     {
         return visibleObjects;
     }
     
-    @Override
+    
     public boolean isFSMRunning()
     {
         return fsmRunning;   
     }
     
-    @Override
+    
     public void setLevel(Level l)
     {
         level = l;
     }
     
-    @Override
+    
     public void setMoveSpeed(float f)
     {
         moveSpeed = f;
         System.out.println("bluey setMoveSpeed: " + f);
     }
     
-    @Override
+    
     public void setMoving(boolean m)
     {
         moving = m;
     }
     
-    @Override
+    
     public CoreImage getCurrentImage()
     {
         return sprite.getImage();
     }
     
-    @Override
+    
     public Sprite getSprite()
     {
         return sprite;
     }
     
-    @Override
+    
     public void stopFSM()
     {
         System.out.println("stopping FSM on " + this + ", current state " 
@@ -167,7 +167,7 @@ public class Bluey implements Enemy, StateMachine
         fsmRunning = false;
     }
     
-    @Override
+    
     public void startFSM()
     {
         
@@ -177,7 +177,7 @@ public class Bluey implements Enemy, StateMachine
         currentState.enter();
     }
     
-    @Override
+    
     public Level getLevel()
     {
         return level;
@@ -189,70 +189,70 @@ public class Bluey implements Enemy, StateMachine
         visibleObjects.add(lo);
     }
        
-    @Override
+    
     public final float getWalkSpeed()
     {
         return WALK_SPEED;   
     }
     
-    @Override
+    
     public float getViewSize()
     {
         return viewSize;
     }
  
-    @Override
+    
     public final float getRunSpeed()
     {
         return RUN_SPEED;
     }
    
-    @Override
-    public void setFacing(Direction d)
+    
+    public void setFacing(int d)
     {
         facing = d;
-        if(d.equals(Direction.LEFT))
+        if(d == Direction.LEFT)
         {
             sprite.setImage(leftWalkAnim);
         }
-        else
+        else if(d == Direction.RIGHT)
         {
             sprite.setImage(rightWalkAnim);
         }
     }
     
  
-    @Override
+    
     public boolean hasSeenPlayerEvidence()
     {
         return seenPlayerEvidence;
     }
     
-    @Override
+    
     public void setSeenPlayerEvidence(boolean b)
     {
         seenPlayerEvidence = b;
     }
     
-    @Override
+    
     public void setInitialState()
     {
         currentState = patrol;
     }
     
-    @Override
+    
     public void setX(float x)
     {
         xPos = x;
     }
     
-    @Override
+    
     public void setY(float y)
     {
         yPos = y;
     }
     
-    @Override
+    
     public void createStates()
     {
         System.out.println("creating states for " + this);
@@ -261,88 +261,88 @@ public class Bluey implements Enemy, StateMachine
         setInitialState();
     }
     
-    @Override
+    
     public void setJump(boolean b)
     {
         canJump = b;
         // System.out.println("bluey: canJump == " + canJump);
     }   
     
-    @Override
+    
     public State getState()
     {
         return currentState;
     }
     
-    @Override
+    
     public void resetAccelX()
     {
         // do nothing for now
     }
     
     
-    @Override
+    
     public void resetAccelY()
     {
         // do nothing for now
     }
     
-    @Override
+    
     public float getMoveSpeed()
     {
         return moveSpeed;
     }
     
-    @Override
+    
     public float getJumpSpeed()
     {
         return JUMP_SPEED;
     }
     
-    @Override
+    
     public void setYSpeed(float f)
     {
         ySpeed = f;
     }
     
-    @Override
+    
     public void setXSpeed(float f)
     {
         xSpeed = f;
     }
     
-    @Override
-    public Direction getFacing()
+    
+    public int getFacing()
     {
         return facing;
     }
     
-    @Override
+    
     public int getHealth()
     {
         return health;
     }
     
-    @Override
+    
     public void changeState(State nextState)
     {
         currentState.exit();
         currentState = nextState;
     }
     
-    @Override
+    
     public float getYSpeed()
     {
         return ySpeed;
     }
     
-    @Override
+    
     public float getXSpeed()
     {
         return xSpeed;
     }
     
-    @Override
+    
     public boolean canJump()
     {
         return canJump;
@@ -371,13 +371,14 @@ public class Bluey implements Enemy, StateMachine
         //CoreImage[] type;
         CoreImage[] leftWalkImages = new CoreImage[
             leftWalkPaths.length];
-        leftWalkImages = AnimCreator.getImagesFromPaths(
+        leftWalkImages = (CoreImage[])AnimCreator.getImagesFromPaths(
             leftWalkPaths).toArray(leftWalkImages);
             
         CoreImage[] rightWalkImages = new CoreImage[
             leftWalkPaths.length];
-        rightWalkImages = AnimCreator.getHorizontallyFlippedCopy(
-                rightWalkImages).toArray(rightWalkImages);
+        rightWalkImages = 
+            (CoreImage[])AnimCreator.getHorizontallyFlippedCopy(
+                    rightWalkImages).toArray(rightWalkImages);
         
         leftWalkAnim = new AnimatedImage(leftWalkImages);
         rightWalkAnim = new AnimatedImage(rightWalkImages);
@@ -394,7 +395,7 @@ public class Bluey implements Enemy, StateMachine
         return tileHeight;
     }
     
-    @Override
+    
     /**
      * Instructs the enemy to jump
      */ 
@@ -408,14 +409,14 @@ public class Bluey implements Enemy, StateMachine
         }
     }
     
-    @Override
+    
     public Rect getZone()
     {
         return getLevel().getActorZone(this);
     }
     
     
-    @Override
+    
     public void update()
     {        
         updatePosition();
@@ -478,11 +479,12 @@ public class Bluey implements Enemy, StateMachine
     // this is just a dupe of the one from Player, give or take...
     private void setStandingAnim()
     {
-        if(getFacing().equals(Direction.RIGHT))
+        f = getFaci();
+        if(f == Direction.RIGHT)
         {
             sprite.setImage(rightStandAnim);
         }
-        else if(getFacing().equals(Direction.LEFT))
+        else if(f == Direction.LEFT)
         {
             sprite.setImage(leftStandAnim);   
         }
@@ -496,8 +498,8 @@ public class Bluey implements Enemy, StateMachine
         xSpeed *= level.FRICTION;
     }
     
-    @Override
-    public void applySpeed(Direction dir)
+    
+    public void applySpeed(int dir)
     {
         setFacing(dir);
         if(dir.equals(Direction.RIGHT))
@@ -522,7 +524,7 @@ public class Bluey implements Enemy, StateMachine
         return yPos + EYE_OFFSET_HEIGHT;
     }
     
-    @Override
+    
     public boolean isMoving()
     {
         return moving;   
@@ -530,13 +532,13 @@ public class Bluey implements Enemy, StateMachine
 
    
     
-    @Override
+    
     public void setHasSeenPlayer(boolean b)
     {
         hasSeenPlayer = b;
     }
     
-    @Override
+    
     public void setCanSeenPlayer(boolean b)
     {
         canSeePlayer = b;
@@ -547,13 +549,13 @@ public class Bluey implements Enemy, StateMachine
         }
     }
     
-    @Override
+    
     public boolean canSeePlayer()
     {
         return canSeePlayer;
     }
     
-    @Override
+    
     public boolean hasSeenPlayer()
     {
         if(!hasSeenPlayer)
@@ -564,13 +566,13 @@ public class Bluey implements Enemy, StateMachine
         return hasSeenPlayer;
     }
     
-    @Override
+    
     public float getMaxFallSpeed()
     {
         return MAX_Y_SPEED;
     }
     
-    @Override
+    
     public void die()
     {
         System.out.println("Die, you, " + this);
@@ -582,7 +584,7 @@ public class Bluey implements Enemy, StateMachine
     {
         
     }
-    @Override
+    
     public void draw(CoreGraphics g)
     {
         //System.out.println("drawing Bluey: " + getX() + ", " + getY());
@@ -601,7 +603,7 @@ public class Bluey implements Enemy, StateMachine
     }
 
 /*
-    @Override
+    
     public CoreGraphics getGraphics()
     {
         return g;

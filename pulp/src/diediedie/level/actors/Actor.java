@@ -31,11 +31,11 @@ import java.util.Set;
 public interface Actor extends MovableObject
 {            
     public static int ANIM_DURATION = 100;
-    void applySpeed(Direction d);
+    void applySpeed(int d);
     boolean canJump();
     void die();
     CoreImage getCurrentImage();
-    Direction getFacing();
+    int getFacing();
     int getHealth();    
     float getJumpSpeed();
     float getMoveSpeed();    
@@ -44,6 +44,6 @@ public interface Actor extends MovableObject
     Rect getZone(); //returns the Actor's zone on the current map
     void setJump(boolean b);
     void jump();
-    void setFacing(Direction d);
+    void setFacing(int d);
     void resetAccelX();
 }  

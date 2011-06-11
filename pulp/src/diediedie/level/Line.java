@@ -38,9 +38,20 @@ public class Line
     
     public boolean intersects(Rect r)
     {
-        for(Point p : points())
+        /*
+            for(Point p : points())
+            {
+                if(r.contains(p.x, p.y))
+                {
+                    return true;
+                }
+            }
+            return false;
+        */
+        Point[] points = points();
+        for(int i = 0; i < points.length; ++i)
         {
-            if(r.contains(p.x, p.y))
+            if(r.contains(points[i].x, points[i].y))
             {
                 return true;
             }

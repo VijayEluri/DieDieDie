@@ -56,25 +56,25 @@ public class Patrol implements State
         currentAction = look;
     }  
     
-    @Override
+    
     public Actor getHost()
     {
         return host;
     }
     
-    @Override
+    
     public Action getCurrentAction()
     {
         return currentAction;
     }
 
-    @Override
+    
     public State getNextState()
     {
         return nextState;
     }
 
-    @Override 
+     
     public void enter()
     {
         if(!running)
@@ -88,7 +88,7 @@ public class Patrol implements State
     /**
      * Update / change the current Action.
      */ 
-    @Override
+    
     public void update()
     {
         final Class cls = currentAction.getClass();
@@ -119,25 +119,25 @@ public class Patrol implements State
     
     
     
-    @Override
+    
     public Class getCurrentActionType()
     {
         return currentAction.getClass();
     }
     
-    @Override
+    
     public void exit()
     {
         running = false;
     }
     
-    @Override
+    
     public boolean isRunning()
     {
         return running;
     }
     
-    @Override
+    
     public String toString()
     {
         return "Patrol";

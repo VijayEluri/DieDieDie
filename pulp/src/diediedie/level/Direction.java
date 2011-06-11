@@ -17,7 +17,10 @@
 
 package diediedie.level;
 
-public enum Direction
+public class Direction
 {
-    LEFT, RIGHT, UP, DOWN
+    public static final int LEFT  = 0, 
+                            RIGHT = 1, 
+                            UP    = 2, 
+                            DOWN  = 3;
 };

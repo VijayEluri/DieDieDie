@@ -27,14 +27,14 @@ import org.newdawn.slick.SlickException;
  */ 
 public class MapLayer 
 {
-    protected List<Tile> tiles;
+    protected List/**/ tiles;
     protected int index;
     protected boolean isVisible;
     
     /**
      * Constructs a new map layer from a List of Tiles.  
      */
-    public MapLayer(List<Tile> layerTiles, final int in, boolean vis)
+    public MapLayer(List/**/ layerTiles, final int in, boolean vis)
     {
         tiles = layerTiles;
         index = in;
@@ -52,12 +52,11 @@ public class MapLayer
         {
             return false;
         }
-        for(Tile t : tiles)
+        for(int i = 0; i < tiles.size(); ++i)
         {
+            Tile t = (Tile)tiles.get(i);
             if(t.xCoord == x && t.yCoord == y)
             {
-                /*CoreSystem.print(this + "|\tContains " +
-                                xCoord + ", " + yCoord);*/
                 return true;
             }
         }

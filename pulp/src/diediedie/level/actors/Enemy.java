@@ -39,7 +39,7 @@ public interface Enemy extends Actor
     void setHasSeenPlayer(boolean b);
     void setCanSeenPlayer(boolean b);
     
-    Set<LevelObject> getVisibleObjects();
+    Set getVisibleObjects();
     void addVisibleObject(LevelObject lo);
     
     boolean isMoving();  

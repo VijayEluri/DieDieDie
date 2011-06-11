@@ -39,9 +39,9 @@ public class AnimCreator
      * on load. 
      */ 
     public static AnimatedImage createAnimFromPaths(int duration, 
-                        /*boolean autoUpdate,*/ String... paths)
+                        String[] paths)
     {
-        List<CoreImage> images = getImagesFromPaths(paths);
+        List images = getImagesFromPaths(paths);
         CoreImage[] imgArr = new CoreImage[images.size()];
         images.toArray(imgArr);
         //Animation anim = new Animation(imgArr); //, duration, autoUpdate);
@@ -66,9 +66,9 @@ public class AnimCreator
      * Returns a cloned, scaled version of a given list by a given
      * scale. 
      
-    public static List<CoreImage> scaleImages(float scale, CoreImage... imgs)
+    public static List scaleImages(float scale, CoreImage... imgs)
     {
-        List<CoreImage> scaled = getEmptyImageList();
+        List scaled = getEmptyImageList();
         
         for(CoreImage i : imgs)
         {
@@ -78,31 +78,33 @@ public class AnimCreator
         return scaled;
     }*/ 
     
-    public static List<CoreImage> getHorizontallyFlippedCopy(CoreImage[] images)
+    public static List getHorizontallyFlippedCopy(CoreImage[] images)
     {
-        List<CoreImage> flipped = getEmptyImageList();        
-        for(CoreImage i : images)
+        List flipped = getEmptyImageList();        
+        //for(CoreImage i : images)
+        for(int i = 0; i < image.length; ++i)
         {
             //flipped.add(i.getFlippedCopy(true, false));
-            flipped.add(i.mirror());
+            flipped.add(images.get(i).mirror());
         }
         return flipped;
     }
     
-    public static List<CoreImage> getEmptyImageList()
+    public static List getEmptyImageList()
     {
-        return new ArrayList<CoreImage>();
+        return new ArrayList();
     }
     
     /*
      * Returns an array of Images from a List of paths to image files. 
      */
-    public static List<CoreImage> getImagesFromPaths(String... paths)                                     
+    public static List getImagesFromPaths(String[] paths)                                     
     {
-        List<CoreImage> images = getEmptyImageList();
-        for(String p : paths)
+        List images = getEmptyImageList();
+        //for(String p : paths)
+        for(int i = 0; i < paths.length; ++i)
         {
-            images.add(loadImage(p));               
+            images.add(loadImage(paths.get(i)));               
         }
         return images;
     }
@@ -112,7 +114,7 @@ public class AnimCreator
     public static Rect getCurrentFrameRect(Actor actr)
     {
         CoreImage img = actr.getCurrentImage();//.getCurrentFrame();
-        return new Rect(actr.getX(), actr.getY(), img.getWidth(), 
-                             img.getHeight());
+        return new Rect((int)actr.getX(), (int)actr.getY(), 
+                        img.getWidth(), img.getHeight());
     }
 }

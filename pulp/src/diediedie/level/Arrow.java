@@ -86,7 +86,7 @@ public class Arrow implements Projectile
     }
     
     
-    @Override
+    
     public void increaseGravityEffect()
     {
         if(gravity < MAX_GRAVITY)
@@ -96,7 +96,7 @@ public class Arrow implements Projectile
         // CoreSystem.print(this + "| grav: " + gravity);
     }  
 
-    @Override
+    
     public void setLevel(Level l)
     {
         level = l;
@@ -108,13 +108,13 @@ public class Arrow implements Projectile
         return MAX_GRAVITY;
     }
 
-    @Override
+    
     public Level getLevel()
     {
         return level;
     }
     
-    @Override
+    
     public float getAirRes()
     {
         return AIR_REST;
@@ -130,7 +130,7 @@ public class Arrow implements Projectile
         flying = true;
     }
     
-    @Override
+    
     public boolean isFlying()
     {
         return flying;
@@ -164,7 +164,7 @@ public class Arrow implements Projectile
                                                     startY - y));
     }
     
-    @Override // boilerplate ignorable
+     // boilerplate ignorable
     public void update(){ }
     
     /**
@@ -177,37 +177,37 @@ public class Arrow implements Projectile
     }
     
     
-    @Override
+    
     public void setX(float f)
     {
         startX = f;
     }
     
-    @Override
+    
     public void setY(float f)
     {
         startY = f;
     }
     
-    @Override
+    
     public Sprite getSprite()
     {
         return sprite;
     }
     
-    @Override
+    
     public void setYSpeed(float f)
     {
         speedY = f;
     }
     
-    @Override
+    
     public void setXSpeed(float f)
     {
         speedX = f;
     }
     
-    @Override
+    
     public float getMaxFallSpeed()
     {
         return MAX_Y_SPEED;
@@ -246,13 +246,13 @@ public class Arrow implements Projectile
         flying = false;
     }
     
-    @Override
+    
     public float getYSpeed()
     {
         return speedY;
     }
     
-    @Override
+    
     public float getXSpeed()
     {
         return speedX;
@@ -297,7 +297,7 @@ public class Arrow implements Projectile
                            facingAngle);*/
     }
 
-    @Override
+    
     public float getGravityLine()
     {
         return GRAVITY_LINE;
@@ -332,7 +332,7 @@ public class Arrow implements Projectile
      * Works out the end point of the arrow based on its SIZE at
      * movementAngle.
      */ 
-    @Override
+    
     public void calculateEndPos()
     {
         /*
@@ -348,25 +348,25 @@ public class Arrow implements Projectile
     }
     
     
-    @Override
+    
     public float getX()
     {
         return startX;
     }
     
-    @Override
+    
     public float getY()
     {
         return startY;
     }
     
-    @Override
+    
     public float getEndX()
     {
         return endX;
     }
     
-    @Override
+    
     public float getEndY()
     {
         return endY;
@@ -375,7 +375,7 @@ public class Arrow implements Projectile
     /**
      * Public method for receiving CoreGraphics object from Slick.
      */ 
-    @Override
+    
     public void draw(CoreGraphics g)
     {
         int oldColor = g.getColor();
@@ -389,13 +389,13 @@ public class Arrow implements Projectile
         return movementAngle;
     }
     
-     @Override
+     
     public void resetAccelX()
     {
         accelX = 0;
     }
     
-    @Override
+    
     public void resetAccelY()
     {
         accelY = 0;

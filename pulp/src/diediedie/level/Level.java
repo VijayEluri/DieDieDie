@@ -52,7 +52,7 @@ public class Level extends TiledMap
     public float gravity;
     
     // The initial direction the player is facing.
-    public final Direction playerFacing;
+    public final int playerFacing;
     
     // What's the dude called?
     private String name;
@@ -70,7 +70,7 @@ public class Level extends TiledMap
                      platformLayer;
         
     private Player player;
-    private List<Actor> enemies;
+    private List/*<Actor>*/ enemies;
     private Tile playerTile = null;
     
     /**
@@ -79,7 +79,7 @@ public class Level extends TiledMap
     public Level(String name, 
                  InputStream in, 
                  String tileSetsPath, 
-                 Direction facing, float grav) throws SlickException
+                 int facing, float grav) throws SlickException
     {
         super(in, tileSetsPath);
         this.name = name;
@@ -93,7 +93,7 @@ public class Level extends TiledMap
         objectLayer = createMapLayer(getLayerIndex("objects"));
         platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
-        enemies = new ArrayList<Actor>();
+        enemies = new ArrayList/*<Actor>*/();
         sortObjects();
         createNavMesh();
     }   
@@ -120,12 +120,13 @@ public class Level extends TiledMap
     public Rect getActorZone(Actor a)
     {
         Rect r = AnimCreator.getCurrentFrameRect(a);
-        
-        for(Rect rect : getNavMesh().getNegativeSpace())
+        Rect[] rects = 
+            (Rect[])getNavMesh().getNegativeSpace().toArray();
+        for(int i = 0; i < rects.length; ++i)
         {
-            if(rect.intersects(r))
+            if(rects[i].intersects(r))
             {
-                return rect;
+                return rects[i];
             }
         }
         return null;
@@ -153,9 +154,11 @@ public class Level extends TiledMap
     /*
      * Returns all enemies + the player
      */ 
-    public List<Actor> getActors()
+    //public List<Actor> getActors()
+    public List getActors()
     {
-        List<Actor> actors = new ArrayList<Actor>(enemies);
+        //List<Actor> actors = new ArrayList<Actor>(enemies);
+        List actors = new ArrayList(enemies);
         actors.add(player);
         return actors;
     }
@@ -176,8 +179,14 @@ public class Level extends TiledMap
      */ 
     public void updateEnemies()
     {
-        for(Actor a : enemies)
+        /*for(Actor a : enemies)
         {
+            a.update();
+        }*/
+        java.util.Iterator it = enemies.iterator();
+        while(it.hasNext())
+        {
+            Actor a = (Actor)it.next();
             a.update();
         }
     }
@@ -187,29 +196,31 @@ public class Level extends TiledMap
      */ 
     private void sortObjects()
     {
-        for(Tile t : objectLayer.tiles)
+        //for(Tile t : objectLayer.tiles)
+        for(int i = 0; i < objectLayer.tiles.size(); ++i)
         {
+            Tile t = (Tile)objectLayer.tiles.get(i);
             try
             {                
-                if(t.properties.get("type").equalsIgnoreCase("exit"))
+                if(t.properties.get("type").equals("exit"))
                 {
                     exitX = t.xPos;
                     exitY = t.yPos;
                 }
                 else if(
-                    t.properties.get("type").equalsIgnoreCase("start"))
+                    t.properties.get("type").equals("start"))
                 {
                     playerTile = t;
                 }
                 else if(
-                    t.properties.get("type").equalsIgnoreCase("enemy"))
+                    t.properties.get("type").equals("enemy"))
                 {
                     System.out.print("read enemy... ");
                     CoreSystem.print(" name: " 
                                        + t.properties.get("name"));
                     
                     if(t.properties.get(
-                        "name").equalsIgnoreCase("bluey"))
+                        "name").equals("bluey"))
                     {                       
                         enemies.add(new Bluey(this, t));
                     }
@@ -243,7 +254,7 @@ public class Level extends TiledMap
      */ 
     private MapLayer createMapLayer(int index)
     {
-        List<Tile> tiles = new ArrayList<Tile>();  
+        List/**/ tiles = new ArrayList/**/();  
         for(int x = 0; x < getWidth(); x++)
         {
             for(int y = 0; y < getHeight(); y++)
@@ -302,8 +313,10 @@ public class Level extends TiledMap
      */ 
     private void drawEnemies(CoreGraphics g)
     {
-        for(Actor a : enemies)
+        //for(Actor a : enemies)
+        for(int i = 0; i < enemies.size(); ++i)
         {
+            Actor a = (Actor)enemies.get(i);
             a.draw(g);
         }
     }
@@ -314,8 +327,10 @@ public class Level extends TiledMap
      */
     public boolean collides(Sprite s)//Rect r)
     {
-        for(Tile t : collisionLayer.tiles)
+        //for(Tile t : collisionLayer.tiles)
+        for(int i = 0; i < collisionLayer.tiles.size(); ++i)
         {
+            Tile t = (Tile)collisionLayer.tiles.get(i);
             //if(t.getRect().intersects(s))
             if(t.intersects(s))
             {
@@ -338,8 +353,11 @@ public class Level extends TiledMap
     */
     public boolean isInCollisionTile(int x, int y)
     {
-        for(Tile t : collisionLayer.tiles)
+        //for(Tile t : collisionLayer.tiles)
+        for(int i = 0; i < collisionLayer.tiles.size(); ++i)
         {
+            Tile t = (Tile)collisionLayer.tiles.get(i);
+            
             if(t.getRect().contains(x, y))
             {
                 return true;
@@ -353,12 +371,14 @@ public class Level extends TiledMap
      */
     public Tile getCollisionTileAt(/*float*/int x, /*float*/int y)
     {
-        for(Tile t : collisionLayer.tiles)
+        //for(Tile t : collisionLayer.tiles)
+        for(int i = 0; i < collisionLayer.tiles.size(); ++i)
         {
-           if(t.getRect().contains(x, y))
-           {
-               return t;
-           }   
+            Tile t = (Tile)collisionLayer.tiles.get(i);
+            if(t.getRect().contains(x, y))
+            {
+                return t;
+            }   
         }
         return null;
     }

@@ -75,8 +75,8 @@ public class Player implements Actor
                 arrowCount = 0;    
     
     private Arrow currentArrow = null; 
-    private List<Arrow> firedArrows = Collections.synchronizedList(
-                            new ArrayList<Arrow>());
+    private List firedArrows = Collections.synchronizedList(
+                                                new ArrayList());
     
     private boolean isChargingArrow = false, isFiringArrow = false;
     
@@ -87,8 +87,8 @@ public class Player implements Actor
                   bowYCurrentOffset, 
                   bowXCurrentOffset;
     
-    public Direction facing = Direction.LEFT, 
-                     moving = Direction.LEFT; 
+    public int facing = Direction.LEFT, 
+               moving = Direction.LEFT; 
         
     // running: indicates the user is holding a directional button
     private boolean running = false;
@@ -154,13 +154,13 @@ public class Player implements Actor
         running = b;
     }
     
-    @Override
+    
     public void setJump(boolean b)
     {
         canJump = b;
     }
     
-    @Override
+    
     public void setLevel(Level l)
     {
         level = l;
@@ -189,13 +189,13 @@ public class Player implements Actor
           currentBow = bowLeft;
     }    
     
-    @Override
+    
     public Rect getZone()
     {
         return getLevel().getActorZone(this);
     }
     
-    @Override
+    
     public float getMoveSpeed()
     {
         return MOVE_SPEED;
@@ -325,19 +325,19 @@ public class Player implements Actor
         currentArrow.setPosition(getHoldingArrowX(), getHoldingArrowY());
     }
     
-    @Override
+    
     public int getHealth()
     {
         return health;
     }
     
-    @Override
+    
     public float getJumpSpeed()
     {
         return JUMP_SPEED;
     }
     
-    @Override
+    
     public void die()
     {
         CoreSystem.print("Player is dead!");
@@ -416,16 +416,15 @@ public class Player implements Actor
     /**
      * Returns a list of the projectiles fired by this Player 
      */ 
-    public List<Projectile> getFiredProjectiles()
+    public List getFiredProjectiles()
     {
-        return new ArrayList<Projectile>(firedArrows);
+        return new ArrayList(firedArrows);
     }
     
     /*
      * Sets the direction the Player is facing
      */ 
-    @Override
-    public void setFacing(Direction dir)
+    public void setFacing(int dir)
     {
         facing = dir;
         if(!running)
@@ -438,7 +437,7 @@ public class Player implements Actor
      * Sets the direction the Player is moving.
      * Called by 
      */ 
-    public void setMovingDir(Direction dir)
+    public void setMovingDir(int dir)
     {
         if(moving != dir)
         {
@@ -465,12 +464,12 @@ public class Player implements Actor
      */ 
     private void setStandingImage()
     {
-        if(facing.equals(Direction.RIGHT))
+        if(facing == Direction.RIGHT)
         {
             //currentAnim = rightStand;
             sprite.setImage(rightStand);
         }
-        else if(facing.equals(Direction.LEFT))
+        else if(facing == Direction.LEFT)
         {
             //currentAnim = leftStand;   
             sprite.setImage(leftStand);
@@ -482,16 +481,16 @@ public class Player implements Actor
     /*
      * Applies speed to the Player -- called by player.update()
      */    
-    @Override
-    public void applySpeed(Direction dir)
+    
+    public void applySpeed(int dir)
     {
-        if(dir.equals(Direction.RIGHT))
+        if(dir == Direction.RIGHT)
         {
             accelerate();
             currentAnim = rightWalk;
             xSpeed = (MOVE_SPEED + accelX);
         }
-        else if(dir.equals(Direction.LEFT))
+        else if(dir == Direction.LEFT)
         {
             accelerate();
             currentAnim = leftWalk;
@@ -515,19 +514,17 @@ public class Player implements Actor
      * Updates the position / existence of previously fired Arrows. 
      */ 
     private void updateFiredArrows()
-    {
-        Iterator<Arrow> it = firedArrows.iterator();
-        
-        while(it.hasNext())
+    {        
+        for(int i = 0; i < firedArrows.size(); ++i)
         {
-            Arrow a = it.next();
+            Arrow a = (Arrow)firedArrows.get(i);
             
             a.updateSpeed();
             a.updatePosition();
             
             /*if(!a.isFlying())
             {
-                it.remove();
+                a.remove();
             }*/
         }
     }
@@ -565,19 +562,19 @@ public class Player implements Actor
         Mover.move(this);
     }
     
-    @Override
+    
     public Level getLevel()
     {
         return level;
     }
     
-    @Override
+    
     public CoreImage getCurrentImage()
     {
         return sprite.getImage();
     }
     
-    @Override
+    
     public boolean canJump()
     {
         return canJump;
@@ -594,7 +591,7 @@ public class Player implements Actor
         CoreSystem.print("xPos==" + xPos + ", yPos==" + yPos); 
     }
     
-    @Override
+    
     public void jump()
     {
         if(canJump())
@@ -604,13 +601,13 @@ public class Player implements Actor
         }
     }
     
-    @Override
+    
     public void setX(float x)
     {
         xPos = x;
     }
     
-    @Override
+    
     public void setY(float y)
     {
         yPos = y;
@@ -625,58 +622,58 @@ public class Player implements Actor
         }
     }
     
-    @Override
+    
     public void resetAccelY()
     {
         // do nothing for now
     }
     
-    @Override
+    
     public void resetAccelX()
     {
         accelX = 0;
         setStandingImage();
     }
     
-    @Override
-    public Direction getFacing()
+    
+    public int getFacing()
     {
         return facing;
     }
 
     
     
-    @Override
+    
     public float getYSpeed()
     {
         return ySpeed;
     }
     
-    @Override
+    
     public float getXSpeed()
     {
         return xSpeed;
     }
     
-    @Override
+    
     public void setYSpeed(float f)
     {
         ySpeed = f;
     }
     
-    @Override
+    
     public void setXSpeed(float f)
     {
         xSpeed = f;
     }
     
-    @Override
+    
     public float getMaxFallSpeed()
     {
         return MAX_Y_SPEED;
     }
     
-    @Override
+    
     public void draw(CoreGraphics g)
     {
         //g.drawAnimation(currentAnim, getX(), getY());
@@ -699,8 +696,10 @@ public class Player implements Actor
         {
             currentArrow.draw(g);    
         }
-        for(Arrow a : firedArrows)
+        //for(Arrow a : firedArrows)
+        for(int i = 0; i < firedArrows.size(); ++i)
         {
+            Arrow a = (Arrow)firedArrows.get(i);
             a.draw(g);
         }
     }  

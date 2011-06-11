@@ -48,13 +48,13 @@ public class StartMoving implements Action
         finished = false;
     }  
     
-    @Override
+    
     public void setHost(LevelObject lo)
     {
         host = lo;
     }
     
-    @Override
+    
     public void perform()
     {
         if(!started && !finished)
@@ -80,31 +80,31 @@ public class StartMoving implements Action
         }
     }
     
-    @Override
+    
     public void update()
     {
         CoreSystem.print(host + "StartMoving >> update...");
     }
     
-    @Override
+    
     public void draw(CoreGraphics g)
     {
         // boiler plate :(
     }
     
-    @Override
+    
     public boolean hasFinished() 
     {
         return started;
     }
     
-    @Override
+    
     public boolean hasStarted() 
     {
         return started;
     }
     
-    @Override
+    
     public String toString()
     {
         return "StartMoving";

@@ -35,8 +35,8 @@ public class NavMesh
 {
     // walkable zones (Lines, as we're in 2D)
     
-    private Collection<Line> walkableZones;
-    private Collection<Rect> negativeSpace;
+    private List walkableZones;
+    private List negativeSpace;
     private Level level;
     
     private int walkableColorInt = Colors.GREEN;
@@ -48,10 +48,11 @@ public class NavMesh
     /**
      * A mesh created by MeshMaker.
      */ 
-    public NavMesh(Level l, Collection<Line> walkables,
-                            Collection<Rect> space)
+    public NavMesh(Level l, List walkables, List space)
     {
         setLevel(l);
+        assert walkableZones.getClass().getName().equals("Set");
+        assert space.getClass().getName().equals("Set");
         walkableZones = walkables;
         negativeSpace = space;
     }
@@ -65,8 +66,12 @@ public class NavMesh
     public void draw(CoreGraphics g)
     {
         g.setColor(walkableColorInt);
-        for(Line l : walkableZones)
+        
+        Line[] lines = (Line[])walkableZones.toArray();
+        
+        for(int i = 0; i < walkableZones.size(); ++i)
         {
+            Line l = lines[i];
             if(l != null)
             {
                 g.drawLine(l.startX, l.startY,
@@ -75,8 +80,10 @@ public class NavMesh
         }
         
         g.setColor(negativeColorInt);
-        for(Rect r : negativeSpace)
+        //for(Rect r : negativeSpace)
+        for(int i = 0; i < negativeSpace.size(); ++i)
         {
+            Rect r = (Rect)negativeSpace.get(i);
             if(r != null)
             {
                 g.drawRect(r.x, 
@@ -91,7 +98,7 @@ public class NavMesh
      * Returns the walkable zones (excluding non-surface negative 
      * spaces) as a series of horizontal lines
      */
-    public Collection<Line> getWalkableZones()
+    public List getWalkableZones()
     {
         return walkableZones;
     }
@@ -99,7 +106,7 @@ public class NavMesh
     /*
      * Returns the negative space zones (rectangles)
      */
-    public Collection<Rect> getNegativeSpace()
+    public List getNegativeSpace()
     {
         return negativeSpace;
     }
@@ -109,9 +116,9 @@ public class NavMesh
      */ 
     public static class Slice 
     {
-        public List<Tile> tiles = null;
+        public List/**/ tiles = null;
          
-        public Slice(List<Tile> t)
+        public Slice(List/**/ t)
         {
             tiles = t;
             if(!hasValidTiles())
@@ -122,12 +129,12 @@ public class NavMesh
         
         public Tile getFirstTile()
         {
-            return tiles.get(0);
+            return (Tile)tiles.get(0);
         }
         
         public Tile getLastTile()
         {
-            return tiles.get(tiles.size()-1);
+            return (Tile)tiles.get(tiles.size()-1);
         }
 
         
@@ -138,8 +145,8 @@ public class NavMesh
         {
             Tile s, e;
             
-            s = tiles.get(0);
-            e = tiles.get(tiles.size() - 1);
+            s = (Tile)tiles.get(0);
+            e = (Tile)tiles.get(tiles.size() - 1);
             
             CoreSystem.print("Slice " + hashCode());
             CoreSystem.print("\t" + s.xCoord + ", " + s.yCoord + " to "
@@ -162,12 +169,13 @@ public class NavMesh
                 return true;
             }
             
-            int x = tiles.get(0).xCoord;
-            int y = tiles.get(0).yCoord;
+            Tile t = (Tile)tiles.get(0);
+            int x = t.xCoord;
+            int y = t.yCoord;
             
             for(int i = 1; i < tiles.size(); ++i)
             {
-                Tile cur = tiles.get(i);
+                Tile cur = (Tile)tiles.get(i);
                 if(cur.xCoord != x || cur.yCoord != y + 1)
                 {
                     return false;    
@@ -184,13 +192,13 @@ public class NavMesh
      */ 
     public static class SliceGroup
     {
-        public List<Slice> slices;
+        public List/*<Slice>*/ slices;
         private Rect rect = null;
         
         /**
          * Assembles a group from a list.
          */ 
-        public SliceGroup(List<Slice> s)
+        public SliceGroup(List s)
         {
             if(s.isEmpty()) 
             {
@@ -209,16 +217,15 @@ public class NavMesh
             Slice startSlice = getStartSlice();
             Slice endSlice = getEndSlice();
             
-            Tile first = startSlice.tiles.get(0);
-            Tile last = endSlice.tiles.get(endSlice.tiles.size() - 1);
-            
-            /*CoreSystem.print("SliceGroup: createShape() \n\tfrom "
-                                + first + "\n\t to " + last);*/
-
+            Tile first = (Tile)startSlice.tiles.get(0);
+            Tile last = (Tile)endSlice.tiles.get(
+                endSlice.tiles.size() - 1);
+            CoreSystem.print("SliceGroup: createShape() \n\tfrom "
+                                + first + "\n\t to " + last);
             rect = new Rect(
-                 first.xPos, first.yPos, 
-                (last.endX - first.xPos),
-                (last.endY - first.yPos));
+                     first.xPos, first.yPos, 
+                    (last.endX - first.xPos),
+                    (last.endY - first.yPos));
             check();
         }        
         
@@ -233,8 +240,8 @@ public class NavMesh
             
             for(int i = 1; i < slices.size(); ++i)
             {
-                prev = slices.get(i-1);
-                curr = slices.get(i);
+                prev = (Slice)slices.get(i-1);
+                curr = (Slice)slices.get(i);
                 
                 if(!MeshMaker.areCompatible(prev, curr))
                 {
@@ -273,7 +280,7 @@ public class NavMesh
          */ 
         public Slice getEndSlice()
         {
-            Slice s = slices.get(slices.size() - 1);
+            Slice s = (Slice)slices.get(slices.size() - 1);
            /* CoreSystem.print("SliceGroup(" + hashCode() + 
                                ").getEndSlice(): {");
             s.printSliceInfo();
@@ -287,7 +294,7 @@ public class NavMesh
          */ 
         public Slice getStartSlice()
         {
-            Slice s = slices.get(0);
+            Slice s = (Slice)slices.get(0);
             /*CoreSystem.print("SliceGroup(" + hashCode() + 
                                ").getStartSlice(): {");
             s.printSliceInfo(); 
@@ -317,11 +324,13 @@ public class NavMesh
                 CoreSystem.print("addGroup: ");
                 other.printGroupInfo();*/
                 
-                for(Slice s : other.slices)
+                //for(Slice s : other.slices)
+                for(int i = 0; i < other.slices.size(); ++i)
                 {
-                    if(!addSlice(s))
+                    if(!addSlice((Slice)other.slices.get(i)))
                     {
-                        throw new IllegalStateException("Not compatible?");
+                        throw new IllegalStateException(
+                            "Not compatible?");
                     }
                     /*else
                     {
@@ -345,15 +354,16 @@ public class NavMesh
          */ 
         public void printGroupInfo()
         {
-            PrintStream out = System.out;
+            /*PrintStream out = CoreSystem.print;
             out.println("SliceGroup " + hashCode() + 
                         " (" + slices.size() + " slices) : ");
            
-            for(Slice s : slices)
+            for(int i = 0; i < slices.size(); ++i)
             {
-                s.printSliceInfo();
+                slices.get(i).printSliceInfo();
             }
-            out.println();
+            out.println();*/
+            CoreSystem.print("printGroupInfor --> not implemented");
         }
     }
     
@@ -362,9 +372,9 @@ public class NavMesh
      */ 
     public static class MeshMaker
     {
-        static Collection<Tile> ledgeTiles = null;
-        static Collection<Line> walkableZones = null;
-        static Collection<Rect> negativeSpace = null;
+        static List ledgeTiles = null;
+        static List walkableZones = null;
+        static List negativeSpace = null;
         static Level l = null;
         
         /**
@@ -375,6 +385,7 @@ public class NavMesh
             l = lev;
             createWalkableZones();
             createNegativeSpace();
+            assert walkableZones.getClass().getName().equals("Set");
             return new NavMesh(l, walkableZones, negativeSpace);
         }
         
@@ -386,12 +397,14 @@ public class NavMesh
         {   
             Line line;        
             ledgeTiles = getLedgeTiles(l);
-            Set<Tile> checked = new HashSet<Tile>();
-            walkableZones = new HashSet<Line>();
+            List checked = new ArrayList();
+            walkableZones = new ArrayList();
             Tile end = null;
             
-            for(Tile start : ledgeTiles)
+            //for(Tile start : ledgeTiles)
+            for(int i = 0; i < ledgeTiles.size(); ++i)
             {
+                Tile start = (Tile)ledgeTiles.get(i);
                 if(!checked.contains(start) && start != null)
                 {
                     end = getEndTile(start, ledgeTiles);
@@ -408,20 +421,21 @@ public class NavMesh
         private static void createNegativeSpace()
         {
             // movable area rects
-            negativeSpace = new ArrayList<Rect>();
+            negativeSpace = new ArrayList();
                         
             // slice the spaces and combine where possible
-            List<Slice> slices = sliceSpaces(getSpaceTiles(l));
-            List<SliceGroup> groups = new ArrayList<SliceGroup>();
+            List slices = sliceSpaces(getSpaceTiles(l));
+            List groups = new ArrayList();
             
             groups.addAll(combineSlices(slices));
             combineGroups(groups);
                                                
-            for(SliceGroup g : groups)
+            //for(SliceGroup g : groups)
+            for(int i = 0; i < groups.size(); ++i)
             {
                 //negativeSpace.add(g.getShape());
+                SliceGroup g = (SliceGroup)groups.get(i);
                 negativeSpace.add(g.getSlicesRect());
-                
             }            
         }
         
@@ -429,7 +443,7 @@ public class NavMesh
          * Attempts to combine any (and all) of the given SliceGroups
          * together.
          */ 
-        private static void combineGroups(List<SliceGroup> groups)
+        private static void combineGroups(List groups)
         {
            /* CoreSystem.print("combineGroups: looking at " +
                                 groups.size());*/
@@ -437,15 +451,15 @@ public class NavMesh
             SliceGroup prev = null;
             SliceGroup curr = null;
             
-            ListIterator<SliceGroup> it = groups.listIterator();
+            ListIterator it = groups.listIterator();
             
             while(it.hasNext())
             {
                 if(it.hasPrevious())
                 {
-                    prev = it.previous();
+                    prev = (SliceGroup)it.previous();
                     it.next();
-                    curr = it.next();
+                    curr = (SliceGroup)it.next();
                    
                     if(curr.equals(prev))
                     {
@@ -485,10 +499,9 @@ public class NavMesh
          * 
          * Slices combined are removed from the given list.
          */
-        private static List<SliceGroup> combineSlices(
-            List<Slice> slices)
+        private static List combineSlices(List slices)
         {                   
-            List<SliceGroup> groups = new ArrayList<SliceGroup>();
+            List groups = new ArrayList();
             
             while(!slices.isEmpty())
             {
@@ -503,25 +516,25 @@ public class NavMesh
         /*
          * Creates a new SliceGroup from the first given Slice list
          */ 
-        private static SliceGroup createNewGroup(List<Slice> allSlices)
+        private static SliceGroup createNewGroup(List allSlices)
         {
             if(allSlices.isEmpty())
             {
                 CoreSystem.print("end of slices; end of groups");
                 return null;
             }      
-            List<Slice> currentSlices = new LinkedList<Slice>();
+            List currentSlices = new LinkedList();
             currentSlices.add(allSlices.remove(0));        
             SliceGroup g = new SliceGroup(currentSlices);
             
             int added = 0;
             do{
                 
-                ListIterator<Slice> lit = allSlices.listIterator();
+                ListIterator lit = allSlices.listIterator();
                 added = 0;
                 while(lit.hasNext())
                 {
-                    Slice s = lit.next();
+                    Slice s = (Slice)lit.next();
                     
                     if(g.addSlice(s))
                     {
@@ -547,7 +560,8 @@ public class NavMesh
                 return false;
             }
             
-            Tile aTile = a.tiles.get(0), bTile = b.tiles.get(0);            
+            Tile aTile = (Tile)a.tiles.get(0);
+            Tile bTile = (Tile)b.tiles.get(0);            
             
             if(areHorizontalNeighbours(aTile, bTile) 
                 &&
@@ -563,10 +577,10 @@ public class NavMesh
          * Slices up the collection of negative space Tiles into
          * continuous vertical 'slices' for later analysis 
          */ 
-        private static List<Slice> sliceSpaces(List<Tile> spaces)
+        private static List sliceSpaces(List spaces)
         {
-            Set<Tile> checked = new HashSet<Tile>(); 
-            List<Slice> slices = new ArrayList<Slice>();
+            Set checked = new HashSet(); 
+            List slices = new ArrayList();
             
             for(int i = 0; i < spaces.size(); ++i)
             {
@@ -585,18 +599,19 @@ public class NavMesh
          * Creates a new vertical 'slice' of Tiles starting from the 
          * Tile at the given start position.
          */ 
-        private static Slice createNewVerticalSlice(List<Tile> 
-                                                  spaceTiles, int start)
+        private static Slice createNewVerticalSlice(
+                                        List spaceTiles, int start)
         {
-            int currentX = spaceTiles.get(start).xCoord;
-            int currentY = spaceTiles.get(start).yCoord;
+            Tile t = (Tile)spaceTiles.get(start);
+            int currentX = t.xCoord;
+            int currentY = t.yCoord;
             
-            List<Tile> sliceTiles = new ArrayList<Tile>();
-            sliceTiles.add(spaceTiles.get(start));
+            List sliceTiles = new ArrayList();
+            sliceTiles.add(t);
             
             for(int i = start+1; i < spaceTiles.size(); ++i)
             {
-                Tile t = spaceTiles.get(i);
+                t = (Tile)spaceTiles.get(i);
                 if(t.xCoord == currentX)
                 {
                     if(t.yCoord == currentY + 1)
@@ -615,15 +630,17 @@ public class NavMesh
          * not have a copy (i.e. same coordinates) in the collision
          * layer.
          */ 
-        private static List<Tile> getSpaceTiles(Level l)
+        private static List getSpaceTiles(Level l)
         {
             MapLayer colls = l.getCollisionLayer();
             MapLayer bgrnd = l.getBackgroundLayer();
             
-            List<Tile> spaceTiles = new ArrayList<Tile>();
+            List spaceTiles = new ArrayList();
 
-            for(Tile b : bgrnd.tiles)
+            //for(Tile b : bgrnd.tiles)
+            for(int i = 0; i < bgrnd.tiles.size(); ++i)
             {
+                Tile b = (Tile)bgrnd.tiles.get(i);
                 if(!colls.containsTile(b.xCoord, b.yCoord))
                 {
                     spaceTiles.add(b);
@@ -636,10 +653,12 @@ public class NavMesh
          * Returns the last Tile linked to the right of the given Tile.  
          * Recursively. B)
          */ 
-        private static Tile getEndTile(Tile start, Collection<Tile> tiles)
+        private static Tile getEndTile(Tile start, List tiles)
         {
-            for(Tile t : tiles)
+            //for(Tile t : tiles)
+            for(int i = 0; i < tiles.size(); ++i)
             {
+                Tile t = (Tile)tiles.get(i);
                 if(t.yCoord == start.yCoord)
                 {
                     if(t.xCoord == start.xCoord + 1)
@@ -669,10 +688,11 @@ public class NavMesh
          * Prints out information about a collection of Tiles for
          * debugging 
          */ 
-        private static void printTileCollection(Collection<Tile> c)
+        private static void printTileCollection(List c)
         {
-            for(Tile t : c)
+            for(int i = 0; i < c.size(); ++i)
             {
+                Tile t = (Tile)c.get(i);
                 CoreSystem.print("\tx: " + t.xCoord + ", y: " +
                                    t.yCoord);
             }
@@ -726,13 +746,15 @@ public class NavMesh
          * Finds the collision Tiles from the Level that can be used as
          * ledges.   
          */ 
-        private static Collection<Tile> getLedgeTiles(Level l)
+        private static List getLedgeTiles(Level l)
         {
             MapLayer colls = l.getCollisionLayer();
-            Collection<Tile> ledgeTiles = new ArrayList<Tile>();
+            List ledgeTiles = new ArrayList();
             
-            for(Tile t : colls.tiles)
-            { 
+            //for(Tile t : colls.tiles)
+            for(int i = 0; i < colls.tiles.size(); ++i)
+            {
+                Tile t = (Tile)colls.tiles.get(i); 
                 // naturally if at vertical position 0, there can't be a
                 // 'higher' level (read: lower number)
                 if(t.yCoord > 0)
@@ -754,8 +776,8 @@ public class NavMesh
         {
             if(!colls.containsTile(test.xCoord, test.yCoord - 1))
             {
-                /*CoreSystem.print("Tile " + test.xCoord + ", "
-                             + test.yCoord + " is ledge tile");*/
+               CoreSystem.print("Tile " + test.xCoord + ", "
+                             + test.yCoord + " is ledge tile");
                 return true;
             }
             return false;
