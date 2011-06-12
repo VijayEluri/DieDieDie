@@ -114,6 +114,15 @@ public class Mover
                 p.calculateEndPos();
             }
         }
+        else
+        {
+            Enemy e = Collider.collidesEnemy(p);
+            if(e != null)
+            {
+                //System.out.println(p + " collided with " + e);
+                e.die();
+            }
+        }
         //System.out.println("applyGravity(p), yTrav: " + yTrav);
         p.increaseGravityEffect(); 
     }

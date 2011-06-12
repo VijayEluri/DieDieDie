@@ -31,7 +31,9 @@ public interface Enemy extends Actor
     
     float getEyePosX();
     float getEyePosY();
-
+    
+    long getTimeSinceLastSawPlayer();
+    void setTimeLastSawPlayer(long time);
     
     boolean canSeePlayer();
     boolean hasSeenPlayer();

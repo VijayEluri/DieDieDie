@@ -40,13 +40,6 @@ public class Alert implements State
     }
     
     @Override
-    public State getNextState()
-    {
-        return nextState;
-    }
-    
-    
-    @Override
     public Enemy getHost()
     {
         return host;
@@ -60,8 +53,11 @@ public class Alert implements State
     
     @Override
     public void update()
-    {
-        
+    { 
+        if(!host.canSeePlayer())
+        {
+            host.getTimeSinceLastSawPlayer();
+        }
     }
     
     @Override
@@ -98,4 +94,10 @@ public class Alert implements State
     {
         return currentAction;
     }
+    /*
+    @Override 
+    public Action getNextAction()
+    {
+        if(getCurrentActionType() == Look)
+    }*/
 }

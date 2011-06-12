@@ -42,6 +42,8 @@ public class Bluey implements Enemy, StateMachine
     
     private Graphics g;
     
+    
+    
     public final String[] leftWalkPaths = 
     {
         "data/bluey_walk_left_1.png",
@@ -55,7 +57,7 @@ public class Bluey implements Enemy, StateMachine
     public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, 
                        RUN_SPEED = 3.1f, JUMP_SPEED = -5.5f,
                        ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;        
-    
+    long timeSinceLastSawPlayer = 0;
     // Variables    
     private State currentState = null;
     private Patrol patrol;
@@ -388,12 +390,13 @@ public class Bluey implements Enemy, StateMachine
     {        
         updatePosition();
         updateProjectiles();
-        updateState();
         
-        /*if(xSpeed > 0)
+        if(health == 0)
         {
-            System.out.println("bluey speed " + xSpeed);        
-        }*/
+            System.out.println(this + " is dead!");
+            return;
+        }
+        updateState();
     }
     
     /*
@@ -414,15 +417,14 @@ public class Bluey implements Enemy, StateMachine
         {
             if(canSeePlayer())
             {
-
+                
                 //System.out.println("changing to alert");
-                //changeState(alert);
+                changeState(alert);
             }
         }
-        else if(currentState.equals(alert))
+        /*else if(currentState.equals(alert))
         {
-            
-        }
+        }*/
     }
     
     public void updatePosition()
@@ -495,8 +497,6 @@ public class Bluey implements Enemy, StateMachine
     {
         return moving;   
     }
-
-   
     
     @Override
     public void setHasSeenPlayer(boolean b)
@@ -515,6 +515,9 @@ public class Bluey implements Enemy, StateMachine
         }
     }
     
+    /*
+     * Returns True if the 
+     */
     @Override
     public boolean canSeePlayer()
     {
@@ -522,13 +525,26 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    public long getTimeSinceLastSawPlayer()
+    {
+        return timeSinceLastSawPlayer;
+    }   
+    
+    @Override
+    public void setTimeLastSawPlayer(long time)
+    {
+        timeSinceLastSawPlayer = time;
+    }
+    
+    @Override
     public boolean hasSeenPlayer()
     {
-        if(!hasSeenPlayer)
+        /*if(!hasSeenPlayer)
         {
             System.out.println("so startled! - " + this);
             jump();
-        }
+        }*/
+        
         return hasSeenPlayer;
     }
     
@@ -542,13 +558,16 @@ public class Bluey implements Enemy, StateMachine
     public void die()
     {
         System.out.println("Die, you, " + this);
+        health = 0;
         // n i
     }
     
-    
+    /*
+     *
+     */
     private void updateProjectiles()
     {
-        
+         
     }
     
     @Override

@@ -30,6 +30,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.Graphics;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * A single level...
@@ -61,7 +62,7 @@ public class Level extends TiledMap
                      platformLayer;
         
     private Player player;
-    private List<Actor> enemies;
+    private List<Enemy> enemies;
     private Tile playerTile = null;
     
     /**
@@ -82,7 +83,7 @@ public class Level extends TiledMap
         objectLayer = createMapLayer(getLayerIndex("objects"));
         platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
-        enemies = new ArrayList<Actor>();
+        enemies = new ArrayList<Enemy>();
         sortObjects();
         createNavMesh();
     }   
@@ -100,6 +101,11 @@ public class Level extends TiledMap
     public MapLayer getBackgroundLayer()
     {
         return backgroundLayer;
+    }
+    
+    public List<Enemy> getEnemies()
+    {
+        return enemies;
     }
     
     /**
@@ -162,9 +168,26 @@ public class Level extends TiledMap
      */ 
     public void updateEnemies()
     {
+/*
         for(Actor a : enemies)
         {
+            if(a.getHealth() == 0)
+            {
+                
+            }
             a.update();
+        }
+*/
+        ListIterator<Enemy> lit = enemies.listIterator();
+        
+        while(lit.hasNext())
+        {
+            Enemy e = lit.next();
+            e.update();
+            if(e.getHealth() == 0)
+            {
+                lit.remove();
+            }
         }
     }
 
@@ -252,13 +275,7 @@ public class Level extends TiledMap
         return new MapLayer(tiles, index, VISIBLE);
     }
     
-    /**
-     * Returns true if two Shapes intersect.
-     */ 
-    public boolean intersection(Shape p1, Shape p2)
-    {
-        return p1.intersects(p2);
-    }
+    
         
     public void render(int x, int y)
     {

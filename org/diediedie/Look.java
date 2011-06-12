@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.newdawn.slick.util.FastTrig;
 import java.lang.Math;
+import java.util.Calendar;
 import org.newdawn.slick.geom.GeomUtil;
 
 /**
@@ -36,7 +37,7 @@ public class Look implements Action
     private float xViewStart, yViewStart;
     private View view = null;    
     private Line sightLine = null; 
-        
+    private Calendar cal;;
     /**
      * Look!
      */
@@ -55,6 +56,7 @@ public class Look implements Action
         finished = false;
         viewCreated = false;
         sightLine = null;
+        cal = Calendar.getInstance();
     }
     
     /*
@@ -139,7 +141,8 @@ public class Look implements Action
             {
                 if(actorIsVisible(e, sh, a))
                 {
-                    if(a.getClass().equals(e.getLevel().getPlayer().getClass()))
+                    if(a.getClass().equals(
+                       e.getLevel().getPlayer().getClass()))
                     {
                         e.setCanSeenPlayer(true);
                     }
@@ -159,9 +162,15 @@ public class Look implements Action
         
         List<Point> points = new ArrayList<Point>();
         
-        points.add(new Point(r.getX(), r.getY()));
-        points.add(new Point(r.getX() + r.getWidth(), r.getY()));
-        points.add(new Point(r.getX() + r.getWidth(), r.getY() + r.getHeight()));
+        points.add(new Point(
+            r.getX(), r.getY()));
+
+        points.add(new Point(
+            r.getX() + r.getWidth(), r.getY()));
+
+        points.add(new Point(
+            r.getX() + r.getWidth(), r.getY() + r.getHeight()));
+
         points.add(new Point(r.getX(), r.getY() + r.getHeight()));
         
         return hasPointInsideShape(points, sh);
@@ -192,6 +201,7 @@ public class Look implements Action
         if(actorInView(sh, a) && !isViewBlocked(e, p))
         {
             //System.out.println(a + " | is visible to | " + e);
+            e.setTimeLastSawPlayer(cal.getTime().getTime());
             return true;
         }  
         return false;

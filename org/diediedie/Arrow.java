@@ -222,6 +222,12 @@ public class Arrow implements Projectile
         Mover.move(this);
         Mover.applyGravity(this);
         
+        Enemy e = Collider.collidesEnemy(this);
+        
+        if(e != null)
+        {
+            System.out.println(this + " collided with Enemy " + e);
+        }
     }
         
         

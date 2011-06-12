@@ -15,6 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+import org.newdawn.slick.geom.Shape;
 
 /**
  * Used to discern whether or not a MovableObject is going to hit
@@ -43,11 +44,35 @@ public class Collider
         {
             return true;
         }*/
-        if(p.getLevel().collides(p.getShape()))
+        final Shape s = p.getShape();
+        if(p.getLevel().collides(s))
         {
             return true;
         }
         return false;
     }
     
+    public static Enemy collidesEnemy(Projectile p)
+    {
+        final Shape s = p.getShape();
+        
+        for(Enemy e : p.getLevel().getEnemies())
+        {
+            Shape sh = AnimCreator.getCurrentFrameRect(e);
+            
+            if(intersection(sh, s))
+            {
+                return e;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Returns true if two Shapes intersect.
+     */ 
+    public static boolean intersection(Shape p1, Shape p2)
+    {
+        return p1.intersects(p2);
+    }
 }

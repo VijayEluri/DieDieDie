@@ -19,7 +19,7 @@ import org.diediedie.Level;
 import org.diediedie.actors.State;
 import org.diediedie.actors.actions.*;
 import java.lang.Class;
-
+import java.util.Date;
  /**
   * State class wherein an Enemy(Actor) moves around the Level on
   * a repetitive set of paths, until interrupted due to seeing something 
@@ -31,11 +31,12 @@ public class Patrol implements State
     private Enemy host = null;
     private Level level = null;
     
-    private Action currentAction;
     private Look look;
     private StartWalking startWalking;
     private StopWalking  stopWalking;
     private State nextState = null;
+    
+    private Action currentAction;    
     
     /**
      * Associate this State with an Actor
@@ -60,13 +61,7 @@ public class Patrol implements State
     {
         return currentAction;
     }
-
-    @Override
-    public State getNextState()
-    {
-        return nextState;
-    }
-
+    
     @Override 
     public void enter()
     {
@@ -85,13 +80,15 @@ public class Patrol implements State
     public void update()
     {
         final Class cls = currentAction.getClass();
-        //System.out.println("Patrol.update(): currentAction: " currentAction);
+        /*System.out.println(
+            "Patrol.update() --> currentAction: " + currentAction);*/
         
         // NOT STARTED *OR* FINISHED
         if(!currentAction.hasStarted())
         {
             currentAction.perform(host);
-            System.out.println("Patrol.update(): started " + currentAction);
+            System.out.println(
+                "Patrol.update(): started " + currentAction);
         }
         // STARTED BUT *NOT* FINISHED
         else if(!currentAction.hasFinished())
@@ -109,8 +106,6 @@ public class Patrol implements State
             }
         }
     }
-    
-    
     
     @Override
     public Class getCurrentActionType()

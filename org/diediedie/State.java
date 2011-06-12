@@ -25,13 +25,14 @@ import java.lang.Class;
  */ 
 public interface State
 {
-    State getNextState();
     Enemy getHost();
     String toString();
-    void update();
+    
     void enter();
     void exit();
     boolean isRunning();      
+    void update();
+    
     Class getCurrentActionType();    
     Action getCurrentAction();
 }
