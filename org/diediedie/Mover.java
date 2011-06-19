@@ -99,9 +99,9 @@ public class Mover
         }
         
         // calc out how much gravity we should try to apply
-        final float MOST = p.getGravity();        
-        float yTrav = MOST;
-        p.setY(p.getY() + yTrav);
+        //final float MOST = p.getGravity();        
+        //float yTrav = MOST;
+        p.setY(p.getY() + p.getGravity());
         p.calculateEndPos();
         
         if(Collider.collidesLevel(p))
@@ -114,16 +114,6 @@ public class Mover
                 p.calculateEndPos();
             }
         }
-        /*else
-        {
-            Enemy e = Collider.collidesEnemy(p);
-            if(e != null)
-            {
-                //System.out.println(p + " collided with " + e);
-                e.die();
-            }
-        }*/
-        //System.out.println("applyGravity(p), yTrav: " + yTrav);
         p.increaseGravityEffect(); 
     }
     
@@ -146,21 +136,7 @@ public class Mover
             float xMove = xTrav / INTERVAL; 
             float yMove = xTrav / INTERVAL;
             while(!doMove(p, xMove, yMove, reverse));
-        }
-        
-        /*final float oldX = p.getX();
-        final float oldY = p.getY();
-
-        float xMove = xTrav / INTERVAL;
-        float yMove = yTrav / INTERVAL;
-        
-        int i = 0;
-        
-        while(i < INTERVAL && doMove(p, xMove, yMove, p.getAngle()))
-        {
-            ++i;
-        }*/
-        
+        }        
     }
     
     

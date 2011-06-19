@@ -531,7 +531,14 @@ public class Player implements Actor, InputProviderListener
         while(it.hasNext())
         {
             Arrow a = it.next();
-            if(a.isFlying())
+            if(a.collidedWithEnemy())
+            {
+                // damage already done in Enemy.doCollision
+                // we can safely remove the arrow here
+                System.out.println("removing collided arrow" + a);
+                it.remove();
+            }
+            else if(a.isFlying())
             {
                 a.updateSpeed();
                 a.updatePosition();

@@ -45,8 +45,19 @@ public class Collider
             return true;
         }*/
         final Shape s = p.getShape();
-        if(p.getLevel().collides(s))
+        if(p.getLevel().collides(s) && p.isFlying())
         {
+            System.out.println(p + " collides Level with speeds :");
+            /*
+            System.out.println(
+                "x :" + p.getXSpeed() + ", y :" + p.getYSpeed());
+            */
+            System.out.println(
+                "x change : " + Math.abs(p.getOldStartX() - p.getX()));
+        
+            System.out.println(
+                "y change : " + Math.abs(p.getOldStartY() - p.getY()));
+            p.stop();
             return true;
         }
         return false;

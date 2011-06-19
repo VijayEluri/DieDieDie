@@ -78,6 +78,17 @@ public class Arrow implements Projectile
         calculateEndPos();
     }
     
+    @Override
+    public float getOldStartX()
+    {
+        return oldX;
+    }
+    
+    @Override
+    public float getOldStartY()
+    {
+        return oldY;  
+    }
     
     @Override
     public void increaseGravityEffect()
@@ -228,11 +239,18 @@ public class Arrow implements Projectile
         
         if(e != null)
         {
-            System.out.println(this + " collided with Enemy " + e);
+            //System.out.println(this + " collided with Enemy " + e);
             e.doCollision(this);
+            collided = true;
         }
     } 
-        
+    
+    @Override
+    public boolean collidedWithEnemy()
+    {
+        return collided;
+    }
+    
     /*
      * Stops the movement of the Arrow
      */ 

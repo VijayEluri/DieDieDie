@@ -170,6 +170,7 @@ public class Bluey implements Enemy, StateMachine
     public void addVisibleObject(LevelObject lo)
     {
         visibleObjects.add(lo);
+        
     }
        
     @Override
@@ -402,7 +403,7 @@ public class Bluey implements Enemy, StateMachine
             return;
         }
         updateState();
-        printInfo(5);
+        //printInfo(5);
     }
     
     /*
@@ -419,17 +420,17 @@ public class Bluey implements Enemy, StateMachine
         date = new Date();
         long now = date.getTime();
         
-        //System.out.println("seconds : " +  seconds);
         
         if((now - lastInfoCallTime) >= seconds*1000)
         {
-            //System.out.println(
-              //  "time since last call :" + (now - lastInfoCallTime));
             System.out.println(
-                "ENEMY :"  + hashCode()
-                + " health : " + health
-                + " state : " + getState()
-                // Add debugging info here :)
+                "Bluey : hashcode "  + hashCode()
+                + "\n\thealth\t\t" + health
+                + "\n\tstate\t\t" + getState()
+                + "\n\tseenPlayer\t" + hasSeenPlayer()               
+                + "\n\tseenEvidence\t" + hasSeenPlayerEvidence()
+                + "\n\tcanSeePlayer\t" + canSeePlayer()
+                // Add any extra debugging info here :)
             );
             lastInfoCallTime = now;
         }
@@ -469,9 +470,17 @@ public class Bluey implements Enemy, StateMachine
     @Override
     public void doCollision(Projectile p)
     {
+        System.out.println(this + "doCollision " + p);
+        // The Projectile's speeds do not take into account gravity
+        // or air resistance. We'll instead calculate damage based on
+        // the change in 
+        System.out.println(
+            "x change : " + Math.abs(p.getOldStartX() - p.getX()));
         
         System.out.println(
-            this + "doCollision " + p + "not implemented"); 
+            "y change : " + Math.abs(p.getOldStartY() - p.getY()));
+        
+        
     }
     
     public void updatePosition()
