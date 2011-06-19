@@ -50,4 +50,6 @@ public interface Enemy extends Actor
     Graphics getGraphics();
     float getWalkSpeed();
     float getRunSpeed();
+    
+    void doCollision(Projectile p); 
 }

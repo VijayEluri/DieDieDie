@@ -114,7 +114,7 @@ public class Mover
                 p.calculateEndPos();
             }
         }
-        else
+        /*else
         {
             Enemy e = Collider.collidesEnemy(p);
             if(e != null)
@@ -122,13 +122,13 @@ public class Mover
                 //System.out.println(p + " collided with " + e);
                 e.die();
             }
-        }
+        }*/
         //System.out.println("applyGravity(p), yTrav: " + yTrav);
         p.increaseGravityEffect(); 
     }
     
     /**
-     * For publically moving Projectiles. :)
+     * Nice static function for moving Projectiles around a Level. 
      */ 
     public static void move(Projectile p)
     {   

@@ -52,6 +52,12 @@ public class Collider
         return false;
     }
     
+    /**
+     * Function to get the current collision state of a Projectile.
+     * 
+     * If Projectile p is currently in a collision with an Enemy,
+     * return that Enemy. Otherwise return null; 
+     */
     public static Enemy collidesEnemy(Projectile p)
     {
         final Shape s = p.getShape();

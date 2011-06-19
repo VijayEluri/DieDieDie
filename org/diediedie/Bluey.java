@@ -15,6 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+import java.util.Date;
 import org.diediedie.Level;
 import org.diediedie.actors.Direction;
 import org.diediedie.actors.Player;
@@ -41,7 +42,7 @@ public class Bluey implements Enemy, StateMachine
     public final String leftStandPath = "data/bluey_standing_left.png";
     
     private Graphics g;
-    
+    private Date date;
     
     
     public final String[] leftWalkPaths = 
@@ -57,8 +58,8 @@ public class Bluey implements Enemy, StateMachine
     public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, 
                        RUN_SPEED = 3.1f, JUMP_SPEED = -5.5f,
                        ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;        
-    long timeSinceLastSawPlayer = 0;
-    // Variables    
+    private long timeSinceLastSawPlayer = 0;
+    
     private State currentState = null;
     private Patrol patrol;
     private Alert alert;
@@ -70,6 +71,10 @@ public class Bluey implements Enemy, StateMachine
     private int health;
     private Direction facing = null;
     private Level level;
+    
+    
+    private long lastInfoCallTime = 0;
+    // ^ used to store the time of the last call to printInfo()
     
     private Set<LevelObject> visibleObjects;
     
@@ -390,14 +395,46 @@ public class Bluey implements Enemy, StateMachine
     {        
         updatePosition();
         updateProjectiles();
-        
+                    
         if(health == 0)
         {
             System.out.println(this + " is dead!");
             return;
         }
         updateState();
+        printInfo(5);
     }
+    
+    /*
+     * Prints out information about this enemy with a gap of at least
+     * as long as the interval specified. 
+     *
+     * This means that you can stick a call to this method in (for 
+     * example) in the main game loop and it won't actually print
+     * anything unless at least 'interval' seconds have passed since
+     * you last called it.
+     */ 
+    public void printInfo(int seconds)
+    {
+        date = new Date();
+        long now = date.getTime();
+        
+        //System.out.println("seconds : " +  seconds);
+        
+        if((now - lastInfoCallTime) >= seconds*1000)
+        {
+            //System.out.println(
+              //  "time since last call :" + (now - lastInfoCallTime));
+            System.out.println(
+                "ENEMY :"  + hashCode()
+                + " health : " + health
+                + " state : " + getState()
+                // Add debugging info here :)
+            );
+            lastInfoCallTime = now;
+        }
+    }
+    
     
     /*
      * Updates the current State (in turn performing its current Action)
@@ -422,9 +459,19 @@ public class Bluey implements Enemy, StateMachine
                 changeState(alert);
             }
         }
-        /*else if(currentState.equals(alert))
+        else if(currentState.equals(alert))
         {
-        }*/
+
+           
+        }
+    }
+    
+    @Override
+    public void doCollision(Projectile p)
+    {
+        
+        System.out.println(
+            this + "doCollision " + p + "not implemented"); 
     }
     
     public void updatePosition()
@@ -606,4 +653,6 @@ public class Bluey implements Enemy, StateMachine
     
     public float getX(){ return xPos; }   
     public float getY(){ return yPos; } 
+    
+    
 }

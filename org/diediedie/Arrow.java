@@ -209,6 +209,8 @@ public class Arrow implements Projectile
     /**
      * Updates the position of the Arrow on the screen after it has left
      * the Player.
+     *
+     * On collision, initiates damage on any Enemy it hits.
      */
     public void updatePosition()
     {
@@ -219,17 +221,17 @@ public class Arrow implements Projectile
         adjustFacingAngle();
         oldX = startX;
         oldY = startY;
-        Mover.move(this);
         Mover.applyGravity(this);
+        Mover.move(this);
         
         Enemy e = Collider.collidesEnemy(this);
         
         if(e != null)
         {
             System.out.println(this + " collided with Enemy " + e);
+            e.doCollision(this);
         }
-    }
-        
+    } 
         
     /*
      * Stops the movement of the Arrow

@@ -58,7 +58,7 @@ public class NavMesh implements Drawable
     @Override
     public void draw(Graphics g)
     {
-        g.setColor(walkableColor);
+        /*g.setColor(walkableColor);
         for(Shape l : walkableZones)
         {
             if(l != null)
@@ -74,7 +74,7 @@ public class NavMesh implements Drawable
             {
                 g.draw(n);
             }
-        }
+        }*/
     }
     
     /*

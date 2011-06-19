@@ -531,10 +531,11 @@ public class Player implements Actor, InputProviderListener
         while(it.hasNext())
         {
             Arrow a = it.next();
-            
-            a.updateSpeed();
-            a.updatePosition();
-            
+            if(a.isFlying())
+            {
+                a.updateSpeed();
+                a.updatePosition();
+            }
             /*if(!a.isFlying())
             {
                 it.remove();

@@ -1,5 +1,8 @@
 package org.diediedie.actors;
 
+/**
+ * Super-interface for all movable LevelObjects.
+ */
 public interface MovableObject extends LevelObject
 {
     void setX(float x);
