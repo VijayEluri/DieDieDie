@@ -168,29 +168,27 @@ public class Level extends TiledMap
      */ 
     public void updateEnemies()
     {
-/*
-        for(Actor a : enemies)
-        {
-            if(a.getHealth() == 0)
-            {
-                
-            }
-            a.update();
-        }
-*/
         ListIterator<Enemy> lit = enemies.listIterator();
         
         while(lit.hasNext())
         {
+            
             Enemy e = lit.next();
-            e.update();
-            if(e.getHealth() == 0)
+            if(e.getHealth() <= 0)
             {
+                e.die();
                 lit.remove();
+            }
+            else
+            {
+                e.update();
             }
         }
     }
 
+    
+    
+    
     /*
      * Sorts the object layer into separate structures
      */ 

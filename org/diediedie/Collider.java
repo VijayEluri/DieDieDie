@@ -38,25 +38,16 @@ public class Collider
      */ 
     public static boolean collidesLevel(Projectile p)
     {
-        /*if(p.getLevel().isInCollisionTile(p.getX(), p.getY()) 
-           ||
-           p.getLevel().isInCollisionTile(p.getEndX(), p.getEndY()))
-        {
-            return true;
-        }*/
-        final Shape s = p.getShape();
-        if(p.getLevel().collides(s) && p.isFlying())
+        if(p.isFlying() 
+            &&
+           p.getLevel().collides(p.getShape()))
         {
             System.out.println(p + " collides Level with speeds :");
-            /*
             System.out.println(
-                "x :" + p.getXSpeed() + ", y :" + p.getYSpeed());
-            */
-            System.out.println(
-                "x change : " + Math.abs(p.getOldStartX() - p.getX()));
+                "\tx change : " + (p.getOldStartX() - p.getX()));
         
             System.out.println(
-                "y change : " + Math.abs(p.getOldStartY() - p.getY()));
+                "\ty change : " + (p.getOldStartY() - p.getY()));
             p.stop();
             return true;
         }
@@ -79,7 +70,14 @@ public class Collider
             
             if(intersection(sh, s))
             {
-                return e;
+                if(sh.contains(p.getEndX(), p.getEndY()))
+                {
+                    System.out.println(
+                        p + " hit Enemy " + e + " with arrow tip"); 
+                    return e;
+                }
+                System.out.println(
+                    p + " hit Enemy " + e + " but not with the tip");
             }
         }
         return null;

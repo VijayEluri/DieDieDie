@@ -361,6 +361,12 @@ public class Arrow implements Projectile
     }
     
     @Override
+    public float getFacingAngle()
+    {
+        return facingAngle;
+    }
+    
+    @Override
     public float getX()
     {
         return startX;

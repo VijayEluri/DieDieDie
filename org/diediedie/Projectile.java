@@ -18,7 +18,7 @@ public interface Projectile extends MovableObject
     
     boolean isFlying();
     float getAngle();
-    
+    float getFacingAngle();
     Shape getShape();
     
     float getGravityLine();    

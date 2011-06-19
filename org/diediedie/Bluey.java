@@ -403,7 +403,7 @@ public class Bluey implements Enemy, StateMachine
             return;
         }
         updateState();
-        //printInfo(5);
+        printInfo(5);
     }
     
     /*
@@ -468,19 +468,27 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
+    /*
+     * Called by Collider when a Projectile, p, impacts an Enemy
+     * (in the case of Arrows, this is when the arrow head hits the
+     * Enemy, not any other part, which will inflict no damage).
+     */
     public void doCollision(Projectile p)
     {
         System.out.println(this + "doCollision " + p);
-        // The Projectile's speeds do not take into account gravity
-        // or air resistance. We'll instead calculate damage based on
-        // the change in 
-        System.out.println(
-            "x change : " + Math.abs(p.getOldStartX() - p.getX()));
+             
+        float xChange = p.getOldStartX() - p.getX();
+        float yChange = p.getOldStartY() - p.getY();
+        
+        System.out.println("\t" + "x change : " + xChange);
+        System.out.println("\t" + "y change : " + yChange);
         
         System.out.println(
-            "y change : " + Math.abs(p.getOldStartY() - p.getY()));
-        
-        
+            "\t trying damage equation d = abs(xChange+yChange) * 3");
+        float damage = Math.abs(xChange + yChange) * 3;
+        System.out.print("== " + damage);
+        this.health -= damage;
+        System.out.println("\t" + this + " health : " + this.health);
     }
     
     public void updatePosition()
