@@ -25,7 +25,7 @@ import java.lang.Class;
  */ 
 public interface State
 {
-    Enemy getHost();
+    Actor getHost();
     String toString();
     
     void enter();

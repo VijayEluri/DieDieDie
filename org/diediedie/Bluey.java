@@ -440,6 +440,8 @@ public class Bluey implements Enemy, StateMachine
     /*
      * Updates the current State (in turn performing its current Action)
      * and looking for any changes to Bluey.
+     * 
+     * --> called by update()
      */ 
     private void updateState()
     {
@@ -451,43 +453,33 @@ public class Bluey implements Enemy, StateMachine
         
         currentState.update();
         
+        // Ascertain whether or not to change state
         if(currentState.equals(patrol))
         {
-            if(canSeePlayer())
+            if(hasSeenPlayer() || hasSeenPlayerEvidence())
             {
                 
-                //System.out.println("changing to alert");
+                System.out.println(this + " changing to alert");
                 changeState(alert);
             }
         }
         else if(currentState.equals(alert))
         {
-
-           
+            // add change state conditions for Alert here
         }
     }
     
-    @Override
+    
     /*
      * Called by Collider when a Projectile, p, impacts an Enemy
      * (in the case of Arrows, this is when the arrow head hits the
      * Enemy, not any other part, which will inflict no damage).
      */
+    @Override
     public void doCollision(Projectile p)
     {
         System.out.println(this + "doCollision " + p);
-             
-        float xChange = p.getOldStartX() - p.getX();
-        float yChange = p.getOldStartY() - p.getY();
-        
-        System.out.println("\t" + "x change : " + xChange);
-        System.out.println("\t" + "y change : " + yChange);
-        
-        System.out.println(
-            "\t trying damage equation d = abs(xChange+yChange) * 3");
-        float damage = Math.abs(xChange + yChange) * 3;
-        System.out.print("== " + damage);
-        this.health -= damage;
+        this.health -= p.getDamage();
         System.out.println("\t" + this + " health : " + this.health);
     }
     
@@ -499,12 +491,11 @@ public class Bluey implements Enemy, StateMachine
         if(isMoving())
         {
             applySpeed(facing);
-        }
-        
-        if(!Mover.move(this))
-        {
-            setStandingAnim();
-            moving = false;
+            if(!Mover.move(this))
+            {
+                setStandingAnim();
+                moving = false;
+            }
         }
     }
     

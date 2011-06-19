@@ -27,6 +27,7 @@ public interface Projectile extends MovableObject
     
     float getOldStartX();
     float getOldStartY();
+    float getDamage();
     
     void increaseGravityEffect();
     

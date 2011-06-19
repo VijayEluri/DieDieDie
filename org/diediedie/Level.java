@@ -62,7 +62,8 @@ public class Level extends TiledMap
                      platformLayer;
         
     private Player player;
-    private List<Enemy> enemies;
+    private List<Enemy> enemiesLiving;
+    private List<Enemy> enemiesDead;
     private Tile playerTile = null;
     
     /**
@@ -83,7 +84,7 @@ public class Level extends TiledMap
         objectLayer = createMapLayer(getLayerIndex("objects"));
         platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
-        enemies = new ArrayList<Enemy>();
+        enemiesLiving = new ArrayList<Enemy>();
         sortObjects();
         createNavMesh();
     }   
@@ -105,7 +106,7 @@ public class Level extends TiledMap
     
     public List<Enemy> getEnemies()
     {
-        return enemies;
+        return enemiesLiving;
     }
     
     /**
@@ -145,11 +146,11 @@ public class Level extends TiledMap
     }
     
     /*
-     * Returns all enemies + the player
+     * Returns all enemiesLiving + the player
      */ 
     public List<Actor> getActors()
     {
-        List<Actor> actors = new ArrayList<Actor>(enemies);
+        List<Actor> actors = new ArrayList<Actor>(enemiesLiving);
         actors.add(player);
         return actors;
     }
@@ -163,12 +164,12 @@ public class Level extends TiledMap
     }
     
     /**
-     * Updates the behaviour and position etc of all enemies on the
+     * Updates the behaviour and position etc of all enemiesLiving on the
      * level
      */ 
     public void updateEnemies()
     {
-        ListIterator<Enemy> lit = enemies.listIterator();
+        ListIterator<Enemy> lit = enemiesLiving.listIterator();
         
         while(lit.hasNext())
         {
@@ -215,7 +216,7 @@ public class Level extends TiledMap
                     
                     if(t.properties.get("name").equalsIgnoreCase("bluey"))
                     {                       
-                        enemies.add(new Bluey(this, t));
+                        enemiesLiving.add(new Bluey(this, t));
                     }
                 }
             }
@@ -225,7 +226,7 @@ public class Level extends TiledMap
                 e.printStackTrace();
             }
         }
-        System.out.println("level has " + enemies.size() + " enemies");
+        System.out.println("level has " + enemiesLiving.size() + " enemiesLiving");
     }
     
     /**
@@ -284,7 +285,7 @@ public class Level extends TiledMap
     
     /**
      * Draw using Graphics object g this Level at 0,0 plus any 
-     * inhabiting enemies. 
+     * inhabiting enemiesLiving. 
      */ 
     public void draw(Graphics g)
     {
@@ -294,14 +295,20 @@ public class Level extends TiledMap
     }
     
     /**
-     * Draw using Graphics object g any visible enemies. 
+     * Draw using Graphics object g any visible enemiesLiving. 
      */ 
     private void drawEnemies(Graphics g)
     {
-        for(Actor a : enemies)
+        for(Actor a : enemiesLiving)
         {
             a.draw(g);
         }
+        /*
+        for(Actor a : enemiesDead)
+        {
+            a.draw(g);
+        }
+        */
     }
     
     /**

@@ -63,13 +63,13 @@ public class StartWalking implements Action
     @Override
     public void draw(Graphics g)
     {
-        
+        // Hopefully this won't need anything...
     }
     
     @Override
     public void update(Enemy host)
     {
-        // this action doesn't require that any further steps be taken!
+        // this action doesn't require that any further steps be taken
     }
     
     @Override

@@ -186,6 +186,28 @@ public class Arrow implements Projectile
         return new Line(startX, startY, endX, endY);   
     }
     
+    @Override
+    public float getDamage()
+    {
+        /*
+            final float xChange = p.getOldStartX() - p.getX();
+            final float yChange = p.getOldStartY() - p.getY();
+            
+            System.out.println("\t" + "x change : " + xChange);
+            System.out.println("\t" + "y change : " + yChange);
+            
+            System.out.println(
+                "\t trying damage equation " +
+                "d = abs(xChange+yChange) * 3");
+            final float damage = Math.abs(xChange + yChange) * 3;
+            System.out.print("== " + damage);
+            return damage;
+        */
+        return Math.abs(
+           (getOldStartX() - getX()) 
+         + (getOldStartY() - getY()) 
+            * 3);
+    }
     
     @Override
     public void setX(float f)
