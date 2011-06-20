@@ -19,7 +19,7 @@ import org.diediedie.actors.Enemy;
 import org.newdawn.slick.Graphics;
 
 /**
- * An Action performed by an Actor when in a certain State.
+ * An Action performed by an Enemy when in a certain State.
  */
 public interface Action
 {

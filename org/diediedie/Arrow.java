@@ -204,9 +204,9 @@ public class Arrow implements Projectile
             return damage;
         */
         return Math.abs(
-           (getOldStartX() - getX()) 
-         + (getOldStartY() - getY()) 
-            * 3);
+                   (getOldStartX() - getX()) 
+                 + (getOldStartY() - getY()) 
+                    * 4);
     }
     
     @Override

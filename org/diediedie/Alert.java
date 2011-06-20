@@ -56,7 +56,7 @@ public class Alert implements State
     { 
         if(!host.canSeePlayer())
         {
-            host.getTimeSinceLastSawPlayer();
+            host.getTimeLastSawPlayer();
         }
     }
     
@@ -94,10 +94,4 @@ public class Alert implements State
     {
         return currentAction;
     }
-    /*
-    @Override 
-    public Action getNextAction()
-    {
-        if(getCurrentActionType() == Look)
-    }*/
 }

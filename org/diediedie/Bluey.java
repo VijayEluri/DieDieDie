@@ -58,7 +58,7 @@ public class Bluey implements Enemy, StateMachine
     public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, 
                        RUN_SPEED = 3.1f, JUMP_SPEED = -5.5f,
                        ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;        
-    private long timeSinceLastSawPlayer = 0;
+    private long timeLastSawPlayer = 0;
     
     private State currentState = null;
     private Patrol patrol;
@@ -511,7 +511,7 @@ public class Bluey implements Enemy, StateMachine
             currentAnim = leftStandAnim;   
         }
         else throw new IllegalStateException(
-                            "standing dir neither left or right");
+            "standing dir neither left or right");
     }
     
     // Woah there!
@@ -580,15 +580,15 @@ public class Bluey implements Enemy, StateMachine
     }
     
     @Override
-    public long getTimeSinceLastSawPlayer()
+    public long getTimeLastSawPlayer()
     {
-        return timeSinceLastSawPlayer;
+        return timeLastSawPlayer;
     }   
     
     @Override
     public void setTimeLastSawPlayer(long time)
     {
-        timeSinceLastSawPlayer = time;
+        timeLastSawPlayer = time;
     }
     
     @Override

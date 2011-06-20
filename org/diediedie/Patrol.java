@@ -20,10 +20,11 @@ import org.diediedie.actors.State;
 import org.diediedie.actors.actions.*;
 import java.lang.Class;
 import java.util.Date;
+
  /**
-  * State class wherein an Enemy(Actor) moves around the Level on
-  * a repetitive set of paths, until interrupted due to seeing something 
-  * interesting :)
+  * State class wherein an Enemy(Actor) moves about their current
+  * platform until interrupted due to interaction with the Player.
+  * 
   */ 
 public class Patrol implements State
 {
@@ -35,7 +36,6 @@ public class Patrol implements State
     private StartWalking startWalking;
     private StopWalking  stopWalking;
     private State nextState = null;
-    
     private Action currentAction;    
     
     /**
@@ -62,13 +62,17 @@ public class Patrol implements State
         return currentAction;
     }
     
+    /*
+     * Makes the host enter this Patrol instance.
+     */
     @Override 
     public void enter()
     {
         if(!running)
         {
             running = true;
-            System.out.println("\tstarted " + this);
+            System.out.println(
+                "\t" + getHost() + " started " + this);
             currentAction.perform(host);
         }
     }
@@ -83,20 +87,20 @@ public class Patrol implements State
         /*System.out.println(
             "Patrol.update() --> currentAction: " + currentAction);*/
         
-        // NOT STARTED *OR* FINISHED
+        // Not yet begun
         if(!currentAction.hasStarted())
         {
             currentAction.perform(host);
             System.out.println(
                 "Patrol.update(): started " + currentAction);
         }
-        // STARTED BUT *NOT* FINISHED
+        // Not finished
         else if(!currentAction.hasFinished())
         {
             // update all started but non-finished actions
             currentAction.update(host);
         }
-        // STARTED *AND* FINISHED
+        // Finished
         else if(currentAction.hasFinished())
         {
             if(cls.equals(startWalking.getClass()))

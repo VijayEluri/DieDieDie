@@ -25,11 +25,15 @@ import java.util.ArrayList;
 import org.newdawn.slick.util.FastTrig;
 import java.lang.Math;
 import java.util.Calendar;
+import java.util.Date;
 import org.newdawn.slick.geom.GeomUtil;
 
 /**
  * Looks at the immediate area in the current Direction, relaying
  * information back to the Enemy's FSM
+ *
+ * Look instances contain a 'lastLookTime' long variable that contains
+ * the last time the current instance was 
  */
 public class Look implements Action
 {
@@ -37,7 +41,9 @@ public class Look implements Action
     private float xViewStart, yViewStart;
     private View view = null;    
     private Line sightLine = null; 
-    private Calendar cal;;
+    private Calendar cal;
+    private long lastLookTime;
+    
     /**
      * Look!
      */
@@ -47,7 +53,7 @@ public class Look implements Action
     }
     
     /*
-     * Resets all the vars
+     * Resets all the vars in this Look instance.
      */ 
     @Override
     public void reset()
@@ -56,16 +62,26 @@ public class Look implements Action
         finished = false;
         viewCreated = false;
         sightLine = null;
+        lastLookTime = 0;
         cal = Calendar.getInstance();
     }
     
+    /**
+     * Returns the last time this Look instance was called (zero if
+     * not yet called).
+     */
+    public long getLastLookTime()
+    {
+        return lastLookTime;
+    }
+    
     /*
-     * Rem: perform() is the entry point for States. 
+     * Performs this Look instance.
      */ 
     @Override
     public void perform(Enemy e)
     {
-        if(!started && !finished)
+        if(!started)// && !finished)
         {
             started = true;
             update(e);
@@ -87,6 +103,10 @@ public class Look implements Action
         }
     }
          
+    /*
+     * Updates the Look action. This creates a View object at Enemy e's
+     * location and analyses the contents for the Player.
+     */
     @Override
     public void update(Enemy e)
     {
