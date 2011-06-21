@@ -76,21 +76,25 @@ public class Look implements Action
     }
     
     /*
-     * Performs this Look instance.
+     * Perform this Look instance on the specified Enemy.
      */ 
     @Override
     public void perform(Enemy e)
     {
-        if(!started)// && !finished)
+        if(!started)
         {
             started = true;
             update(e);
             viewCreated = true;
-            System.out.println("Look.perform()");
+            System.out.println("starting Look.perform()");
         }
         else if(started && !finished)
         {
             update(e);
+        }
+        else
+        {
+            
         }
     }
     
@@ -104,8 +108,9 @@ public class Look implements Action
     }
          
     /*
-     * Updates the Look action. This creates a View object at Enemy e's
-     * location and analyses the contents for the Player.
+     * Updates the Look instance. Creates a View object from the Enemy's
+     * eye position and analyses the content for the Player and other
+     * suspicious entities.
      */
     @Override
     public void update(Enemy e)

@@ -34,7 +34,7 @@ import org.newdawn.slick.Graphics;
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */ 
-public class Bluey implements Enemy, StateMachine
+public class Bluey implements Enemy, StateMachine, Observer
 {
     // constants
     public static final int MAX_HEALTH = 50;
@@ -43,7 +43,6 @@ public class Bluey implements Enemy, StateMachine
     
     private Graphics g;
     private Date date;
-    
     
     public final String[] leftWalkPaths = 
     {
