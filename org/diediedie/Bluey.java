@@ -71,7 +71,9 @@ public class Bluey implements Enemy, StateMachine, Observer
     private Direction facing = null;
     private Level level;
     
-    
+    private int lookSeconds = 3;
+    // ^ number of seconds spent Looking when in Patrol State.
+      
     private long lastInfoCallTime = 0;
     // ^ used to store the time of the last call to printInfo()
     
@@ -108,7 +110,13 @@ public class Bluey implements Enemy, StateMachine, Observer
         yPos--;
         System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
     }
-    
+   
+    @Override
+    public int getLookSeconds()
+    {
+        return lookSeconds;
+    }
+   
     @Override
     public Set<LevelObject> getVisibleObjects()
     {
@@ -439,6 +447,8 @@ public class Bluey implements Enemy, StateMachine, Observer
     /*
      * Updates the current State (in turn performing its current Action)
      * and looking for any changes to Bluey.
+     *
+     * Will change the current State if necessary.
      * 
      * --> called by update()
      */ 
@@ -450,14 +460,11 @@ public class Bluey implements Enemy, StateMachine, Observer
             startFSM();
         }
         
-        currentState.update();
-        
         // Ascertain whether or not to change state
         if(currentState.equals(patrol))
         {
             if(hasSeenPlayer() || hasSeenPlayerEvidence())
             {
-                
                 System.out.println(this + " changing to alert");
                 changeState(alert);
             }
@@ -466,6 +473,9 @@ public class Bluey implements Enemy, StateMachine, Observer
         {
             // add change state conditions for Alert here
         }
+        
+        // perform the current state
+        currentState.update();
     }
     
     

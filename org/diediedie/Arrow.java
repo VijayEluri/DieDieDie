@@ -43,7 +43,7 @@ public class Arrow implements Projectile
                         GRAVITY_LINE = 1f, 
                         MOVE_SPEED = 0.6f, 
                         MAX_Y_SPEED = 24.5f,
-                        FALLING_ANGLE_CHANGE = 0.44f;
+                        FALLING_ANGLE_CHANGE = 0.440001f;
                         
     private float mouseX = 0, 
                   mouseY = 0,
