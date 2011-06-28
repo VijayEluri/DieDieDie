@@ -349,7 +349,7 @@ public class Player implements Actor, InputProviderListener
     }
     
     @Override
-    public int getHealth()
+    public float getHealth()
     {
         return health;
     }

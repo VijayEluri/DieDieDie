@@ -39,7 +39,7 @@ public class Patrol implements State
     private Action currentAction;    
     
     /**
-     * Associate this State with an Actor
+     * Associate this State with an Enemy
      */ 
     public Patrol(Enemy e)
     {
@@ -77,13 +77,14 @@ public class Patrol implements State
         }
     }
     
+    
+    
     /**
      * Update / change the current Action.
      */ 
     @Override
     public void update()
     {
-        final Class cls = currentAction.getClass();
         /*System.out.println(
             "Patrol.update() --> currentAction: " + currentAction);*/
         
@@ -103,11 +104,18 @@ public class Patrol implements State
         // Finished
         else if(currentAction.hasFinished())
         {
+            System.out.println("Patrol.update " + currentAction +
+                " has finished.");
+            // Work out the next Action
+            final Class cls = getCurrentActionType();
+            
             if(cls.equals(startWalking.getClass()))
             {
-                System.out.println("Patrol.update(): changing state");   
+                System.out.print(
+                    "Patrol.update : next state : ");  
                 currentAction = new Look();    
             }
+            System.out.println(currentAction);
         }
     }
     

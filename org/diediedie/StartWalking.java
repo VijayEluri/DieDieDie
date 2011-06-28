@@ -21,6 +21,7 @@ import org.newdawn.slick.Graphics;
 
 /**
  * Causes an Enemy to *start* walking in the currently faced direction.
+ * This is a 'one-shot' action (no updating).
  */ 
 public class StartWalking implements Action
 {   

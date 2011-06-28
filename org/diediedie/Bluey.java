@@ -67,7 +67,7 @@ public class Bluey implements Enemy, StateMachine, Observer
                     canSeePlayer = false, hasSeenPlayer = false,
                     fsmRunning = false, seenPlayerEvidence = false;
                     
-    private int health;
+    private float health;
     private Direction facing = null;
     private Level level;
     
@@ -309,7 +309,7 @@ public class Bluey implements Enemy, StateMachine, Observer
     }
     
     @Override
-    public int getHealth()
+    public float getHealth()
     {
         return health;
     }
@@ -410,7 +410,7 @@ public class Bluey implements Enemy, StateMachine, Observer
             return;
         }
         updateState();
-        printInfo(5);
+        //printInfo(5);
     }
     
     /*
@@ -488,7 +488,9 @@ public class Bluey implements Enemy, StateMachine, Observer
     public void doCollision(Projectile p)
     {
         System.out.println(this + "doCollision " + p);
-        this.health -= p.getDamage();
+        final float damage = p.getDamage();
+        this.health -= damage;
+        System.out.println("Projectile caused " + damage + " damage"); 
         System.out.println("\t" + this + " health : " + this.health);
     }
     

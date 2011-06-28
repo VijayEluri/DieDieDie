@@ -68,6 +68,7 @@ public class Arrow implements Projectile
     
     /**
      * Creates a new arrow at the given position.
+     *
      */ 
     public Arrow(float xPos, float yPos, Level lev, int mouseX, 
                  int mouseY)
@@ -78,12 +79,18 @@ public class Arrow implements Projectile
         calculateEndPos();
     }
     
+    /**
+     * Returns the previous x position of the start of the arrow
+     */
     @Override
     public float getOldStartX()
     {
         return oldX;
     }
     
+    /**
+     * Returns the previous y position of the start of the arrow
+     */
     @Override
     public float getOldStartY()
     {
@@ -99,7 +106,10 @@ public class Arrow implements Projectile
         } 
         // System.out.println(this + "| grav: " + gravity);
     }  
-
+    
+    /** 
+     * 
+     */
     @Override
     public void setLevel(Level l)
     {
@@ -171,9 +181,7 @@ public class Arrow implements Projectile
     @Override // boilerplate ignorable
     public void update(){ }
     
-    /**
-     * Updates the speed of a release arrow
-     */ 
+   
     protected void updateSpeed()
     {          
         setXSpeed(MOVE_SPEED * accelX);
@@ -189,12 +197,14 @@ public class Arrow implements Projectile
     @Override
     public float getDamage()
     {
+
+        final float xChange = Math.abs(getOldStartX() - getX());
+        final float yChange = Math.abs(getOldStartY() - getY());
         /*
-            final float xChange = p.getOldStartX() - p.getX();
-            final float yChange = p.getOldStartY() - p.getY();
-            
-            System.out.println("\t" + "x change : " + xChange);
-            System.out.println("\t" + "y change : " + yChange);
+            System.out.println("\tARROW DAMAGE");
+            System.out.println("\tSpeed :");
+            System.out.println("\t\t" + "x change : " + xChange);
+            System.out.println("\t\t" + "y change : " + yChange);
             
             System.out.println(
                 "\t trying damage equation " +
@@ -202,11 +212,31 @@ public class Arrow implements Projectile
             final float damage = Math.abs(xChange + yChange) * 3;
             System.out.print("== " + damage);
             return damage;
+            
+            System.out.println("\t damage == " + damage);
         */
-        return Math.abs(
-                   (getOldStartX() - getX()) 
-                 + (getOldStartY() - getY()) 
-                    * 4);
+        System.out.println("Speed changes (last frame, this frame):");
+        System.out.println("--------------------------------------");
+        System.out.println(
+            "\t x : " + xChange + "\n" +
+            "\t y : " + yChange + "\n");
+        
+        final float MULT = 3.3f;
+        
+        float bigger;
+        if(xChange > yChange) 
+        {
+            bigger  = xChange;
+        }
+        else 
+        {
+            bigger = yChange;
+        }
+        System.out.println("\tUsing " + bigger);
+        final float damage = bigger * MULT;
+        System.out.println(
+            "\t" + bigger + " * " + MULT + " == " + damage); 
+        return damage;
     }
     
     @Override

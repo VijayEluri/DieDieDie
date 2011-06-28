@@ -32,7 +32,7 @@ public interface Actor extends MovableObject
     void die();
     Animation getCurrentAnim();
     Direction getFacing();
-    int getHealth();    
+    float getHealth();    
     float getJumpSpeed();
     float getMoveSpeed();    
     float getXSpeed();
