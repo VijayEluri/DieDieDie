@@ -1,0 +1,65 @@
+Bluey - Alert State-Action Tree
+================================
+
+Documents all possible paths for Bluey enemies when in Alert State.
+
+
+
+StateName :  Alert
+---------
+
+Glossary
+--------
+
+'PlayerEvidence'
+
+    aka     DeadEnemy,
+            PlayerProjectile (tbd moving or static?)
+            hitByProjectile (tbd Enemy's own crossfire?)
+            attackedByPlayer
+            ...?
+            
+
+
+In-cause(s)
+-----------
+        Patrol (..?)
+
+        Behaviour is dependant on the conditions leading to invocation
+        but one can safely assume the Enemy effected will look for
+        and attack the Player i.e. will have some kind of knowledge of
+        the Player's existance and react accordingly.
+                        
+Out-cause(s)        
+------------
+        
+        Timeout:: If X seconds has passed
+
+            and  hasNotSeenPlayer
+            and  hasNotSeenPlayerEvidence
+                                
+        
+
+Follows :   Patrol...
+-------
+            
+Starting Req(s):
+-------
+           Enemy has seen Player
+                |
+               and/or
+                |
+            Enemy has Knowledge of 'Player-Evidence':
+            e.g.    
+Actions 
+--------
+           Look
+            Jump
+             StartWalking,
+                StopWalking,
+
+Action Tree 
+-----------
+
+Start Conditions:
+    Can see player || can s
