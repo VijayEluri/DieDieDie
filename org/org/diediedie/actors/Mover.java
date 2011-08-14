@@ -16,13 +16,14 @@
  */
 package org.diediedie.actors;
 import java.lang.Math;
+
 import org.newdawn.slick.util.FastTrig;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.Collider;
+import org.diediedie.actors.tools.Collider;
 import org.diediedie.actors.Aligner;
 
 /**
- * Class used to Actors and Projectiles around a Level. 
+ * Class used to Actors and Projectile(s) around a Level. 
  */ 
 public class Mover
 {    

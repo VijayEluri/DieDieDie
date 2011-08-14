@@ -1,4 +1,4 @@
-package org.diediedie.actors;
+package org.diediedie.actors.tools;
 import org.diediedie.actors.Actor;
 
 /**

@@ -15,7 +15,7 @@
  *      MA 02110-1301, USA.
  */
 
-package org.diediedie.actors;
+package org.diediedie.actors.tools;
 
 import java.util.List;
 import java.util.ArrayList;

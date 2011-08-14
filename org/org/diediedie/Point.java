@@ -1,4 +1,4 @@
-package org.diediedie.actors;
+package org.diediedie;
 
 /*
  * A 2D Point on a 2D plain.

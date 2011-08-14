@@ -19,7 +19,12 @@ package org.diediedie;
 import java.io.*;
 import org.diediedie.NavMesh;
 import org.diediedie.NavMesh.MeshMaker;
-import org.diediedie.actors.*;
+import org.diediedie.actors.Actor;
+import org.diediedie.actors.Bluey;
+import org.diediedie.actors.Enemy;
+import org.diediedie.actors.Player;
+import org.diediedie.actors.tools.AnimCreator;
+import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
@@ -230,7 +235,8 @@ public class Level extends TiledMap
     /**
      * Returns the name of this Level.
      */ 
-    public String toString()
+    @Override
+	public String toString()
     {
         return name;
     }
@@ -274,7 +280,8 @@ public class Level extends TiledMap
     
     
         
-    public void render(int x, int y)
+    @Override
+	public void render(int x, int y)
     {
         // keep the ordering!
         render(x, y, backgroundLayer.index);

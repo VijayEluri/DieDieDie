@@ -15,18 +15,19 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.actions;
-import org.diediedie.actors.Enemy;
+
+import org.diediedie.actors.LevelObject;
 import org.newdawn.slick.Graphics;
 
 /**
- * An Action performed by an Enemy when in a certain State.
+ * An Action performed by a LevelObject when in a certain State.
  */
 public interface Action
 {
-    void perform(Enemy e);
+    void perform(LevelObject e);
     boolean hasStarted();
-    boolean hasFinished(); 
-    void update(Enemy e);
+    boolean hasFinished();
+    void update(LevelObject e);
     void draw(Graphics g);
     void reset();
 }

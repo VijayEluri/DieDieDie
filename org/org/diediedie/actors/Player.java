@@ -15,7 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
-
+import org.diediedie.actors.tools.AnimCreator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,9 +34,8 @@ import org.newdawn.slick.command.KeyControl;
 import org.diediedie.Level;
 import org.diediedie.Tile;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.AnimCreator;
 import org.diediedie.actors.Arrow;
-import org.diediedie.actors.Direction;
+import org.diediedie.actors.tools.Direction;
 
 /**
  * The main Player Character. 

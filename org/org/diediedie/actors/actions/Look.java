@@ -15,16 +15,24 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.actions;
-import org.diediedie.actors.*;
-import org.diediedie.actors.actions.Action;
-import org.newdawn.slick.geom.*;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Color;
-import java.util.List;
 import java.util.ArrayList;
-import org.newdawn.slick.util.FastTrig;
+import java.util.List;
 import java.util.Calendar;
-
+import org.diediedie.actors.Enemy;
+import org.diediedie.Point;
+import org.diediedie.actors.Actor;
+import org.diediedie.actors.LevelObject;
+import org.diediedie.actors.Observer;
+import org.diediedie.actors.Player;
+import org.diediedie.actors.Projectile;
+import org.diediedie.actors.tools.AnimCreator;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Path;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.util.FastTrig;
+import org.diediedie.actors.tools.Direction;
 /**
  * Looks at the immediate area in the current Direction, relaying
  * information back to the Enemy's FSM
@@ -76,18 +84,18 @@ public class Look implements Action
      * Perform this Look instance on the specified Enemy.
      */ 
     @Override
-    public void perform(Enemy e)
+    public void perform(LevelObject lo)
     {
         if(!started)
         {
             started = true;
-            update(e);
+            update(lo);
             viewCreated = true;
             System.out.println("starting Look.perform()");
         }
         else if(!finished)
         {
-            update(e);
+            update(lo);
         }
         else
         {
@@ -105,26 +113,26 @@ public class Look implements Action
     }
          
     /*
-     * Updates the Look instance. Creates a View object from the Enemy's
+     * Updates the Look instance. Creates a View object from the Observer's
      * eye position and analyses the content for the Player and other
      * suspicious entities.
      */
     @Override
-    public void update(Enemy e)
+    public void update(LevelObject lo)//Observer o)
     {
-        view = new View(e);
-        analyseView(e, view.getShape());   
+        view = new View((Observer)lo);
+        analyseView((Observer)lo, view.getShape());   
     }
     
     /*
      * Analyses an Enemy's view Shape for various LevelObjects. 
      */ 
-    private void analyseView(Enemy e, Shape sh)
+    private void analyseView(Observer o, Shape sh)
     {
         //List<Actor> actors = e.getLevel().getActors();
         
-        checkVisibleActors(e, sh, e.getLevel().getActors());
-        checkVisiblePlayerObjects(e, sh, e.getLevel().getPlayer());
+        checkVisibleActors(o, sh, o.getLevel().getActors());
+        checkVisiblePlayerObjects(o, sh, o.getLevel().getPlayer());
     }
     
     /*
@@ -132,7 +140,7 @@ public class Look implements Action
      * 
      * So far: Projectiles.
      */ 
-    private void checkVisiblePlayerObjects(Enemy e, Shape sh, Player pl)
+    private void checkVisiblePlayerObjects(Observer e, Shape sh, Player pl)
     {
         List<Point> points;
         for(Projectile pr : pl.getFiredProjectiles())
@@ -154,9 +162,9 @@ public class Look implements Action
     
     /*
      * Checks for the visibility of the other Actors on the Level to 
-     * this Enemy. 
+     * this Enemy. Used by Observers.
      */
-    private void checkVisibleActors(Enemy e, Shape sh, List<Actor> actors)
+    private void checkVisibleActors(Observer e, Shape sh, List<Actor> actors)
     {
         for(Actor a : actors)
         {
@@ -164,8 +172,7 @@ public class Look implements Action
             {
                 if(actorIsVisible(e, sh, a))
                 {
-                    if(a.getClass().equals(
-                       e.getLevel().getPlayer().getClass()))
+                    if(a.getClass().equals(e.getLevel().getPlayer().getClass()))
                     {
                         e.setCanSeenPlayer(true);
                     }
@@ -213,17 +220,17 @@ public class Look implements Action
     }
     
     /*
-     * Returns true if Actor a is visible to Enemy e.
+     * Returns true if Actor a is visible to Observer o.
      */ 
-    public final boolean actorIsVisible(Enemy e, Shape sh, Actor a)
+    public final boolean actorIsVisible(Observer o, Shape sh, Actor a)
     {
         final float[] pos = AnimCreator.getCurrentFrameRect(a).getCenter();
         final Point p = new Point(pos[0], pos[1]);
         
-        if(actorInView(sh, a) && !isViewBlocked(e, p))
+        if(actorInView(sh, a) && !isViewBlocked(o, p))
         {
             //System.out.println(a + " | is visible to | " + e);
-            e.setTimeLastSawPlayer(cal.getTime().getTime());
+            o.setTimeLastSawPlayer(cal.getTime().getTime());
             return true;
         }  
         return false;
@@ -232,16 +239,16 @@ public class Look implements Action
     
     
     /*
-     * Returns true if a line from Enemy e's eye position to the given
+     * Returns true if a line from Observer o's eye position to the given
      * position collides with any obstacles on the Level.
      */ 
-    private boolean isViewBlocked(Enemy e, Point pos)
+    private boolean isViewBlocked(Observer o, Point pos)
     {
         // create line from the view start to the x/y coord pos. 
         // if unobstructed, return false        
-        sightLine = new Line(e.getEyePosX(), e.getEyePosY(), pos.x, pos.y);
+        sightLine = new Line(o.getEyePosX(), o.getEyePosY(), pos.x, pos.y);
        
-        if(e.getLevel().collides(sightLine))
+        if(o.getLevel().collides(sightLine))
         {
             sightLine = null;
             return true;
@@ -281,14 +288,17 @@ public class Look implements Action
         // view geometry components
         private float xViewStart, yViewStart, /*topEndX,*/
         			  topEndY, endX, botEndY;
+
+		private Observer observer;
           
        /**
         * Constructs a view from a Enemy's facing direction and position 
         */
-        View(Enemy e)
+        View(Observer ob)
         {
-            viewSize = e.getViewSize();
-            constructFOV(e);
+            viewSize = ob.getViewSize();
+            constructFOV(ob);
+            this.observer = ob;
             //System.out.println("constructed view");
         } 
         
@@ -310,9 +320,9 @@ public class Look implements Action
         /*
          * Create FOV Lines
          */ 
-        private void constructFOV(Enemy e)
+        private void constructFOV(Observer e)
         {            
-            xViewStart = e.getEyePosX();
+			xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
             
             

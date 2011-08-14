@@ -21,24 +21,16 @@ import java.util.*;
 /**
  * Enemy. Actors with a few methods related to 'AI'.
  */ 
-public interface Enemy extends Actor
+public interface Enemy extends Actor, Observer
 {
     float getViewSize();
-    
-    void setMoveSpeed(float f);
-    void setMoving(boolean b);
-    
-    float getEyePosX();
-    float getEyePosY();
-        
     long getTimeLastSawPlayer();
     void setTimeLastSawPlayer(long time);
-    void changeState(String state_name);
+    
     // Enemy's visibility of Player
     boolean canSeePlayer();
     boolean hasSeenPlayer();
     boolean hasSeenPlayerEvidence();
-    
     void setSeenPlayerEvidence(boolean b);
     void setHasSeenPlayer(boolean b);
     void setCanSeenPlayer(boolean b);

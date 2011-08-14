@@ -15,7 +15,8 @@
  *      MA 02110-1301, USA.
  */
 
-package org.diediedie.actors;
+package org.diediedie.actors.tools;
+
 public enum Direction
 {
     LEFT, RIGHT, UP, DOWN

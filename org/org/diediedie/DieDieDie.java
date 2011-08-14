@@ -17,7 +17,7 @@
 package org.diediedie;
 
 import org.diediedie.actors.Player;
-import org.diediedie.actors.Direction;
+import org.diediedie.actors.tools.Direction;
 import java.io.FileInputStream;
 import java.io.File;
 import org.newdawn.slick.AppGameContainer;
@@ -46,14 +46,16 @@ public class DieDieDie extends BasicGame {
 	/**
 	 * Create the game
 	 */
-	public DieDieDie() {
+	public DieDieDie() 
+	{
 		super("DieDieDie");
 	}
 
 	/**
 	 * Initialises the game. Of course.
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) throws SlickException 
+	{
 		container.setVSync(true);
 		// container.setTargetFrameRate(60);
 		inputProv = new InputProvider(container.getInput());
@@ -72,7 +74,8 @@ public class DieDieDie extends BasicGame {
 	/*
 	 * Sets up the Levels objects
 	 */
-	private void createLevels() {
+	private void createLevels()
+	{
 		level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
 				Direction.LEFT, GRAVITY);
 	}
@@ -82,12 +85,15 @@ public class DieDieDie extends BasicGame {
 	 * nice wrapper for the lavel path.
 	 */
 	private Level loadLevel(String name, String levelPath, String tileSetsPath,
-			Direction startDir, float grav) {
-		try {
+							Direction startDir, float grav)
+	{
+		try
+		{
 			FileInputStream in = new FileInputStream(new File(levelPath));
 
 			return new Level(name, in, tileSetsPath, startDir, grav);
-		} catch (Exception e) {
+		} catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 		return null;
@@ -96,7 +102,8 @@ public class DieDieDie extends BasicGame {
 	/**
 	 * Updates the game's state.
 	 */
-	public void update(GameContainer container, int delta) {
+	public void update(GameContainer container, int delta)
+	{
 		player.update();
 		currentLevel.update();
 	}
@@ -104,7 +111,8 @@ public class DieDieDie extends BasicGame {
 	/**
 	 * Render the updated game state.
 	 */
-	public void render(GameContainer container, Graphics g) {
+	public void render(GameContainer container, Graphics g)
+	{
 		currentLevel.draw(g);
 		player.draw(g);
 	}
@@ -112,9 +120,10 @@ public class DieDieDie extends BasicGame {
 	/**
 	 * For running the program from the command line.
 	 */
-	public static void main(String[] argv) throws SlickException {
-		AppGameContainer container = new AppGameContainer(new DieDieDie(),
-				xSize, ySize, false);
+	public static void main(String[] argv) throws SlickException
+	{
+		AppGameContainer container = new AppGameContainer(
+				new DieDieDie(), xSize, ySize, false);
 		container.start();
 	}
 }

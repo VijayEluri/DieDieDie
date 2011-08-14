@@ -17,8 +17,9 @@
 package org.diediedie.actors;
 
 import org.diediedie.Level;
-import org.diediedie.actors.Collider;
+import org.diediedie.actors.Projectile;
 import org.diediedie.actors.Enemy;
+import org.diediedie.actors.tools.Collider;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Shape;
@@ -90,6 +91,13 @@ public class Arrow implements Projectile
         return oldX;
     }
     
+    @Override
+    public float getMoveSpeed()
+    {
+    	return -1.0f;
+    }
+    
+    
     /**
      * Returns the previous y position of the start of the arrow
      */
@@ -119,7 +127,8 @@ public class Arrow implements Projectile
     }
 
     
-    public final float getMaxGravity()
+    @Override
+	public final float getMaxGravity()
     {
         return MAX_GRAVITY;
     }
@@ -139,7 +148,8 @@ public class Arrow implements Projectile
     /**
      * Informs the Arrow object that it has been released by the player
      */ 
-    public void release(float power)
+    @Override
+	public void release(float power)
     {
         accelX = power * AIR_REST;
         accelY = power * AIR_REST;
@@ -165,7 +175,8 @@ public class Arrow implements Projectile
      * Allows the Player to update the movementAngle (aim) of the arrow prior
      * to release, based upon the mouse's position. 
      */ 
-    public void updateAiming(float mouseX, float mouseY)
+    @Override
+	public void updateAiming(float mouseX, float mouseY)
     {       
         setMovementAngle(mouseX, mouseY);
         calculateEndPos();
@@ -277,7 +288,8 @@ public class Arrow implements Projectile
      *
      * On collision, initiates damage on any Enemy it hits.
      */
-    public void updatePosition()
+    @Override
+	public void updatePosition()
     {
         
         /*System.out.println("Arrow(" + hashCode() + ")updatePosition(): "
@@ -308,7 +320,8 @@ public class Arrow implements Projectile
     /*
      * Stops the movement of the Arrow
      */ 
-    public void stop()
+    @Override
+	public void stop()
     {
         /*System.out.println("stopping Arrow " + hashCode() + "; speed " +
                         speedX + ", " + speedY);*/
@@ -332,7 +345,8 @@ public class Arrow implements Projectile
     }
     
     // applies 'gravity' to the arrow WHEN IT IS IN FLIGHT
-    public void adjustFacingAngle()
+    @Override
+	public void adjustFacingAngle()
     {
         if(!isFlying())
         {
@@ -379,7 +393,8 @@ public class Arrow implements Projectile
     /**
      * Guess.
      */ 
-    public boolean isGoingDown()
+    @Override
+	public boolean isGoingDown()
     {
         if(oldY < startY)
         {
@@ -393,7 +408,8 @@ public class Arrow implements Projectile
      * Applies 'gravity' to the y-axis position once it has left the 
      * player
      */ 
-    public float getGravity()
+    @Override
+	public float getGravity()
     {
         return gravity;
     }
@@ -454,7 +470,8 @@ public class Arrow implements Projectile
                            Color.red);
     }
     
-    public float getMovementAngle()
+    @Override
+	public float getMovementAngle()
     {
         return movementAngle;
     }

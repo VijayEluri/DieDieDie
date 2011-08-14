@@ -14,8 +14,11 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie.actors;
+package org.diediedie.actors.tools;
+import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.Actor;
+import org.diediedie.actors.Enemy;
+import org.diediedie.actors.Projectile;
 import org.newdawn.slick.geom.Shape;
 
 /**

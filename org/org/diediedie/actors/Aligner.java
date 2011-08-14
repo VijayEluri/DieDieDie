@@ -18,6 +18,8 @@
 
 package org.diediedie.actors;
 
+import org.diediedie.actors.tools.Collider;
+
 /**
  * Utility class for aligning an Actor against a Tile following a
  * collision

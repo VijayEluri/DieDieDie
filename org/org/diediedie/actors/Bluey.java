@@ -20,15 +20,12 @@ import org.diediedie.DevTools;
 import java.util.Date;
 import org.diediedie.Level;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.Alert;
-import org.diediedie.actors.Direction;
+import org.diediedie.actors.tools.Direction;
 import org.diediedie.actors.Enemy;
-import org.diediedie.actors.State;
-import org.diediedie.actors.actions.*;
 import java.util.Set;
 import java.util.HashSet;
 import org.diediedie.Tile;
-import org.diediedie.actors.AnimCreator;
+import org.diediedie.actors.tools.AnimCreator;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Graphics;
@@ -37,7 +34,7 @@ import org.newdawn.slick.geom.Shape;
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */
-public class Bluey implements Enemy, StateMachine, Observer 
+public class Bluey implements Enemy, Observer 
 {
 	// constants
 	public static final int MAX_HEALTH = 50;
@@ -57,16 +54,12 @@ public class Bluey implements Enemy, StateMachine, Observer
 
 	private long timeLastSawPlayer = 0L;
 
-	private State currentState = null;
-	private Patrol patrol;
-	private Alert alert;
-
 	private boolean setUp = false, canJump = false, moving = false,
 			canSeePlayer = false, hasSeenPlayer = false, fsmRunning = false,
 			seenPlayerEvidence = false;
 
 	private float health;
-	private Direction facing = null;
+	private org.diediedie.actors.tools.Direction facing = null;
 	private Level level;
 
 	private int lookSeconds = 3;
@@ -94,7 +87,7 @@ public class Bluey implements Enemy, StateMachine, Observer
 			tileHeight = t.tileHeight;
 			createAnimations();
 			health = MAX_HEALTH;
-			createStates();
+
 			canSeePlayer = false;
 			hasSeenPlayer = false;
 			setUp = true;
@@ -113,18 +106,15 @@ public class Bluey implements Enemy, StateMachine, Observer
 	{
 		return lookSeconds;
 	}
-
+	
+	
+	
 	@Override
 	public Set<LevelObject> getVisibleObjects() 
 	{
 		return visibleObjects;
 	}
 
-	@Override
-	public boolean isFSMRunning()
-	{
-		return fsmRunning;
-	}
 
 	@Override
 	public void setLevel(Level l)
@@ -132,38 +122,18 @@ public class Bluey implements Enemy, StateMachine, Observer
 		level = l;
 	}
 
-	@Override
 	public void setMoveSpeed(float f)
 	{
 		moveSpeed = f;
 		System.out.println("bluey setMoveSpeed: " + f);
 	}
 
-	@Override
 	public void setMoving(boolean m) 
 	{
 		moving = m;
 	}
 
-	@Override
-	public void stopFSM()
-	{
-		System.out.println("stopping FSM on " + this + ", current state "
-				+ currentState);
-		currentState.exit();
-		fsmRunning = false;
-	}
-
-	@Override
-	public void startFSM()
-	{
-
-		System.out.println(this + "\n\tstartFSM()");
-		fsmRunning = true;
-		setInitialState();
-		currentState.enter();
-	}
-
+	
 	@Override
 	public Level getLevel()
 	{
@@ -221,12 +191,6 @@ public class Bluey implements Enemy, StateMachine, Observer
 	}
 
 	@Override
-	public void setInitialState()
-	{
-		currentState = patrol;
-	}
-
-	@Override
 	public void setX(float x)
 	{
 		xPos = x;
@@ -238,14 +202,7 @@ public class Bluey implements Enemy, StateMachine, Observer
 		yPos = y;
 	}
 
-	@Override
-	public void createStates() 
-	{
-		System.out.println("creating states for " + this);
-		patrol = new Patrol(this);
-		alert = new Alert(this);
-		setInitialState();
-	}
+
 
 	@Override
 	public void setJump(boolean b)
@@ -254,11 +211,7 @@ public class Bluey implements Enemy, StateMachine, Observer
 		// System.out.println("bluey: canJump == " + canJump);
 	}
 
-	@Override
-	public State getState() 
-	{
-		return currentState;
-	}
+	
 
 	@Override
 	public void resetAccelX() 
@@ -308,12 +261,7 @@ public class Bluey implements Enemy, StateMachine, Observer
 		return health;
 	}
 
-	@Override
-	public void changeState(State nextState) 
-	{
-		currentState.exit();
-		currentState = nextState;
-	}
+	
 
 	@Override
 	public float getYSpeed()
@@ -403,7 +351,7 @@ public class Bluey implements Enemy, StateMachine, Observer
 			System.out.println(this + " is dead!");
 			return;
 		}
-		updateState();
+		
 		// printInfo(5);
 	}
 
@@ -423,7 +371,7 @@ public class Bluey implements Enemy, StateMachine, Observer
 		if ((now - lastInfoCallTime) >= seconds * 1000)
 		{
 			System.out.println("Bluey : hashcode " + hashCode()
-					+ "\n\thealth\t\t" + health + "\n\tstate\t\t" + getState()
+					+ "\n\thealth\t\t" + health 
 					+ "\n\tseenPlayer\t" + hasSeenPlayer()
 					+ "\n\tseenEvidence\t" + hasSeenPlayerEvidence()
 					+ "\n\tcanSeePlayer\t" + canSeePlayer()
@@ -433,48 +381,6 @@ public class Bluey implements Enemy, StateMachine, Observer
 		}
 	}
 
-	/*
-	 * Updates the current State (in turn performing its current Action) and
-	 * looking for any changes to Bluey.
-	 * 
-	 * Will change the current State if necessary.
-	 * 
-	 * --> called by update()
-	 */
-	private void updateState() 
-	{
-		// Start the machine!
-		if (!isFSMRunning() && (health > 0)) 
-		{
-			startFSM();
-		}
-
-		// Ascertain whether or not to change state
-		if (currentState.equals(patrol)) 
-		{
-			
-		} 
-		else if (currentState.equals(alert))
-		{
-			// add state conditions for Alert here
-			//if(hasNotSeenPlayerFor(xSeconds))... back to Patrol??
-		
-			
-		}
-
-		// perform the current state
-		currentState.update();
-	}
-	
-	@Override
-	public void changeState(String s)
-	{
-		System.out.println("Bluey change state : " + s);
-		if(s.equals("Alert"))
-		{
-			currentState = alert;
-		}
-	}
 	
 	/*
 	 * Called by Collider when a Projectile, p, impacts an Enemy (in the case of
@@ -487,7 +393,7 @@ public class Bluey implements Enemy, StateMachine, Observer
 		System.out.println(this + "doCollision " + p);
 		final float damage = p.getDamage();
 
-		DevTools.printMethods(p);
+		//DevTools.printMethods(p);
 
 		this.health -= damage;
 		System.out.println("Projectile caused " + damage + " damage");
@@ -641,11 +547,11 @@ public class Bluey implements Enemy, StateMachine, Observer
 		drawProjectiles(g);
 
 		// this is just debug code to draw; it won't be here for ever :)
-		if (currentState.getClass().equals(patrol.getClass())) 
+		/*if (currentState.getClass().equals(patrol.getClass())) 
 		{
 			Action act = patrol.getCurrentAction();
 			act.draw(g);
-		}
+		}*/
 	}
 
 	public Graphics getGraphics() 

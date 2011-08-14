@@ -16,7 +16,7 @@
  */
  
 package org.diediedie.actors;
-import org.diediedie.actors.Direction;
+import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.Shape;
 
@@ -31,12 +31,11 @@ public interface Actor extends MovableObject
     Direction getFacing();
     float getHealth();    
     float getJumpSpeed();
-    float getMoveSpeed();    
-    float getXSpeed();
-    float getYSpeed();
     Shape getZone();    
     void setJump(boolean b);
     void jump();
     void setFacing(Direction d);
-    void resetAccelX();
+	void resetAccelX();
+    //float getWalkSpeed();
+    //void setMoving(boolean b);
 }  
