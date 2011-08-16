@@ -21,6 +21,7 @@ import java.util.Date;
 import org.diediedie.Level;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.tools.Direction;
+import org.diediedie.actors.tools.Mover;
 import org.diediedie.actors.Enemy;
 import java.util.Set;
 import java.util.HashSet;
@@ -36,21 +37,26 @@ import org.newdawn.slick.geom.Shape;
  */
 public class Bluey implements Enemy, Observer 
 {
-	// constants
 	public static final int MAX_HEALTH = 50;
-	private float viewSize = 500f;
+	
+	// viewSize - size of the triangular view shape used for Looking for 
+	// LevelObjects
+	private final float viewSize = 500f;
 	public final String leftStandPath = "data/bluey_standing_left.png";
-
 	private Graphics g;
 	private Date date;
-
-	public final String[] leftWalkPaths = { "data/bluey_walk_left_1.png",
-			"data/bluey_walk_left_2.png", "data/bluey_walk_left_3.png",
-			"data/bluey_walk_left_4.png", "data/bluey_walk_left_5.png",
-			"data/bluey_walk_left_6.png" };
-
-	public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, RUN_SPEED = 3.1f,
-			JUMP_SPEED = -5.5f, ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;
+	public final String[] leftWalkPaths = {"data/bluey_walk_left_1.png",
+										   "data/bluey_walk_left_2.png", 
+										   "data/bluey_walk_left_3.png",
+										   "data/bluey_walk_left_4.png", 
+										   "data/bluey_walk_left_5.png",
+										   "data/bluey_walk_left_6.png" };
+	public final float MAX_Y_SPEED = 20.5f, 
+					   WALK_SPEED = 1f, 
+					   RUN_SPEED = 3.1f,
+					   JUMP_SPEED = -5.5f, 
+					   ACCEL_RATE = 0.03f, 
+					   EYE_OFFSET_HEIGHT = 5f;
 
 	private long timeLastSawPlayer = 0L;
 
@@ -59,10 +65,10 @@ public class Bluey implements Enemy, Observer
 			seenPlayerEvidence = false;
 
 	private float health;
-	private org.diediedie.actors.tools.Direction facing = null;
+	private Direction facing = null;
 	private Level level;
 
-	private int lookSeconds = 3;
+	private float lookSeconds = 1.5f;
 	// ^ number of seconds spent Looking when in Patrol State.
 
 	private long lastInfoCallTime = 0;
@@ -102,19 +108,16 @@ public class Bluey implements Enemy, Observer
 	}
 
 	@Override
-	public int getLookSeconds() 
+	public float getLookSeconds() 
 	{
 		return lookSeconds;
 	}
-	
-	
 	
 	@Override
 	public Set<LevelObject> getVisibleObjects() 
 	{
 		return visibleObjects;
 	}
-
 
 	@Override
 	public void setLevel(Level l)
@@ -132,7 +135,6 @@ public class Bluey implements Enemy, Observer
 	{
 		moving = m;
 	}
-
 	
 	@Override
 	public Level getLevel()
@@ -143,7 +145,6 @@ public class Bluey implements Enemy, Observer
 	public void addVisibleObject(LevelObject lo)
 	{
 		visibleObjects.add(lo);
-
 	}
 
 	@Override

@@ -698,7 +698,7 @@ public class NavMesh implements Drawable
          * Returns true if two given Tiles are +/- by one vertically
          * and equal horizontally
          */ 
-        private static boolean areVerticalNeighbours(Tile original,
+        /*private static boolean areVerticalNeighbours(Tile original,
                                                      Tile possible)
         {
             if(original.xCoord == possible.xCoord)
@@ -707,14 +707,14 @@ public class NavMesh implements Drawable
                     ||
                    possible.yCoord == (original.yCoord - 1))
                 {
-                   /* System.out.println("vert neighbours: " + original +
-                                        ", " + possible);*/
+                    System.out.println("vert neighbours: " + original +
+                                        ", " + possible);
                     return true;   
                 }
             }
             
             return false;
-        }
+        }*/
 
         
         /*

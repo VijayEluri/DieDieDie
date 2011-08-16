@@ -20,6 +20,7 @@ import org.diediedie.Level;
 import org.diediedie.actors.Projectile;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.tools.Collider;
+import org.diediedie.actors.tools.Mover;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Shape;

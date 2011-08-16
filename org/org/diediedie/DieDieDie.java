@@ -30,7 +30,8 @@ import org.newdawn.slick.command.InputProvider;
 /**
  * DieDieDie
  */
-public class DieDieDie extends BasicGame {
+public class DieDieDie extends BasicGame
+{
 	private Player player;
 
 	private InputProvider inputProv = null;
@@ -92,7 +93,8 @@ public class DieDieDie extends BasicGame {
 			FileInputStream in = new FileInputStream(new File(levelPath));
 
 			return new Level(name, in, tileSetsPath, startDir, grav);
-		} catch (Exception e) 
+		} 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}

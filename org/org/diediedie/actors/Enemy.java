@@ -15,6 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+import org.diediedie.actors.statemachine.StateMachine;
 import org.newdawn.slick.Graphics;
 import java.util.*;
 
@@ -24,26 +25,10 @@ import java.util.*;
 public interface Enemy extends Actor, Observer
 {
     float getViewSize();
-    long getTimeLastSawPlayer();
-    void setTimeLastSawPlayer(long time);
-    
-    // Enemy's visibility of Player
-    boolean canSeePlayer();
-    boolean hasSeenPlayer();
-    boolean hasSeenPlayerEvidence();
-    void setSeenPlayerEvidence(boolean b);
-    void setHasSeenPlayer(boolean b);
-    void setCanSeenPlayer(boolean b);
-    
-    Set<LevelObject> getVisibleObjects();
     void addVisibleObject(LevelObject lo);
-    
     boolean isMoving();  
-    
     float getWalkSpeed();
     float getRunSpeed();
-    
     void doCollision(Projectile p); 
-    
     Graphics getGraphics();
 }

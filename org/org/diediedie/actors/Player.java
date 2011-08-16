@@ -16,6 +16,8 @@
  */
 package org.diediedie.actors;
 import org.diediedie.actors.tools.AnimCreator;
+import org.diediedie.actors.tools.Mover;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,8 +47,8 @@ public class Player implements Actor, InputProviderListener
     private boolean setUp = false, canJump = false;
     final boolean autoUpdate = true;
      
-    private float accelX = 0f, bowCharge = 0, oldX, oldY, bowX, bowY, 
-                  bowYCurrentOffset, bowXCurrentOffset;
+    private float accelX = 0f, bowCharge = 0, bowX, bowY, 
+                  bowYCurrentOffset;
                   
     
     public final float MAX_CHARGE = 20.34f, 
@@ -66,7 +68,7 @@ public class Player implements Actor, InputProviderListener
                       BOW_ANGLE_OFFSET = 90; 
                       
     private int health = MAX_HEALTH, 
-                arrowCount = 0, 
+               //arrowCount = 0, 
                 mouseX, 
                 mouseY,
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;   
@@ -80,8 +82,7 @@ public class Player implements Actor, InputProviderListener
     private List<Arrow> firedArrows = Collections.synchronizedList(new
                                                     ArrayList<Arrow>());
     
-    private boolean leftMoveDown = false, rightMoveDown = false,
-                    isChargingArrow = false, isFiringArrow = false;
+    private boolean isChargingArrow = false;
     
     private float xPos, yPos, xSpeed, ySpeed;
     private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
@@ -420,8 +421,6 @@ public class Player implements Actor, InputProviderListener
     private void releaseArrow()
     {
         isChargingArrow = false;
-        isFiringArrow = true;
-        
         currentArrow.release(bowCharge);
         firedArrows.add(currentArrow);
         currentArrow = null;

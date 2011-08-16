@@ -5,7 +5,6 @@ package org.diediedie.actors;
  */
 public interface MovableObject extends LevelObject
 {
-	
     float getMoveSpeed();    
 	float getXSpeed();
 	float getYSpeed();
@@ -14,8 +13,6 @@ public interface MovableObject extends LevelObject
     void setYSpeed(float y);
     void setXSpeed(float x);
     float getMaxFallSpeed();
-    
     void resetAccelX();
     void resetAccelY();
-  
 }
