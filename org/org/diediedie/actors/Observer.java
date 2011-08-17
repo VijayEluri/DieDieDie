@@ -1,6 +1,5 @@
 package org.diediedie.actors;
 
-import java.util.List;
 import java.util.Set;
 
 import org.diediedie.actors.tools.Direction;

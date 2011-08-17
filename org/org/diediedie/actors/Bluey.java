@@ -16,7 +16,6 @@
  */
 package org.diediedie.actors;
 
-import org.diediedie.DevTools;
 import java.util.Date;
 import org.diediedie.Level;
 import org.diediedie.actors.Actor;

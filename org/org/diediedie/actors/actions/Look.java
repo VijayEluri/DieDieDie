@@ -18,7 +18,7 @@ package org.diediedie.actors.actions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
-import org.diediedie.actors.Enemy;
+//import org.diediedie.actors.Enemy;
 import org.diediedie.Point;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.LevelObject;

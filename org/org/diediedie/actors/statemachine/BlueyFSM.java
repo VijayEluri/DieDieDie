@@ -28,7 +28,7 @@ public class BlueyFSM implements StateMachine
 	 */
 	public BlueyFSM(Bluey host)
 	{
-		host = host;
+		this.host = host;
 		currentState = new BlueyIdle();
 	}
 	private State currentState;

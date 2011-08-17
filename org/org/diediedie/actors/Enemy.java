@@ -15,9 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
-import org.diediedie.actors.statemachine.StateMachine;
 import org.newdawn.slick.Graphics;
-import java.util.*;
 
 /**
  * Enemy. Actors with a few methods related to 'AI'.
