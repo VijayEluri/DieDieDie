@@ -23,6 +23,8 @@ import org.diediedie.actors.Actor;
 import org.diediedie.actors.Bluey;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.Player;
+import org.diediedie.actors.statemachine.BlueyFSM;
+import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.tiled.TiledMap;
@@ -218,7 +220,7 @@ public class Level extends TiledMap
                                        + t.properties.get("name"));
                     
                     if(t.properties.get("name").equalsIgnoreCase("bluey"))
-                    {                       
+                    {
                         enemiesLiving.add(new Bluey(this, t));
                     }
                 }

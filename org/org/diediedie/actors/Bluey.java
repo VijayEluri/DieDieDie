@@ -19,6 +19,8 @@ package org.diediedie.actors;
 import java.util.Date;
 import org.diediedie.Level;
 import org.diediedie.actors.Actor;
+import org.diediedie.actors.statemachine.BlueyFSM;
+import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.Direction;
 import org.diediedie.actors.tools.Mover;
 import org.diediedie.actors.Enemy;
@@ -59,9 +61,11 @@ public class Bluey implements Enemy, Observer
 
 	private long timeLastSawPlayer = 0L;
 
-	private boolean setUp = false, canJump = false, moving = false,
-			canSeePlayer = false, hasSeenPlayer = false, fsmRunning = false,
-			seenPlayerEvidence = false;
+	private boolean canJump = false, 
+			        moving = false,
+				    canSeePlayer = false, 
+				    hasSeenPlayer = false, 
+				    seenPlayerEvidence = false;
 
 	private float health;
 	private Direction facing = null;
@@ -80,32 +84,39 @@ public class Bluey implements Enemy, Observer
 
 	private Animation leftWalkAnim, rightWalkAnim, leftStandAnim,
 			rightStandAnim, currentAnim = null;
-
+	
+	private StateMachine stateMachine;
+	
 	/**
 	 * Constructor. The object is associated with a Level and is positioned as
 	 * near to Tile t on it as possible.
 	 */
 	public Bluey(Level l, Tile t)
 	{
-		if (!setUp)
-		{
-			tileHeight = t.tileHeight;
-			createAnimations();
-			health = MAX_HEALTH;
+		tileHeight = t.tileHeight;
+		createAnimations();
+		health = MAX_HEALTH;
 
-			canSeePlayer = false;
-			hasSeenPlayer = false;
-			setUp = true;
-		}
+		canSeePlayer = false;
+		hasSeenPlayer = false;
+		
+		stateMachine = new BlueyFSM(this);
 		visibleObjects = new HashSet<LevelObject>();
 		setLevel(l);
 		xPos = t.xPos;
 		yPos = t.yPos;
-		yPos -= (AnimCreator.getCurrentFrameRect(this).getHeight() - t.tileHeight);
+		yPos -= (AnimCreator.getCurrentFrameRect(this
+				 ).getHeight() - t.tileHeight);
 		yPos--;
 		System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
 	}
 
+	@Override
+	public StateMachine getFSM()
+	{
+		return stateMachine;
+	}
+	
 	@Override
 	public float getLookSeconds() 
 	{

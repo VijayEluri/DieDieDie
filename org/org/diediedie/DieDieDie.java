@@ -120,9 +120,9 @@ public class DieDieDie extends BasicGame
 	}
 
 	/**
-	 * For running the program from the command line.
+	 * For running the program from 		the command line.
 	 */
-	public static void main(String[] argv) throws SlickException
+	public static void main(String[] args) throws SlickException
 	{
 		AppGameContainer container = new AppGameContainer(
 				new DieDieDie(), xSize, ySize, false);
