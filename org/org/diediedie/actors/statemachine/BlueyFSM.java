@@ -17,9 +17,13 @@
 
 package org.diediedie.actors.statemachine;
 
-import javax.swing.SwingWorker.StateValue;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.diediedie.actors.Bluey;
+import org.diediedie.actors.actions.Action;
+import org.diediedie.actors.actions.Look;
+import org.diediedie.actors.actions.StartMoving;
 
 /**
  * Handles the State and Actions for Bluey Enemies.
@@ -27,11 +31,11 @@ import org.diediedie.actors.Bluey;
 public class BlueyFSM implements StateMachine
 {
 	private Bluey host;
-	State idle;
+	State patrol ;
 	private State currentState;
 	
 	/* 
-	 * States: Idle, Alert, Fighting
+	 * States: Idle, Alert, Combat
 	 * 
 	 * Idle - Initial State for a Bluey. As soon as the Player has been seen 
 	 * or Player's items are seen, moves to Alert State.
@@ -52,8 +56,8 @@ public class BlueyFSM implements StateMachine
 	public BlueyFSM(Bluey host)
 	{
 		this.host = host;
-		idle = new Idle();
-		currentState = idle;
+		patrol = new Patrol();
+		currentState = patrol;
 	}
 	
 	public State getCurrentState()
@@ -85,8 +89,12 @@ public class BlueyFSM implements StateMachine
 	@Override
 	public void update()
 	{
-		// TODO Auto-generated method stub
+		// Query the Bluey instance and see if we need to change the
+		// current State.
 		
+		
+		// finally, update the current state
+		currentState.update();
 	}
 	
 	public Bluey getHost()
@@ -97,28 +105,39 @@ public class BlueyFSM implements StateMachine
 	////////////////////////////////////////////////////////////////////////
 	//	         			Bluey State Definitions                       //
 	////////////////////////////////////////////////////////////////////////
-	class Idle implements State
+	class Patrol implements State
 	{
+		private Action startAction,
+		               currentAction,
+					   look, 
+					   startMoving, 
+					   stopMoving; 
+		
 		/*
 		 * Initial State for a Bluey. As soon as the Player has been seen 
 	     * or Player's items are seen, the Bluey moves to the Alert State.
 	     * 
-	     * Idle has a simple action sequence....
-	     * 
+	     * Idle has (so far) a simple action sequence, called Patrol
 		 */
-
+		public Patrol()
+		{
+			look = new Look(host);
+			startMoving = new StartMoving();
+			stopMoving = new StopMoving();
+			startAction = look;
+		}
+		
 		@Override
 		public void update() 
 		{
-			// TODO Auto-generated method stub
+			// Patrolling
 			
 		}
 
 		@Override
-		public StateType getType() 
+		public StateType stateType() 
 		{
-			// TODO Auto-generated method stub
-			return null;
+			return StateType.PATROL;
 		}
 	}
 }

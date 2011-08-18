@@ -144,7 +144,7 @@ public class Player implements Actor, InputProviderListener
     }    
     
     @Override
-    public void setJump(boolean b)
+    public void setCanJump(boolean b)
     {
         canJump = b;
     }

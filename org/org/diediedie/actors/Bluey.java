@@ -213,16 +213,12 @@ public class Bluey implements Enemy, Observer
 		yPos = y;
 	}
 
-
-
 	@Override
-	public void setJump(boolean b)
+	public void setCanJump(boolean b)
 	{
 		canJump = b;
 		// System.out.println("bluey: canJump == " + canJump);
 	}
-
-	
 
 	@Override
 	public void resetAccelX() 
@@ -354,15 +350,13 @@ public class Bluey implements Enemy, Observer
 	@Override
 	public void update() 
 	{
-		updatePosition();
-		updateProjectiles();
-
 		if (health == 0) 
 		{
 			System.out.println(this + " is dead!");
 			return;
 		}
-		
+		updatePosition();
+		updateProjectiles();
 		// printInfo(5);
 	}
 
@@ -485,7 +479,7 @@ public class Bluey implements Enemy, Observer
 	}
 
 	@Override
-	public void setCanSeenPlayer(boolean b)
+	public void setCanSeePlayer(boolean b)
 	{
 		canSeePlayer = b;
 
@@ -541,7 +535,7 @@ public class Bluey implements Enemy, Observer
      */
 	private void updateProjectiles() 
 	{
-		// needs doing...
+		// for ...
 	}
 
 	@Override

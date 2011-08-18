@@ -32,7 +32,7 @@ public interface Actor extends MovableObject
     float getHealth();    
     float getJumpSpeed();
     Shape getZone();    
-    void setJump(boolean b);
+    void setCanJump(boolean b);
     void jump();
     void setFacing(Direction d);
 	void resetAccelX();

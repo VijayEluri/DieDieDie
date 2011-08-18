@@ -21,7 +21,7 @@ public interface Observer extends LevelObject
 	float getEyePosX();
 	float getEyePosY();
 	Direction getFacing();
-	void setCanSeenPlayer(boolean b);
+	void setCanSeePlayer(boolean b);
 	void setTimeLastSawPlayer(long time);
 	void addVisibleObject(LevelObject lo);
 	boolean canSeePlayer();

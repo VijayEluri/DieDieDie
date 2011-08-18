@@ -23,10 +23,11 @@ import org.newdawn.slick.Graphics;
  */
 public interface Action
 {
-    void perform(LevelObject e);
+    void perform();
     boolean hasStarted();
     boolean hasFinished();
-    void update(LevelObject e);
+    void update();
     void draw(Graphics g);
     void reset();
+    
 }

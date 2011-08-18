@@ -48,7 +48,7 @@ public class Mover
         {        
             if(a.getY() >= oldY)
             {
-                a.setJump(true);
+                a.setCanJump(true);
             }
             a.setYSpeed(0);
             a.setY(oldY);
@@ -57,7 +57,7 @@ public class Mover
         } 
         else
         {
-            a.setJump(false);
+            a.setCanJump(false);
         }
         
         // horizontal 

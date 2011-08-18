@@ -48,12 +48,13 @@ public class Look implements Action
     private Line sightLine = null; 
     private Calendar cal;
     private long lastLookTime;
-    
+    private Observer host;
     /**
      * Resets all of the fields in this Look instance.
      */
-    public Look()
+    public Look(Observer host)
     {
+    	this.host = host;
         reset();
     }
     
@@ -84,22 +85,22 @@ public class Look implements Action
      * Perform this Look instance on the specified Enemy.
      */ 
     @Override
-    public void perform(LevelObject lo)
+    public void perform()
     {
         if(!started)
         {
             started = true;
-            update(lo);
+            update();
             viewCreated = true;
             System.out.println("starting Look.perform()");
         }
         else if(!finished)
         {
-            update(lo);
+            update();
         }
         else
         {
-            // finished, i guess?
+            // finished - or should we reset and loop?
         }
     }
     
@@ -118,21 +119,21 @@ public class Look implements Action
      * suspicious entities.
      */
     @Override
-    public void update(LevelObject lo)//Observer o)
+    public void update()
     {
-        view = new View((Observer)lo);
-        analyseView((Observer)lo, view.getShape());   
+        view = new View(host);
+        analyseView(view.getShape());   
     }
     
     /*
-     * Analyses an Enemy's view Shape for various LevelObjects. 
+     * Analyses an Observers view Shape for various LevelObjects. 
      */ 
-    private void analyseView(Observer o, Shape sh)
+    private void analyseView(Shape sh)
     {
         //List<Actor> actors = e.getLevel().getActors();
         
-        checkVisibleActors(o, sh, o.getLevel().getActors());
-        checkVisiblePlayerObjects(o, sh, o.getLevel().getPlayer());
+        checkAndSetVisibleActors(sh, host.getLevel().getActors());
+        checkAndSetVisiblePlayerObjects(sh, host.getLevel().getPlayer());
     }
     
     /*
@@ -140,7 +141,7 @@ public class Look implements Action
      * 
      * So far: Projectiles.
      */ 
-    private void checkVisiblePlayerObjects(Observer e, Shape sh, Player pl)
+    private void checkAndSetVisiblePlayerObjects(Shape sh, Player pl)
     {
         List<Point> points;
         for(Projectile pr : pl.getFiredProjectiles())
@@ -150,36 +151,43 @@ public class Look implements Action
             points.add(new Point(pr.getEndX(), pr.getEndY()));
          
             if(hasPointInsideShape(points, sh) 
-                && (!isViewBlocked(e, points.get(0)) 
-                ||  !isViewBlocked(e, points.get(1))))
+                && (!isViewBlocked(host, points.get(0)) 
+                ||  !isViewBlocked(host, points.get(1))))
             {
-                e.addVisibleObject(pr);
-                e.setSeenPlayerEvidence(true);
-                //System.out.println(e + " can see " + pr);
+            	host.addVisibleObject(pr);
+            	host.setSeenPlayerEvidence(true);
+                //System.out.println(host + " can see " + pr);
             }
         }
     }
     
     /*
      * Checks for the visibility of the other Actors on the Level to 
-     * this Enemy. Used by Observers.
+     * this Observer.
      */
-    private void checkVisibleActors(Observer e, Shape sh, List<Actor> actors)
+    private void checkAndSetVisibleActors(Shape sh, List<Actor> actors)
     {
+    	boolean playerVisible = false;
         for(Actor a : actors)
         {
-            if(a.hashCode() != e.hashCode())
+            if(a.hashCode() != host.hashCode())
             {
-                if(actorIsVisible(e, sh, a))
+                if(actorIsVisible(host, sh, a))
                 {
-                    if(a.getClass().equals(e.getLevel().getPlayer().getClass()))
+                	// Actor-specific
+                    if(a.getClass().equals(
+                    	host.getLevel().getPlayer().getClass()))
                     {
-                        e.setCanSeenPlayer(true);
+                    	host.setCanSeePlayer(true);
+                    	playerVisible = true;
                     }
                 }
             }
         }
-        e.setCanSeenPlayer(false);        
+        if(!playerVisible)
+        {
+        	host.setCanSeePlayer(false);
+        }
     }
     
     /*
