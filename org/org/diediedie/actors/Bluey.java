@@ -310,8 +310,10 @@ public class Bluey implements Enemy, Observer {
 	/**
 	 * Instructs the enemy to jump
 	 */
-	public void jump() {
-		if (canJump()) {
+	public void jump() 
+	{
+		if (canJump()) 
+		{
 			System.out.println("bluey jump");
 			ySpeed = JUMP_SPEED;
 			canJump = false;
@@ -325,7 +327,8 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public void update() {
+	public void update()
+	{
 		if (health == 0) {
 			System.out.println(this + " is dead!");
 			return;

@@ -22,23 +22,34 @@ public class GroundChecker
 	 */
 	public static boolean canContinueMoving(Actor a, Direction d)
 	{
-		System.out.println("\tcanContinueMoving...");
+		//System.out.println("\tcanContinueMoving...");
 		Shape zone = a.getZone();
+		//assert (d == Direction.LEFT) || (d == Direction.RIGHT);
 		
 		if(zone == null)
 		{
 			System.out.println("Zone is null!");
 			System.exit(-1);
 		}
+		
+		/*
+		 * Actor is on a walkableZone -- check how far it extends it the
+		 * Actor's direction d
+		 */
+		if(d == Direction.LEFT)
+		{
+			if(zone.getMinX() < (a.getX()-1))
+			{
+				return true;
+			}
+		}
+		else if(d == Direction.RIGHT)
+		{
+			if(zone.getMaxX() > (a.getX() + (a.getWidth()+1) ))
+			{
+				return true;
+			}
+		}
 		return false;
 	}
-    /*public static boolean canMove(Actor a)
-    {
-        return false;
-    }*/
-    
-    /*public static boolean canMoveTo(Actor a, float x, float y)
-    {
-        return false;
-    }*/
 }
