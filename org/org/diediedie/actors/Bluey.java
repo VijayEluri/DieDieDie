@@ -90,6 +90,8 @@ public class Bluey extends Object implements Enemy, Observer
 
 	private boolean hitByPlayer = false;
 
+	private Shape lastPlayerLocation;
+
 	//private Look look;
 
 	/**
@@ -190,7 +192,9 @@ public class Bluey extends Object implements Enemy, Observer
 		if (d.equals(Direction.LEFT)) 
 		{
 			currentAnim = leftWalkAnim;
-		} else {
+		} 
+		else 
+		{
 			currentAnim = rightWalkAnim;
 		}
 	}
@@ -351,7 +355,7 @@ public class Bluey extends Object implements Enemy, Observer
 	 */
 	public void jump() 
 	{
-		if (canJump()) 
+		if(canJump()) 
 		{
 			System.out.println("bluey jump");
 			ySpeed = JUMP_SPEED;
@@ -598,4 +602,17 @@ public class Bluey extends Object implements Enemy, Observer
 		return yPos;
 	}
 
+	@Override
+	public void setLocationLastSeenPlayer(Shape s) 
+	{
+		lastPlayerLocation = s;
+	}
+	
+	@Override
+	public Shape getLocationLastSeenPlayer()
+	{
+		
+		return lastPlayerLocation;
+	}
+	
 }

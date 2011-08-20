@@ -3,6 +3,7 @@ package org.diediedie.actors;
 import java.util.Set;
 
 import org.diediedie.actors.tools.Direction;
+import org.newdawn.slick.geom.Shape;
 
 
 /*
@@ -26,6 +27,8 @@ public interface Observer extends LevelObject
 	void setAsVisibleObject(LevelObject lo);
 	boolean canSeePlayer();
     boolean hasSeenPlayer();
+    void setLocationLastSeenPlayer(Shape sh);
+    Shape getLocationLastSeenPlayer();
     boolean hasSeenPlayerEvidence();
     void setSeenPlayerEvidence(boolean b);
     void setHasSeenPlayer(boolean b);

@@ -19,6 +19,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,6 +38,7 @@ import org.diediedie.Drawable;
 import org.diediedie.Level;
 import org.diediedie.MapLayer;
 import org.diediedie.Tile;
+import org.diediedie.actors.tools.Direction;
 
 
 /**
@@ -46,24 +48,62 @@ public class NavMesh implements Drawable
 {
     // walkable zones (Lines, as we're in 2D)
     private Collection<Shape> walkableZones;
-    private Collection<Shape> negativeSpace;
+    private Collection<NegativeSpace> negativeSpaces;
     private Level level; 
     private Color walkableColor = Color.green;
     private Color negativeColor = Color.orange;
     
+    /*
+     * walkableNegativeConnections - maps each walkable area to its intersecting
+     * negative space rectangles.
+     */
+	private Map<Shape, List<Shape>> walkableNegativeConnections;
+    
+	
     /**
      * A mesh created by MeshMaker.
      */ 
     public NavMesh(Level l, 
     			   Collection<Shape> walkables,
-                   Collection<Shape> space)
+                   Collection<NegativeSpace> space)
     {
         setLevel(l);
         walkableZones = walkables;
-        negativeSpace = space;
+        negativeSpaces = space;
+        linkWalkableZonesToNegativeSpace();
+        linkNegativeSpace();
         
-        //System.out.println("Check the movement map");
-        //System.exit(-1);
+    }
+    
+    private void linkNegativeSpace()
+    {    	
+    	Iterator<NegativeSpace> nit = negativeSpaces.iterator();
+    	
+    	while(nit.hasNext())
+    	{
+    		NegativeSpace current = nit.next();
+    		current.addNeighbours(negativeSpaces);
+    	}
+    }    
+    
+	private void linkWalkableZonesToNegativeSpace()
+    {
+		walkableNegativeConnections = new HashMap<Shape, List<Shape>>();
+		
+		List<Shape> connected;
+		
+		for(Shape w : walkableZones)
+		{
+			connected = new ArrayList<Shape>();
+			for(NegativeSpace n : negativeSpaces)
+			{
+				if(w.intersects(n.getShape()))
+				{
+					connected.add(n.getShape());
+				}
+			}
+			walkableNegativeConnections.put(w, connected);
+		}
     }
     
     @Override
@@ -83,14 +123,10 @@ public class NavMesh implements Drawable
                 g.draw(l);
             }
         }
-        
         g.setColor(negativeColor);
-        for(Shape n : negativeSpace)
+        for(NegativeSpace n : negativeSpaces)
         {
-            if(n != null)
-            {
-                g.draw(n);
-            }
+            n.draw(g);
         }
     }
     
@@ -105,9 +141,9 @@ public class NavMesh implements Drawable
     /*
      * Returns the negative space zones
      */
-    public Collection<Shape> getNegativeSpace()
+    public Collection<NegativeSpace> getNegativeSpace()
     {
-        return negativeSpace;
+        return negativeSpaces;
     }
     
     /*
@@ -124,6 +160,11 @@ public class NavMesh implements Drawable
             {
                 throw new IllegalStateException("Invalid Slice");
             }
+        }
+        
+        public List<Tile> getTiles()
+        {
+        	return tiles;
         }
         
         public Tile getFirstTile()
@@ -184,6 +225,9 @@ public class NavMesh implements Drawable
         }
     }
     
+    
+    
+    
     /**
      * A bunch of connected, identically-shaped and horizontally 
      * adjacent Slices.
@@ -205,8 +249,6 @@ public class NavMesh implements Drawable
             slices = s;
             createShape();
         }
-        
-        
         
         /*
          * 
@@ -369,7 +411,7 @@ public class NavMesh implements Drawable
     {
         static List<Tile> ledgeTiles = null;
         static Collection<Shape> walkableZones = null;
-        static Collection<Shape> negativeSpace = null;
+        static Collection<NegativeSpace> negativeSpace = null;
         static Level l = null;
         
         /**
@@ -486,7 +528,7 @@ public class NavMesh implements Drawable
         private static void createNegativeSpace()
         {
             // movable area polygons
-            negativeSpace = new ArrayList<Shape>();
+            negativeSpace = new ArrayList<NegativeSpace>();
                         
             // slice the spaces and combine where possible
             List<Slice> slices = sliceSpaces(getSpaceTiles(l));
@@ -497,7 +539,7 @@ public class NavMesh implements Drawable
                                                
             for(SliceGroup g : groups)
             {
-                negativeSpace.add(g.getShape());
+                negativeSpace.add(new NegativeSpace(g));
             }            
         }
         
@@ -708,25 +750,6 @@ public class NavMesh implements Drawable
         }
         
         /*
-         * Returns the last Tile linked to the right of the given Tile.  
-         * Recursively. B)
-         */ 
-        /*private static Tile getEndTile(Tile start, Collection<Tile> tiles)
-        {
-            for(Tile t : tiles)
-            {
-                if(t.yCoord == start.yCoord)
-                {
-                    if(t.xCoord == start.xCoord + 1)
-                    {
-                        return getEndTile(t, tiles);
-                    }
-                }
-            }
-            return start;
-        }*/
-        
-        /*
          * Returns a line from the top surface of 2 (collision) Tiles
          */ 
         private static Rectangle makeWalkShape(Tile start, Tile end)
@@ -742,18 +765,6 @@ public class NavMesh implements Drawable
             return rect;
         }
         
-        /*
-         * Prints out information about a collection of Tiles for
-         * debugging 
-         */ 
-        private static void printTileCollection(Collection<Tile> c)
-        {
-            for(Tile t : c)
-            {
-                System.out.println("\tx: " + t.xCoord + ", y: " +
-                                   t.yCoord);
-            }
-        }
         
         /*
          * Returns true if two given Tiles are +/- by one horizontally
@@ -775,30 +786,7 @@ public class NavMesh implements Drawable
             }
             return false;
         }
-        
-        /*
-         * Returns true if two given Tiles are +/- by one vertically
-         * and equal horizontally
-         */ 
-        /*private static boolean areVerticalNeighbours(Tile original,
-                                                     Tile possible)
-        {
-            if(original.xCoord == possible.xCoord)
-            {
-                if(possible.yCoord == (original.yCoord + 1)
-                    ||
-                   possible.yCoord == (original.yCoord - 1))
-                {
-                    System.out.println("vert neighbours: " + original +
-                                        ", " + possible);
-                    return true;   
-                }
-            }
-            
-            return false;
-        }*/
-
-        
+      
         /*
          * Finds the collision Tiles from the Level that can be used as
          * ledges.   
@@ -838,4 +826,5 @@ public class NavMesh implements Drawable
             return false;
         } 
     }
+    
 }
