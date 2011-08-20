@@ -85,16 +85,18 @@ public class DieDieDie extends BasicGame
 	 * Utility method to load a Level into the current game. This just acts as a
 	 * nice wrapper for the lavel path.
 	 */
-	private Level loadLevel(String name, String levelPath, String tileSetsPath,
-							Direction startDir, float grav)
+	private Level loadLevel(String name,
+			                String levelPath, 
+			                String tileSetsPath,
+							Direction startDir, 
+							float grav)
 	{
 		try
 		{
 			FileInputStream in = new FileInputStream(new File(levelPath));
-
 			return new Level(name, in, tileSetsPath, startDir, grav);
 		} 
-		catch (Exception e) 
+		catch(Exception e) 
 		{
 			e.printStackTrace();
 		}

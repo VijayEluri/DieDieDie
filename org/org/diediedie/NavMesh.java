@@ -18,10 +18,13 @@ package org.diediedie;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.newdawn.slick.Color;
@@ -47,7 +50,7 @@ public class NavMesh implements Drawable
     private Level level; 
     private Color walkableColor = Color.green;
     private Color negativeColor = Color.orange;
-    
+    private Map<Shape, Shape> movementMap;
     /**
      * A mesh created by MeshMaker.
      */ 
@@ -57,6 +60,35 @@ public class NavMesh implements Drawable
         setLevel(l);
         walkableZones = walkables;
         negativeSpace = space;
+        //createMovementMap();
+        //System.out.println("Check the movement map");
+        //System.exit(-1);
+    }
+    
+   /* 
+     * Maps negative space to walkable zones.
+     
+    private void createMovementMap()
+    {
+    	System.out.println("createMovementMap ::");
+    	movementMap = new HashMap<Shape, Shape>();
+    	
+    	boolean printN = true;
+    	int nCount = 0;
+    	
+    	for(Shape n : negativeSpace)
+    	{
+    		for(Shape w : walkableZones)
+    		{
+    			if(w.)
+    		}
+    		
+    	}
+    }*/
+    
+    public Map<Shape, Shape> getMovementMap()
+    {
+    	return movementMap;
     }
     
     @Override
@@ -68,7 +100,7 @@ public class NavMesh implements Drawable
     @Override
     public void draw(Graphics g)
     {
-        /*g.setColor(walkableColor);
+        g.setColor(walkableColor);
         for(Shape l : walkableZones)
         {
             if(l != null)
@@ -76,7 +108,7 @@ public class NavMesh implements Drawable
                 g.draw(l);
             }
         }
-        
+        /*
         g.setColor(negativeColor);
         for(Shape n : negativeSpace)
         {
@@ -202,7 +234,7 @@ public class NavMesh implements Drawable
         
         
         /*
-         * Creates a Shape encompassing the 
+         * 
          */ 
         private void createShape()
         {
@@ -360,7 +392,7 @@ public class NavMesh implements Drawable
      */ 
     public static class MeshMaker
     {
-        static Collection<Tile> ledgeTiles = null;
+        static List<Tile> ledgeTiles = null;
         static Collection<Shape> walkableZones = null;
         static Collection<Shape> negativeSpace = null;
         static Level l = null;
@@ -376,30 +408,103 @@ public class NavMesh implements Drawable
             return new NavMesh(l, walkableZones, negativeSpace);
         }
         
-        /*
-         * Examines collision tiles and saves those which have negative
-         * space above them. 
-         */
+       
         private static void createWalkableZones()
         {   
-            Line line;        
             ledgeTiles = getLedgeTiles(l);
             Set<Tile> checked = new HashSet<Tile>();
             walkableZones = new HashSet<Shape>();
-            Tile end = null;
+            List<List<Tile>> walkableTileList = new ArrayList<List<Tile>>();
+            Collections.sort(ledgeTiles);
+            List<Tile> ledgeTiles2 = 
+            	Collections.synchronizedList(new ArrayList<Tile>(ledgeTiles));
             
-            for(Tile start : ledgeTiles)
+            walkableTileList = splitWalkableZones(ledgeTiles2);
+            for(List<Tile> tl : walkableTileList)
             {
-                if(!checked.contains(start) && start != null)
-                {
-                    end = getEndTile(start, ledgeTiles);
-                    line = makeWalkLine(start, end);
-                    walkableZones.add(line);
-                }
+            	/*System.out.println("Walkable Tile List");
+            	for(Tile t : tl)
+            	{
+            		System.out.println("\t" + t.xCoord + ", " + t.yCoord);
+            	}
+            	System.out.println("\n");*/
+            	walkableZones.add(
+            			makeWalkShape(tl.get(0), tl.get(tl.size()-1)));
             }
         }
         
-        /*
+          
+        
+        private static List<List<Tile>> splitWalkableZones(List<Tile> ledges)
+        {
+        	List<List<Tile>> walkableTileList = new ArrayList<List<Tile>>();
+        	Tile previous = null;
+        	List<Tile> currentNbrs = null;
+        	
+        	synchronized(ledges)
+        	{
+        		Iterator<Tile> tit = ledges.iterator();
+	        	while(!ledges.isEmpty())
+	        	{
+	        		Tile current = tit.next();
+	        		System.out.println(
+        				 "current : " 
+        				+ current.xCoord 
+        				+ ", "
+        				+ current.yCoord);
+	        		
+	        		if(previous == null)
+	        		{
+	        			System.out.println(
+	        				"\t--> current is first Tile : " +
+	        				"creating new list for it");
+	        			
+	        			currentNbrs = new ArrayList<Tile>();
+	        			currentNbrs.add(current);
+	        		}
+	        		else if(previous.xCoord == (current.xCoord - 1)
+	        						&&
+	        				previous.yCoord == current.yCoord)
+	        		{
+	        			// not the first Tile -- but adjacent to previous
+	        			System.out.println(
+	        		         "\t--> current is adjacent to previous ("
+	        				+ previous.xCoord
+	        				+ ", "
+	        				+ previous.yCoord
+	        				+ ")");
+	        			currentNbrs.add(current);
+	        		}
+	        		else
+	        		{
+	        			// not the first Tile -- nor adjacent to previous
+	        			System.out.println(
+	        				 "\t--> current is not adjacent to previous ("
+	        				+ previous.xCoord
+	        				+ ", "
+	        				+ previous.yCoord);
+	        			
+	        			assert previous.xCoord != (current.xCoord - 1);
+	        			
+	        			System.out.println(
+	        				"\t--> adding neighbours list to master list");
+	        			walkableTileList.add(currentNbrs);
+	        			System.out.println(
+		        				"\t--> creating new list and adding current");
+	        			currentNbrs = new ArrayList<Tile>();
+	        			currentNbrs.add(current);
+	        		}
+	        		previous = current;
+	        		tit.remove();
+	        	}
+        	}
+        	System.out.println(
+        		"\n\tmade " + walkableTileList.size() + " list(s)");
+        	
+        	return walkableTileList;
+        }
+        
+		/*
          * Discovers and assembles a collection of negative space Shapes
          * for a given Level
          */ 
@@ -510,8 +615,8 @@ public class NavMesh implements Drawable
             SliceGroup g = new SliceGroup(currentSlices);
             
             int added = 0;
-            do{
-                
+            do 
+            {    
                 ListIterator<Slice> lit = allSlices.listIterator();
                 added = 0;
                 while(lit.hasNext())
@@ -521,8 +626,8 @@ public class NavMesh implements Drawable
                     if(g.addSlice(s))
                     {
                         added++;
-                        System.out.println("|--adding Slice : ");
-                        s.printSliceInfo();
+                        //System.out.println("|--adding Slice : ");
+                        //s.printSliceInfo();
                         lit.remove();
                     }
                 }
@@ -631,7 +736,7 @@ public class NavMesh implements Drawable
          * Returns the last Tile linked to the right of the given Tile.  
          * Recursively. B)
          */ 
-        private static Tile getEndTile(Tile start, Collection<Tile> tiles)
+        /*private static Tile getEndTile(Tile start, Collection<Tile> tiles)
         {
             for(Tile t : tiles)
             {
@@ -644,20 +749,22 @@ public class NavMesh implements Drawable
                 }
             }
             return start;
-        }
+        }*/
         
         /*
          * Returns a line from the top surface of 2 (collision) Tiles
          */ 
-        private static Line makeWalkLine(Tile start, Tile prev)
+        private static Rectangle makeWalkShape(Tile start, Tile end)
         {
-            /*System.out.println("\tnew walk line from " 
-                    + start.getCoords() + " | to | " + prev.getCoords());*/
-            Line line = new Line(start.xPos, start.yPos,
-                                 prev.endX, prev.yPos);
-            start = null;
-            prev = null;
-            return line;
+            System.out.println("\tnew walk line from " 
+                    + start.getCoords() + " | to | " + end.getCoords());
+           
+            Rectangle rect = new Rectangle(
+            		start.xPos, 
+            		start.yPos - 3, 
+            		(end.endX - start.xPos),
+            		5);
+            return rect;
         }
         
         /*
@@ -721,10 +828,10 @@ public class NavMesh implements Drawable
          * Finds the collision Tiles from the Level that can be used as
          * ledges.   
          */ 
-        private static Collection<Tile> getLedgeTiles(Level l)
+        private static List<Tile> getLedgeTiles(Level l)
         {
             MapLayer colls = l.getCollisionLayer();
-            Collection<Tile> ledgeTiles = new ArrayList<Tile>();
+            List<Tile> ledgeTiles = new ArrayList<Tile>();
             
             for(Tile t : colls.tiles)
             { 

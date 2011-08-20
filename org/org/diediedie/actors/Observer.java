@@ -23,7 +23,7 @@ public interface Observer extends LevelObject
 	Direction getFacing();
 	void setCanSeePlayer(boolean b);
 	void setTimeLastSawPlayer(long time);
-	void addVisibleObject(LevelObject lo);
+	void setAsVisibleObject(LevelObject lo);
 	boolean canSeePlayer();
     boolean hasSeenPlayer();
     boolean hasSeenPlayerEvidence();

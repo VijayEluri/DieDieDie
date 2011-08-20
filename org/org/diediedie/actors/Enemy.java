@@ -24,11 +24,12 @@ import org.newdawn.slick.Graphics;
 public interface Enemy extends Actor, Observer
 {
     float getViewSize();
-    void addVisibleObject(LevelObject lo);
     boolean isMoving();  
     float getWalkSpeed();
     float getRunSpeed();
     void doCollision(Projectile p); 
     Graphics getGraphics();
     StateMachine getFSM();
+    boolean hitByPlayer();
+
 }

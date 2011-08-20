@@ -154,7 +154,7 @@ public class Look implements Action
                 && (!isViewBlocked(host, points.get(0)) 
                 ||  !isViewBlocked(host, points.get(1))))
             {
-            	host.addVisibleObject(pr);
+            	host.setAsVisibleObject(pr);
             	host.setSeenPlayerEvidence(true);
                 //System.out.println(host + " can see " + pr);
             }
@@ -306,7 +306,7 @@ public class Look implements Action
         {
             viewSize = ob.getViewSize();
             constructFOV(ob);
-            this.observer = ob;
+            observer = ob;
             //System.out.println("constructed view");
         } 
         

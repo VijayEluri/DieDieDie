@@ -23,7 +23,7 @@ import org.newdawn.slick.geom.Rectangle;
  * Acts as a bridge between a TiledMap and the individual tiles so they
  * can be accessed easily (for collision det. etc).
  */ 
-public class Tile
+public class Tile implements Comparable<Tile>
 {   
     final float ROUNDING = 0.999f;    
     public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
@@ -31,8 +31,8 @@ public class Tile
     private TiledMap tiledMap;
     private Rectangle rect;
     
-    public Map<String, String> properties = new 
-                                              HashMap<String, String>();
+    public Map<String, String> properties = 
+    		new HashMap<String, String>();
     
     public static final String[] PROPERTIES = {"type", "name"};
     public static final String[] VALUES = {
@@ -83,6 +83,8 @@ public class Tile
         }
     }
     
+    
+    
     /**
      * Stores the coordinates and size of the current Tile. 
      */ 
@@ -116,4 +118,43 @@ public class Tile
                 yPos + "], [" + (xPos+tileWidth) + ", " 
                 + (yPos+tileHeight) + "] " + layer;
     }
+
+    /*
+     * Returns a negative integer, zero, or a positive integer as this object 
+     * is less than, equal to, or greater than the specified object.
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+	@Override
+	public int compareTo(Tile other) 
+	{
+		// yCoord has priority
+		if(other.yCoord == this.yCoord)
+		{
+			// Same vertical position
+			if(other.xCoord == this.xCoord)
+			{
+				// Same horizontal position
+				return 0;
+			}
+			else if(other.xCoord > this.xCoord)
+			{
+				// other Tile is further to the right than this Tile
+				return -1;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		else if(other.yCoord < this.yCoord)
+		{
+			// other Tile has higher position than this Tile
+			return 1;
+		}
+		// other Tile has lower position than this Tile
+		return -1;
+	}
+
+	
 }

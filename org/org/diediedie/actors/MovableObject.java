@@ -1,5 +1,7 @@
 package org.diediedie.actors;
 
+import org.diediedie.actors.tools.Direction;
+
 /**
  * Super-interface for all movable LevelObjects.
  */

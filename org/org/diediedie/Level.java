@@ -120,6 +120,7 @@ public class Level extends TiledMap
     public Shape getActorZone(Actor a)
     {
         Rectangle r = AnimCreator.getCurrentFrameRect(a);
+        
         for(Shape s : getNavMesh().getWalkableZones())
         {
             if(r.intersects(s))

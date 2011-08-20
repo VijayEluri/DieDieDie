@@ -23,7 +23,6 @@ import org.newdawn.slick.geom.Shape;
 public interface Actor extends MovableObject
 {            
     public static int ANIM_DURATION = 100;
-    
     void applySpeed(Direction d);
     boolean canJump();
     void die();
@@ -36,6 +35,6 @@ public interface Actor extends MovableObject
     void jump();
     void setFacing(Direction d);
 	void resetAccelX();
-    //float getWalkSpeed();
-    //void setMoving(boolean b);
+	int getWidth();
+    int getHeight();
 }  

@@ -28,5 +28,5 @@ public interface LevelObject extends Drawable
     void draw(Graphics g);
     Level getLevel();
     float getX();
-    float getY();  
+    float getY();     
 }

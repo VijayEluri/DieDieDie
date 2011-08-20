@@ -50,6 +50,7 @@ public class Player implements Actor, InputProviderListener
     private float accelX = 0f, bowCharge = 0, bowX, bowY, 
                   bowYCurrentOffset;
                   
+    private int height, width;
     
     public final float MAX_CHARGE = 20.34f, 
                        CHARGE_INCR = 0.3f, 
@@ -81,7 +82,6 @@ public class Player implements Actor, InputProviderListener
     private Arrow currentArrow = null; 
     private List<Arrow> firedArrows = Collections.synchronizedList(new
                                                     ArrayList<Arrow>());
-    
     private boolean isChargingArrow = false;
     
     private float xPos, yPos, xSpeed, ySpeed;
@@ -142,6 +142,17 @@ public class Player implements Actor, InputProviderListener
             setUp = true;
         }
     }    
+    
+    @Override
+	public int getWidth()
+	{
+		return width;
+	}
+	@Override
+	public int getHeight()
+	{
+		return height;
+	}
     
     @Override
     public void setCanJump(boolean b)
@@ -366,12 +377,12 @@ public class Player implements Actor, InputProviderListener
         System.out.println("Player is dead!");
     }
     
-    private float getMiddleXPos()
+    /*private float getMiddleXPos()
     {
         final float midX = xPos + (getCurrentFrameWidth() / 2);
         //System.out.println("xPos: " + xPos + ", midX: " + midX);
         return midX;
-    }
+    }*/
     
     private void updateBowPosition()
     {
@@ -411,9 +422,7 @@ public class Player implements Actor, InputProviderListener
     {
         return yPos + ARROW_Y_OFFSET;
     } 
-    
-    
-    
+
     /*
      * Fires an Arrow from the Player's position towards the X / Y
      * coordinates.
@@ -467,11 +476,17 @@ public class Player implements Actor, InputProviderListener
     /**
      * Returns the x position
      */ 
-    public float getX() { return xPos; }
+    public float getX() 
+    { 
+    	return xPos; 
+    }
     /**
      * Returns the y position
      */ 
-    public float getY() { return yPos; } 
+    public float getY()
+    { 
+    	return yPos; 
+    } 
     
     
     /**
@@ -665,8 +680,6 @@ public class Player implements Actor, InputProviderListener
         return facing;
     }
 
-    
-    
     @Override
     public float getYSpeed()
     {
@@ -742,5 +755,9 @@ public class Player implements Actor, InputProviderListener
         
         // get initial direction from the level
         facing = level.playerFacing;
+        
+        Image i = leftWalk.getCurrentFrame();
+        width = i.getWidth();
+        height = i.getHeight();
     }    
 }

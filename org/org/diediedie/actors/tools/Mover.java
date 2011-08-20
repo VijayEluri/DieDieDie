@@ -48,6 +48,10 @@ public class Mover
         {        
             if(a.getY() >= oldY)
             {
+            	/*
+            	 * Only set canJump=true if we hit the floot (not the 
+            	 * ceiling)
+            	 */
                 a.setCanJump(true);
             }
             a.setYSpeed(0);
@@ -66,7 +70,7 @@ public class Mover
         if(Collider.collidesLevel(a))
         {
             a.setX(oldX);
-            a.setXSpeed(0);
+			a.setXSpeed(0);
             a.resetAccelX();
         }       
         if(a.getX() == oldX)
