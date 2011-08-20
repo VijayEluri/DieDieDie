@@ -19,6 +19,7 @@ package org.diediedie.actors;
 import java.util.Date;
 import org.diediedie.Level;
 import org.diediedie.actors.Actor;
+import org.diediedie.actors.actions.Look;
 import org.diediedie.actors.statemachine.BlueyFSM;
 import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.Direction;
@@ -36,26 +37,30 @@ import org.newdawn.slick.geom.Shape;
 /*
  * Blue stick-enemy wielding 2 pistols. 
  */
-public class Bluey implements Enemy, Observer {
+public class Bluey extends Object implements Enemy, Observer 
+{
 	public static final int MAX_HEALTH = 50;
 
 	// viewSize - size of the triangular view shape used for Looking for
-	// LevelObjects
+	
 	private final float viewSize = 500f;
 	public final String leftStandPath = "data/bluey_standing_left.png";
 	private Graphics g;
 	private Date date;
-	public final String[] leftWalkPaths = { "data/bluey_walk_left_1.png",
-			"data/bluey_walk_left_2.png", "data/bluey_walk_left_3.png",
-			"data/bluey_walk_left_4.png", "data/bluey_walk_left_5.png",
-			"data/bluey_walk_left_6.png" };
+	public final String[] leftWalkPaths =  {"data/bluey_walk_left_1.png",
+											"data/bluey_walk_left_2.png", 
+											"data/bluey_walk_left_3.png",
+											"data/bluey_walk_left_4.png", 
+											"data/bluey_walk_left_5.png",
+											"data/bluey_walk_left_6.png"};
+	
 	public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, RUN_SPEED = 3.1f,
-			JUMP_SPEED = -5.5f, ACCEL_RATE = 0.03f, EYE_OFFSET_HEIGHT = 5f;
+			JUMP_SPEED = -5.5f, EYE_OFFSET_HEIGHT = 5f;
 
 	private long timeLastSawPlayer = 0L;
 
-	private boolean canJump = false, moving = false, canSeePlayer = false,
-			hasSeenPlayer = false, seenPlayerEvidence = false;
+	private boolean canJump = false, canSeePlayer = false, moving = false,
+					hasSeenPlayer = false, seenPlayerEvidence = false;
 
 	private int health, width, height;
 	private Direction facing = null;
@@ -69,8 +74,14 @@ public class Bluey implements Enemy, Observer {
 
 	private Set<LevelObject> visibleObjects;
 
-	private float xPos, yPos, tileHeight, moveSpeed = 0, oldX, oldY,
-			xSpeed = 0, ySpeed = 0, accelX = 0, accelY = 0;
+	private float xPos, 
+				  yPos, 
+				  tileHeight, 
+				  moveSpeed = 0, 
+				  oldX, 
+				  oldY,
+				  xSpeed = 0, 
+				  ySpeed = 0;
 
 	private Animation leftWalkAnim, rightWalkAnim, leftStandAnim,
 			rightStandAnim, currentAnim = null;
@@ -78,6 +89,8 @@ public class Bluey implements Enemy, Observer {
 	private StateMachine stateMachine;
 
 	private boolean hitByPlayer = false;
+
+	//private Look look;
 
 	/**
 	 * Constructor. The object is associated with a Level and is positioned as
@@ -88,7 +101,7 @@ public class Bluey implements Enemy, Observer {
 		tileHeight = t.tileHeight;
 		createAnimations();
 		health = MAX_HEALTH;
-
+		//look = new Look(this);
 		canSeePlayer = false;
 		hasSeenPlayer = false;
 
@@ -115,7 +128,8 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public Set<LevelObject> getVisibleObjects() {
+	public Set<LevelObject> getVisibleObjects()
+	{
 		return visibleObjects;
 	}
 
@@ -146,29 +160,35 @@ public class Bluey implements Enemy, Observer {
 		return hitByPlayer;
 	}
 
-	public void setAsVisibleObject(LevelObject lo) {
+	public void setAsVisibleObject(LevelObject lo) 
+	{
 		visibleObjects.add(lo);
 	}
 
 	@Override
-	public final float getWalkSpeed() {
+	public final float getWalkSpeed()
+	{
 		return WALK_SPEED;
 	}
 
 	@Override
-	public float getViewSize() {
+	public float getViewSize()
+	{
 		return viewSize;
 	}
 
 	@Override
-	public final float getRunSpeed() {
+	public final float getRunSpeed() 
+	{
 		return RUN_SPEED;
 	}
 
 	@Override
-	public void setFacing(Direction d) {
+	public void setFacing(Direction d)
+	{
 		facing = d;
-		if (d.equals(Direction.LEFT)) {
+		if (d.equals(Direction.LEFT)) 
+		{
 			currentAnim = leftWalkAnim;
 		} else {
 			currentAnim = rightWalkAnim;
@@ -176,43 +196,51 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public boolean hasSeenPlayerEvidence() {
+	public boolean hasSeenPlayerEvidence()
+	{
 		return seenPlayerEvidence;
 	}
 
 	@Override
-	public void setSeenPlayerEvidence(boolean b) {
+	public void setSeenPlayerEvidence(boolean b) 
+	{
 		seenPlayerEvidence = b;
 	}
 
 	@Override
-	public void setX(float x) {
+	public void setX(float x) 
+	{
 		xPos = x;
 	}
 
 	@Override
-	public void setY(float y) {
+	public void setY(float y) 
+	{
 		yPos = y;
 	}
 
 	@Override
-	public void setCanJump(boolean b) {
+	public void setCanJump(boolean b) 
+	{
 		canJump = b;
 		// System.out.println("bluey: canJump == " + canJump);
 	}
 
 	@Override
-	public void resetAccelX() {
+	public void resetAccelX()
+	{
 		// do nothing for now
 	}
 
 	@Override
-	public void resetAccelY() {
+	public void resetAccelY() 
+	{
 		// do nothing for now
 	}
 
 	@Override
-	public float getMoveSpeed() {
+	public float getMoveSpeed()
+	{
 		return moveSpeed;
 	}
 
@@ -223,41 +251,49 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public void setYSpeed(float f) {
+	public void setYSpeed(float f) 
+	{
 		ySpeed = f;
 	}
 
 	@Override
-	public void setXSpeed(float f) {
+	public void setXSpeed(float f)
+	{
 		xSpeed = f;
 	}
 
 	@Override
-	public Direction getFacing() {
+	public Direction getFacing() 
+	{
 		return facing;
 	}
 
 	@Override
-	public float getHealth() {
+	public float getHealth() 
+	{
 		return health;
 	}
 
 	@Override
-	public float getYSpeed() {
+	public float getYSpeed() 
+	{
 		return ySpeed;
 	}
 
 	@Override
-	public float getXSpeed() {
+	public float getXSpeed() 
+	{
 		return xSpeed;
 	}
 
 	@Override
-	public boolean canJump() {
+	public boolean canJump()
+	{
 		return canJump;
 	}
 
-	private void createAnimations() {
+	private void createAnimations()
+	{
 		System.out.println("bluey -> creating animations");
 
 		Image leftStand1 = AnimCreator.loadImage(leftStandPath);
@@ -290,19 +326,22 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public int getWidth() {
+	public int getWidth() 
+	{
 		return width;
 	}
 
 	@Override
-	public int getHeight() {
+	public int getHeight() 
+	{
 		return height;
 	}
 
 	/*
 	 * Returns the height of Bluey's Tile in the Map Editor, Tiled.
 	 */
-	public float getTileHeight() {
+	public float getTileHeight() 
+	{
 		return tileHeight;
 	}
 
@@ -329,10 +368,12 @@ public class Bluey implements Enemy, Observer {
 	@Override
 	public void update()
 	{
-		if (health == 0) {
+		if(health == 0) 
+		{
 			System.out.println(this + " is dead!");
 			return;
 		}
+		
 		updatePosition();
 		updateProjectiles();
 		stateMachine.update();
@@ -371,7 +412,8 @@ public class Bluey implements Enemy, Observer {
 	 * which will inflict no damage).
 	 */
 	@Override
-	public void doCollision(Projectile p) {
+	public void doCollision(Projectile p)
+	{
 		System.out.println(this + "doCollision " + p);
 		final float damage = p.getDamage();
 		hitByPlayer = true;
@@ -382,13 +424,16 @@ public class Bluey implements Enemy, Observer {
 		System.out.println("\t" + this + " health : " + this.health);
 	}
 
-	public void updatePosition() {
+	public void updatePosition() 
+	{
 		Mover.applyGravity((Actor) this);
 		applyFriction();
 
-		if (isMoving()) {
+		if (isMoving())
+		{
 			applySpeed(facing);
-			if (!Mover.move(this)) {
+			if (!Mover.move(this))
+			{
 				setStandingAnim();
 				moving = false;
 			}
@@ -444,7 +489,8 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public boolean isMoving() {
+	public boolean isMoving() 
+	{
 		return (xSpeed > 0) || (ySpeed > 0);
 	}
 
@@ -481,17 +527,20 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public void setTimeLastSawPlayer(long time) {
+	public void setTimeLastSawPlayer(long time) 
+	{
 		timeLastSawPlayer = time;
 	}
 
 	@Override
-	public boolean hasSeenPlayer() {
+	public boolean hasSeenPlayer()
+	{
 		return hasSeenPlayer;
 	}
 
 	@Override
-	public float getMaxFallSpeed() {
+	public float getMaxFallSpeed()
+	{
 		return MAX_Y_SPEED;
 	}
 
@@ -505,7 +554,8 @@ public class Bluey implements Enemy, Observer {
 	/*
      *
      */
-	private void updateProjectiles() {
+	private void updateProjectiles() 
+	{
 		// for ...
 	}
 
@@ -515,11 +565,12 @@ public class Bluey implements Enemy, Observer {
 	}
 
 	@Override
-	public void draw(Graphics g) {
+	public void draw(Graphics g)
+	{
 		// System.out.println("drawing Bluey: " + getX() + ", " + getY());
 		g.drawAnimation(currentAnim, getX(), getY());
 		drawProjectiles(g);
-
+		//look.draw(g);
 		// this is just debug code to draw; it won't be here for ever :)
 		/*
 		 * if (currentState.getClass().equals(patrol.getClass())) { Action act =
@@ -527,19 +578,23 @@ public class Bluey implements Enemy, Observer {
 		 */
 	}
 
-	public Graphics getGraphics() {
+	public Graphics getGraphics()
+	{
 		return g;
 	}
 
-	private void drawProjectiles(Graphics g) {
+	private void drawProjectiles(Graphics g) 
+	{
 
 	}
 
-	public float getX() {
+	public float getX()
+	{
 		return xPos;
 	}
 
-	public float getY() {
+	public float getY()
+	{
 		return yPos;
 	}
 

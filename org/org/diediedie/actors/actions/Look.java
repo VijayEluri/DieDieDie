@@ -40,7 +40,7 @@ import org.diediedie.actors.tools.Direction;
  * Look instances contain a 'lastLookTime' long variable that contains
  * the last time the current instance was 
  */
-public class Look implements Action
+public class Look extends Object implements Action
 {
     private boolean started, finished, viewCreated;
     //private float xViewStart, yViewStart;
@@ -121,6 +121,7 @@ public class Look implements Action
     @Override
     public void update()
     {
+    	//System.out.println("\n\tLOOK-> update()\n");
         view = new View(host);
         analyseView(view.getShape());   
     }
@@ -244,8 +245,6 @@ public class Look implements Action
         return false;
     }
     
-    
-    
     /*
      * Returns true if a line from Observer o's eye position to the given
      * position collides with any obstacles on the Level.
@@ -266,10 +265,16 @@ public class Look implements Action
     }
          
     @Override
-    public boolean hasStarted() { return started; }
+    public boolean hasStarted() 
+    { 
+    	return started; 
+    }
     
     @Override
-    public boolean hasFinished() { return finished; }
+    public boolean hasFinished()
+    { 
+    	return finished; 
+    }
     
     /*
      * View - constructs the geometry describing the field-of-view from
@@ -288,9 +293,7 @@ public class Look implements Action
         private Line topLine, botLine;
         private Path fovShape;
 
-        private float viewSize;
-
-        
+        private float viewSize;        
         private Color color = Color.white;
         
         // view geometry components
@@ -332,7 +335,6 @@ public class Look implements Action
         {            
 			xViewStart = e.getEyePosX();
             yViewStart = e.getEyePosY();
-            
             
             if(e.getFacing().equals(Direction.LEFT))
             {

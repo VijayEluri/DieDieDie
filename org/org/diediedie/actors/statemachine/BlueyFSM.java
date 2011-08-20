@@ -139,7 +139,7 @@ public class BlueyFSM implements StateMachine
 			   host.hasSeenPlayerEvidence())
 			{
 				System.out.println(
-					host + 	" changing current State PATROL to ALERT");
+					host + " changing current State PATROL to ALERT");
 				currentState = alert;
 			}
 		}
@@ -150,6 +150,13 @@ public class BlueyFSM implements StateMachine
 			 * ALERT and COMBAT States, depending on the proximity of the
 			 * Player. The host never returns to PATROL State.
 			 */
+			if(host.canSeePlayer())
+			{
+				System.out.println(
+				   host + " changing current State ALERT to COMBAT" +
+						" (can see player)");
+				
+			}
 		}
 		else if(currentState.getType() == StateType.COMBAT)
 		{
@@ -158,6 +165,12 @@ public class BlueyFSM implements StateMachine
 			 * which the Player is not visible, or has not attacked the
 			 * host.
 			 */
+			if(!host.canSeePlayer())
+			{
+				System.out.println(
+				   host + " changing current State COMBAT to ALERT" +
+						" (cannot see Player)");
+			}
 		}
 		// finally, update the current state
 		currentState.update();
@@ -173,8 +186,7 @@ public class BlueyFSM implements StateMachine
 	////////////////////////////////////////////////////////////////////////
 	class Patrol implements State
 	{
-		private Action startAction,
-		               currentAction;
+		private Action currentAction;
         private Look look;
         private StartMoving startMoving;
         private StopMoving stopMoving;
@@ -235,17 +247,16 @@ public class BlueyFSM implements StateMachine
 					 * a sudden drop or obstacle ahead).
 					 */
 					Direction facing = host.getFacing();
-					boolean cont = GroundChecker.canContinueMoving(
-							host, facing);
+					boolean cont = 
+							GroundChecker.canContinueMoving(host, facing);
 					//System.out.println(
 						//"\t--> canContinueMoving returned " + cont);
+					
 					if(cont == false)
 					{
 						/*
 						 * We can't go this way; turn around!
 						 */
-						System.out.println("BlueyFSM :: Patrol");
-						System.out.println("\tTurning around!");
 						
 						turnAround = new TurnAround();
 						turnAround.setHost(host);
@@ -253,10 +264,11 @@ public class BlueyFSM implements StateMachine
 					}
 					else
 					{
-						// Keep going in this Direction until we have a
-						// reason to change. I can't think of one in this State
-						// (yet...)
-						currentAction = null;
+						/*
+						 * Keep going in this way until we have a reason 
+						 * to change
+						 */
+						currentAction = look;
 					}
 				}
 				else
@@ -274,10 +286,12 @@ public class BlueyFSM implements StateMachine
 			}
 			else
 			{
-				// Falling. Presumably we've taken this into account and
+				// In the air. Presumably we've taken the ground into account and
 				// the host isn't about to fall to their death...
-				System.out.println("BlueyFSM: " + host + " is falling!");
+				//System.out.println("BlueyFSM: " + host + " is airborne");
 				currentAction = null;
+				
+				// ^ update steering based upon destination?
 			}
 			
 			/*
@@ -286,6 +300,9 @@ public class BlueyFSM implements StateMachine
 			 */
 			if(currentAction != null)
 			{
+				//System.out.println("BlueyFSM :: Patrol");
+				//System.out.println("\t" + currentAction);
+				
 				currentAction.perform();
 			}
 		}
@@ -309,7 +326,6 @@ public class BlueyFSM implements StateMachine
 		public void update() 
 		{
 			
-			
 		}
 
 		@Override
@@ -318,7 +334,6 @@ public class BlueyFSM implements StateMachine
 			// TODO Auto-generated method stub
 			return StateType.ALERT;
 		}
-
 	}
 	
 	class Combat implements State 

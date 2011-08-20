@@ -50,45 +50,20 @@ public class NavMesh implements Drawable
     private Level level; 
     private Color walkableColor = Color.green;
     private Color negativeColor = Color.orange;
-    private Map<Shape, Shape> movementMap;
+    
     /**
      * A mesh created by MeshMaker.
      */ 
-    public NavMesh(Level l, Collection<Shape> walkables,
-                            Collection<Shape> space)
+    public NavMesh(Level l, 
+    			   Collection<Shape> walkables,
+                   Collection<Shape> space)
     {
         setLevel(l);
         walkableZones = walkables;
         negativeSpace = space;
-        //createMovementMap();
+        
         //System.out.println("Check the movement map");
         //System.exit(-1);
-    }
-    
-   /* 
-     * Maps negative space to walkable zones.
-     
-    private void createMovementMap()
-    {
-    	System.out.println("createMovementMap ::");
-    	movementMap = new HashMap<Shape, Shape>();
-    	
-    	boolean printN = true;
-    	int nCount = 0;
-    	
-    	for(Shape n : negativeSpace)
-    	{
-    		for(Shape w : walkableZones)
-    		{
-    			if(w.)
-    		}
-    		
-    	}
-    }*/
-    
-    public Map<Shape, Shape> getMovementMap()
-    {
-    	return movementMap;
     }
     
     @Override
@@ -108,7 +83,7 @@ public class NavMesh implements Drawable
                 g.draw(l);
             }
         }
-        /*
+        
         g.setColor(negativeColor);
         for(Shape n : negativeSpace)
         {
@@ -116,7 +91,7 @@ public class NavMesh implements Drawable
             {
                 g.draw(n);
             }
-        }*/
+        }
     }
     
     /*
@@ -422,18 +397,16 @@ public class NavMesh implements Drawable
             walkableTileList = splitWalkableZones(ledgeTiles2);
             for(List<Tile> tl : walkableTileList)
             {
-            	/*System.out.println("Walkable Tile List");
+            	System.out.println("Walkable Tile List");
             	for(Tile t : tl)
             	{
             		System.out.println("\t" + t.xCoord + ", " + t.yCoord);
             	}
-            	System.out.println("\n");*/
+            	System.out.println("\n");
             	walkableZones.add(
             			makeWalkShape(tl.get(0), tl.get(tl.size()-1)));
             }
         }
-        
-          
         
         private static List<List<Tile>> splitWalkableZones(List<Tile> ledges)
         {
@@ -463,7 +436,7 @@ public class NavMesh implements Drawable
 	        			currentNbrs.add(current);
 	        		}
 	        		else if(previous.xCoord == (current.xCoord - 1)
-	        						&&
+	        					&&
 	        				previous.yCoord == current.yCoord)
 	        		{
 	        			// not the first Tile -- but adjacent to previous
@@ -498,6 +471,8 @@ public class NavMesh implements Drawable
 	        		tit.remove();
 	        	}
         	}
+        	// Add the final neighbour list to the master list
+        	walkableTileList.add(currentNbrs);
         	System.out.println(
         		"\n\tmade " + walkableTileList.size() + " list(s)");
         	

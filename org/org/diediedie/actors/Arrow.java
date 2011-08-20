@@ -36,7 +36,7 @@ import org.newdawn.slick.util.FastTrig;
    http://www.zahniser.net/~russell/computer/index.php?title=movementAngle%20and%20Coordinates
  
  */ 
-public class Arrow implements Projectile
+public class Arrow extends Object implements Projectile
 {      
     // constants
     private final float SIZE = 18f, 

@@ -42,7 +42,7 @@ import org.diediedie.actors.tools.Direction;
 /**
  * The main Player Character. 
  */ 
-public class Player implements Actor, InputProviderListener 
+public class Player extends Object implements Actor, InputProviderListener 
 {    
     private boolean setUp = false, canJump = false;
     final boolean autoUpdate = true;
