@@ -15,6 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+import org.diediedie.Point;
 import org.diediedie.actors.statemachine.StateMachine;
 import org.newdawn.slick.Graphics;
 
@@ -31,5 +32,6 @@ public interface Enemy extends Actor, Observer
     Graphics getGraphics();
     StateMachine getFSM();
     boolean hitByPlayer();
-
+    void setGoto(Point p);
+	Point getGoto();
 }

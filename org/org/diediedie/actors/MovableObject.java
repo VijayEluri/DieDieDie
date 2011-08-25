@@ -1,11 +1,12 @@
 package org.diediedie.actors;
 
-import org.diediedie.actors.tools.Direction;
+import org.newdawn.slick.util.pathfinding.Mover;
+
 
 /**
  * Super-interface for all movable LevelObjects.
  */
-public interface MovableObject extends LevelObject
+public interface MovableObject extends LevelObject, Mover
 {
     float getMoveSpeed();    
 	float getXSpeed();

@@ -44,8 +44,7 @@ public class Level extends TiledMap
     // where the exit of the level is
     public float exitX, exitY;
     
-    // friction. lower number == more friction, because the horizontal
-    // speed is multiplied by this number
+    // lesser number == more friction. xSpeed is multiplied by this number
     public static final float FRICTION = 0.91f;
     
     // other way with gravity because gravity is added to the Actors' 
@@ -67,7 +66,7 @@ public class Level extends TiledMap
         
     private Player player;
     private List<Enemy> enemiesLiving;
-    private List<Enemy> enemiesDead;
+    //private List<Enemy> enemiesDead;
     private Tile playerTile = null;
     
     /**
@@ -97,7 +96,7 @@ public class Level extends TiledMap
     {
         navMesh = MeshMaker.generateMesh(this);
     }
-        
+    
     public void associatePlayer(Player p)
     {
         player = p;        
@@ -162,24 +161,23 @@ public class Level extends TiledMap
     }
     
     /**
-     * Updates the contents of the level, if any.
+     * Updates everything on the level.
      */ 
     public void update()
     {
         updateEnemies();
     }
-    
+
     /**
      * Updates the behaviour and position etc of all enemiesLiving on the
      * level
      */ 
-    public void updateEnemies()
+    private void updateEnemies()
     {
         ListIterator<Enemy> lit = enemiesLiving.listIterator();
         
         while(lit.hasNext())
         {
-            
             Enemy e = lit.next();
             if(e.getHealth() <= 0)
             {
@@ -193,9 +191,6 @@ public class Level extends TiledMap
         }
     }
 
-    
-    
-    
     /*
      * Sorts the object layer into separate structures
      */ 
@@ -281,8 +276,6 @@ public class Level extends TiledMap
         return new MapLayer(tiles, index, VISIBLE);
     }
     
-    
-        
     @Override
 	public void render(int x, int y)
     {

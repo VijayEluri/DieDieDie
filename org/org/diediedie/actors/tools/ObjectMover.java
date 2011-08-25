@@ -24,7 +24,7 @@ import org.diediedie.actors.Projectile;
 /**
  * Class used to Actors and Projectile(s) around a Level. 
  */ 
-public class Mover
+public class ObjectMover
 {    
     static final int INTERVAL = 10;
     
@@ -35,10 +35,19 @@ public class Mover
      */ 
     public static boolean move(final Actor a)
     {
-        //System.out.println("moving " + a);
-        final float oldX = a.getX();
-        final float oldY = a.getY();
+    	/*if(a.getYSpeed() == a.getJumpSpeed())
+    	{
+	        System.out.println(
+	        	"moving : " + a + " xSpeed " 
+	        		+ a.getXSpeed() 
+	        		+ " ySpeed " 
+	        		+ a.getYSpeed()
+	        		+ " direction " 
+	        		+ a.getFacing());
+    	}*/
         
+    	final float oldX = a.getX();
+        final float oldY = a.getY();
         // test new position
         
         // vertical 
@@ -49,7 +58,7 @@ public class Mover
             if(a.getY() >= oldY)
             {
             	/*
-            	 * Only set canJump=true if we hit the floot (not the 
+            	 * Only set canJump=true if we hit the floor (not the 
             	 * ceiling)
             	 */
                 a.setCanJump(true);

@@ -21,7 +21,7 @@ import org.diediedie.actors.Projectile;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.tools.Collider;
 import org.diediedie.actors.tools.Direction;
-import org.diediedie.actors.tools.Mover;
+import org.diediedie.actors.tools.ObjectMover;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Shape;
@@ -300,8 +300,8 @@ public class Arrow extends Object implements Projectile
         adjustFacingAngle();
         oldX = startX;
         oldY = startY;
-        Mover.applyGravity(this);
-        Mover.move(this);
+        ObjectMover.applyGravity(this);
+        ObjectMover.move(this);
         
         Enemy e = Collider.collidesEnemy(this);
         

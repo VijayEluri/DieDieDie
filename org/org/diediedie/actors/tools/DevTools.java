@@ -1,6 +1,6 @@
 // Development and Debugging Tools
 
-package org.diediedie;
+package org.diediedie.actors.tools;
 
 import java.lang.reflect.Method;
 
@@ -12,7 +12,7 @@ public abstract class DevTools
         Class<? extends Object> c = o.getClass();
         return c.getDeclaredMethods();
     }
-
+    
     public static void printMethods(Object o)
     {
         System.out.println("Methods of " + o.getClass().getName());

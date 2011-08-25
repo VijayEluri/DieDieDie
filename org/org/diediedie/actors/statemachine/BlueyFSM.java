@@ -247,10 +247,10 @@ public class BlueyFSM implements StateMachine
 					 * a sudden drop or obstacle ahead).
 					 */
 					Direction facing = host.getFacing();
-					boolean cont = 
-							GroundChecker.canContinueMoving(host, facing);
-					//System.out.println(
-						//"\t--> canContinueMoving returned " + cont);
+					boolean cont = GroundChecker.canContinueMoving(
+						host, facing);
+					/*System.out.println(
+						"\t--> canContinueMoving returned " + cont);*/
 					
 					if(cont == false)
 					{

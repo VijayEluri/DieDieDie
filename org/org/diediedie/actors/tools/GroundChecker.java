@@ -1,5 +1,4 @@
 package org.diediedie.actors.tools;
-import java.util.Map;
 
 import org.diediedie.actors.Actor;
 import org.newdawn.slick.geom.Shape;
@@ -22,10 +21,11 @@ public class GroundChecker
 	 */
 	public static boolean canContinueMoving(Actor a, Direction d)
 	{
+		//assert a.canJump();
 		//System.out.println("\tcanContinueMoving...");
-		Shape zone = a.getZone();
 		//assert (d == Direction.LEFT) || (d == Direction.RIGHT);
-		
+		Shape zone = a.getZone();
+
 		if(zone == null)
 		{
 			System.out.println("Zone is null!");
@@ -34,18 +34,18 @@ public class GroundChecker
 		
 		/*
 		 * Actor is on a walkableZone -- check how far it extends it the
-		 * Actor's direction d
+		 * Actor's direction (d)
 		 */
 		if(d == Direction.LEFT)
 		{
-			if(zone.getMinX() < (a.getX()-1))
+			if(zone.getMinX() < (a.getX() - 2))
 			{
 				return true;
 			}
 		}
 		else if(d == Direction.RIGHT)
 		{
-			if(zone.getMaxX() > (a.getX() + (a.getWidth()+1) ))
+			if(zone.getMaxX() > (a.getX() + (a.getWidth()+ 2) ))
 			{
 				return true;
 			}

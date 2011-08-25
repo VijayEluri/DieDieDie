@@ -16,10 +16,13 @@
  */
 package org.diediedie;
 
+import org.diediedie.actors.Enemy;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.tools.Direction;
 import java.io.FileInputStream;
 import java.io.File;
+import java.util.Date;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -41,6 +44,18 @@ public class DieDieDie extends BasicGame
 
 	private final String TILE_SETS_PATH = "data",
 			LEVEL_1_PATH = "data/level1.tmx", LEVEL_ONE_NAME = "Level 1";
+
+	private boolean gameStarted;
+
+	private Date now = new Date();
+
+	private long gameStartTime;
+
+	private long currentTime;
+
+	private long DEBUG_INTERRUPT = 2000;
+
+	private boolean alreadyDebugMode = false;
 
 	public static final float GRAVITY = 0.20f;
 
@@ -108,10 +123,32 @@ public class DieDieDie extends BasicGame
 	 */
 	public void update(GameContainer container, int delta)
 	{
+		if(!gameStarted)
+		{
+			gameStarted = true;
+			/*
+			 *  Record the game start time  in order to trigger
+			 *  time-based events on the current level (for 
+			 *  debugging purposes)
+			 */
+			gameStartTime = System.currentTimeMillis();
+		}
+		//updateCurrentTime();
+		
 		player.update();
 		currentLevel.update();
 	}
-
+	
+	public long millisSinceGameStart()
+	{
+		return currentTime - gameStartTime;
+	}
+	
+	public long getCurrentTime()
+	{
+		return System.currentTimeMillis();
+	}
+	
 	/**
 	 * Render the updated game state.
 	 */

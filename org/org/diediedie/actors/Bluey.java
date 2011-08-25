@@ -18,12 +18,14 @@ package org.diediedie.actors;
 
 import java.util.Date;
 import org.diediedie.Level;
+import org.diediedie.NegativeSpace;
+import org.diediedie.Point;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.actions.Look;
 import org.diediedie.actors.statemachine.BlueyFSM;
 import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.Direction;
-import org.diediedie.actors.tools.Mover;
+import org.diediedie.actors.tools.ObjectMover;
 import org.diediedie.actors.Enemy;
 import java.util.Set;
 import java.util.HashSet;
@@ -47,20 +49,27 @@ public class Bluey extends Object implements Enemy, Observer
 	public final String leftStandPath = "data/bluey_standing_left.png";
 	private Graphics g;
 	private Date date;
-	public final String[] leftWalkPaths =  {"data/bluey_walk_left_1.png",
-											"data/bluey_walk_left_2.png", 
-											"data/bluey_walk_left_3.png",
-											"data/bluey_walk_left_4.png", 
-											"data/bluey_walk_left_5.png",
-											"data/bluey_walk_left_6.png"};
+	public final String[] leftWalkPaths =  {
+			"data/bluey_walk_left_1.png",
+			"data/bluey_walk_left_2.png", 
+			"data/bluey_walk_left_3.png",
+			"data/bluey_walk_left_4.png", 
+			"data/bluey_walk_left_5.png",
+			"data/bluey_walk_left_6.png"};
 	
-	public final float MAX_Y_SPEED = 20.5f, WALK_SPEED = 1f, RUN_SPEED = 3.1f,
-			JUMP_SPEED = -5.5f, EYE_OFFSET_HEIGHT = 5f;
+	public final float MAX_Y_SPEED = 20.5f, 
+					   WALK_SPEED = 1f, 
+					   RUN_SPEED = 3,
+					   JUMP_SPEED = -5.5f, 
+					   EYE_OFFSET_HEIGHT = 5f;
 
 	private long timeLastSawPlayer = 0L;
 
-	private boolean canJump = false, canSeePlayer = false, moving = false,
-					hasSeenPlayer = false, seenPlayerEvidence = false;
+	private boolean canJump = false, 
+				    canSeePlayer = false, 
+				    moved = false,
+					hasSeenPlayer = false, 
+					seenPlayerEvidence = false;
 
 	private int health, width, height;
 	private Direction facing = null;
@@ -91,6 +100,14 @@ public class Bluey extends Object implements Enemy, Observer
 	private boolean hitByPlayer = false;
 
 	private Shape lastPlayerLocation;
+
+	private Point gotoPoint;
+
+	private NegativeSpace negativeSpaceGoto = null;
+
+	private long printJumpTime;
+
+	private final int printJumpDataDuration = 1;
 
 	//private Look look;
 
@@ -257,9 +274,33 @@ public class Bluey extends Object implements Enemy, Observer
 	@Override
 	public void setYSpeed(float f) 
 	{
+		/*if(f == 0)
+		{
+			System.out.println(
+				"\n" + "setYSpeed() was sent JUMP_SPEED");
+			System.out.println("stack trace follows:");
+			StackTraceElement[] stackTraceElements = 
+				Thread.currentThread().getStackTrace();
+			
+			int i = 0;
+			
+			for(StackTraceElement s : stackTraceElements)
+			{
+				if(i > 0)
+				{
+					System.out.println("\t" + s);
+				}
+				else
+				{
+					i++;
+				}
+			}
+			//System.exit(-1);
+			
+		}*/
 		ySpeed = f;
 	}
-
+	
 	@Override
 	public void setXSpeed(float f)
 	{
@@ -269,6 +310,8 @@ public class Bluey extends Object implements Enemy, Observer
 	@Override
 	public Direction getFacing() 
 	{
+		//System.out.println(
+			//"Bluey " + hashCode() + " facing " + facing);
 		return facing;
 	}
 
@@ -307,19 +350,22 @@ public class Bluey extends Object implements Enemy, Observer
 		Image[] leftStandImages = { leftStand1 };
 		Image[] rightStandImages = { rightStand1 };
 
-		leftStandAnim = new Animation(leftStandImages, Actor.ANIM_DURATION,
-				true);
-		rightStandAnim = new Animation(rightStandImages, Actor.ANIM_DURATION,
-				true);
+		leftStandAnim = new Animation(
+			leftStandImages, Actor.ANIM_DURATION, true);
+		rightStandAnim = new Animation(
+			rightStandImages, Actor.ANIM_DURATION, true);
 
 		// walking anims
-		Image[] leftWalkImages = AnimCreator.getImagesFromPaths(leftWalkPaths)
-				.toArray(rightStandImages);
+		Image[] leftWalkImages = AnimCreator.getImagesFromPaths(
+			leftWalkPaths).toArray(rightStandImages);
+		
 		Image[] rightWalkImages = AnimCreator.getHorizontallyFlippedCopy(
 				leftWalkImages).toArray(rightStandImages);
-		leftWalkAnim = new Animation(leftWalkImages, Actor.ANIM_DURATION, true);
-		rightWalkAnim = new Animation(rightWalkImages, Actor.ANIM_DURATION,
-				true);
+
+		leftWalkAnim = new Animation(
+			leftWalkImages, Actor.ANIM_DURATION, true);
+		rightWalkAnim = new Animation(
+			rightWalkImages, Actor.ANIM_DURATION, true);
 
 		facing = Direction.LEFT;
 		currentAnim = leftStandAnim;
@@ -351,18 +397,36 @@ public class Bluey extends Object implements Enemy, Observer
 
 	@Override
 	/**
-	 * Instructs the enemy to jump
+	 * Causes the enemy to jump.
 	 */
 	public void jump() 
 	{
 		if(canJump()) 
 		{
-			System.out.println("bluey jump");
-			ySpeed = JUMP_SPEED;
+			System.out.println("\tbluey : jump()");
+			setYSpeed(JUMP_SPEED);
 			canJump = false;
 		}
 	}
-
+	
+	private void printJumpingData(int gap)
+	{
+        date = new Date();
+		long now = date.getTime();
+		
+		// debugging method
+		if(!canJump 
+				&&
+		   (now - this.printJumpTime) >= gap)
+		{
+			System.out.println("Bluey " + hashCode() + " is airbone:");
+			System.out.println("\t" + "facing " + getFacing());
+			System.out.println("\t" + "ySpeed " + ySpeed);
+			System.out.println("\t" + "xSpeed " + xSpeed);
+			//System.out.println("\t" + );
+		}
+	}
+	
 	@Override
 	public Shape getZone()
 	{
@@ -382,6 +446,8 @@ public class Bluey extends Object implements Enemy, Observer
 		updateProjectiles();
 		stateMachine.update();
 		// printInfo(5);
+		
+		printJumpingData(this.printJumpDataDuration );
 	}
 
 	/*
@@ -397,7 +463,7 @@ public class Bluey extends Object implements Enemy, Observer
 		date = new Date();
 		long now = date.getTime();
 
-		if ((now - lastInfoCallTime) >= seconds * 1000)
+		if((now - lastInfoCallTime) >= seconds * 1000)
 		{
 			System.out.println("Bluey : hashcode " + hashCode()
 					+ "\n\thealth\t\t" + health + "\n\tseenPlayer\t"
@@ -430,16 +496,21 @@ public class Bluey extends Object implements Enemy, Observer
 
 	public void updatePosition() 
 	{
-		Mover.applyGravity((Actor) this);
+		ObjectMover.applyGravity((Actor) this);
 		applyFriction();
 
-		if (isMoving())
+		if(isMoving())
 		{
 			applySpeed(facing);
-			if (!Mover.move(this))
+			
+			if(!ObjectMover.move(this))
 			{
 				setStandingAnim();
-				moving = false;
+				moved = false;
+			}
+			else
+			{
+				moved = true;
 			}
 		}
 	}
@@ -450,7 +521,8 @@ public class Bluey extends Object implements Enemy, Observer
 		if (getFacing().equals(Direction.RIGHT)) 
 		{
 			currentAnim = rightStandAnim;
-		} else if (getFacing().equals(Direction.LEFT)) 
+		} 
+		else if (getFacing().equals(Direction.LEFT)) 
 		{
 			currentAnim = leftStandAnim;
 		} else
@@ -613,6 +685,48 @@ public class Bluey extends Object implements Enemy, Observer
 	{
 		
 		return lastPlayerLocation;
+	}
+
+	/*
+	 * Sets the target destination for this Enemy.
+	 */
+	@Override
+	public void setGoto(Point p)
+	{
+		if(!isValidGotoPoint(p))
+		{
+			return;
+		}
+		this.gotoPoint = p;
+		System.out.println(
+			"Bluey " + hashCode() + ".setGoto(" + p.x + ", " + p.y + ")");
+	}
+	
+	/*
+	 * Returns true if the current gotoPoint is in a valid position.
+	 * 
+	 * Returns false if the point is null or in a collision tile or is otherwise
+	 * unreachable.
+	 */
+	private boolean isValidGotoPoint(Point p)
+	{
+		System.out.println("isGotoPointValid() ");		
+		this.negativeSpaceGoto  = 
+				getLevel().getNavMesh().getNegativeSpaceFromPoint(p);
+	
+		if(p == null)
+		{
+			System.out.println("\t gotoPoint is in a collision tile");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public Point getGoto()
+	{
+		return this.gotoPoint;
 	}
 	
 }

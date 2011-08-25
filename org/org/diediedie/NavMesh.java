@@ -225,7 +225,21 @@ public class NavMesh implements Drawable
         }
     }
     
-    
+    /*
+     * Returns the negative space object containing this Point, or 
+     * null if there isn't one.
+     */
+    public NegativeSpace getNegativeSpaceFromPoint(Point p)
+    {
+    	for(NegativeSpace n : negativeSpaces)
+    	{
+    		if(n.getShape().contains(p.x, p.y))
+    		{
+    			return n;
+    		}
+    	}
+    	return null;
+    }
     
     
     /**

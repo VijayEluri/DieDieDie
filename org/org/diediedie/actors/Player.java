@@ -16,7 +16,7 @@
  */
 package org.diediedie.actors;
 import org.diediedie.actors.tools.AnimCreator;
-import org.diediedie.actors.tools.Mover;
+import org.diediedie.actors.tools.ObjectMover;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
 import org.diediedie.Level;
+import org.diediedie.Point;
 import org.diediedie.Tile;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Arrow;
@@ -72,7 +73,7 @@ public class Player extends Object implements Actor, InputProviderListener
                //arrowCount = 0, 
                 mouseX, 
                 mouseY,
-                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;   
+                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;
                     
     // Movement
     private Command jump;
@@ -217,6 +218,7 @@ public class Player extends Object implements Actor, InputProviderListener
         prov.bindCommand(new KeyControl(Input.KEY_D), right);
         prov.bindCommand(new KeyControl(Input.KEY_W), jump);
         
+        
         in.addMouseListener(new MouseListener()
         {
             public void	mousePressed(int button, int x, int y) 
@@ -235,6 +237,20 @@ public class Player extends Object implements Actor, InputProviderListener
                     mouseY = y;  
                     readyArrow();
                 }
+                else if(button == Input.MOUSE_RIGHT_BUTTON)
+                {
+                	/*
+                	 * For now this button is for creating a 'goto'
+                	 * for the Enemy, as a way of testing path-finding
+                	 *  algortithms.
+                	 */
+                	for(Enemy e : getLevel().getEnemies())
+                	{
+                		//e.setGoto(new Point(
+                			//	(float)mouseX, (float)mouseY));
+                		e.jump();
+                	}
+                }
             }
             public void	mouseReleased(int button, int x, int y)
             {
@@ -244,10 +260,12 @@ public class Player extends Object implements Actor, InputProviderListener
                     releaseArrow();
                 }
             }
+            
             public boolean isAcceptingInput() 
             {
                 return true;
             } 
+            
             public void	mouseMoved(int oldx, int oldy, int newx, int newy) 
             {
                 // keep track of the mouse position
@@ -255,8 +273,6 @@ public class Player extends Object implements Actor, InputProviderListener
                 mouseY = newy;
             }
             public void	mouseWheelMoved(int change) {}            
-            
-            // boiler plate code. yeah. sorry.
             public void	mouseClicked(int button, int x, int y, int clicks) {}
             public void	mouseDragged(int oldx, int oldy, int newx, int newy) {} 
             public void	inputEnded(){} 
@@ -574,7 +590,7 @@ public class Player extends Object implements Actor, InputProviderListener
     @Override
     public void update()
     {
-        Mover.applyGravity(this);
+    	ObjectMover.applyGravity(this);
         applyFriction();
                 
         if(running)
@@ -592,7 +608,7 @@ public class Player extends Object implements Actor, InputProviderListener
             chargeArrow();
         }
         updateFiredArrows();
-        Mover.move(this);
+        ObjectMover.move(this);
     }
     
     @Override

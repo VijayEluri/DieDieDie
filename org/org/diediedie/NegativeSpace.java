@@ -27,6 +27,7 @@ public class NegativeSpace implements Drawable
 	private Level level = null;
 	private Point centre = null;
 	private Rectangle centerRect = null;
+	private int nextColorCount = 1;
 	
 	
 	public NegativeSpace(SliceGroup sg)
@@ -92,7 +93,8 @@ public class NegativeSpace implements Drawable
 		{
 			Shape s = new Path(centre.x, centre.y);
 			 ((Path) s).lineTo(ns.getCentre().x, ns.getCentre().y);
-			
+			((Path) s).close();
+			neighbourLinkShapes.add(s);
 		}
 	}
 
@@ -141,11 +143,15 @@ public class NegativeSpace implements Drawable
 	@Override
 	public void draw(Graphics g)
 	{
-		final Color c = g.getColor();
+		//final Color c = g.getColor();
 		g.draw(shape);
-		g.setColor(Color.blue);
+		/*g.setColor(Color.blue);
 		g.fill(centerRect);
-		g.setColor(c);
+		/*for(Shape s : neighbourLinkShapes)
+		{
+			g.draw(s);
+		}
+		g.setColor(c);*/
 	}
 	
 	public Point getCentre()
@@ -157,7 +163,6 @@ public class NegativeSpace implements Drawable
 	{
 		centre = new Point(shape.getCenterX(), shape.getCenterY());
 	}
-	
 
 	@Override
 	public void setLevel(Level l)
