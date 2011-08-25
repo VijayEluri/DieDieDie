@@ -37,9 +37,7 @@ public class Aligner
         {
             // here 'canJump' is used to discern the direction of the
             // collision; i.e. a 'true' value indicates (hopefully) 
-            // that the m *fell* into this collision rather than
-            // headbutted it... 
-            
+            // that the Actor fell rather than flew...
             if(m.canJump())
             {
                 m.setY(m.getY() + INCR);
@@ -58,6 +56,4 @@ public class Aligner
             m.setY(m.getY() + INCR);
         }
     }    
-    
-    
 }

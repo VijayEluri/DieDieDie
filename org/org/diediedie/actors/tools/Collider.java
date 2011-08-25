@@ -29,7 +29,8 @@ public class Collider
 {
     public static boolean collidesLevel(Actor m)
     {
-        if(m.getLevel().collides(AnimCreator.getCurrentFrameRect(m)))
+        if(m.getLevel().collides(
+           AnimCreator.getCurrentFrameRect(m)))
         {
             return true;
         }
@@ -43,7 +44,7 @@ public class Collider
     public static boolean collidesLevel(Projectile p)
     {
         if(p.isFlying() 
-            &&
+        		&&
            p.getLevel().collides(p.getShape()))
         {
             System.out.println(p + " collides Level with speeds :");

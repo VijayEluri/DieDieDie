@@ -44,8 +44,8 @@ public class Bluey extends Object implements Enemy, Observer
 	public static final int MAX_HEALTH = 50;
 
 	// viewSize - size of the triangular view shape used for Looking for
-	
 	private final float viewSize = 500f;
+	
 	public final String leftStandPath = "data/bluey_standing_left.png";
 	private Graphics g;
 	private Date date;
@@ -108,8 +108,6 @@ public class Bluey extends Object implements Enemy, Observer
 	private long printJumpTime;
 
 	private final int printJumpDataDuration = 1;
-
-	//private Look look;
 
 	/**
 	 * Constructor. The object is associated with a Level and is positioned as
@@ -243,6 +241,11 @@ public class Bluey extends Object implements Enemy, Observer
 	@Override
 	public void setCanJump(boolean b) 
 	{
+		if(b != canJump)
+		{
+			System.out.println("Bluey " + hashCode() 
+				+ " canJump changed to " + b); 
+		}
 		canJump = b;
 		// System.out.println("bluey: canJump == " + canJump);
 	}
@@ -530,7 +533,6 @@ public class Bluey extends Object implements Enemy, Observer
 					"standing dir neither left or right");
 	}
 
-	// Woah there!
 	private void applyFriction() 
 	{
 		xSpeed *= Level.FRICTION;
@@ -555,7 +557,9 @@ public class Bluey extends Object implements Enemy, Observer
 	@Override
 	public float getEyePosX() 
 	{
-		return xPos + (AnimCreator.getCurrentFrameRect(this).getWidth() / 2);
+		return xPos + (
+			AnimCreator.getCurrentFrameRect(
+					 		this).getWidth() / 2);
 	}
 
 	@Override
@@ -567,7 +571,18 @@ public class Bluey extends Object implements Enemy, Observer
 	@Override
 	public boolean isMoving() 
 	{
-		return (xSpeed > 0) || (ySpeed > 0);
+		/*
+		 *  Assume that if canJump == false then Bluey is falling 
+		 *  (and is therefore moving)
+		 */
+		if(!canJump)
+		{
+			return true;
+		}
+		else
+		{
+			return xSpeed != 0;
+		}
 	}
 
 	@Override
@@ -581,7 +596,7 @@ public class Bluey extends Object implements Enemy, Observer
 	{
 		canSeePlayer = b;
 
-		if (b && !hasSeenPlayer())
+		if(b && !hasSeenPlayer())
 		{
 			setHasSeenPlayer(true);
 		}
@@ -621,10 +636,11 @@ public class Bluey extends Object implements Enemy, Observer
 	}
 
 	@Override
-	public void die() {
-		System.out.println("Die, you, " + this);
+	public void die() 
+	{
+		System.out.println("\n\t KILLING " + this);
 		health = 0;
-		// n i
+		// n i clean up this bitch
 	}
 
 	/*

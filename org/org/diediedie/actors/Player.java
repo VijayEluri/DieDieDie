@@ -651,7 +651,7 @@ public class Player extends Object implements Actor, InputProviderListener
     {
         if(canJump())
         {
-            ySpeed = JUMP_SPEED;
+            setYSpeed(JUMP_SPEED);
             canJump = false;
         }
     }

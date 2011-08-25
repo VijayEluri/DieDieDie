@@ -37,4 +37,5 @@ public interface Actor extends MovableObject
 	void resetAccelX();
 	int getWidth();
     int getHeight();
+    
 }  

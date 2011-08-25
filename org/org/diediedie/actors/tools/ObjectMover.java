@@ -35,8 +35,11 @@ public class ObjectMover
      */ 
     public static boolean move(final Actor a)
     {
-    	/*if(a.getYSpeed() == a.getJumpSpeed())
+    	/*if(a.getYSpeed() >= a.getJumpSpeed()
+    		&&
+    	   a.canJump())
     	{
+    		
 	        System.out.println(
 	        	"moving : " + a + " xSpeed " 
 	        		+ a.getXSpeed() 
@@ -44,8 +47,9 @@ public class ObjectMover
 	        		+ a.getYSpeed()
 	        		+ " direction " 
 	        		+ a.getFacing());
-    	}*/
-        
+    	}
+        */
+    	
     	final float oldX = a.getX();
         final float oldY = a.getY();
         // test new position
