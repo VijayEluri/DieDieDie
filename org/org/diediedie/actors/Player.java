@@ -51,7 +51,7 @@ public class Player extends Object implements Actor, InputProviderListener
     private float accelX = 0f, bowCharge = 0, bowX, bowY, 
                   bowYCurrentOffset;
                   
-    private int height, width;
+    private int height, width, minReleaseCharge = 7;
     
     public final float MAX_CHARGE = 20.34f, 
                        CHARGE_INCR = 0.3f, 
@@ -434,13 +434,15 @@ public class Player extends Object implements Actor, InputProviderListener
      */ 
     private void releaseArrow()
     {
-        isChargingArrow = false;
-        currentArrow.release(bowCharge);
-        firedArrows.add(currentArrow);
-        currentArrow = null;
-        
-        System.out.println("released arrow, power " + bowCharge);        
-        bowCharge = 0;
+    	if(bowCharge >= minReleaseCharge)
+    	{
+	        currentArrow.release(bowCharge);
+	        firedArrows.add(currentArrow);
+	        System.out.println("released arrow, power " + bowCharge);        
+    	}
+    	isChargingArrow = false;
+    	currentArrow = null;
+    	bowCharge = 0;
     }
     
     /**
