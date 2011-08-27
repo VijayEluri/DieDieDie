@@ -28,6 +28,7 @@ import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
@@ -68,6 +69,8 @@ public class Level extends TiledMap
     private List<Enemy> enemiesLiving;
     //private List<Enemy> enemiesDead;
     private Tile playerTile = null;
+
+	private Image levelArt;
     
     /**
      * Create a Level
@@ -91,6 +94,11 @@ public class Level extends TiledMap
         sortObjects();
         createNavMesh();
     }   
+    
+    public void setLevelArt(String pathToImage)
+    {
+    	levelArt = AnimCreator.loadImage(pathToImage);
+    }
     
     private void createNavMesh()
     {
@@ -250,7 +258,8 @@ public class Level extends TiledMap
      */ 
     private MapLayer createMapLayer(int index)
     {
-        List<Tile> tiles = new ArrayList<Tile>();  
+        List<Tile> tiles = new ArrayList<Tile>();
+        
         for(int x = 0; x < getWidth(); x++)
         {
             for(int y = 0; y < getHeight(); y++)
@@ -293,9 +302,15 @@ public class Level extends TiledMap
         render(0, 0);
         navMesh.draw(g);
         drawEnemies(g);
+        drawLevelArt(g);
     }
     
-    /**
+    private void drawLevelArt(Graphics g) 
+    {
+    	g.drawImage(levelArt, 0, 0);
+	}
+
+	/**
      * Draw using Graphics object g any visible enemiesLiving. 
      */ 
     private void drawEnemies(Graphics g)

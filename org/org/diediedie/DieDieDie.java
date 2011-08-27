@@ -43,7 +43,9 @@ public class DieDieDie extends BasicGame
 	private Level level1 = null, currentLevel = null;
 
 	private final String TILE_SETS_PATH = "data",
-			LEVEL_1_PATH = "data/level1.tmx", LEVEL_ONE_NAME = "Level 1";
+						 LEVEL_1_PATH = "data/level1.tmx", 
+						 LEVEL_ONE_NAME = "Level 1",
+						 level1ArtPath = "data/level1_background.png";
 
 	private boolean gameStarted;
 
@@ -56,6 +58,8 @@ public class DieDieDie extends BasicGame
 	private long DEBUG_INTERRUPT = 2000;
 
 	private boolean alreadyDebugMode = false;
+
+
 
 	public static final float GRAVITY = 0.20f;
 
@@ -94,6 +98,7 @@ public class DieDieDie extends BasicGame
 	{
 		level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
 				Direction.LEFT, GRAVITY);
+		level1.setLevelArt(level1ArtPath);
 	}
 
 	/*

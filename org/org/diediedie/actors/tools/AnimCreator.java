@@ -42,7 +42,8 @@ public class AnimCreator
      * on load. 
      */ 
     public static Animation createAnimFromPaths(int duration, 
-                                    boolean autoUpdate, String... paths)
+                                    			boolean autoUpdate, 
+                                    			String... paths)
     {
         List<Image> images = getImagesFromPaths(paths);
         Image[] imgArr = new Image[images.size()];
@@ -55,6 +56,8 @@ public class AnimCreator
      */ 
     public static Image loadImage(String path)
     {
+    	System.out.println(
+        		"load image : " + path);
         try
         {
             return new Image(new FileInputStream(
@@ -110,6 +113,7 @@ public class AnimCreator
         List<Image> images = getEmptyImageList();
         for(String p : paths)
         {
+        	
             images.add(loadImage(p));               
         }
         return images;

@@ -93,17 +93,38 @@ public class Player extends Object implements Actor, InputProviderListener
         
     private final String bowLeftPath = "data/STICKMAN_BOW_LEFT.png";
     
-    private final String[] leftWalkPaths = 
-    {
+    private final String[] leftWalkPaths = {
+    	"data/1.png",	
+    	"data/2.png",
+    	"data/3.png",
+    	"data/4.png",
+    	"data/5.png",
+    	"data/6.png",
+    	"data/7.png",
+    	"data/8.png",
+    };
+    /*{
+    	"data/test_sprite/1.png",	
+    	"data/test_sprite/2.png",
+    	"data/test_sprite/3.png",
+    	"data/test_sprite/4.png",
+    	"data/test_sprite/5.png",
+    	"data/test_sprite/6.png",
+    	"data/test_sprite/7.png",
+    	"data/test_sprite/8.png",
+    };*/
+    /*
+      Old shit sprite:
+      {
         "data/STICKMAN_LEFT_WALK_1.png", 
         "data/STICKMAN_LEFT_WALK_2.png",
         "data/STICKMAN_LEFT_WALK_3.png", 
         "data/STICKMAN_LEFT_WALK_4.png",  
         "data/STICKMAN_LEFT_WALK_5.png", 
         "data/STICKMAN_LEFT_WALK_6.png"
-    };
+    };*/
     
-    private final String[] rightWalkPaths =
+    /*private final String[] rightWalkPaths =
     {
         "data/STICKMAN_RIGHT_WALK_1.png", 
         "data/STICKMAN_RIGHT_WALK_2.png",
@@ -111,19 +132,22 @@ public class Player extends Object implements Actor, InputProviderListener
         "data/STICKMAN_RIGHT_WALK_4.png",  
         "data/STICKMAN_RIGHT_WALK_5.png", 
         "data/STICKMAN_RIGHT_WALK_6.png"
-    }; 
+    };*/ 
     
     private String[] leftStandPaths =
     {
-        "data/STICKMAN_LEFT_STAND.png"        
+  		"data/standing.png"
+        //"data/test_sprite/standing.png"
+    	//"data/STICKMAN_LEFT_STAND.png"        
     };
     
-    private String[] rightStandPaths = 
+    /*private String[] rightStandPaths = 
     {
         "data/STICKMAN_RIGHT_STAND.png"        
-    };
+    };*/
     private Animation leftWalk, rightWalk, leftStand, rightStand,
                       currentAnim;
+    
     private Image bowLeft, bowRight, currentBow;
     
     // associated level for collision / item collection reference
@@ -758,22 +782,63 @@ public class Player extends Object implements Actor, InputProviderListener
      */ 
     private void initAnim()
     {
-        
-        leftWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, leftWalkPaths);
-        rightWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, rightWalkPaths);           
-        rightStand = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, rightStandPaths);
-        leftStand = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-                                    autoUpdate, leftStandPaths);                
-        currentAnim = leftStand;
-        
-        // get initial direction from the level
+    	
+        //leftWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
+          //                          autoUpdate, leftWalkPaths);
+        // get the images for leftWalk so we can flip them to use as right.#
+    	Image[] leftWalkImgs = new Image[leftWalkPaths.length];
+    	Image[] rightWalkImgs = new Image[leftWalkPaths.length];
+    	Image[] leftStandImgs = new Image[leftStandPaths.length];
+    	Image[] rightStandImgs = new Image[leftStandPaths.length];
+    	
+    	leftWalkImgs = AnimCreator.getImagesFromPaths(
+    			leftWalkPaths).toArray(leftWalkImgs);
+    	rightWalkImgs = AnimCreator.getHorizontallyFlippedCopy(
+    			leftWalkImgs).toArray(rightWalkImgs);
+    	
+    	leftStandImgs = AnimCreator.getImagesFromPaths(
+    			leftStandPaths).toArray(leftStandImgs);
+    	rightStandImgs = AnimCreator.getHorizontallyFlippedCopy(
+    			leftStandImgs).toArray(rightStandImgs);
+    	
+    	boolean autoUpdate = true;
+    	
+    	leftWalk = new Animation(leftWalkImgs, 
+    							 Actor.ANIM_DURATION, 
+    							 autoUpdate);
+    	
+    	rightWalk = new Animation(rightWalkImgs, 
+    							  Actor.ANIM_DURATION, 
+				                  autoUpdate);
+    	
+    	leftStand = new Animation(leftStandImgs, 
+								  Actor.ANIM_DURATION, 
+								  autoUpdate);
+    	
+    	rightStand = new Animation(rightStandImgs, 
+    							   Actor.ANIM_DURATION,
+    							   autoUpdate);
+    	
+    	setInitialAnim();
+    }    
+    
+    private void setInitialAnim()
+    {
+    	// get the initial direction from the level and 
+    	// select an animation based upon it.
         facing = level.playerFacing;
         
-        Image i = leftWalk.getCurrentFrame();
+        if(facing == Direction.LEFT)
+        {	
+        	currentAnim = leftWalk;
+        }
+        else
+        {
+        	currentAnim = rightWalk;
+        }
+        
+        Image i = currentAnim.getCurrentFrame();
         width = i.getWidth();
         height = i.getHeight();
-    }    
+    }
 }
