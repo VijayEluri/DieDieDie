@@ -1,0 +1,31 @@
+
+18/08/11
+========
+
+[alex]
+
+I had an idea that there could be a certain clumsiness to the character to encourage the player to take their time and think things through... because invariably there'll be levels that you could power through by charging along, I was wondering what you thought about building a handicap into the "run" state by having him stumble or something at random intervals
+ 
+ So if you really wanted to you could run through a level but you'd be periodically vulnerable
+ 
+[me] i was thinking that shooting whilst running would be really inaccurate
+: the stumble thing could definitely be done
+ or we could have an 'accuracy meter' that shrinks as you run along
+...
+[alex]Well what really inspires me about the Assassins Creed Multiplayer is that you can't be a cunt, you play by the rules and you play well or you die
+(12:18:21) sean.talbot@gmail.com/8BEC519E: yeah
+(12:18:24) Alexander Bertram-Powell: There are very few shortcuts or cheats
+(12:18:37) sean.talbot@gmail.com/8BEC519E: that's good - that may mean less AI coding!
+(12:18:51) Alexander Bertram-Powell: And even if you run around making quick kills, the stealthy guy who does quality playing still wins
+(12:19:04) sean.talbot@gmail.com/8BEC519E: yeah, we can have different scores for different kills
+
+Long range bonus ("marksman"), Stealth based on enemy's awareness of player character etc.
+(12:22:03) sean.talbot@gmail.com/8BEC519E: makes level design all the more important so that it's actually possible to kill enemies in various ways
+(12:22:10) sean.talbot@gmail.com/8BEC519E: yes
+ ages ago I was thinking of having a 'wind' bar, which you'd have to offset your shots to, like in golf, but now I'm thinking that might be a bit silly if we have all these other handicaps
+
+(12:25:14) Alexander Bertram-Powell: Borrowing more from AC2 (without being blatant) I don't know if you noticed but the system there is less to do with specific actions than the bodypart you're controlling
+(12:25:27) Alexander Bertram-Powell: So there's a button for head, legs, left hand and right hand
+Head button is mainly used for talking, left hand is weapon, right hand is pushing or operating machinery, legs is running or jumping
+(12:26:21) sean.talbot@gmail.com/8BEC519E: cool
+(12:26:58) Alexander Bertram-Powell: So maybe we can figure a simplified version of that concept where one or two buttons have different functions depending on what the player is doing - mid air, walking, running etc.

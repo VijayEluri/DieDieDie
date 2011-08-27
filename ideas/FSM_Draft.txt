@@ -1,0 +1,46 @@
+Action - a single atomic thing that can be performed by an Enemy
+(such as Looking at the immediate area). 
+
+Action Sequence - A list of Actions that an Enemy undertakes. This is
+State-dependent. A State can have more than one sequence. I was also
+thinking that sequences could be generated on the fly, depending on the
+nature of the surroundings (like a decision tree). Not sure what the
+best design for this is, really... Maybe thinking of it as a 'list' is a
+bad idea.
+
+State - broad description for a set of behaviours. Each enemy type can
+have several States. 
+
+StateMachine - Each Enemy has an internal StateMachine that updates
+the current State, chooses which ActionSequence (or DecisionTree) of the
+current State to run, and changes to a new State when deemed necessary.
+
+E.g.  Enemy: 'Bluey'
+     States: Idle, Alert, Fighting
+
+Idle -  Initial State. As soon as the Player is seen, the Player's
+        items are seen, or another dead / underattack Enemy is seen,
+        the Bluey moves to Alert State.
+
+        Note: once the Enemy leaves this State, they never return to it.
+        They must DIE
+
+ --> Action Sequences: 'Patrol'...
+ 
+Alert - Has knowledge of Player's existence, has some knowledge
+        of Player's whereabouts (or has just seen an arrow fly past)
+        but this may be inaccurate...  Will begin to hunt down the player
+
+--> Action Sequences: 'Hunting', 'Hiding' (e.g. ducking behind crates)
+ 
+Fighting - Moves into this mode from Alert when in suitably close
+           range to the Player.  Attempts to kill his ass.
+
+--> Action Sequences: 'Attacking', 'Defending'... ???
+
+Thoughts:
+========
+
+Perhaps we'll need both Action Sequences *and* Decision Trees...?
+
+
