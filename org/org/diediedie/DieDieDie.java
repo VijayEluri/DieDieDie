@@ -27,6 +27,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.command.InputProvider;
 
@@ -56,7 +57,9 @@ public class DieDieDie extends BasicGame
 
 	private long currentTime;
 
-	public static final float GRAVITY = 0.20f;
+	private ScalableGame scalableWrapper;
+
+	public static final float GRAVITY = 0.25f;
 
 	/**
 	 * Create the game
@@ -64,6 +67,7 @@ public class DieDieDie extends BasicGame
 	public DieDieDie() 
 	{
 		super("DieDieDie");
+		scalableWrapper = new ScalableGame(this, xSize, ySize);
 	}
 
 	/**

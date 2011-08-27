@@ -29,10 +29,10 @@ public interface Actor extends MovableObject
     Animation getCurrentAnim();
     Direction getFacing();
     float getHealth();    
-    float getJumpSpeed();
+    //float getJumpSpeed();
     Shape getZone();    
     void setCanJump(boolean b);
-    void jump();
+    void startJump();
     void setFacing(Direction d);
 	void resetAccelX();
 	int getWidth();

@@ -52,10 +52,9 @@ public class ObjectMover
             	 */
                 a.setCanJump(true);
             }
-            a.setYSpeed(0);
-            a.setY(oldY);
-            
             Aligner.alignToObstacle(a);
+            a.setYSpeed(0);
+            a.setY(oldY);            
         } 
         else
         {
@@ -70,6 +69,7 @@ public class ObjectMover
             a.setX(oldX);
 			a.setXSpeed(0);
             a.resetAccelX();
+         ;
         }       
         if(a.getX() == oldX)
         {

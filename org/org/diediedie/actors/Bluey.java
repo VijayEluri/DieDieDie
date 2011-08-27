@@ -67,7 +67,7 @@ public class Bluey extends Object implements Enemy, Observer
 
 	private boolean canJump = false, 
 				    canSeePlayer = false, 
-				    moved = false,
+				    //moved = false,
 					hasSeenPlayer = false, 
 					seenPlayerEvidence = false;
 
@@ -108,6 +108,8 @@ public class Bluey extends Object implements Enemy, Observer
 	private long printJumpTime;
 
 	private final int printJumpDataDuration = 1;
+
+	private boolean moved;
 
 	/**
 	 * Constructor. The object is associated with a Level and is positioned as
@@ -268,11 +270,7 @@ public class Bluey extends Object implements Enemy, Observer
 		return moveSpeed;
 	}
 
-	@Override
-	public float getJumpSpeed() 
-	{
-		return JUMP_SPEED;
-	}
+	
 
 	@Override
 	public void setYSpeed(float f) 
@@ -402,7 +400,7 @@ public class Bluey extends Object implements Enemy, Observer
 	/**
 	 * Causes the enemy to jump.
 	 */
-	public void jump() 
+	public void startJump() 
 	{
 		if(canJump()) 
 		{

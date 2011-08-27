@@ -209,6 +209,10 @@ public class Arrow extends Object implements Projectile
         return new Line(startX, startY, endX, endY);   
     }
     
+    /*
+     * Returns the damage caused by this arrow at its current
+     * velocity.
+     */
     @Override
     public float getDamage()
     {

@@ -45,7 +45,7 @@ import org.diediedie.actors.tools.Direction;
  */ 
 public class Player extends Object implements Actor, InputProviderListener 
 {    
-    private boolean setUp = false, canJump = false;
+	private boolean setUp = false, canJump = false;
     final boolean autoUpdate = true;
      
     private float accelX = 0f, bowCharge = 0, bowX, bowY, 
@@ -58,7 +58,10 @@ public class Player extends Object implements Actor, InputProviderListener
                        BOW_Y_OFFSET_NORMAL = -2f, 
                        BOW_Y_OFFSET_AIM_UP = -10, 
                        MAX_Y_SPEED = 20.5f,
-                       MAX_X_SPEED = 2.5f, JUMP_SPEED = -6.5f,
+                       MAX_X_SPEED = 2.5f, 
+                       JUMP_INCR = 0.8f,
+                       INITIAL_JUMP_SPEED = -0.2f,
+                       MAX_JUMP_SPEED = -5.6f,
                        BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
                        MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
                        ACCEL_RATE = 0.03f;
@@ -117,6 +120,8 @@ public class Player extends Object implements Actor, InputProviderListener
     
     // associated level for collision / item collection reference
     private Level level = null;
+	private boolean isJumping = false;
+	private boolean jumpKeyDown = false;
     
     /**
      * Constructs the Player at the given position.
@@ -148,6 +153,10 @@ public class Player extends Object implements Actor, InputProviderListener
     public void setCanJump(boolean b)
     {
         canJump = b;
+        if(b == true)
+        {
+        	isJumping = false;
+        }
     }
     
     @Override
@@ -237,7 +246,7 @@ public class Player extends Object implements Actor, InputProviderListener
                 	{
                 		//e.setGoto(new Point(
                 			//	(float)mouseX, (float)mouseY));
-                		e.jump();
+                		e.startJump();
                 	}
                 }
             }
@@ -294,6 +303,12 @@ public class Player extends Object implements Actor, InputProviderListener
                 running = false;   
             }
         }
+        else if(com.equals(jump))
+        {
+        	System.out.println("jump key released");
+        	jumpKeyDown = false;
+        	isJumping = false;
+        }
     }
     
     /**
@@ -317,7 +332,10 @@ public class Player extends Object implements Actor, InputProviderListener
         }
         else if(com.equals(jump))
         {
-            jump();
+        	if(!jumpKeyDown)
+        	{
+        		startJump();
+        	}
         }
     }
     
@@ -370,11 +388,11 @@ public class Player extends Object implements Actor, InputProviderListener
         return health;
     }
     
-    @Override
+   /* @Override
     public float getJumpSpeed()
     {
         return JUMP_SPEED;
-    }
+    }*/
     
     @Override
     public void die()
@@ -592,7 +610,10 @@ public class Player extends Object implements Actor, InputProviderListener
         {
             decelerate();
         }
-        
+        if(isJumping)
+        {
+        	updateJump();
+        }
         // Update Arrow information depending on state
         if(isChargingArrow)
         {
@@ -638,14 +659,46 @@ public class Player extends Object implements Actor, InputProviderListener
     }
     
     @Override
-    public void jump()
+    public void startJump()
     {
-        if(canJump())
+    	System.out.println("calling Player.jump()");
+    	if(canJump())
         {
-            setYSpeed(JUMP_SPEED);
+            setYSpeed(INITIAL_JUMP_SPEED);
             canJump = false;
+            isJumping = true;
         }
     }
+    
+    /*
+     * Updates the player's current jump action. That is,
+     * if the player has previously pressed the jump
+     * command and successfully started a jump, the jump
+     * key is still pressed AND the jump hasn't reached maximum speed,
+     * increment it.
+     */
+    private void updateJump()
+    {
+    	/*if(isJumping
+	    		&&
+	    		!canJump
+	    			&&
+	    			ySpeed > MAX_JUMP_SPEED)*/
+		if(!canJump)
+		{
+			if(ySpeed > MAX_JUMP_SPEED)
+			{
+	    		ySpeed -= JUMP_INCR;
+	    		System.out.println("Player.updateJump() : " + ySpeed);
+			}
+			else
+			{
+				System.out.println(
+    				"updateJump() --> MAX_JUMP_SPEED reached");
+				isJumping = false;
+			}
+		}
+	}
     
     @Override
     public void setX(float x)
