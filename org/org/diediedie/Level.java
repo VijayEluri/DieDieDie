@@ -86,9 +86,9 @@ public class Level extends TiledMap
         System.out.println("Level " + name + " has " + getLayerCount() +
                            " tile layers");
         
-        collisionLayer = createMapLayer(getLayerIndex("collisions"));
+        collisionLayer = createMapLayer(getLayerIndex("collision"));
         objectLayer = createMapLayer(getLayerIndex("objects"));
-        platformLayer = createMapLayer(getLayerIndex("platforms"));
+        //platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
         enemiesLiving = new ArrayList<Enemy>();
         sortObjects();
@@ -204,6 +204,7 @@ public class Level extends TiledMap
      */ 
     private void sortObjects()
     {
+    	boolean foundPlayerStart = false;
         for(Tile t : objectLayer.tiles)
         {
             try
@@ -216,6 +217,7 @@ public class Level extends TiledMap
                 else if(t.properties.get("type").equalsIgnoreCase("start"))
                 {
                     playerTile = t;
+                    foundPlayerStart = true;
                 }
                 else if(t.properties.get("type").equalsIgnoreCase("enemy"))
                 {
@@ -234,6 +236,13 @@ public class Level extends TiledMap
                 //System.out.println("sortObjects: ignoring np exception");
                 e.printStackTrace();
             }
+        }
+        if(!foundPlayerStart)
+        {
+        	System.out.println(
+        		"did not find player start position." +
+        		"Cannot continue.");
+        	System.exit(-1);
         }
         System.out.println("level has " + enemiesLiving.size() + " enemiesLiving");
     }
@@ -290,7 +299,7 @@ public class Level extends TiledMap
     {
         // keep the ordering!
         render(x, y, backgroundLayer.index);
-        render(x, y, platformLayer.index);
+        //render(x, y, platformLayer.index);
     }
     
     /**
@@ -300,15 +309,15 @@ public class Level extends TiledMap
     public void draw(Graphics g)
     {
         render(0, 0);
-        navMesh.draw(g);
+        //navMesh.draw(g);
         drawEnemies(g);
-        drawLevelArt(g);
+        //drawLevelArt(g);
     }
     
-    private void drawLevelArt(Graphics g) 
+    /*private void drawLevelArt(Graphics g) 
     {
     	g.drawImage(levelArt, 0, 0);
-	}
+	}*/
 
 	/**
      * Draw using Graphics object g any visible enemiesLiving. 

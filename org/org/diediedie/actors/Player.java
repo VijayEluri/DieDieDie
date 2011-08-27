@@ -58,7 +58,7 @@ public class Player extends Object implements Actor, InputProviderListener
                        BOW_Y_OFFSET_NORMAL = -2f, 
                        BOW_Y_OFFSET_AIM_UP = -10, 
                        MAX_Y_SPEED = 20.5f,
-                       MAX_X_SPEED = 2.5f, JUMP_SPEED = -5.5f,
+                       MAX_X_SPEED = 2.5f, JUMP_SPEED = -6.5f,
                        BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
                        MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
                        ACCEL_RATE = 0.03f;
@@ -103,48 +103,13 @@ public class Player extends Object implements Actor, InputProviderListener
     	"data/7.png",
     	"data/8.png",
     };
-    /*{
-    	"data/test_sprite/1.png",	
-    	"data/test_sprite/2.png",
-    	"data/test_sprite/3.png",
-    	"data/test_sprite/4.png",
-    	"data/test_sprite/5.png",
-    	"data/test_sprite/6.png",
-    	"data/test_sprite/7.png",
-    	"data/test_sprite/8.png",
-    };*/
-    /*
-      Old shit sprite:
-      {
-        "data/STICKMAN_LEFT_WALK_1.png", 
-        "data/STICKMAN_LEFT_WALK_2.png",
-        "data/STICKMAN_LEFT_WALK_3.png", 
-        "data/STICKMAN_LEFT_WALK_4.png",  
-        "data/STICKMAN_LEFT_WALK_5.png", 
-        "data/STICKMAN_LEFT_WALK_6.png"
-    };*/
     
-    /*private final String[] rightWalkPaths =
-    {
-        "data/STICKMAN_RIGHT_WALK_1.png", 
-        "data/STICKMAN_RIGHT_WALK_2.png",
-        "data/STICKMAN_RIGHT_WALK_3.png", 
-        "data/STICKMAN_RIGHT_WALK_4.png",  
-        "data/STICKMAN_RIGHT_WALK_5.png", 
-        "data/STICKMAN_RIGHT_WALK_6.png"
-    };*/ 
     
     private String[] leftStandPaths =
     {
-  		"data/standing.png"
-        //"data/test_sprite/standing.png"
-    	//"data/STICKMAN_LEFT_STAND.png"        
+  		"data/standing.png"        
     };
     
-    /*private String[] rightStandPaths = 
-    {
-        "data/STICKMAN_RIGHT_STAND.png"        
-    };*/
     private Animation leftWalk, rightWalk, leftStand, rightStand,
                       currentAnim;
     
