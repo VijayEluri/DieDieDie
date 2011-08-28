@@ -570,7 +570,7 @@ public class Player extends Object implements Actor, InputProviderListener
         while(it.hasNext())
         {
             Arrow a = it.next();
-            if(a.collidedWithEnemy())
+            if(a.getCollidedWithEnemy())
             {
                 // damage already done in Enemy.doCollision
                 // we can safely remove the arrow here

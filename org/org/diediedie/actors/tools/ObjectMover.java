@@ -106,6 +106,7 @@ public class ObjectMover
             p.stop();
             while(Collider.collidesLevel(p))
             {
+            	p.setCollided(true);
                 //final float oldY = p.getY();
                 p.setY(p.getY() - Aligner.INCR);
                 p.calculateEndPos();
@@ -157,11 +158,8 @@ public class ObjectMover
         			+ angleActuallyMoved);
         	lastPrintTime = now;
         }
-        	
-       
     	p.setFacingAngle(angleActuallyMoved);
 	    p.calculateEndPos();
-   
     }
     
     

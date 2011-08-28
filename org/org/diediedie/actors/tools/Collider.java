@@ -47,6 +47,7 @@ public class Collider
         		&&
            p.getLevel().collides(p.getShape()))
         {
+        	p.setCollided(true);
             /*System.out.println(p + " collides Level with speeds :");
             System.out.println(
                 "\tx change : " + (p.getOldStartX() - p.getX()));

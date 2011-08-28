@@ -24,10 +24,20 @@ public interface Projectile extends MovableObject
     float getDamage();
     void increaseGravityEffect();
     boolean isGoingDown();
-    boolean collidedWithEnemy();
+    
     float getEndX();
     float getEndY();    
     float getAirRes();
     void calculateEndPos();
     void setFacingAngle(float a);
+	
+    boolean getCollidedWithEnemy();
+
+    void setCollidedWithEnemy(Enemy e);
+    
+    void setCollided(boolean b);
+    Enemy getEnemyCollidedWith();
+
+    boolean getCollided();
+	
 }

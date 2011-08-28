@@ -69,6 +69,10 @@ public class Arrow extends Object implements Projectile
 
     private boolean flying = false, 
                     collided = false;
+
+	private boolean collidedWithEnemy = false;
+
+	private Enemy enemyCollidedWith = null;
     
     /**
      * Creates a new arrow at the given position.
@@ -319,6 +323,7 @@ public class Arrow extends Object implements Projectile
         
         if(e != null)
         {
+        	collidedWithEnemy = true;
             //System.out.println(this + " collided with Enemy " + e);
             e.doCollision(this);
             collided = true;
@@ -326,9 +331,9 @@ public class Arrow extends Object implements Projectile
     } 
     
     @Override
-    public boolean collidedWithEnemy()
+    public boolean getCollidedWithEnemy()
     {
-        return collided;
+        return collidedWithEnemy ;
     }
     
     /*
@@ -427,9 +432,6 @@ public class Arrow extends Object implements Projectile
         return gravity;
     }
     
-
-
-    
     /*
      * Works out the end point of the arrow based on its SIZE at
      * movementAngle.
@@ -445,7 +447,6 @@ public class Arrow extends Object implements Projectile
     	{
 	    	final float angle = movementAngle + facingAngle;
 	        
-	    	
 	    	endX = (float)(startX + SIZE * FastTrig.sin(
 	                    Math.toRadians(angle)));
 	        endY = (float)(startY - SIZE * FastTrig.cos(
@@ -453,12 +454,28 @@ public class Arrow extends Object implements Projectile
     	}
     	else
     	{
+    		
     		endX = (float)(startX - SIZE * FastTrig.sin(
     					Math.toRadians(facingAngle)));
     		endY = (float)(startY - SIZE * FastTrig.cos(
     					Math.toRadians(facingAngle)));
     	}
     }
+    
+    @Override
+    public boolean getCollided()
+    {
+    	return collided;
+    }
+    
+    @Override
+    public void setCollided(boolean b)
+    {
+    	collided = b;
+    	flying = false;
+    }
+    
+    
     
     @Override
     public float getFacingAngle()
@@ -496,8 +513,11 @@ public class Arrow extends Object implements Projectile
     @Override
     public void draw(Graphics g)
     {
-        g.drawGradientLine(startX, startY, Color.black, endX, endY,
-                           Color.red);
+        g.drawGradientLine(
+        	startX, startY, 
+        	Color.black, 
+        	endX, endY,
+            Color.red);
     }
     
     @Override
@@ -537,4 +557,20 @@ public class Arrow extends Object implements Projectile
 		oldY = y;
 		
 	}
+
+	@Override
+	public void setCollidedWithEnemy(Enemy e) 
+	{
+		assert e != null;
+		collided = true;
+		collidedWithEnemy = true;
+		enemyCollidedWith = e;
+	}
+	
+	public Enemy getEnemyCollidedWith()
+	{
+		return enemyCollidedWith;
+	}
+
 }
+
