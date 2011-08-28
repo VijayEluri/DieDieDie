@@ -453,8 +453,8 @@ public class Arrow extends Object implements Projectile
     	}
     	else
     	{
-    		endX = (float)(startX + SIZE * FastTrig.sin(
-    					Math.toRadians(-facingAngle)));
+    		endX = (float)(startX - SIZE * FastTrig.sin(
+    					Math.toRadians(facingAngle)));
     		endY = (float)(startY - SIZE * FastTrig.cos(
     					Math.toRadians(facingAngle)));
     	}
