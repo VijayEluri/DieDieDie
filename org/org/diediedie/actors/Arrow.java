@@ -40,19 +40,17 @@ public class Arrow extends Object implements Projectile
 {      
     // constants
     private final float SIZE = 18f, 
-                        AIR_REST = 0.85f,
-                        MAX_GRAVITY = 26f, 
-                        GRAVITY_INCR = 0.115f, 
+                        AIR_REST = 0.75f,
+                        MAX_GRAVITY = 20f, 
+                        GRAVITY_INCR = 0.1f, 
                         ANGLE_CHANGE_INCR = 0.15f,
                         MAX_ANGLE_CHANGE = 1.6f, 
                         GRAVITY_LINE = 1f, 
-                        MOVE_SPEED = 0.6f, 
-                        MAX_Y_SPEED = 24.5f,
+                        MOVE_SPEED = 0.65f, 
+                        MAX_Y_SPEED = 26.5f,
                         FALLING_ANGLE_CHANGE = 0.440010f;
                         
-    private float mouseX = 0, 
-                  mouseY = 0,
-                  startX = 0, 
+    private float startX = 0, 
                   startY = 0, 
                   oldX = 0, 
                   oldY = 0, 
@@ -62,14 +60,15 @@ public class Arrow extends Object implements Projectile
                   accelY = 0, 
                   speedX = 0, speedY = 0,  
                   movementAngle = 90, 
+                  // ^ initial angle when loading into the Bow
                   gravity = 0f, 
+                  // ^ gravity effect
                   facingAngle = 0, angleChange = 0.01f;
                                       
     private Level level = null;
 
     private boolean flying = false, 
-                    collided = false, 
-                    goingDown = false;
+                    collided = false;
     
     /**
      * Creates a new arrow at the given position.
@@ -93,6 +92,8 @@ public class Arrow extends Object implements Projectile
         return oldX;
     }
     
+    
+    
     @Override
     public float getMoveSpeed()
     {
@@ -112,6 +113,8 @@ public class Arrow extends Object implements Projectile
     @Override
     public void increaseGravityEffect()
     {
+    	
+        
         if(gravity < MAX_GRAVITY)
         {
             gravity += GRAVITY_INCR;
@@ -194,7 +197,11 @@ public class Arrow extends Object implements Projectile
     }
     
     @Override // boilerplate ignorable
-    public void update(){ }
+    public void update()
+    {
+    	updateSpeed();
+        updatePosition();
+    }
     
    
     protected void updateSpeed()
@@ -243,6 +250,7 @@ public class Arrow extends Object implements Projectile
         final float MULT = 3.3f;
         
         float bigger;
+        
         if(xChange > yChange) 
         {
             bigger  = xChange;
@@ -301,10 +309,10 @@ public class Arrow extends Object implements Projectile
         /*System.out.println("Arrow(" + hashCode() + ")updatePosition(): "
                             + "oldX, oldY: " + oldX + ", " + oldY
                             + "new: " + startX + ", " + startY);*/
-        adjustFacingAngle();
-        oldX = startX;
-        oldY = startY;
-        ObjectMover.applyGravity(this);
+        
+        //oldX = startX;
+        //oldY = startY;
+        
         ObjectMover.move(this);
         
         Enemy e = Collider.collidesEnemy(this);
@@ -351,8 +359,8 @@ public class Arrow extends Object implements Projectile
     }
     
     // applies 'gravity' to the arrow WHEN IT IS IN FLIGHT
-    @Override
-	public void adjustFacingAngle()
+    
+	/*public void adjustFacingAngle()
     {
         if(!isFlying())
         {
@@ -386,9 +394,8 @@ public class Arrow extends Object implements Projectile
                 facingAngle -= (angleChange * FALLING_ANGLE_CHANGE);
             }
         }
-        /*System.out.println("arrow " + this.hashCode() + " facing: " + 
-                           facingAngle);*/
-    }
+       
+    }*/
 
     @Override
     public float getGravityLine()
@@ -430,10 +437,27 @@ public class Arrow extends Object implements Projectile
     @Override
     public void calculateEndPos()
     {
-        endX = (float)(startX + SIZE * FastTrig.sin(
-                        Math.toRadians(movementAngle + facingAngle)));
-        endY = (float)(startY - SIZE * FastTrig.cos(
-                        Math.toRadians(movementAngle + facingAngle)));
+    	//System.out.println(
+    		//"calculateEndPos() angle is " + movementAngle +  facingAngle);
+    	
+    	
+    	if(!isFlying())
+    	{
+	    	final float angle = movementAngle + facingAngle;
+	        
+	    	
+	    	endX = (float)(startX + SIZE * FastTrig.sin(
+	                    Math.toRadians(angle)));
+	        endY = (float)(startY - SIZE * FastTrig.cos(
+	                    Math.toRadians(angle)));
+    	}
+    	else
+    	{
+    		endX = (float)(startX + SIZE * FastTrig.sin(
+    					Math.toRadians(-facingAngle)));
+    		endY = (float)(startY - SIZE * FastTrig.cos(
+    					Math.toRadians(facingAngle)));
+    	}
     }
     
     @Override
@@ -493,4 +517,24 @@ public class Arrow extends Object implements Projectile
     {
         accelY = 0;
     }
+
+	@Override
+	public void setFacingAngle(float a) 
+	{
+		facingAngle = a;
+	}
+
+	@Override
+	public void setOldStartX(float x)
+	{
+		oldX = x;
+		
+	}
+
+	@Override
+	public void setOldStartY(float y) 
+	{
+		oldY = y;
+		
+	}
 }

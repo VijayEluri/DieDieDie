@@ -456,7 +456,8 @@ public class Player extends Object implements Actor, InputProviderListener
     	{
 	        currentArrow.release(bowCharge);
 	        firedArrows.add(currentArrow);
-	        System.out.println("released arrow, power " + bowCharge);        
+	        System.out.println("released arrow, power " + bowCharge
+	        	+ " angle " + currentArrow.getMovementAngle());        
     	}
     	isChargingArrow = false;
     	currentArrow = null;
@@ -578,13 +579,8 @@ public class Player extends Object implements Actor, InputProviderListener
             }
             else if(a.isFlying())
             {
-                a.updateSpeed();
-                a.updatePosition();
+            	a.update();
             }
-            /*if(!a.isFlying())
-            {
-                it.remove();
-            }*/
         }
     }
     

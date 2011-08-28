@@ -27,6 +27,7 @@ import org.diediedie.actors.Projectile;
 public class ObjectMover
 {    
     static final int INTERVAL = 10;
+	private static long lastPrintTime = 0;
     
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
@@ -96,11 +97,8 @@ public class ObjectMover
         {
             return;
         }
-        
-        // calc out how much gravity we should try to apply
-        //final float MOST = p.getGravity();        
-        //float yTrav = MOST;
         p.setY(p.getY() + p.getGravity());
+        p.increaseGravityEffect(); 
         p.calculateEndPos();
         
         if(Collider.collidesLevel(p))
@@ -113,7 +111,7 @@ public class ObjectMover
                 p.calculateEndPos();
             }
         }
-        p.increaseGravityEffect(); 
+        
     }
     
     /**
@@ -121,21 +119,49 @@ public class ObjectMover
      */ 
     public static void move(Projectile p)
     {   
+    	//
+    	p.setOldStartX(p.getX());
+    	p.setOldStartY(p.getY());
+    	
+    	applyGravity(p);
+    	
         float xTrav = p.getXSpeed() * p.getAirRes();
         float yTrav = p.getYSpeed();
-        
-        if(xTrav <= 0 && yTrav <= 0)
-        {
-            return;
-        }    
-        
+       
         if(!doMove(p, xTrav, yTrav, p.getMovementAngle()))
         {
             float reverse = p.getMovementAngle() + 180;
             float xMove = xTrav / INTERVAL; 
             float yMove = xTrav / INTERVAL;
             while(!doMove(p, xMove, yMove, reverse));
-        }        
+        }
+        // adjust facing angle
+        int newX = (int)p.getX();
+        int newY = (int)p.getY();
+        
+        final long now = System.currentTimeMillis();
+        
+        float angleActuallyMoved = 
+        	(float)Math.toDegrees(
+        			Math.atan2(p.getX() - p.getOldStartX(), 
+        					   p.getY() - p.getOldStartY()));
+        
+        if(now - lastPrintTime  >= 200)
+        {
+        	System.out.println(
+        			"Projectile moved (" 
+        			+ p.getOldStartX() + ", " + p.getOldStartY() 
+        			+ ") to ("
+        			+ newX + ", " + newY + ")" 
+        			+ ", angle -> " 
+        			+ angleActuallyMoved);
+        	lastPrintTime = now;
+        }
+        	
+       
+    	p.setFacingAngle(angleActuallyMoved);
+	    p.calculateEndPos();
+   
     }
     
     

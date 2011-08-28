@@ -19,6 +19,8 @@ public interface Projectile extends MovableObject
     float getMaxGravity();
     float getOldStartX();
     float getOldStartY();
+    void setOldStartX(float x);
+    void setOldStartY(float y);
     float getDamage();
     void increaseGravityEffect();
     boolean isGoingDown();
@@ -27,5 +29,5 @@ public interface Projectile extends MovableObject
     float getEndY();    
     float getAirRes();
     void calculateEndPos();
-    void adjustFacingAngle();
+    void setFacingAngle(float a);
 }
