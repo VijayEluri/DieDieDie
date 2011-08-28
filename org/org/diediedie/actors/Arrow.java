@@ -43,12 +43,9 @@ public class Arrow extends Object implements Projectile
                         AIR_REST = 0.75f,
                         MAX_GRAVITY = 20f, 
                         GRAVITY_INCR = 0.1f, 
-                        ANGLE_CHANGE_INCR = 0.15f,
-                        MAX_ANGLE_CHANGE = 1.6f, 
                         GRAVITY_LINE = 1f, 
                         MOVE_SPEED = 0.65f, 
-                        MAX_Y_SPEED = 26.5f,
-                        FALLING_ANGLE_CHANGE = 0.440010f;
+                        MAX_Y_SPEED = 26.5f;
                         
     private float startX = 0, 
                   startY = 0, 
@@ -118,7 +115,6 @@ public class Arrow extends Object implements Projectile
     public void increaseGravityEffect()
     {
     	
-        
         if(gravity < MAX_GRAVITY)
         {
             gravity += GRAVITY_INCR;
@@ -342,13 +338,17 @@ public class Arrow extends Object implements Projectile
     @Override
 	public void stop()
     {
-        /*System.out.println("stopping Arrow " + hashCode() + "; speed " +
-                        speedX + ", " + speedY);*/
+        System.out.println(
+        	"stopping Arrow " 
+        	+ hashCode()
+        	+ ": speed " 
+        	+ speedX + ", " + speedY);
         resetAccelX();
         resetAccelY();
         setXSpeed(0);
         setYSpeed(0);
         flying = false;
+        collided = true;
     }
     
     @Override
@@ -363,45 +363,7 @@ public class Arrow extends Object implements Projectile
         return speedX;
     }
     
-    // applies 'gravity' to the arrow WHEN IT IS IN FLIGHT
-    
-	/*public void adjustFacingAngle()
-    {
-        if(!isFlying())
-        {
-            return;
-        }
-        
-        if(!isGoingDown() && gravity > GRAVITY_LINE)// && gravity < MAX_GRAVITY)
-        {
-            if(movementAngle > 0)
-            {
-                facingAngle += angleChange;
-            }
-            else
-            {
-                facingAngle -= angleChange;
-            }
-            
-            if(angleChange < MAX_ANGLE_CHANGE)
-            {
-                angleChange += ANGLE_CHANGE_INCR;
-            }
-        }
-        else if(isGoingDown())
-        {
-            if(movementAngle > 0)
-            {
-                facingAngle += (angleChange * FALLING_ANGLE_CHANGE);
-            }
-            else
-            {
-                facingAngle -= (angleChange * FALLING_ANGLE_CHANGE);
-            }
-        }
-       
-    }*/
-
+   
     @Override
     public float getGravityLine()
     {
@@ -454,7 +416,6 @@ public class Arrow extends Object implements Projectile
     	}
     	else
     	{
-    		
     		endX = (float)(startX - SIZE * FastTrig.sin(
     					Math.toRadians(facingAngle)));
     		endY = (float)(startY - SIZE * FastTrig.cos(
@@ -571,6 +532,5 @@ public class Arrow extends Object implements Projectile
 	{
 		return enemyCollidedWith;
 	}
-
 }
 

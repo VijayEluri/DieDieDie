@@ -107,12 +107,10 @@ public class ObjectMover
             while(Collider.collidesLevel(p))
             {
             	p.setCollided(true);
-                //final float oldY = p.getY();
                 p.setY(p.getY() - Aligner.INCR);
                 p.calculateEndPos();
             }
         }
-        
     }
     
     /**
@@ -120,7 +118,6 @@ public class ObjectMover
      */ 
     public static void move(Projectile p)
     {   
-    	//
     	p.setOldStartX(p.getX());
     	p.setOldStartY(p.getY());
     	
@@ -136,9 +133,7 @@ public class ObjectMover
             float yMove = xTrav / INTERVAL;
             while(!doMove(p, xMove, yMove, reverse));
         }
-        // adjust facing angle
-        int newX = (int)p.getX();
-        int newY = (int)p.getY();
+       
         
         final long now = System.currentTimeMillis();
         
@@ -153,7 +148,7 @@ public class ObjectMover
         			"Projectile moved (" 
         			+ p.getOldStartX() + ", " + p.getOldStartY() 
         			+ ") to ("
-        			+ newX + ", " + newY + ")" 
+        			+ p.getX() + ", " + p.getY() + ")" 
         			+ ", angle -> " 
         			+ angleActuallyMoved);
         	lastPrintTime = now;
@@ -162,15 +157,16 @@ public class ObjectMover
 	    p.calculateEndPos();
     }
     
-    
     /*
      * Returns the new horizontal position of p after hypothetically 
      * applying horizontal distance xTrav based upon p's getMovementAngle().
      */ 
     public static float getNewXPos(Projectile p, float xTrav, float angle)
     {
-        return p.getX() + xTrav * (float)FastTrig.sin(
-                            Math.toRadians(angle));
+        return p.getX() 
+        	+ xTrav 
+        		* (float)FastTrig.sin(
+        				Math.toRadians(angle));
     }
     
     /*
@@ -195,6 +191,7 @@ public class ObjectMover
     private static boolean doMove(Projectile p, float xTrav, float yTrav,    
                                   float angle)
     {
+    	
         p.setX(getNewXPos(p, xTrav, angle));
         p.setY(getNewYPos(p, yTrav, angle));        
         p.calculateEndPos();
