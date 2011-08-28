@@ -93,8 +93,7 @@ public class Arrow extends Object implements Projectile
         return oldX;
     }
     
-    
-    
+ 
     @Override
     public float getMoveSpeed()
     {
@@ -179,8 +178,7 @@ public class Arrow extends Object implements Projectile
     /**
      * Allows the Player to update the movementAngle (aim) of the arrow prior
      * to release, based upon the mouse's position. 
-     */ 
-    @Override
+     */
 	public void updateAiming(float mouseX, float mouseY)
     {       
         setMovementAngle(mouseX, mouseY);
@@ -302,8 +300,7 @@ public class Arrow extends Object implements Projectile
      *
      * On collision, initiates damage on any Enemy it hits.
      */
-    @Override
-	public void updatePosition()
+	private void updatePosition()
     {
         
         /*System.out.println("Arrow(" + hashCode() + ")updatePosition(): "
@@ -397,6 +394,9 @@ public class Arrow extends Object implements Projectile
     /*
      * Works out the end point of the arrow based on its SIZE at
      * movementAngle.
+     * 
+     * startX/Y = TIP of the arrow
+     * endX/Y = FEATHER of the arrow
      */ 
     @Override
     public void calculateEndPos()
@@ -405,7 +405,7 @@ public class Arrow extends Object implements Projectile
     		//"calculateEndPos() angle is " + movementAngle +  facingAngle);
     	
     	
-    	if(!isFlying())
+    	if(!isFlying() && !getCollided())
     	{
 	    	final float angle = movementAngle + facingAngle;
 	        
@@ -414,7 +414,7 @@ public class Arrow extends Object implements Projectile
 	        endY = (float)(startY - SIZE * FastTrig.cos(
 	                    Math.toRadians(angle)));
     	}
-    	else
+    	else if(!getCollided())
     	{
     		endX = (float)(startX - SIZE * FastTrig.sin(
     					Math.toRadians(facingAngle)));
