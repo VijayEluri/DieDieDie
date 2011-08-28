@@ -44,7 +44,7 @@ public class Arrow extends Object implements Projectile
                         MAX_GRAVITY = 20f, 
                         GRAVITY_INCR = 0.1f, 
                         GRAVITY_LINE = 1f, 
-                        MOVE_SPEED = 0.65f, 
+                        MOVE_SPEED = .55f, 
                         MAX_Y_SPEED = 26.5f;
                         
     private float startX = 0, 
