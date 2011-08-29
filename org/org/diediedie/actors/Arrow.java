@@ -16,6 +16,7 @@
  */
 package org.diediedie.actors;
 
+import org.diediedie.ArrowBouncer;
 import org.diediedie.Level;
 import org.diediedie.actors.Projectile;
 import org.diediedie.actors.Enemy;
@@ -536,18 +537,13 @@ public class Arrow extends Object implements Projectile
 	}
 
 	@Override
-	public void bounce() 
+	public void bounce(ArrowBouncer ab) 
 	{
 		System.out.println("BOUNCE");
 		// swap horizontal
-		speedX = -speedX;
-		// swap the arrow's direction
-		oldX = startX;
-		oldY = startY;
-		endX = oldX;
-		endY = oldY;
-		startX = endX;
-		startY = endY;
+		
+		movementAngle = movementAngle + ab.getAngleChange();
+		speedX += ab.getSpeedBoost();
 	}
 	
 	@Override

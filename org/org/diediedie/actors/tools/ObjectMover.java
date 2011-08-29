@@ -135,15 +135,13 @@ public class ObjectMover
             float yMove = xTrav / INTERVAL;
             while(!doMove(p, xMove, yMove, reverse));
         }
-       
-        
-        final long now = System.currentTimeMillis();
         
         float angleActuallyMoved = 
         	(float)Math.toDegrees(
         			Math.atan2(p.getX() - p.getOldStartX(), 
         					   p.getY() - p.getOldStartY()));
         
+        /*final long now = System.currentTimeMillis();
         if(now - lastPrintTime  >= 200)
         {
         	System.out.println(
@@ -154,7 +152,8 @@ public class ObjectMover
         			+ ", angle -> " 
         			+ angleActuallyMoved);
         	lastPrintTime = now;
-        }
+        }*/
+        
     	p.setFacingAngle(angleActuallyMoved);
 	    p.calculateEndPos();
 	    checkOutOfBounds(p);

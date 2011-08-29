@@ -18,7 +18,10 @@
 
 package org.diediedie.actors.tools;
 
+import org.diediedie.ArrowBouncer;
 import org.diediedie.actors.Actor;
+import org.diediedie.actors.Projectile;
+import org.newdawn.slick.geom.Shape;
 
 /**
  * Utility class for aligning an Actor against a Tile following a
@@ -56,9 +59,30 @@ public class Aligner
             m.setY(m.getY() + INCR);
         }
     }    
-    /*public static void alignProjectileToBouncer(Projectile p, 
-    										    ArrowBouncer l)
-    {
-    	
-    }*/
+
+
+	public static void alignToBouncer(Projectile p, ArrowBouncer b) 
+	{
+		final Shape rect  = b.getRect();
+		final int i = 5;
+		final float oldX = p.getX();
+		final float oldY = p.getY();
+
+		while(rect.contains(p.getX(), p.getY()))
+		{
+			if(b.getDirection() == Direction.RIGHT)
+			{	
+				p.setX(p.getX() + i);
+			}
+			else 
+			{
+				p.setX(p.getX() - i);
+			}
+			p.calculateEndPos();
+		}
+	
+		System.out.println("alignToBouncer : " 
+			+ oldX + ", " + oldY + " to "
+			+ p.getX() + ", " + p.getY());
+	}
 }

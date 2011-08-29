@@ -54,7 +54,7 @@
    <property name="isvisible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3Y2QqDMBCFYe1qV/v+T9sDRQiDJE6XMI3/B+diMLaJDiHYdQAAAAAAoKZe2fzBb3r+u3eOb2n9Xqz/NdetsivUS8bmMo2NZK8clKMyFOrSWPs80kRd/0k5KxflWqhz1+bWPiRJn8Uvefe/m3JXRuVRqHPXbC8MM/UUAMB70rNIjfuiSc8iNe4DsA72HB+BZ06f7vH2HB+BZ07s8ctE7POaIvY5vo8+b7/Pecftv+Mc+112bex3WQCI6gnu4ZUeADAAAA==
+   H4sIAAAAAAAAA+3Y2QrCMBCF4Wpd4u77P62nYGEYSqYKhsH8H5yLIbnIRggZBgAAAAAAgO9t3gHWmM7KVhmVXVCv6VvL3DeTvXJQjkoJ6qivXw+brPM/KWflolyDuta2NPdiYtfilz69/27KXXkoz6CutfmzUBbqOQCAtuwbpkf2DQMAnn/HZ9ByTP4dn0HGMQHIL+N93lIPdyd7/P97XOP/ZXvj/2UBIKsXW503fgAwAAA=
   </data>
  </layer>
  <layer name="background" width="64" height="48">
@@ -62,7 +62,7 @@
    <property name="isvisible" value="true"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3WwQnAIBBFQYtI/7XmknNAg7LZPwNe1YewOAYAAABw0vWs6nvuOrtb/yz951cl+nv1r86/Lv0Ana3O0i4zOL0f2KPiX3XmTl/vnt6fouI7n5TenyL9nRP6Exrf6Nef3A/8xw1hQHY6ADAAAA==
+   H4sIAAAAAAAAA+3XuwkAIRRFQYuw/1pNNhNEN/FzZ+DFchRESwEAAAD4r34DM+qGOYn+t/pX13itH4Be+h2c3g+MnfhW3fF/SO1Pkb6n6f0p0s85oT+hcUS//uR+4B4NK5dfxgAwAAA=
   </data>
  </layer>
  <layer name="objects" width="64" height="48">

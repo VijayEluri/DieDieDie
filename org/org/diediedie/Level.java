@@ -402,7 +402,7 @@ public class Level extends TiledMap
     public void draw(Graphics g)
     {
         render(0, 0);
-        navMesh.draw(g);
+        //navMesh.draw(g);
         drawEnemies(g);
         drawObjects(g);
     }

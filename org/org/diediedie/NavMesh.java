@@ -72,7 +72,6 @@ public class NavMesh implements Drawable
         negativeSpaces = space;
         linkWalkableZonesToNegativeSpace();
         linkNegativeSpace();
-        
     }
     
     public Map<Shape, List<Shape>> getWalkSpaceMap()
@@ -448,7 +447,7 @@ public class NavMesh implements Drawable
         private static void createWalkableZones()
         {   
             ledgeTiles = getLedgeTiles(l);
-            Set<Tile> checked = new HashSet<Tile>();
+            //Set<Tile> checked = new HashSet<Tile>();
             walkableZones = new HashSet<Shape>();
             List<List<Tile>> walkableTileList = new ArrayList<List<Tile>>();
             Collections.sort(ledgeTiles);
@@ -485,8 +484,8 @@ public class NavMesh implements Drawable
         				 "current : " 
         				+ current.xCoord 
         				+ ", "
-        				+ current.yCoord);
-	        		*/
+        				+ current.yCoord);*/
+	        		
 	        		if(previous == null)
 	        		{
 	        			/*System.out.println(
@@ -519,11 +518,11 @@ public class NavMesh implements Drawable
 	        				+ previous.yCoord);
 	        			*/
 	        			assert previous.xCoord != (current.xCoord - 1);
-	        			/*
-	        			System.out.println(
-	        				"\t--> adding neighbours list to master list");
+	        			
+	        			/*System.out.println(
+	        				"\t--> adding neighbours list to master list");*/
 	        			walkableTileList.add(currentNbrs);
-	        			System.out.println(
+	        			/*System.out.println(
 		        				"\t--> creating new list and adding current");*/
 	        			currentNbrs = new ArrayList<Tile>();
 	        			currentNbrs.add(current);
@@ -534,8 +533,8 @@ public class NavMesh implements Drawable
         	}
         	// Add the final neighbour list to the master list
         	walkableTileList.add(currentNbrs);
-        	System.out.println(
-        		"\n\tmade " + walkableTileList.size() + " list(s)");
+        	/*System.out.println(
+        		"\n\tmade " + walkableTileList.size() + " list(s)");*/
         	
         	return walkableTileList;
         }
@@ -561,6 +560,8 @@ public class NavMesh implements Drawable
                 negativeSpace.add(new NegativeSpace(g));
             }            
         }
+        
+
         
         /*
          * Attempts to combine any (and all) of the given SliceGroups
@@ -747,23 +748,28 @@ public class NavMesh implements Drawable
         }
         
         /*
-         * Returns a list of tiles from the background layer that do
-         * not have a copy (i.e. same coordinates) in the collision
-         * layer.
+         * Returns a list of tiles not in the collision
+         * layer or ArrowBouncer list.
          */ 
         private static List<Tile> getSpaceTiles(Level l)
         {
             MapLayer colls = l.getCollisionLayer();
-            MapLayer bgrnd = l.getBackgroundLayer();
+            //MapLayer bgrnd = l.getBackgroundLayer();
             
             List<Tile> spaceTiles = new ArrayList<Tile>();
-
-            for(Tile b : bgrnd.tiles)
+            	
+            //for(Tile b : bgrnd.tiles)
+            for(int x = 0; x < l.getWidth(); ++x)
             {
-                if(!colls.containsTile(b.xCoord, b.yCoord))
-                {
-                    spaceTiles.add(b);
-                }
+            	for(int y = 0; y < l.getHeight(); ++y)
+            	{
+	                if(!colls.containsTile(x, y))//b.xCoord, b.yCoord))
+	                {
+	                	System.out.println("Found space tile (" + x + ", "
+	                				+ y + ")");
+	                    spaceTiles.add(new Tile(l, x, y, 0));
+	                }
+            	}
             }
             return spaceTiles;
         }
@@ -773,9 +779,9 @@ public class NavMesh implements Drawable
          */ 
         private static Rectangle makeWalkShape(Tile start, Tile end)
         {
-            System.out.println("\tnew walk line from " 
+            /*System.out.println("\tnew walk line from " 
                     + start.getCoords() + " | to | " + end.getCoords());
-           
+           */
             Rectangle rect = new Rectangle(
             		start.xPos, 
             		start.yPos - 3, 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="collision" tilewidth="16" tileheight="16">
+  <image source="collision.png" width="80" height="32"/>
+ </tileset>
+ <tileset firstgid="11" name="tile" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="128" height="64"/>
+ </tileset>
+ <tileset firstgid="43" name="bg" tilewidth="16" tileheight="16">
+  <image source="level1_background.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="59" name="object" tilewidth="16" tileheight="16">
+  <image source="object_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="object"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="60" name="exit" tilewidth="16" tileheight="16">
+  <image source="exit_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="exit"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="61" name="bluey" tilewidth="16" tileheight="16">
+  <image source="bluey_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="bluey"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="62" name="start" tilewidth="16" tileheight="16">
+  <image source="start_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="start"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="background" width="40" height="30" visible="0">
+  <properties>
+   <property name="isvisible" value="true"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3Stw3AMADEQO0j5yzvP5i5hR4wCxbsr5ZSBhppohr2My200hb4Ox100hX4Nz3U6A383r70p78kb/rTX9L39qU//SV505/+kr63L/3pL8mb/v7l7wOI4AM4wBIAAA==
+  </data>
+ </layer>
+ <layer name="collisions" width="40" height="30" opacity="0.99">
+  <properties>
+   <property name="isvisible" value="false"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+2VSxLAIAhD8f6X7rYbWj4BomNmXJo8EXGJyFIWg1g4NF2+nE7l6zrX5cvJkzMxH0+qH2JfV04ln/bfenorwmfNsPD95U/zebOQ7zrD1zFfpvovyjLFF2Wz3nOVWOr35b0zn9UDnYuee4x876wqofgQPhFv1vni9ahSJx+ydzya4GNcDy3t/j7AEgAA
+  </data>
+ </layer>
+ <layer name="platforms" width="40" height="30">
+  <properties>
+   <property name="isvisible" value="true"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+2VOw7AIAxDcwgYuf81u3RgIMKQDxbCUkbiR5uYIiJFKQaxcGh6fDbdypd1r8dn04pPlfx8vOn7eZzL8onk097bldna4UM9EL5Kzrfq5bnXFr6MfDk1fyO1vxCmbL4m+3zIf47SjKmBPaI0Y2PnQ3t4+nruxW6+ZPD1XlHy4tNq9jZaerPmC7oXfY8ojfIkis86O+x87PUBrKmyRsASAAA=
+  </data>
+ </layer>
+ <layer name="objects" width="40" height="30">
+  <properties>
+   <property name="isvisible" value="false"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3OMREAMAgEMITR+pdVC9x1eIZEQaqAiZsOAGOdDgCwykkHAPj2AHC6N7vAEgAA
+  </data>
+ </layer>
+</map>

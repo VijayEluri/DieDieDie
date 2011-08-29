@@ -1,4 +1,5 @@
 package org.diediedie.actors;
+import org.diediedie.ArrowBouncer;
 import org.newdawn.slick.geom.*;
 
 /**
@@ -38,7 +39,7 @@ public interface Projectile extends MovableObject
     Enemy getEnemyCollidedWith();
 
     boolean getCollided();
-	void bounce();
+	void bounce(ArrowBouncer ab);
 	
 	
 }

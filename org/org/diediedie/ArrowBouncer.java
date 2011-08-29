@@ -6,16 +6,19 @@ import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
+
 
 public class ArrowBouncer implements LevelObject, Bounded
 {
+	public static final int SPEED_BOOST = 1;
 	final String IMAGE_PATH_RIGHT = "data/bouncer_right_debug.png",
 			     IMAGE_PATH_LEFT = "data/bouncer_left_debug.png"; 
 	Image image;
 	Level level;
 	Tile tile;
 	private Rectangle rect;
+	private final int RIGHT_ANGLE_CHANGE = 90;
+	private final int LEFT_ANGLE_CHANGE = -RIGHT_ANGLE_CHANGE;
 	Direction dir;
 	
 	public ArrowBouncer(Tile t, Level l, Direction d)
@@ -39,6 +42,19 @@ public class ArrowBouncer implements LevelObject, Bounded
 		return dir;
 	}
 	
+	public int getAngleChange()
+	{
+		/*
+		 * Returns the value to add to the Arrow's
+		 * angle.
+		 */
+		if(dir == Direction.LEFT)
+		{
+			return LEFT_ANGLE_CHANGE;
+		}
+		return RIGHT_ANGLE_CHANGE;
+	}
+	
 	private void createRect()
 	{
 		this.rect = new Rectangle(
@@ -49,6 +65,26 @@ public class ArrowBouncer implements LevelObject, Bounded
 	{
 		return image;
 	}
+	
+	/*public long getTimeLastUsed()
+	{
+		return lastUsed ;
+	}*/
+	
+	/*public void setUsed()
+	{
+		lastUsed = System.currentTimeMillis();
+	}
+	
+	public boolean canUse()
+	{
+		boolean ret = (System.currentTimeMillis()
+				- lastUsed) 
+				   	>= 
+				  USE_DELAY;
+		System.out.println("canUse " + ret);
+		return ret;
+	}*/
 	
 	@Override
 	public void setLevel(Level l) 
@@ -66,7 +102,7 @@ public class ArrowBouncer implements LevelObject, Bounded
 	public void draw(Graphics g) 
 	{
 		g.drawImage(image, tile.xPos, tile.yPos);
-		g.draw((Shape)rect);
+		//g.draw((Shape)rect);
 	}
 
 	@Override
@@ -94,4 +130,8 @@ public class ArrowBouncer implements LevelObject, Bounded
 		return rect;
 	}
 
+	public int getSpeedBoost()
+	{
+		return SPEED_BOOST;
+	}
 }

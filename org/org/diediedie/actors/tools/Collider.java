@@ -65,7 +65,8 @@ public class Collider
         	{
         		System.out.println(
         			"Arrow " + p.hashCode() + " hit bouncer");
-        		p.bounce();
+        		Aligner.alignToBouncer(p, ab);	
+        		p.bounce(ab);
         	}
         }
         return false;
