@@ -122,6 +122,7 @@ public class Player extends Object implements Actor, InputProviderListener
     private Level level = null;
 	private boolean isJumping = false;
 	private boolean jumpKeyDown = false;
+	private boolean outOfBounds = false;
     
     /**
      * Constructs the Player at the given position.
@@ -570,11 +571,12 @@ public class Player extends Object implements Actor, InputProviderListener
         while(it.hasNext())
         {
             Arrow a = it.next();
-            if(a.getCollidedWithEnemy())
+            if(a.getCollidedWithEnemy() ||
+               a.isOutOfBounds())
             {
                 // damage already done in Enemy.doCollision
                 // we can safely remove the arrow here
-                System.out.println("removing collided arrow" + a);
+                System.out.println("removing arrow" + a);
                 it.remove();
             }
             else if(a.isFlying())
@@ -857,4 +859,17 @@ public class Player extends Object implements Actor, InputProviderListener
         width = i.getWidth();
         height = i.getHeight();
     }
+
+	@Override
+	public boolean isOutOfBounds() 
+	{
+		return outOfBounds ;
+	}
+
+	@Override
+	public void setOutOfBounds(boolean b) 
+	{
+		outOfBounds = b;
+		
+	}
 }

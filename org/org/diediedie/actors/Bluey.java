@@ -111,6 +111,8 @@ public class Bluey extends Object implements Enemy, Observer
 
 	private boolean moved;
 
+	private boolean outOfBounds;
+
 	/**
 	 * Constructor. The object is associated with a Level and is positioned as
 	 * near to Tile t on it as possible.
@@ -123,7 +125,7 @@ public class Bluey extends Object implements Enemy, Observer
 		//look = new Look(this);
 		canSeePlayer = false;
 		hasSeenPlayer = false;
-
+        outOfBounds = false;
 		stateMachine = new BlueyFSM(this);
 		visibleObjects = new HashSet<LevelObject>();
 		setLevel(l);
@@ -164,9 +166,6 @@ public class Bluey extends Object implements Enemy, Observer
 		System.out.println("bluey setMoveSpeed: " + f);
 	}
 
-	/*
-	 * public void setMoving(boolean m) { moving = m; }
-	 */
 	@Override
 	public Level getLevel()
 	{
@@ -206,6 +205,7 @@ public class Bluey extends Object implements Enemy, Observer
 	public void setFacing(Direction d)
 	{
 		facing = d;
+		
 		if (d.equals(Direction.LEFT)) 
 		{
 			currentAnim = leftWalkAnim;
@@ -741,6 +741,19 @@ public class Bluey extends Object implements Enemy, Observer
 	public Point getGoto()
 	{
 		return this.gotoPoint;
+	}
+
+	@Override
+	public boolean isOutOfBounds() 
+	{
+		return outOfBounds ;
+	}
+
+	@Override
+	public void setOutOfBounds(boolean b) 
+	{
+		outOfBounds = b;
+		
 	}
 	
 }

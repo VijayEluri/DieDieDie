@@ -59,6 +59,8 @@ public class DieDieDie extends BasicGame
 
 	private ScalableGame scalableWrapper;
 
+	private Level arrowBounceTest;
+
 	public static final float GRAVITY = 0.25f;
 
 	/**
@@ -81,10 +83,10 @@ public class DieDieDie extends BasicGame
 
 		// set up levels
 		createLevels();
-		currentLevel = level1;
+		currentLevel = arrowBounceTest;/*level1*/;
 
 		// load player and associate with the level data
-		player = new Player(level1);
+		player = new Player(arrowBounceTest);//level1);
 
 		// hook up the player to the input provider
 		player.associateInputProvider(inputProv, container.getInput());
@@ -97,6 +99,10 @@ public class DieDieDie extends BasicGame
 	{
 		level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
 				Direction.LEFT, GRAVITY);
+		arrowBounceTest = loadLevel("Arrow One Name", 
+				"data/Bouncy_Arrows_1024x768x16x16.tmx",
+				TILE_SETS_PATH, Direction.RIGHT, GRAVITY);
+				
 		//level1.setLevelArt(level1ArtPath);
 	}
 

@@ -6,7 +6,6 @@ import org.newdawn.slick.geom.*;
  **/
 public interface Projectile extends MovableObject
 {
-
     void updateAiming(float mouseX, float mouseY);
     void stop();
     void release(float power);
@@ -39,5 +38,7 @@ public interface Projectile extends MovableObject
     Enemy getEnemyCollidedWith();
 
     boolean getCollided();
+	void bounce();
+	
 	
 }

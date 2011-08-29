@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="48" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="collision" tilewidth="16" tileheight="16">
+  <image source="collision_32x32.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="17" name="exit" tilewidth="16" tileheight="16">
+  <image source="exit_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="exit"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="18" name="bluey_tile" tilewidth="16" tileheight="16">
+  <image source="bluey_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="bluey"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="19" name="start" tilewidth="16" tileheight="16">
+  <image source="start_tile.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="start"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="20" name="background_debug" tilewidth="16" tileheight="16">
+  <image source="background_tile_debug.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="21" name="bouncer" tilewidth="32" tileheight="32">
+  <image source="arrow_bounce_tile.png" width="32" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="bouncer"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="collision" width="64" height="48" visible="0">
+  <properties>
+   <property name="isvisible" value="false"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3YwQrDIBBF0aRNG5O0Tf7/a/s2ggziZCWi98BbDLpRBwWnCQAAAAAAAKhjVh7KU1mc+s7cUuLclryUt7Iqwam9uXY/0rS6/k3ZlUP5OHVpLLf2kCTdi5Z8lZ9yKpdTl8ZsL4RMHQMAqM++U6Ox7xQARNyP3I8joM/p8xHQ5/33OWfc/xmX2H/Z0dh/WQBo1R9drLuvADAAAA==
+  </data>
+ </layer>
+ <layer name="background" width="64" height="48">
+  <properties>
+   <property name="isvisible" value="true"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3UwQkAIRAEQYMw/1gvAn16SlfBBtAM7BgAAAAAcMb84W6iX3+5H6Ci/ovr/cBa/T/U+yvqO9f7K+o7F/oLjTv69Zf7gXd8hSEtmQAwAAA=
+  </data>
+ </layer>
+ <layer name="objects" width="64" height="48">
+  <properties>
+   <property name="isvisible" value="false"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3OsQkAIAwAwayg4v6rOoCkEJQg3NVffAQAAAAAP+iHfXtyAbtZPQAAAADAVaN6AACA1ALG8ZHTADAAAA==
+  </data>
+ </layer>
+</map>

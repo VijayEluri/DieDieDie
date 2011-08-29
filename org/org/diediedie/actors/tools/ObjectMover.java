@@ -18,6 +18,7 @@ package org.diediedie.actors.tools;
 import java.lang.Math;
 
 import org.newdawn.slick.util.FastTrig;
+import org.diediedie.Level;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Projectile;
 
@@ -155,6 +156,31 @@ public class ObjectMover
         }
     	p.setFacingAngle(angleActuallyMoved);
 	    p.calculateEndPos();
+	    checkOutOfBounds(p);
+    }
+    
+    public static void checkOutOfBounds(Projectile p)
+    {
+    	/*
+    	 * We're only interested in the left, right and
+    	 * bottom.
+    	 */
+    	final int W = p.getLevel().getLevelWidth();
+    	final int H = p.getLevel().getLevelHeight();
+    	
+    	/*
+    	 * Check just the end points - it will be the last
+    	 * part to leave
+    	 */
+    	final float END_X = p.getEndX();
+    	final float END_Y = p.getEndY();
+    	
+    	if(END_X < 0 ||
+    	   END_X > W ||
+    	   END_Y > H)
+    	{
+    		p.setOutOfBounds(true);
+    	}
     }
     
     /*

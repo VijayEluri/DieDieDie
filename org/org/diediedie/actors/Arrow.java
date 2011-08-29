@@ -40,7 +40,7 @@ public class Arrow extends Object implements Projectile
 {      
     // constants
     private final float SIZE = 18f, 
-                        AIR_REST = 0.7f,
+                        AIR_REST = 0.8f,
                         MAX_GRAVITY = 20f, 
                         GRAVITY_INCR = 0.1f, 
                         GRAVITY_LINE = 1f, 
@@ -60,7 +60,7 @@ public class Arrow extends Object implements Projectile
                   // ^ initial angle when loading into the Bow
                   gravity = 0f, 
                   // ^ gravity effect
-                  facingAngle = 0, angleChange = 0.01f;
+                  facingAngle = 0;
                                       
     private Level level = null;
 
@@ -70,6 +70,8 @@ public class Arrow extends Object implements Projectile
 	private boolean collidedWithEnemy = false;
 
 	private Enemy enemyCollidedWith = null;
+
+	private boolean outOfBounds = false;
     
     /**
      * Creates a new arrow at the given position.
@@ -176,7 +178,7 @@ public class Arrow extends Object implements Projectile
     }
     
     /**
-     * Allows the Player to update the movementAngle (aim) of the arrow prior
+     * Allows the Player to df the movementAngle (aim) of the arrow prior
      * to release, based upon the mouse's position. 
      */
 	public void updateAiming(float mouseX, float mouseY)
@@ -531,6 +533,25 @@ public class Arrow extends Object implements Projectile
 	public Enemy getEnemyCollidedWith()
 	{
 		return enemyCollidedWith;
+	}
+
+	@Override
+	public void bounce() 
+	{
+		System.out.println("BOUNCE");
+		
+	}
+	
+	@Override
+	public boolean isOutOfBounds() 
+	{
+		return outOfBounds;
+	}
+
+	@Override
+	public void setOutOfBounds(boolean b) 
+	{
+		outOfBounds = b;
 	}
 }
 

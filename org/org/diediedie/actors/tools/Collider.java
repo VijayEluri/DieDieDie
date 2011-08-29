@@ -15,6 +15,7 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.tools;
+import org.diediedie.ArrowBouncer;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Enemy;
@@ -43,19 +44,29 @@ public class Collider
      */ 
     public static boolean collidesLevel(Projectile p)
     {
-        if(p.isFlying() 
-        		&&
-           p.getLevel().collides(p.getShape()))
+        if(p.isFlying())
         {
-        	p.setCollided(true);
-            /*System.out.println(p + " collides Level with speeds :");
-            System.out.println(
-                "\tx change : " + (p.getOldStartX() - p.getX()));
-        
-            System.out.println(
-                "\ty change : " + (p.getOldStartY() - p.getY()));*/
-            p.stop();
-            return true;
+        	if(p.getLevel().collides(p.getShape()))
+	        {
+	        	
+	            /*System.out.println(
+	            	p + " " + p.hashCode() + " " + "collides Level with speeds :");
+	            System.out.println(
+	                "\tx change : " + (p.getOldStartX() - p.getX()));
+	        
+	            System.out.println(
+	                "\ty change : " + (p.getOldStartY() - p.getY()));*/
+	            p.stop();
+	            return true;
+	        }
+        	// Check for arrow bouncer 
+        	ArrowBouncer ab = p.getLevel().collidesBouncer(p);
+        	if(ab != null)
+        	{
+        		System.out.println(
+        			"Arrow " + p.hashCode() + " hit bouncer");
+        		p.bounce();
+        	}
         }
         return false;
     }

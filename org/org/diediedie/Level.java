@@ -22,7 +22,10 @@ import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Bluey;
 import org.diediedie.actors.Enemy;
+import org.diediedie.actors.LevelObject;
+import org.diediedie.actors.MovableObject;
 import org.diediedie.actors.Player;
+import org.diediedie.actors.Projectile;
 import org.diediedie.actors.statemachine.BlueyFSM;
 import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.AnimCreator;
@@ -55,6 +58,8 @@ public class Level extends TiledMap
     // initial direction player faces 
     public final Direction playerFacing;
     
+    
+    
     private String name;
     private NavMesh navMesh;
     private final String VIS_STR = "isvisible", TRUE_STR = "true", 
@@ -62,15 +67,20 @@ public class Level extends TiledMap
     
     private final int NOT_PRESENT = 0;
     
-    private MapLayer collisionLayer, objectLayer, backgroundLayer, 
-                     platformLayer;
-        
+    private MapLayer collisionLayer, objectLayer, backgroundLayer;//, 
+                     /*platformLayer;*/
+    
+    //List<LevelObject> objects;
+    
+    List<ArrowBouncer> bouncers;
+    
     private Player player;
     private List<Enemy> enemiesLiving;
     //private List<Enemy> enemiesDead;
     private Tile playerTile = null;
-
-	private Image levelArt;
+    
+	private int levelHeight;
+	private int levelWidth;
     
     /**
      * Create a Level
@@ -82,23 +92,41 @@ public class Level extends TiledMap
         this.name = name;
         this.gravity = grav;
         this.playerFacing = facing;
+        calculateLevelDimensions();
         
         System.out.println("Level " + name + " has " + getLayerCount() +
-                           " tile layers");
+                           " tile layers. Mapsize " + this.levelWidth + " by "
+                           + this.levelHeight);
         
         collisionLayer = createMapLayer(getLayerIndex("collision"));
         objectLayer = createMapLayer(getLayerIndex("objects"));
-        //platformLayer = createMapLayer(getLayerIndex("platforms"));
         backgroundLayer = createMapLayer(getLayerIndex("background"));    
         enemiesLiving = new ArrayList<Enemy>();
+        //objects = new ArrayList<LevelObject>();
+        bouncers = new ArrayList<ArrowBouncer>();
         sortObjects();
         createNavMesh();
     }   
     
-    public void setLevelArt(String pathToImage)
+    private void calculateLevelDimensions()
+    {
+    	 levelHeight = this.height * this.tileHeight;
+         levelWidth = this.width * this.tileWidth;
+    }
+    
+    public int getLevelWidth()
+    {
+    	return levelWidth;
+    }
+    public int getLevelHeight()
+    {
+    	return levelHeight;
+    }
+    
+    /*public void setLevelArt(String pathToImage)
     {
     	levelArt = AnimCreator.loadImage(pathToImage);
-    }
+    }*/
     
     private void createNavMesh()
     {
@@ -198,13 +226,32 @@ public class Level extends TiledMap
             }
         }
     }
-
+    
+    /*
+     * Returns true if the Projectile P is in a collision with
+     * an ArrowBouncer on this level.
+     */
+    public ArrowBouncer collidesBouncer(Projectile p)
+    {
+    	final float x = p.getX(), y = p.getY();
+    	
+    	for(ArrowBouncer ab : bouncers)
+    	{
+    		if(ab.getRect().contains(x, y))
+    		{
+    			return ab;
+    		}
+    	}
+    	return null;
+    }
+    
     /*
      * Sorts the object layer into separate structures
      */ 
     private void sortObjects()
     {
     	boolean foundPlayerStart = false;
+    	
         for(Tile t : objectLayer.tiles)
         {
             try
@@ -230,6 +277,14 @@ public class Level extends TiledMap
                         enemiesLiving.add(new Bluey(this, t));
                     }
                 }
+                else if(t.properties.get("type").equalsIgnoreCase("bouncer"))
+               	{
+                	System.out.println(
+                		"found bouncer at "	+ t.xPos + ", " + t.yPos);
+                	//System.exit(-1);
+                	//objects.add(new ArrowBouncer(t, this));
+                	bouncers.add(new ArrowBouncer(t, this));
+               	}
             }
             catch(NullPointerException e)
             {
@@ -297,9 +352,8 @@ public class Level extends TiledMap
     @Override
 	public void render(int x, int y)
     {
-        // keep the ordering!
+        // ordering matters!
         render(x, y, backgroundLayer.index);
-        //render(x, y, platformLayer.index);
     }
     
     /**
@@ -311,14 +365,17 @@ public class Level extends TiledMap
         render(0, 0);
         //navMesh.draw(g);
         drawEnemies(g);
-        //drawLevelArt(g);
+        drawObjects(g);
     }
     
-    /*private void drawLevelArt(Graphics g) 
+    private void drawObjects(Graphics g)
     {
-    	g.drawImage(levelArt, 0, 0);
-	}*/
-
+    	for(ArrowBouncer ab : bouncers)
+        {
+        	ab.draw(g);
+        }
+    }
+    
 	/**
      * Draw using Graphics object g any visible enemiesLiving. 
      */ 

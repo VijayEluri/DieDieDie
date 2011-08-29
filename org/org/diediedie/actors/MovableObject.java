@@ -8,6 +8,9 @@ import org.newdawn.slick.util.pathfinding.Mover;
  */
 public interface MovableObject extends LevelObject, Mover
 {
+	boolean isOutOfBounds();
+	void setOutOfBounds(boolean b);
+	
     float getMoveSpeed();    
 	float getXSpeed();
 	float getYSpeed();
