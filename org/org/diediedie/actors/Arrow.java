@@ -40,11 +40,11 @@ public class Arrow extends Object implements Projectile
 {      
     // constants
     private final float SIZE = 18f, 
-                        AIR_REST = 0.75f,
+                        AIR_REST = 0.7f,
                         MAX_GRAVITY = 20f, 
                         GRAVITY_INCR = 0.1f, 
                         GRAVITY_LINE = 1f, 
-                        MOVE_SPEED = .55f, 
+                        MOVE_SPEED = .6f, 
                         MAX_Y_SPEED = 26.5f;
                         
     private float startX = 0, 
