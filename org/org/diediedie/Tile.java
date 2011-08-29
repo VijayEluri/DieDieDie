@@ -34,12 +34,15 @@ public class Tile implements Comparable<Tile>
     public Map<String, String> properties = 
     		new HashMap<String, String>();
     
-    public static final String[] PROPERTIES = {"type", "name"};
+    public static final String[] PROPERTIES = {"type", "name", "direction"};
     public static final String[] VALUES = {
                                             "exit", 
                                             "enemy", 
                                             "start", 
-                                            "bluey"
+                                            "bluey",
+                                            "left",
+                                            "right",
+                                            
                                           };
     public static final String NULL = "NULL";
     

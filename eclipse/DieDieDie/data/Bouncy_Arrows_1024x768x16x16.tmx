@@ -31,20 +31,30 @@
  <tileset firstgid="20" name="background_debug" tilewidth="16" tileheight="16">
   <image source="background_tile_debug.png" width="16" height="16"/>
  </tileset>
- <tileset firstgid="21" name="bouncer" tilewidth="32" tileheight="32">
-  <image source="arrow_bounce_tile.png" width="32" height="32"/>
+ <tileset firstgid="21" name="bouncer right" tilewidth="16" tileheight="16">
+  <image source="bouncer_right_debug.png" width="16" height="16"/>
   <tile id="0">
    <properties>
+    <property name="direction" value="right"/>
     <property name="type" value="bouncer"/>
    </properties>
   </tile>
  </tileset>
- <layer name="collision" width="64" height="48" visible="0">
+ <tileset firstgid="22" name="bouncer left" tilewidth="16" tileheight="16">
+  <image source="bouncer_left_debug.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="type" value="bouncer"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="collision" width="64" height="48">
   <properties>
    <property name="isvisible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3YwQrDIBBF0aRNG5O0Tf7/a/s2ggziZCWi98BbDLpRBwWnCQAAAAAAAKhjVh7KU1mc+s7cUuLclryUt7Iqwam9uXY/0rS6/k3ZlUP5OHVpLLf2kCTdi5Z8lZ9yKpdTl8ZsL4RMHQMAqM++U6Ox7xQARNyP3I8joM/p8xHQ5/33OWfc/xmX2H/Z0dh/WQBo1R9drLuvADAAAA==
+   H4sIAAAAAAAAA+3YuQrDMBCEYedwohx28v5Pm2kMYjHaVGJs/x9MsUiFji2EhgEAAAAAAADo46SclYtyTep/5rayzHUyKjflrpSkzubG86jjuv+H8lReyjupW2Nrey9V6rNwMimz8lG+Sd0ai71QVuolAAAAgIv4jnfQc03xHe/AcU1b59jnPdFTx0Cf77/PueP933FL/Jc9mvgvCwCufpdm3OYAMAAA
   </data>
  </layer>
  <layer name="background" width="64" height="48">
@@ -52,7 +62,7 @@
    <property name="isvisible" value="true"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3UwQkAIRAEQYMw/1gvAn16SlfBBtAM7BgAAAAAcMb84W6iX3+5H6Ci/ovr/cBa/T/U+yvqO9f7K+o7F/oLjTv69Zf7gXd8hSEtmQAwAAA=
+   H4sIAAAAAAAAA+3XuQ3AIBAAQYpw/7W6A0sk5tkZ6WK0XAJjAAAAAMA/ngWzE/139c+ecVs/AADM2PGtuuL/UO2vqN9pvb+ivudCf6Hxi3795X7gHC+YYZC2ADAAAA==
   </data>
  </layer>
  <layer name="objects" width="64" height="48">
@@ -60,7 +70,7 @@
    <property name="isvisible" value="false"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3OsQkAIAwAwayg4v6rOoCkEJQg3NVffAQAAAAAP+iHfXtyAbtZPQAAAADAVaN6AACA1ALG8ZHTADAAAA==
+   H4sIAAAAAAAAA+3PsQkAIAxFQVcQ0f1H1QXSWETRO0id/0oBAAAAYNdY10+PCNSEHzf3Z9D/dz8AAADAq9rpAQAAhCbE+IHIADAAAA==
   </data>
  </layer>
 </map>

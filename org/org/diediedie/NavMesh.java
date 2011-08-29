@@ -75,6 +75,11 @@ public class NavMesh implements Drawable
         
     }
     
+    public Map<Shape, List<Shape>> getWalkSpaceMap()
+    {
+    	return walkableNegativeConnections;
+    }
+    
     private void linkNegativeSpace()
     {    	
     	Iterator<NegativeSpace> nit = negativeSpaces.iterator();
@@ -476,18 +481,18 @@ public class NavMesh implements Drawable
 	        	while(!ledges.isEmpty())
 	        	{
 	        		Tile current = tit.next();
-	        		System.out.println(
+	        		/*System.out.println(
         				 "current : " 
         				+ current.xCoord 
         				+ ", "
         				+ current.yCoord);
-	        		
+	        		*/
 	        		if(previous == null)
 	        		{
-	        			System.out.println(
+	        			/*System.out.println(
 	        				"\t--> current is first Tile : " +
 	        				"creating new list for it");
-	        			
+	        			*/
 	        			currentNbrs = new ArrayList<Tile>();
 	        			currentNbrs.add(current);
 	        		}
@@ -496,30 +501,30 @@ public class NavMesh implements Drawable
 	        				previous.yCoord == current.yCoord)
 	        		{
 	        			// not the first Tile -- but adjacent to previous
-	        			System.out.println(
+	        			/*System.out.println(
 	        		         "\t--> current is adjacent to previous ("
 	        				+ previous.xCoord
 	        				+ ", "
 	        				+ previous.yCoord
-	        				+ ")");
+	        				+ ")");*/
 	        			currentNbrs.add(current);
 	        		}
 	        		else
 	        		{
 	        			// not the first Tile -- nor adjacent to previous
-	        			System.out.println(
+	        			/*System.out.println(
 	        				 "\t--> current is not adjacent to previous ("
 	        				+ previous.xCoord
 	        				+ ", "
 	        				+ previous.yCoord);
-	        			
+	        			*/
 	        			assert previous.xCoord != (current.xCoord - 1);
-	        			
+	        			/*
 	        			System.out.println(
 	        				"\t--> adding neighbours list to master list");
 	        			walkableTileList.add(currentNbrs);
 	        			System.out.println(
-		        				"\t--> creating new list and adding current");
+		        				"\t--> creating new list and adding current");*/
 	        			currentNbrs = new ArrayList<Tile>();
 	        			currentNbrs.add(current);
 	        		}
@@ -813,7 +818,7 @@ public class NavMesh implements Drawable
             for(Tile t : colls.tiles)
             { 
                 // naturally if at vertical position 0, there can't be a
-                // 'higher' level (read: lower number)
+                // 'higher' tile level (lower number)
                 if(t.yCoord > 0)
                 {        
                     if(isLedgeTile(t, colls))
@@ -822,6 +827,8 @@ public class NavMesh implements Drawable
                     }
                 }
             }
+            System.out.println("Found total of " 
+            		+ ledgeTiles.size() + " ledge tiles");
             return ledgeTiles;
         }
         
@@ -833,8 +840,8 @@ public class NavMesh implements Drawable
         {
             if(!colls.containsTile(test.xCoord, test.yCoord - 1))
             {
-                /*System.out.println("Tile " + test.xCoord + ", "
-                             + test.yCoord + " is ledge tile");*/
+                System.out.println("Tile " + test.xCoord + ", "
+                             + test.yCoord + " is ledge tile");
                 return true;
             }
             return false;

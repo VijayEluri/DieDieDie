@@ -39,6 +39,7 @@ import org.newdawn.slick.Graphics;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * A single level...
@@ -163,6 +164,28 @@ public class Level extends TiledMap
                 return s;
             }
         }
+        // find current negative space
+        /*NegativeSpace n = getNavMesh().getNegativeSpaceFromPoint(
+        	new Point(a.getX(), a.getY()));
+        
+        if(n != null)
+        {
+        	// look up the walkable from the negative space
+        	
+        	for(Map.Entry<Shape, List<Shape>> entry
+        					: 
+        		navMesh.getWalkSpaceMap().entrySet())
+        	{
+        		for(Shape n2 : entry.getValue())
+        		{
+        			if(n.getShape() == n2)
+        			{
+        				return entry.getKey();
+        			}
+        		}
+        	}
+        }*/
+        
         return null;
     }
     
@@ -215,9 +238,10 @@ public class Level extends TiledMap
         while(lit.hasNext())
         {
             Enemy e = lit.next();
-            if(e.getHealth() <= 0)
+            if(e.getHealth() <= 0 || e.isOutOfBounds())
             {
                 e.die();
+                System.out.println("Removing " + e);
                 lit.remove();
             }
             else
@@ -278,12 +302,27 @@ public class Level extends TiledMap
                     }
                 }
                 else if(t.properties.get("type").equalsIgnoreCase("bouncer"))
-               	{
+               	{	
                 	System.out.println(
                 		"found bouncer at "	+ t.xPos + ", " + t.yPos);
-                	//System.exit(-1);
-                	//objects.add(new ArrowBouncer(t, this));
-                	bouncers.add(new ArrowBouncer(t, this));
+
+                	System.out.println(t.properties);
+                
+                	if(t.properties.get("direction").equalsIgnoreCase("left"))
+                	{
+                		bouncers.add(new ArrowBouncer(t, this, Direction.LEFT));
+                	}
+                	else if (
+                		t.properties.get("direction").equalsIgnoreCase("right"))
+                	{
+                		bouncers.add(new ArrowBouncer(t, this, Direction.RIGHT));
+                	}
+                	else
+                	{
+                		System.out.println("Bouncer has no direction!");
+                		System.exit(-1);
+                	}
+                	
                	}
             }
             catch(NullPointerException e)
@@ -363,7 +402,7 @@ public class Level extends TiledMap
     public void draw(Graphics g)
     {
         render(0, 0);
-        //navMesh.draw(g);
+        navMesh.draw(g);
         drawEnemies(g);
         drawObjects(g);
     }

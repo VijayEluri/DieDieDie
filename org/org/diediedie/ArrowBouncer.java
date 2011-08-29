@@ -2,6 +2,7 @@ package org.diediedie;
 
 import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.tools.AnimCreator;
+import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
@@ -9,18 +10,33 @@ import org.newdawn.slick.geom.Shape;
 
 public class ArrowBouncer implements LevelObject, Bounded
 {
-	final String IMAGE_PATH = "data/arrow_bounce_tile.png";
+	final String IMAGE_PATH_RIGHT = "data/bouncer_right_debug.png",
+			     IMAGE_PATH_LEFT = "data/bouncer_left_debug.png"; 
 	Image image;
 	Level level;
 	Tile tile;
 	private Rectangle rect;
+	Direction dir;
 	
-	public ArrowBouncer(Tile t, Level l)
+	public ArrowBouncer(Tile t, Level l, Direction d)
 	{
 		setLevel(l);
-		image = AnimCreator.loadImage(IMAGE_PATH);
+		if(d == Direction.LEFT)
+		{
+			image = AnimCreator.loadImage(IMAGE_PATH_LEFT);
+		}
+		else
+		{
+			image = AnimCreator.loadImage(IMAGE_PATH_RIGHT);
+		}
 		tile = t;
+		dir = d;
 		createRect();
+	}
+	
+	public Direction getDirection()
+	{
+		return dir;
 	}
 	
 	private void createRect()
@@ -69,7 +85,6 @@ public class ArrowBouncer implements LevelObject, Bounded
 	@Override
 	public float getY() 
 	{
-		
 		return tile.yPos;
 	}
 

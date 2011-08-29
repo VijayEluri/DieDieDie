@@ -677,22 +677,17 @@ public class Player extends Object implements Actor, InputProviderListener
      */
     private void updateJump()
     {
-    	/*if(isJumping
-	    		&&
-	    		!canJump
-	    			&&
-	    			ySpeed > MAX_JUMP_SPEED)*/
 		if(!canJump)
 		{
 			if(ySpeed > MAX_JUMP_SPEED)
 			{
 	    		ySpeed -= JUMP_INCR;
-	    		System.out.println("Player.updateJump() : " + ySpeed);
+	    		//System.out.println("Player.updateJump() : " + ySpeed);
 			}
 			else
 			{
-				System.out.println(
-    				"updateJump() --> MAX_JUMP_SPEED reached");
+				/*System.out.println(
+    				"updateJump() --> MAX_JUMP_SPEED reached");*/
 				isJumping = false;
 			}
 		}

@@ -28,6 +28,7 @@ public class GroundChecker
 
 		if(zone == null)
 		{
+			
 			System.out.println("Zone is null!");
 			System.exit(-1);
 		}

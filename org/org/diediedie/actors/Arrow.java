@@ -539,7 +539,15 @@ public class Arrow extends Object implements Projectile
 	public void bounce() 
 	{
 		System.out.println("BOUNCE");
-		
+		// swap horizontal
+		speedX = -speedX;
+		// swap the arrow's direction
+		oldX = startX;
+		oldY = startY;
+		endX = oldX;
+		endY = oldY;
+		startX = endX;
+		startY = endY;
 	}
 	
 	@Override

@@ -77,6 +77,7 @@ public class ObjectMover
         {
             return false;
         }
+        checkOutOfBounds(a);
         return true;
     }
     
@@ -159,6 +160,23 @@ public class ObjectMover
 	    checkOutOfBounds(p);
     }
     
+    public static void checkOutOfBounds(Actor a)
+    {
+    	final int W = a.getLevel().getLevelWidth();
+    	final int H = a.getLevel().getLevelHeight();
+
+    	final float START_X = a.getX();
+    	final float START_Y = a.getY();
+    	final float END_X = a.getX() + a.getWidth();
+    	
+    	if(START_X > W ||
+    	     END_X < 0 ||
+    	   START_Y > H)
+    	{
+    		a.setOutOfBounds(true);
+    	}
+    	
+    }
     public static void checkOutOfBounds(Projectile p)
     {
     	/*
