@@ -51,6 +51,8 @@ public class Level extends TiledMap
     
     // lesser number == more friction. xSpeed is multiplied by this number
     public static final float FRICTION = 0.91f;
+
+	private static final int ILLEGAL_PLAYER_LAYER = -1;
     
     // other way with gravity because gravity is added to the Actors' 
     // ySpeed
@@ -64,12 +66,17 @@ public class Level extends TiledMap
     private String name;
     private NavMesh navMesh;
     private final String VIS_STR = "isvisible", TRUE_STR = "true", 
-                         FALSE_STR = "false", PLATFORM_STR = "platforms";
+                         FALSE_STR = "false";
     
     private final int NOT_PRESENT = 0;
     
-    private MapLayer collisionLayer, objectLayer, backgroundLayer;//, 
+    private MapLayer collisionLayer, objectLayer;//, 
                      /*platformLayer;*/
+    
+    /*
+     *  list of the background layers in the order they should be drawn
+     */
+    private List<Integer> backgroundLayers = null;
     
     //List<LevelObject> objects;
     
@@ -82,6 +89,10 @@ public class Level extends TiledMap
     
 	private int levelHeight;
 	private int levelWidth;
+
+	private int playerLayer = ILLEGAL_PLAYER_LAYER;
+
+	private MapLayer playerLayerTiles;
     
     /**
      * Create a Level
@@ -98,16 +109,54 @@ public class Level extends TiledMap
         System.out.println("Level " + name + " has " + getLayerCount() +
                            " tile layers. Mapsize " + this.levelWidth + " by "
                            + this.levelHeight);
+        createLayers();
         
-        collisionLayer = createMapLayer(getLayerIndex("collision"));
-        objectLayer = createMapLayer(getLayerIndex("objects"));
-        backgroundLayer = createMapLayer(getLayerIndex("background"));    
+        
+        
+        
         enemiesLiving = new ArrayList<Enemy>();
         //objects = new ArrayList<LevelObject>();
         bouncers = new ArrayList<ArrowBouncer>();
-        sortObjects();
+    
         createNavMesh();
     }   
+    
+    private void createLayers()
+    {
+    	createBackgroundLayers();
+    	addPlayerLayer();
+    	collisionLayer = createMapLayer(getLayerIndex("collision"));
+        //objectLayer = createMapLayer(getLayerIndex("objects"));
+    }
+    
+    /*
+     * Finds the "player" layer. This will be an empty
+     */
+    private void addPlayerLayer() 
+    {	
+    	playerLayer = getLayerIndex("player");    	
+    	System.out.println("addPlayerLayer :" + playerLayer);
+    	playerLayerTiles = createMapLayer(playerLayer);
+    	sortObjectLayer(playerLayerTiles);
+	}
+
+	/*
+     * Creates a list of the integers for those layers
+     * in the map that are backgrounds.
+     */
+    private void createBackgroundLayers()
+    {
+    	backgroundLayers = new ArrayList<Integer>();
+    	final int LAYERS = getLayerCount();
+    	
+    	for(int i = 0; i < LAYERS; ++i)
+    	{
+    		if(isVisible(i))
+    		{
+    			backgroundLayers.add(i);
+    		}
+    	}
+    }
     
     private void calculateLevelDimensions()
     {
@@ -139,10 +188,10 @@ public class Level extends TiledMap
         player = p;        
     }
     
-    public MapLayer getBackgroundLayer()
+    /*public MapLayer getBackgroundLayer()
     {
         return backgroundLayer;
-    }
+    }*/
     
     public List<Enemy> getEnemies()
     {
@@ -203,7 +252,7 @@ public class Level extends TiledMap
      * Returns the Tile associated with the Player's start position on 
      * this Level.
      */ 
-    public Tile getPlayerTile()
+	public Tile getPlayerTile()
     {
         return playerTile;   
     }
@@ -272,11 +321,11 @@ public class Level extends TiledMap
     /*
      * Sorts the object layer into separate structures
      */ 
-    private void sortObjects()
+    private void sortObjectLayer(MapLayer ml)
     {
     	boolean foundPlayerStart = false;
     	
-        for(Tile t : objectLayer.tiles)
+        for(Tile t : ml.tiles)
         {
             try
             {                
@@ -338,7 +387,10 @@ public class Level extends TiledMap
         		"Cannot continue.");
         	System.exit(-1);
         }
-        System.out.println("level has " + enemiesLiving.size() + " enemiesLiving");
+        if(enemiesLiving != null)
+        {
+        	System.out.println("level has " + enemiesLiving.size() + " enemiesLiving");
+        }
     }
     
     /**
@@ -363,48 +415,62 @@ public class Level extends TiledMap
     {
         List<Tile> tiles = new ArrayList<Tile>();
         
-        for(int x = 0; x < getWidth(); x++)
+        for(int x = 0; x < getWidth(); ++x)
         {
-            for(int y = 0; y < getHeight(); y++)
+            for(int y = 0; y < getHeight(); ++y)
             {
                 if(getTileId(x, y, index) != NOT_PRESENT)
                 {
                     tiles.add(new Tile(this, x, y, index));
                 }
             }
-        }   
-        
-        final boolean VISIBLE; 
-        final String v = getLayerProperty(index, VIS_STR, Tile.NULL);
-        
-        if(v.equals(TRUE_STR))
-        {
-            VISIBLE = true;
-        }
-        else
-        {
-            VISIBLE = false;
-        }
-        return new MapLayer(tiles, index, VISIBLE);
+        }           
+        return new MapLayer(tiles, index, isVisible(index));
     }
     
-    @Override
-	public void render(int x, int y)
+    /*
+     * Returns true if the layer specified is visible.
+     */
+    private boolean isVisible(int layerIndex)
+    {
+    	return getLayerProperty(
+	    			layerIndex, 
+					VIS_STR, 
+					Tile.NULL).equals(TRUE_STR);
+    }
+    
+    /*
+     * Draw the Level. 
+     */
+	public void render(int x, int y, Graphics g)
     {
         // ordering matters!
-        render(x, y, backgroundLayer.index);
+    	for(int i = 0; i < playerLayer; ++i)
+    	{
+    		render(x, y, i);
+    	}
+    	drawPlayerLayer(g);
+    	for(int i = playerLayer+1; i < backgroundLayers.size(); ++i)
+    	{
+    		render(x, y, i);
+    	}
+        //navMesh.draw(g);
+    }
+    
+    private void drawPlayerLayer(Graphics g)
+    {
+    	drawEnemies(g);
+    	player.draw(g);
+    	//drawObjects(g);
     }
     
     /**
-     * Draw using Graphics object g this Level at 0,0 plus any 
-     * inhabiting enemiesLiving. 
+     * Draw using Graphics object g this Level at 0,0 plus 
+     * the player, enemies, objects..... 
      */ 
     public void draw(Graphics g)
     {
-        render(0, 0);
-        //navMesh.draw(g);
-        drawEnemies(g);
-        drawObjects(g);
+        render(0, 0, g);
     }
     
     private void drawObjects(Graphics g)
@@ -455,8 +521,6 @@ public class Level extends TiledMap
         return false;
     }
     
-    
-    
     /**
      * Returns true if the x / y coordinate position supplied is inside
      * a collision tile
@@ -487,5 +551,4 @@ public class Level extends TiledMap
         }
         return null;
     }
-    
 }

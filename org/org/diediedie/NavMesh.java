@@ -457,12 +457,12 @@ public class NavMesh implements Drawable
             walkableTileList = splitWalkableZones(ledgeTiles2);
             for(List<Tile> tl : walkableTileList)
             {
-            	System.out.println("Walkable Tile List");
+            	/*System.out.println("Walkable Tile List");
             	for(Tile t : tl)
             	{
             		System.out.println("\t" + t.xCoord + ", " + t.yCoord);
             	}
-            	System.out.println("\n");
+            	System.out.println("\n");*/
             	walkableZones.add(
             			makeWalkShape(tl.get(0), tl.get(tl.size()-1)));
             }
@@ -765,8 +765,8 @@ public class NavMesh implements Drawable
             	{
 	                if(!colls.containsTile(x, y))//b.xCoord, b.yCoord))
 	                {
-	                	System.out.println("Found space tile (" + x + ", "
-	                				+ y + ")");
+	                	/*System.out.println("Found space tile (" + x + ", "
+	                				+ y + ")");*/
 	                    spaceTiles.add(new Tile(l, x, y, 0));
 	                }
             	}
@@ -846,8 +846,8 @@ public class NavMesh implements Drawable
         {
             if(!colls.containsTile(test.xCoord, test.yCoord - 1))
             {
-                System.out.println("Tile " + test.xCoord + ", "
-                             + test.yCoord + " is ledge tile");
+                /*System.out.println("Tile " + test.xCoord + ", "
+                             + test.yCoord + " is ledge tile");*/
                 return true;
             }
             return false;

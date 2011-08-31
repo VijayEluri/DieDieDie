@@ -94,23 +94,24 @@ public class Player extends Object implements Actor, InputProviderListener
     // running: indicates the user is holding a directional button
     private boolean running = false;
         
-    private final String bowLeftPath = "data/STICKMAN_BOW_LEFT.png";
+    private final String bowLeftPath = 
+    	"data/player_images/STICKMAN_BOW_LEFT.png";
     
     private final String[] leftWalkPaths = {
-    	"data/1.png",	
-    	"data/2.png",
-    	"data/3.png",
-    	"data/4.png",
-    	"data/5.png",
-    	"data/6.png",
-    	"data/7.png",
-    	"data/8.png",
+    	"data/player_images/1.png",	
+    	"data/player_images/2.png",
+    	"data/player_images/3.png",
+    	"data/player_images/4.png",
+    	"data/player_images/5.png",
+    	"data/player_images/6.png",
+    	"data/player_images/7.png",
+    	"data/player_images/8.png",
     };
     
     
     private String[] leftStandPaths =
     {
-  		"data/standing.png"        
+  		"data/player_images/standing.png"        
     };
     
     private Animation leftWalk, rightWalk, leftStand, rightStand,
@@ -129,6 +130,7 @@ public class Player extends Object implements Actor, InputProviderListener
      */ 
     public Player(Level l)
     {
+    	assert l != null;
         setLevel(l);
         setUpStartPosition();
         if(!setUp)

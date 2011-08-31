@@ -46,7 +46,6 @@ public class DieDieDie extends BasicGame
 
 	private final String TILE_SETS_PATH = "data",
 						 LEVEL_1_PATH = "data/level1_1024x768.tmx",
-						 	//"data/level1.tmx", 
 						 LEVEL_ONE_NAME = "Level 1";
 
 	private boolean gameStarted;
@@ -83,10 +82,10 @@ public class DieDieDie extends BasicGame
 
 		// set up levels
 		createLevels();
-		currentLevel = arrowBounceTest;/*level1*/;
-
+		currentLevel = level1;/*arrowBounceTest;level1*/;
+			
 		// load player and associate with the level data
-		player = new Player(arrowBounceTest);//level1);
+		player = new Player(level1);
 
 		// hook up the player to the input provider
 		player.associateInputProvider(inputProv, container.getInput());
@@ -97,13 +96,19 @@ public class DieDieDie extends BasicGame
 	 */
 	private void createLevels()
 	{
-		level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
-				Direction.LEFT, GRAVITY);
-		arrowBounceTest = loadLevel("Arrow One Name", 
-				"data/Bouncy_Arrows_1024x768x16x16.tmx",
-				TILE_SETS_PATH, Direction.RIGHT, GRAVITY);
+		//level1 = loadLevel(LEVEL_ONE_NAME, LEVEL_1_PATH, TILE_SETS_PATH,
+			//	Direction.LEFT, GRAVITY);
+		level1 = loadLevel(
+				"Factory", 
+				"data/levels/Factory_1_R1024x768_T32x32.tmx",
+				"data",
+				Direction.RIGHT,
+				GRAVITY);
+		//arrowBounceTest = loadLevel("Arrow One Name", 
+			//	"data/Bouncy_Arrows_1024x768x16x16.tmx",
+				//TILE_SETS_PATH, Direction.RIGHT, GRAVITY);
 				
-		//level1.setLevelArt(level1ArtPath);
+
 	}
 
 	/*
@@ -165,7 +170,7 @@ public class DieDieDie extends BasicGame
 	public void render(GameContainer container, Graphics g)
 	{
 		currentLevel.draw(g);
-		player.draw(g);
+		//player.draw(g);
 	}
 
 	/**

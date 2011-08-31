@@ -59,9 +59,7 @@ public class NegativeSpace implements Drawable
 	
 	public void addNeighbours(Collection<NegativeSpace> others)
     {
-    	
-    	System.out.println("getNeighbours : \n" + this);
-    	
+    	//System.out.println("getNeighbours : \n" + this);  	
     	//Map<Direction, NegativeSpace> neighbours = null;
     	
     	for(NegativeSpace ns : others)
@@ -76,7 +74,7 @@ public class NegativeSpace implements Drawable
     				// not already in the list
 	    			if(nsShape.intersects(startShape))
 	    			{
-	    				System.out.println("\t--> intersects " + ns);
+	    				//System.out.println("\t--> intersects " + ns);
 	    				this.getNeighbours().add(ns);
 	    			}
     			}

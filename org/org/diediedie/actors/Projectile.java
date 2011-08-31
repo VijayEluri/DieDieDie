@@ -40,6 +40,4 @@ public interface Projectile extends MovableObject
 
     boolean getCollided();
 	void bounce(ArrowBouncer ab);
-	
-	
 }
