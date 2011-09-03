@@ -71,7 +71,6 @@ public class ObjectMover
             a.setX(oldX);
 			a.setXSpeed(0);
             a.resetAccelX();
-         ;
         }       
         if(a.getX() == oldX)
         {

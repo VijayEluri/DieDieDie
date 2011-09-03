@@ -29,7 +29,7 @@ import org.newdawn.slick.geom.Shape;
  */ 
 public class Aligner
 {
-    public static final float INCR = 0.01f;
+    public static final float INCR = 0.02f;//0.01f;
     
     /**
      * Aligns a collided Actor adjacently colliding part of the Level.

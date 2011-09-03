@@ -16,6 +16,7 @@
  */
  
 package org.diediedie.actors;
+import org.diediedie.actors.tools.CollideMask;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.Shape;
@@ -30,12 +31,11 @@ public interface Actor extends MovableObject
     Direction getFacing();
     float getHealth();    
     //float getJumpSpeed();
-    Shape getZone();    
     void setCanJump(boolean b);
     void startJump();
     void setFacing(Direction d);
 	void resetAccelX();
 	int getWidth();
     int getHeight();
-    
+    CollideMask getCollideMask();
 }  

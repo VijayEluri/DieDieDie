@@ -11,6 +11,8 @@ import org.newdawn.slick.geom.Shape;
 public class GroundChecker
 {
 	/*
+	 * !!!!!! ONLY APPLIES TO LEFT AND RIGHT DIRECTIONS!!!!!
+	 * 
 	 * NOTE: This method assumes that Actor.canJump() evaluates to true.
 	 * 
 	 * Returns true if the Actor can continue walking in the given 
@@ -19,25 +21,27 @@ public class GroundChecker
 	 * Returns false if the Actor cannot walk any further in the given 
 	 * Direction.
 	 */
-	public static boolean canContinueMoving(Actor a, Direction d)
+	/*public static boolean canContinueMoving(Actor a, Direction d)
 	{
 		//assert a.canJump();
 		//System.out.println("\tcanContinueMoving...");
 		//assert (d == Direction.LEFT) || (d == Direction.RIGHT);
-		Shape zone = a.getZone();
+		Shape zone = getWalkableZone();
+				//a.getZone();
 
 		if(zone == null)
 		{
 			
 			System.out.println("Zone is null!");
-			System.exit(-1);
+			return true;
+			//System.exit(-1);
 		}
 		
 		/*
 		 * Actor is on a walkableZone -- check how far it extends it the
 		 * Actor's direction (d)
 		 */
-		if(d == Direction.LEFT)
+		/*if(d == Direction.LEFT)
 		{
 			if(zone.getMinX() < (a.getX() - 2))
 			{
@@ -52,5 +56,5 @@ public class GroundChecker
 			}
 		}
 		return false;
-	}
+	}*/
 }

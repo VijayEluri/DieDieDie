@@ -113,11 +113,11 @@ public class AnimCreator
         List<Image> images = getEmptyImageList();
         for(String p : paths)
         {
-        	
             images.add(loadImage(p));               
         }
         return images;
     }
+    
     /**
      * Returns an Animation frame's rectangular bounding box.
      */ 
@@ -127,4 +127,9 @@ public class AnimCreator
         return new Rectangle(actr.getX(), actr.getY(), img.getWidth(), 
                              img.getHeight());
     }
+  /*  public static CollideMask getCurrentCollideMask(Actor a)
+    {
+    	
+    }
+    */
 }

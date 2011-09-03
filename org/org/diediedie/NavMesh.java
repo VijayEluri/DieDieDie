@@ -46,13 +46,15 @@ import org.diediedie.actors.tools.Direction;
  */ 
 public class NavMesh implements Drawable
 {
-    // walkable zones (Lines, as we're in 2D)
+    // walkable zones
     private Collection<Shape> walkableZones;
     private Collection<NegativeSpace> negativeSpaces;
-    private Level level; 
+
     private Color walkableColor = Color.green;
     private Color negativeColor = Color.orange;
     
+    
+    private Map<Shape, List<Tile>> walkableTileMap;
     /*
      * walkableNegativeConnections - maps each walkable area to its intersecting
      * negative space rectangles.
@@ -63,20 +65,32 @@ public class NavMesh implements Drawable
     /**
      * A mesh created by MeshMaker.
      */ 
-    public NavMesh(Level l, 
-    			   Collection<Shape> walkables,
-                   Collection<NegativeSpace> space)
+    public NavMesh(Collection<Shape> walkables,
+                   Collection<NegativeSpace> space,
+                   Map<Shape, List<Tile>> walkableTiles)
     {
-        setLevel(l);
+
         walkableZones = walkables;
         negativeSpaces = space;
+        walkableTileMap = walkableTiles;
         linkWalkableZonesToNegativeSpace();
         linkNegativeSpace();
+    }
+    
+    public Map<Shape, List<Tile>> getWalkableTilesMap()
+    {
+    	return walkableTileMap;
     }
     
     public Map<Shape, List<Shape>> getWalkSpaceMap()
     {
     	return walkableNegativeConnections;
+    }
+    
+    // boiler plate
+    public void setLevel(Level l)
+    {
+    	return;
     }
     
     private void linkNegativeSpace()
@@ -110,16 +124,12 @@ public class NavMesh implements Drawable
 		}
     }
     
-    @Override
-    public void setLevel(Level l)
-    {
-        level = l;
-    }
-    
+
     @Override
     public void draw(Graphics g)
     {
         g.setColor(walkableColor);
+        
         for(Shape l : walkableZones)
         {
             if(l != null)
@@ -127,7 +137,9 @@ public class NavMesh implements Drawable
                 g.draw(l);
             }
         }
+        
         g.setColor(negativeColor);
+        
         for(NegativeSpace n : negativeSpaces)
         {
             n.draw(g);
@@ -428,6 +440,13 @@ public class NavMesh implements Drawable
     public static class MeshMaker
     {
         static List<Tile> ledgeTiles = null;
+        
+        /*
+         * walkableTilesMap - this is used to link walkable area shapes
+         * with lists of Tiles in order to help optimize collision
+         * detection.
+         */
+        static Map<Shape, List<Tile>> walkableTilesMap = null;
         static Collection<Shape> walkableZones = null;
         static Collection<NegativeSpace> negativeSpace = null;
         static Level l = null;
@@ -440,11 +459,10 @@ public class NavMesh implements Drawable
             l = lev;
             createWalkableZones();
             createNegativeSpace();
-            return new NavMesh(l, walkableZones, negativeSpace);
+            return new NavMesh(walkableZones, negativeSpace, walkableTilesMap);
         }
         
-       
-        private static void createWalkableZones()
+		private static void createWalkableZones()
         {   
             ledgeTiles = getLedgeTiles(l);
             //Set<Tile> checked = new HashSet<Tile>();
@@ -453,8 +471,12 @@ public class NavMesh implements Drawable
             Collections.sort(ledgeTiles);
             List<Tile> ledgeTiles2 = 
             	Collections.synchronizedList(new ArrayList<Tile>(ledgeTiles));
-            
+
             walkableTileList = splitWalkableZones(ledgeTiles2);
+            
+            walkableTilesMap = new HashMap<Shape, List<Tile>>();
+            
+                        
             for(List<Tile> tl : walkableTileList)
             {
             	/*System.out.println("Walkable Tile List");
@@ -463,8 +485,9 @@ public class NavMesh implements Drawable
             		System.out.println("\t" + t.xCoord + ", " + t.yCoord);
             	}
             	System.out.println("\n");*/
-            	walkableZones.add(
-            			makeWalkShape(tl.get(0), tl.get(tl.size()-1)));
+            	Shape s = makeWalkShape(tl.get(0), tl.get(tl.size()-1));
+            	walkableZones.add(s);
+            	walkableTilesMap.put(s, tl);
             }
         }
         

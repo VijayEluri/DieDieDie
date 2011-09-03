@@ -24,6 +24,7 @@ import org.diediedie.actors.Actor;
 import org.diediedie.actors.actions.Look;
 import org.diediedie.actors.statemachine.BlueyFSM;
 import org.diediedie.actors.statemachine.StateMachine;
+import org.diediedie.actors.tools.CollideMask;
 import org.diediedie.actors.tools.Direction;
 import org.diediedie.actors.tools.ObjectMover;
 import org.diediedie.actors.Enemy;
@@ -113,6 +114,8 @@ public class Bluey extends Object implements Enemy, Observer
 
 	private boolean outOfBounds;
 
+	private boolean setUp;
+
 	/**
 	 * Constructor. The object is associated with a Level and is positioned as
 	 * near to Tile t on it as possible.
@@ -120,7 +123,11 @@ public class Bluey extends Object implements Enemy, Observer
 	public Bluey(Level l, Tile t) 
 	{
 		tileHeight = t.tileHeight;
-		createAnimations();
+		if(!setUp)
+		{
+			createAnimations();
+			setUp = true;
+		}
 		health = MAX_HEALTH;
 		//look = new Look(this);
 		canSeePlayer = false;
@@ -365,6 +372,7 @@ public class Bluey extends Object implements Enemy, Observer
 
 		leftWalkAnim = new Animation(
 			leftWalkImages, Actor.ANIM_DURATION, true);
+		
 		rightWalkAnim = new Animation(
 			rightWalkImages, Actor.ANIM_DURATION, true);
 
@@ -428,12 +436,7 @@ public class Bluey extends Object implements Enemy, Observer
 		}
 	}
 	
-	@Override
-	public Shape getZone()
-	{
-		return getLevel().getActorZone(this);
-	}
-
+	
 	@Override
 	public void update()
 	{
@@ -754,6 +757,13 @@ public class Bluey extends Object implements Enemy, Observer
 	{
 		outOfBounds = b;
 		
+	}
+
+	@Override
+	public CollideMask getCollideMask()
+	{
+		// TODO
+		return null;
 	}
 	
 }

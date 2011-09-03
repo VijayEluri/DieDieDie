@@ -15,7 +15,10 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.tools;
+import java.util.List;
+
 import org.diediedie.ArrowBouncer;
+import org.diediedie.Tile;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Enemy;
@@ -28,15 +31,29 @@ import org.newdawn.slick.geom.Shape;
  */ 
 public class Collider
 {
+	
     public static boolean collidesLevel(Actor m)
     {
-        if(m.getLevel().collides(
-           AnimCreator.getCurrentFrameRect(m)))
+    	List<Tile> tilesHit = m.getLevel().getTileCollisions(m);
+    	if(!tilesHit.isEmpty())
         {
+        	/*
+        	 *  Actor's Bounding box has hit a collision tile.
+        	 *  
+        	 *  Tiles in tilesHit are in horizontal then vertical
+        	 *  order.
+        	 */
+    		/*System.out.println("tiles hit : ");
+    		for(Tile t : tilesHit)
+    		{
+    			System.out.println("\t" + t);
+    		}*/
             return true;
         }
         return false;
     }
+    
+    //private static float[] getIntersection
     
     /*
      * Returns true if the arrow intersects with collision Tile on the

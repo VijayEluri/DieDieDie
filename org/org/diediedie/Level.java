@@ -29,6 +29,7 @@ import org.diediedie.actors.Projectile;
 import org.diediedie.actors.statemachine.BlueyFSM;
 import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.AnimCreator;
+import org.diediedie.actors.tools.CollideMask;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.Image;
@@ -36,6 +37,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.Graphics;
+
+import java.util.BitSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -49,7 +52,7 @@ public class Level extends TiledMap
     // where the exit of the level is
     public float exitX, exitY;
     
-    // lesser number == more friction. xSpeed is multiplied by this number
+    // smaller number == more friction. xSpeed is multiplied by this number
     public static final float FRICTION = 0.91f;
 
 	private static final int ILLEGAL_PLAYER_LAYER = -1;
@@ -61,7 +64,7 @@ public class Level extends TiledMap
     // initial direction player faces 
     public final Direction playerFacing;
     
-    
+    private CollideMask collisionTileMask;
     
     private String name;
     private NavMesh navMesh;
@@ -70,8 +73,7 @@ public class Level extends TiledMap
     
     private final int NOT_PRESENT = 0;
     
-    private MapLayer collisionLayer, objectLayer;//, 
-                     /*platformLayer;*/
+    private MapLayer collisionLayer, objectLayer;
     
     /*
      *  list of the background layers in the order they should be drawn
@@ -110,23 +112,32 @@ public class Level extends TiledMap
                            " tile layers. Mapsize " + this.levelWidth + " by "
                            + this.levelHeight);
         createLayers();
-        
-        
-        
-        
         enemiesLiving = new ArrayList<Enemy>();
         //objects = new ArrayList<LevelObject>();
         bouncers = new ArrayList<ArrowBouncer>();
-    
         createNavMesh();
     }   
+    
+    public CollideMask getCollisionTileMask()
+    {
+    	return collisionTileMask;
+    }
     
     private void createLayers()
     {
     	createBackgroundLayers();
     	addPlayerLayer();
     	collisionLayer = createMapLayer(getLayerIndex("collision"));
+    	createCollisionTileMask();
         //objectLayer = createMapLayer(getLayerIndex("objects"));
+    }
+    
+    private void createCollisionTileMask()
+    {
+    	collisionTileMask = new CollideMask(
+        	getTileImage(collisionLayer.tiles.get(0).xCoord, 
+        			     collisionLayer.tiles.get(0).yCoord,
+        			     getLayerIndex("collision")));
     }
     
     /*
@@ -197,6 +208,8 @@ public class Level extends TiledMap
     {
         return enemiesLiving;
     }
+    
+    
     
     /**
      * Returns the shape in the nav mesh that this actor is in/on, if
@@ -424,7 +437,7 @@ public class Level extends TiledMap
                     tiles.add(new Tile(this, x, y, index));
                 }
             }
-        }           
+        }       
         return new MapLayer(tiles, index, isVisible(index));
     }
     
@@ -440,7 +453,12 @@ public class Level extends TiledMap
     }
     
     /*
-     * Draw the Level. 
+     * Draws the Level map, the Player, Enemies and objects. 
+     * 
+     * To use transparency the Level's TiledMap layout must 
+     * include a 'player' layer which is rendered in between 
+     * the background layers.  Not including a player layour
+     * will cause the game to exit at init stage.
      */
 	public void render(int x, int y, Graphics g)
     {
@@ -454,14 +472,14 @@ public class Level extends TiledMap
     	{
     		render(x, y, i);
     	}
-        //navMesh.draw(g);
+        navMesh.draw(g);
     }
     
     private void drawPlayerLayer(Graphics g)
     {
     	drawEnemies(g);
     	player.draw(g);
-    	//drawObjects(g);
+    	drawObjects(g);
     }
     
     /**
@@ -499,6 +517,7 @@ public class Level extends TiledMap
     }
     
     /**
+
      * Returns true if Shape p intersects with a collision tile on the
      * Level.
      */ 
@@ -509,7 +528,10 @@ public class Level extends TiledMap
             if(t.getRect().intersects(p))
             {
                 
-                /*System.out.println("[Shape [origin " + 
+            	
+            	
+            	
+            	/*System.out.println("[Shape [origin " + 
                                     new Throwable().fillInStackTrace()
                                     .getStackTrace()[3].getFileName()
                                       + "] collision with Tile " +
@@ -521,6 +543,7 @@ public class Level extends TiledMap
         return false;
     }
     
+
     /**
      * Returns true if the x / y coordinate position supplied is inside
      * a collision tile
@@ -551,4 +574,27 @@ public class Level extends TiledMap
         }
         return null;
     }
+
+    /*
+     * Return all Tiles that an Actor is intersecting.
+     */
+	public List<Tile> getTileCollisions(Actor m) 
+	{
+		List<Tile> colls = new ArrayList<Tile>();
+		// TODO Auto-generated method stub
+		final Shape rect = AnimCreator.getCurrentFrameRect(m);
+		
+		for(Map.Entry<Shape, List<Tile>> e 
+				: 
+			navMesh.getWalkableTilesMap().entrySet())
+		{
+			if(e.getKey().intersects(rect))
+			{
+				colls.addAll(e.getValue());
+			}
+		}
+		//System.out.println(
+			//"getTileCollisions : " + colls.size() + " tiles");
+		return colls;
+	}
 }

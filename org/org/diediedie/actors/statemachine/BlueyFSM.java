@@ -247,17 +247,19 @@ public class BlueyFSM implements StateMachine
 					 * a sudden drop or obstacle ahead).
 					 */
 					Direction facing = host.getFacing();
-					boolean cont = GroundChecker.canContinueMoving(
-						host, facing);
+					System.out.println("NOT IMPLEMENTED!");
+					System.exit(-1);
+					//boolean cont = GroundChecker.canContinueMoving(
+						//host, facing);
 					/*System.out.println(
 						"\t--> canContinueMoving returned " + cont);*/
 					
-					if(cont == false)
+					/*if(cont == false)
 					{
 						/*
 						 * We can't go this way; turn around!
 						 */
-						
+					/*	
 						turnAround = new TurnAround();
 						turnAround.setHost(host);
 						currentAction = turnAround;
@@ -267,9 +269,9 @@ public class BlueyFSM implements StateMachine
 						/*
 						 * Keep going in this way until we have a reason 
 						 * to change
-						 */
+						 *
 						currentAction = look;
-					}
+					}*/
 				}
 				else
 				{

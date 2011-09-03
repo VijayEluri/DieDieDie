@@ -16,6 +16,8 @@
  */
 package org.diediedie.actors;
 import org.diediedie.actors.tools.AnimCreator;
+import org.diediedie.actors.tools.CollideMask;
+import org.diediedie.actors.tools.MaskedAnimation;
 import org.diediedie.actors.tools.ObjectMover;
 
 import java.util.List;
@@ -27,6 +29,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.command.BasicCommand;
 import org.newdawn.slick.command.Command;
@@ -34,7 +37,6 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
 import org.diediedie.Level;
-import org.diediedie.Point;
 import org.diediedie.Tile;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Arrow;
@@ -114,10 +116,15 @@ public class Player extends Object implements Actor, InputProviderListener
   		"data/player_images/standing.png"        
     };
     
-    private Animation leftWalk, rightWalk, leftStand, rightStand,
-                      currentAnim;
+    private MaskedAnimation leftWalk, 
+    						rightWalk, 
+    						leftStand, 
+    						rightStand,
+    						currentAnim;
     
-    private Image bowLeft, bowRight, currentBow;
+    private Image bowLeft, 
+    			  bowRight, 
+    			  currentBow;
     
     // associated level for collision / item collection reference
     private Level level = null;
@@ -192,7 +199,7 @@ public class Player extends Object implements Actor, InputProviderListener
           currentBow = bowLeft;
     }    
     
-    @Override
+    
     public Shape getZone()
     {
         return getLevel().getActorZone(this);
@@ -219,23 +226,22 @@ public class Player extends Object implements Actor, InputProviderListener
         prov.bindCommand(new KeyControl(Input.KEY_D), right);
         prov.bindCommand(new KeyControl(Input.KEY_W), jump);
         
-        
         in.addMouseListener(new MouseListener()
         {
             public void	mousePressed(int button, int x, int y) 
             {
-                
                 if(button == BOW_BUTTON)
                 {       
                     Tile c = getLevel().getCollisionTileAt(x, y);
                     if(c != null)
                     {
-                        System.out.println("Mouse pressed Tile " +
-                                            c.xCoord + ", " + 
-                                            c.yCoord);
+                        System.out.println(
+                        	"Mouse pressed Tile " 
+                           + c.xCoord + ", " 
+                           + c.yCoord);
                     }
                     mouseX = x;
-                    mouseY = y;  
+                    mouseY = y;
                     readyArrow();
                 }
                 else if(button == Input.MOUSE_RIGHT_BUTTON)
@@ -640,7 +646,6 @@ public class Player extends Object implements Actor, InputProviderListener
      * This is done to stop it looking like the player is 'hovering'
      * before landing due to having a high falling speed.
      */ 
-    
     @Override
     public boolean canJump()
     {
@@ -719,7 +724,7 @@ public class Player extends Object implements Actor, InputProviderListener
     @Override
     public void resetAccelY()
     {
-        // do nothing for now
+        // does nothing for now
     }
     
     @Override
@@ -774,7 +779,13 @@ public class Player extends Object implements Actor, InputProviderListener
         if(isChargingArrow)
         {
             g.drawImage(currentBow, bowX, bowY);
-        }        
+        }
+        
+        Image curr = this.currentAnim.getCurrentFrame();
+        g.draw((Shape) new Rectangle(
+				getX(), getY(), 
+		        curr.getWidth(), 
+		        curr.getHeight()));
     }
     
     /*
@@ -808,31 +819,37 @@ public class Player extends Object implements Actor, InputProviderListener
     	
     	leftWalkImgs = AnimCreator.getImagesFromPaths(
     			leftWalkPaths).toArray(leftWalkImgs);
+    	
     	rightWalkImgs = AnimCreator.getHorizontallyFlippedCopy(
     			leftWalkImgs).toArray(rightWalkImgs);
     	
     	leftStandImgs = AnimCreator.getImagesFromPaths(
     			leftStandPaths).toArray(leftStandImgs);
+    	
     	rightStandImgs = AnimCreator.getHorizontallyFlippedCopy(
     			leftStandImgs).toArray(rightStandImgs);
     	
     	boolean autoUpdate = true;
     	
-    	leftWalk = new Animation(leftWalkImgs, 
-    							 Actor.ANIM_DURATION, 
-    							 autoUpdate);
+    	leftWalk = new MaskedAnimation(
+						 leftWalkImgs, 
+						 Actor.ANIM_DURATION, 
+						 autoUpdate);
+
+    	rightWalk = new MaskedAnimation(
+    						rightWalkImgs, 
+    						Actor.ANIM_DURATION, 
+				            autoUpdate);
     	
-    	rightWalk = new Animation(rightWalkImgs, 
-    							  Actor.ANIM_DURATION, 
-				                  autoUpdate);
+    	leftStand = new MaskedAnimation(
+    						leftStandImgs, 
+							Actor.ANIM_DURATION, 
+							autoUpdate);
     	
-    	leftStand = new Animation(leftStandImgs, 
-								  Actor.ANIM_DURATION, 
-								  autoUpdate);
-    	
-    	rightStand = new Animation(rightStandImgs, 
-    							   Actor.ANIM_DURATION,
-    							   autoUpdate);
+    	rightStand = new MaskedAnimation(
+    						rightStandImgs, 
+    						Actor.ANIM_DURATION,
+    						autoUpdate);
     	
     	setInitialAnim();
     }    
@@ -866,7 +883,13 @@ public class Player extends Object implements Actor, InputProviderListener
 	@Override
 	public void setOutOfBounds(boolean b) 
 	{
-		outOfBounds = b;
+		outOfBounds = b;	
+	}
+	
+	@Override
+	public CollideMask getCollideMask()
+	{
 		
+		return currentAnim.getCurrentFrameMask();
 	}
 }

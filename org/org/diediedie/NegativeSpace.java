@@ -24,10 +24,10 @@ public class NegativeSpace implements Drawable
 	Set<NegativeSpace> neighbours;
 	List<Shape> neighbourLinkShapes; 
 	
-	private Level level = null;
+	//private Level level = null;
 	private Point centre = null;
 	private Rectangle centerRect = null;
-	private int nextColorCount = 1;
+	//private int nextColorCount = 1;
 	
 	
 	public NegativeSpace(SliceGroup sg)
@@ -165,6 +165,6 @@ public class NegativeSpace implements Drawable
 	@Override
 	public void setLevel(Level l)
 	{
-		this.level = l;
+		//this.level = l;
 	}
 }
