@@ -68,8 +68,8 @@ public class Level extends TiledMap
     
     private String name;
     private NavMesh navMesh;
-    private final String VIS_STR = "isvisible", TRUE_STR = "true", 
-                         FALSE_STR = "false";
+    private final String VIS_STR = "isvisible", TRUE_STR = "true";
+                      
     
     private final int NOT_PRESENT = 0;
     
@@ -527,10 +527,6 @@ public class Level extends TiledMap
         {
             if(t.getRect().intersects(p))
             {
-                
-            	
-            	
-            	
             	/*System.out.println("[Shape [origin " + 
                                     new Throwable().fillInStackTrace()
                                     .getStackTrace()[3].getFileName()
@@ -585,14 +581,14 @@ public class Level extends TiledMap
 		final Shape rect = m.getCollisionBox();//AnimCreator.getCurrentFrameRect(m);
 		
 		for(Map.Entry<Shape, List<Tile>> e 
-				: 
+						: 
 			navMesh.getWalkableTilesMap().entrySet())
-		{
-			if(e.getKey().intersects(rect))
 			{
-				colls.addAll(e.getValue());
+				if(e.getKey().intersects(rect))
+				{
+					colls.addAll(e.getValue());
+				}
 			}
-		}
 		//System.out.println(
 			//"getTileCollisions : " + colls.size() + " tiles");
 		return colls;

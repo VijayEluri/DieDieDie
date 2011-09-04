@@ -29,11 +29,11 @@ import org.newdawn.slick.geom.Shape;
  */ 
 public class Aligner
 {
-    public static final float INCR = 0.02f;//0.01f;
+    public static final float INCR = 1;//0.02f;//0.01f;
     
     /**
      * Aligns a collided Actor adjacently colliding part of the Level.
-     */ 
+     */ /*
     public static void alignToObstacle(Actor m)
     {
         while(!Collider.collidesLevel(m))
@@ -58,7 +58,7 @@ public class Aligner
         {
             m.setY(m.getY() + INCR);
         }
-    }    
+    }    */
 
 
 	public static void alignToBouncer(Projectile p, ArrowBouncer b) 

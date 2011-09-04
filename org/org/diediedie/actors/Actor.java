@@ -16,11 +16,11 @@
  */
  
 package org.diediedie.actors;
-import org.diediedie.actors.tools.CollideMask;
+
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
+
 
 public interface Actor extends MovableObject
 {            
@@ -38,6 +38,6 @@ public interface Actor extends MovableObject
 	void resetAccelX();
 	int getWidth();
     int getHeight();
-    CollideMask getCollideMask();
+   // CollideMask getCollideMask();
     public Rectangle getCollisionBox();
 }  

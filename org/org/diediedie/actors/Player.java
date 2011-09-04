@@ -909,12 +909,12 @@ public class Player extends Object implements Actor, InputProviderListener
 		outOfBounds = b;	
 	}
 	
-	@Override
+	/*@Override
 	public CollideMask getCollideMask()
 	{
 		
 		return currentAnim.getCurrentFrameMask();
-	}
+	}*/
 
 	public Rectangle getCollisionBox()
 	{

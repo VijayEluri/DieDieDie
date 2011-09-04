@@ -60,7 +60,7 @@ public class DieDieDie extends BasicGame
 
 	private Level arrowBounceTest;
 
-	public static final float GRAVITY = 0.25f;
+	public static final float GRAVITY = 0.2f;//.25f;
 
 	/**
 	 * Create the game

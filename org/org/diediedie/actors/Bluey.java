@@ -89,8 +89,6 @@ public class Bluey extends Object implements Enemy, Observer
 				  yPos, 
 				  tileHeight, 
 				  moveSpeed = 0, 
-				  oldX, 
-				  oldY,
 				  xSpeed = 0, 
 				  ySpeed = 0;
 
@@ -647,7 +645,7 @@ public class Bluey extends Object implements Enemy, Observer
 	{
 		System.out.println("\n\t KILLING " + this);
 		health = 0;
-		// n i clean up this bitch
+		
 	}
 
 	/*
@@ -765,13 +763,4 @@ public class Bluey extends Object implements Enemy, Observer
 		
 	}
 
-	@Override
-	public CollideMask getCollideMask()
-	{
-		// TODO
-		return null;
-	}
-
-
-	
 }

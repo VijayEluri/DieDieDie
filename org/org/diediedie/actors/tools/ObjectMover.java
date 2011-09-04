@@ -54,14 +54,11 @@ public class ObjectMover
             	 */
                 a.setCanJump(true);
             }
-            Aligner.alignToObstacle(a);
+            
             a.setYSpeed(0);
             a.setY(oldY);            
         } 
-        else
-        {
-            a.setCanJump(false);
-        }
+       
         
         // horizontal 
         a.setX(a.getX() + a.getXSpeed());
