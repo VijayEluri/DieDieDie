@@ -123,9 +123,13 @@ public class AnimCreator
      */ 
     public static Rectangle getCurrentFrameRect(Actor actr)
     {
-        Image i = actr.getCurrentAnim().getCurrentFrame();
-        return new Rectangle(
-        	actr.getX(), actr.getY(), 
-        	i.getWidth(), i.getHeight());
+        Image img = actr.getCurrentAnim().getCurrentFrame();
+        return new Rectangle(actr.getX(), actr.getY(), img.getWidth(), 
+                             img.getHeight());
     }
+  /*  public static CollideMask getCurrentCollideMask(Actor a)
+    {
+    	
+    }
+    */
 }

@@ -582,50 +582,19 @@ public class Level extends TiledMap
 	{
 		List<Tile> colls = new ArrayList<Tile>();
 		// TODO Auto-generated method stub
-		final Shape rect = AnimCreator.getCurrentFrameRect(m);
+		final Shape rect = m.getCollisionBox();//AnimCreator.getCurrentFrameRect(m);
 		
-		for(Tile t : collisionLayer.tiles)
-		{
-			if(t.getRect().intersects(rect))
-			{
-				colls.add(t);
-			}
-		}
-		
-		/*for(Map.Entry<Shape, List<Tile>> e 
+		for(Map.Entry<Shape, List<Tile>> e 
 				: 
 			navMesh.getWalkableTilesMap().entrySet())
 		{
 			if(e.getKey().intersects(rect))
 			{
-				for(Tile t : e.getValue())
-				{
-					if(t.getRect().intersects(rect))
-					{
-						colls.add(t);
-					}
-				}
-				//colls.addAll(e.getValue());
-			}
-		}*/
-
-		return colls;
-	}
-	
-	/*
-     * Return all Tiles that a Shape is intersecting.
-     */
-	public List<Tile> getTileCollisions(Shape s) 
-	{
-		List<Tile> colls = new ArrayList<Tile>();
-		
-		for(Tile t : collisionLayer.tiles)
-		{
-			if(t.getRect().intersects(s))
-			{
-				colls.add(t);
+				colls.addAll(e.getValue());
 			}
 		}
+		//System.out.println(
+			//"getTileCollisions : " + colls.size() + " tiles");
 		return colls;
 	}
 }

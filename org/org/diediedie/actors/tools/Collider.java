@@ -15,7 +15,6 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.tools;
-import java.util.BitSet;
 import java.util.List;
 
 import org.diediedie.ArrowBouncer;
@@ -24,7 +23,6 @@ import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.Projectile;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 /**
@@ -36,95 +34,26 @@ public class Collider
 	
     public static boolean collidesLevel(Actor m)
     {
-    	final Shape actorRect = AnimCreator.getCurrentFrameRect(m);
-    	List<Tile> tilesHit = m.getLevel().getTileCollisions(actorRect);
-    	
+    	List<Tile> tilesHit = m.getLevel().getTileCollisions(m);
     	if(!tilesHit.isEmpty())
         {
-    		/*System.out.println(
-    			"Actor hit " 
-    			+ tilesHit.size() + " tiles");
-    		*/
-    		// create a shape of just the intersected area to check
-    		// the actor's current image's collide mask against.
-    		Tile firstTile = tilesHit.get(0);
-    		Tile lastTile = tilesHit.get(tilesHit.size() - 1);
-    		
-    		final float rectX, rectY, rectWidth, rectHeight;
-    		
-    		/*
-    		 * Work out minima / maximum for top-left point of the 
-    		 * intersection rectangle.
-    		 */
-    		if(actorRect.getX() < firstTile.xPos)
+        	/*
+        	 *  Actor's Bounding box has hit a collision tile.
+        	 *  
+        	 *  Tiles in tilesHit are in horizontal then vertical
+        	 *  order.
+        	 */
+    		/*System.out.println("tiles hit : ");
+    		for(Tile t : tilesHit)
     		{
-    			/*
-    			 * use tile xPos as rect start x : the Actor's xPos is 
-    			 * further to the left than the left-most
-    			 * tile, 
-    			 */
-    			rectX = firstTile.xPos;
-    		}
-    		else
-    		{
-    			rectX = actorRect.getX();
-    		}
-    		if(actorRect.getY() < firstTile.yPos)
-    		{
-    			/*
-    			 * actor's yPos is higher than the start tile's, so
-    			 * use the tile's y position
-    			 */
-    			rectY = firstTile.yPos;
-    		}
-    		else
-    		{
-    			rectY = actorRect.getY();
-    		}
-    		
-    		/****************************************************************/
-    		
-    		/*
-    		 * Work out width and height    		
-    		 */
-    		// W
-    		if(actorRect.getMaxX() < lastTile.endX)
-    		{
-    			rectWidth = actorRect.getMaxX() - rectX;
-    		}
-    		else
-    		{
-    			rectWidth = lastTile.endX - rectX;
-    		}
-    		
-    		// H
-    		if(actorRect.getMaxY() < lastTile.endY)
-    		{
-    			rectHeight = actorRect.getMaxY() - rectY;
-    		}
-    		else
-    		{
-    			rectHeight = lastTile.endY - rectY;
-    		}
-    		
-    		// find the rectangle pixels
-    		boolean bits[] = m.getCollideMask().getRectBits(
-    					Math.abs((int)rectX - (int)actorRect.getX()),
-    					(int)rectWidth,
-    					Math.abs((int)rectY - (int)actorRect.getY()),
-    					(int)rectHeight);
-    		
-    		for(int i = 0; i < bits.length; ++ i)
-    		{
-    			if(bits[i] == true)
-    			{
-    				
-    				return true;
-    			}
-    		}
+    			System.out.println("\t" + t);
+    		}*/
+            return true;
         }
         return false;
     }
+    
+    //private static float[] getIntersection
     
     /*
      * Returns true if the arrow intersects with collision Tile on the
@@ -151,8 +80,8 @@ public class Collider
         	ArrowBouncer ab = p.getLevel().collidesBouncer(p);
         	if(ab != null)
         	{
-        		/*System.out.println(
-        			"Arrow " + p.hashCode() + " hit bouncer");*/
+        		System.out.println(
+        			"Arrow " + p.hashCode() + " hit bouncer");
         		Aligner.alignToBouncer(p, ab);	
         		p.bounce(ab);
         	}

@@ -35,6 +35,7 @@ import org.diediedie.actors.tools.AnimCreator;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 /*
@@ -142,7 +143,8 @@ public class Bluey extends Object implements Enemy, Observer
 		yPos--;
 		System.out.println("new Bluey enemy at " + xPos + ", " + yPos);
 	}
-
+	
+	
 	@Override
 	public StateMachine getFSM() 
 	{
@@ -586,6 +588,10 @@ public class Bluey extends Object implements Enemy, Observer
 		}
 	}
 
+	public Rectangle getCollisionBox()
+	{
+		return null;
+	}	
 	@Override
 	public void setHasSeenPlayer(boolean b) 
 	{
@@ -765,5 +771,7 @@ public class Bluey extends Object implements Enemy, Observer
 		// TODO
 		return null;
 	}
+
+
 	
 }

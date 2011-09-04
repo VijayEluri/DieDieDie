@@ -67,23 +67,28 @@ public class Player extends Object implements Actor, InputProviderListener
                        BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
                        MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
                        ACCEL_RATE = 0.03f;
+
                         
     private final int MAX_HEALTH = 20, 
                       BOW_AIM_UP_TRIGGER = 50,
                       BOW_AIM_DOWN_TRIGGER = 110, 
                       BOW_X_OFFSET = 5,
-                      BOW_ANGLE_OFFSET = 90; 
+                      BOW_ANGLE_OFFSET = 90,
+                      COLLISION_WIDTH_DIV = 4;
                       
     private int health = MAX_HEALTH, 
                //arrowCount = 0, 
                 mouseX, 
                 mouseY,
-                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON;
+                BOW_BUTTON = Input.MOUSE_LEFT_BUTTON,
+                xOffsetCollisionBox;
                     
     // Movement
     private Command jump;
     private Command left; 
     private Command right;    
+    
+    private Rectangle collisionBox;
     
     private Arrow currentArrow = null; 
     private List<Arrow> firedArrows = Collections.synchronizedList(new
@@ -143,10 +148,28 @@ public class Player extends Object implements Actor, InputProviderListener
         if(!setUp)
         {            
             initAnim();   
+            setUpCollisionBox();
             initBow();
             setUp = true;
         }
+        
     }    
+    
+    /*
+     * Set the width and height and initial
+     * values for the collision box. 
+     * The only thing that will change
+     */
+    private void setUpCollisionBox()
+    {
+    	xOffsetCollisionBox = width/COLLISION_WIDTH_DIV;
+    	
+    	collisionBox = new Rectangle(
+			    		0, 
+			    		0, 
+			    		width - (width/COLLISION_WIDTH_DIV),
+			    		currentAnim.getHeight());
+    }
     
     @Override
 	public int getWidth()
@@ -397,7 +420,11 @@ public class Player extends Object implements Actor, InputProviderListener
         return health;
     }
     
-  
+   /* @Override
+    public float getJumpSpeed()
+    {
+        return JUMP_SPEED;
+    }*/
     
     @Override
     public void die()
@@ -534,7 +561,7 @@ public class Player extends Object implements Actor, InputProviderListener
             currentAnim = leftStand;   
         }
         else throw new IllegalStateException(
-        	"standing dir neither left or right");
+                            "standing dir neither left or right");
     }
     
     @Override
@@ -885,6 +912,19 @@ public class Player extends Object implements Actor, InputProviderListener
 	@Override
 	public CollideMask getCollideMask()
 	{
+		
 		return currentAnim.getCurrentFrameMask();
+	}
+
+	public Rectangle getCollisionBox()
+	{
+		/*
+		 * A box slightly thinner than the current frame
+		 * for more believable collision detection.
+		 */
+		collisionBox.setX(xPos+xOffsetCollisionBox);
+		collisionBox.setY(yPos);
+		//System.out.println("getCollisionBox : returning " + collisionBox);
+		return collisionBox;
 	}
 }
