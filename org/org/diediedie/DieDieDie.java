@@ -30,6 +30,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.command.InputProvider;
+import org.diediedie.test.*;
 
 /**
  * DieDieDie
@@ -70,16 +71,25 @@ public class DieDieDie extends BasicGame
 		super("DieDieDie");
 		scalableWrapper = new ScalableGame(this, xSize, ySize);
 	}
-
+	
+	private void runTests()
+	{
+		CollideMaskTest.test_entirely_transparent_image();
+		CollideMaskTest.test_top_left_not_transparent_image();
+		CollideMaskTest.test_no_transparent_pixels_image();
+		System.exit(-1);
+	}
+	
 	/**
 	 * Initialises the game. Of course.
 	 */
 	public void init(GameContainer container) throws SlickException 
 	{
+		//runTests();
 		container.setVSync(true);
 		// container.setTargetFrameRate(60);
 		inputProv = new InputProvider(container.getInput());
-
+		
 		// set up levels
 		createLevels();
 		currentLevel = level1;/*arrowBounceTest;level1*/;

@@ -397,11 +397,7 @@ public class Player extends Object implements Actor, InputProviderListener
         return health;
     }
     
-   /* @Override
-    public float getJumpSpeed()
-    {
-        return JUMP_SPEED;
-    }*/
+  
     
     @Override
     public void die()
@@ -538,7 +534,7 @@ public class Player extends Object implements Actor, InputProviderListener
             currentAnim = leftStand;   
         }
         else throw new IllegalStateException(
-                            "standing dir neither left or right");
+        	"standing dir neither left or right");
     }
     
     @Override
@@ -889,7 +885,6 @@ public class Player extends Object implements Actor, InputProviderListener
 	@Override
 	public CollideMask getCollideMask()
 	{
-		
 		return currentAnim.getCurrentFrameMask();
 	}
 }
