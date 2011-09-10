@@ -26,7 +26,11 @@ import org.newdawn.slick.geom.Rectangle;
 public class Tile implements Comparable<Tile>
 {   
     final float ROUNDING = 0.999f;    
-    public int xCoord, yCoord, tileWidth, tileHeight, layer, id;
+    public int xCoord, yCoord, 
+    		   tileWidth, tileHeight, 
+    		   layer, 
+    		   id;
+    
     public float xPos, yPos, endX, endY;
     private TiledMap tiledMap;
     private Rectangle rect;
@@ -50,15 +54,16 @@ public class Tile implements Comparable<Tile>
      * Constructs a Tile from a tile at specified coordinates (x,y). If
      * this is a collision 
      */ 
-    public Tile(TiledMap map, int xCoord, int yCoord, int layer)
+    public Tile(TiledMap map, int xCoord, int yCoord, 
+    			int layer)
     {
-        this.tiledMap = map;
+        tiledMap = map;
         tileWidth = map.getTileWidth();
         tileHeight = map.getTileHeight();
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.layer = layer;
-        this.id = map.getTileId(xCoord, yCoord, layer); 
+        id = map.getTileId(xCoord, yCoord, layer); 
         calculatePosition();
         extractProperties();
         

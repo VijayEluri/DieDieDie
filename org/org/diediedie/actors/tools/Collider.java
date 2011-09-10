@@ -37,23 +37,10 @@ public class Collider
     	List<Tile> tilesHit = m.getLevel().getTileCollisions(m);
     	if(!tilesHit.isEmpty())
         {
-        	/*
-        	 *  Actor's Bounding box has hit a collision tile.
-        	 *  
-        	 *  Tiles in tilesHit are in horizontal then vertical
-        	 *  order.
-        	 */
-    		/*System.out.println("tiles hit : ");
-    		for(Tile t : tilesHit)
-    		{
-    			System.out.println("\t" + t);
-    		}*/
             return true;
         }
         return false;
     }
-    
-    //private static float[] getIntersection
     
     /*
      * Returns true if the arrow intersects with collision Tile on the
@@ -65,19 +52,15 @@ public class Collider
         {
         	if(p.getLevel().collides(p.getShape()))
 	        {
-	        	
-	            /*System.out.println(
-	            	p + " " + p.hashCode() + " " + "collides Level with speeds :");
-	            System.out.println(
-	                "\tx change : " + (p.getOldStartX() - p.getX()));
-	        
-	            System.out.println(
-	                "\ty change : " + (p.getOldStartY() - p.getY()));*/
 	            p.stop();
 	            return true;
 	        }
         	// Check for arrow bouncer 
         	ArrowBouncer ab = p.getLevel().collidesBouncer(p);
+        	/*
+        	 * this collision should be refactored as some levels
+        	 * might not have bouncers...
+        	 */
         	if(ab != null)
         	{
         		System.out.println(

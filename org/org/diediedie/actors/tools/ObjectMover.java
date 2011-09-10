@@ -54,11 +54,9 @@ public class ObjectMover
             	 */
                 a.setCanJump(true);
             }
-            
             a.setYSpeed(0);
             a.setY(oldY);            
         } 
-       
         
         // horizontal 
         a.setX(a.getX() + a.getXSpeed());

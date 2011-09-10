@@ -19,5 +19,23 @@ package org.diediedie.actors.tools;
 
 public enum Direction
 {
-    LEFT, RIGHT, UP, DOWN
-};
+    LEFT, RIGHT, UP, DOWN;
+    
+    
+    /*
+	 * Converts a string in a Direction object, or null
+	 * if invalid.
+	 */
+	public static Direction convertToDirection(String s)
+    {
+    	for(Direction  d : Direction.values())
+    	{
+    		if(s.equalsIgnoreCase(s))
+    		{
+    			return d;
+    		}
+    	}
+    	return null;
+    
+    }
+}

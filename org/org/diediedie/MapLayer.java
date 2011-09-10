@@ -15,26 +15,121 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.diediedie.actors.LevelObject;
+import org.diediedie.actors.Player;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.tiled.TiledMap;
+
+
 /**
- * Represents a layer of Tiles
+ * Represents a layer of Tiles and Level Objects that will
+ * be rendered on a Level.
  */ 
-public class MapLayer 
+public class MapLayer
 {
+	public enum Type
+	{
+		Background, Collision, Elevator, Player
+	}
+
+	private static final int TILE_NOT_PRESENT = 0;;
+	
     protected List<Tile> tiles;
     protected int index;
-    protected boolean isVisible;
+    
+    protected TiledMap map;
+    // the parent map which holds this layer
+    
+    protected Type type;
+    protected String name;
+    
+    protected List<LevelObject> levelContent;
     
     /**
      * Constructs a new map layer from a List of Tiles.  
      */
-    public MapLayer(List<Tile> layerTiles, final int in, boolean vis)
+    public MapLayer(TiledMap map, 
+    				String nameStr,
+    				final int in, 
+    				final boolean vis)
     {
-        tiles = layerTiles;
+    	extractTiles(map, in);
+        System.out.println("MapLayer : Index " + in 
+        		+ "\n\tName " + nameStr
+        		+ "\n\tTile count : " + tiles.size()
+        		+ "\n\tVisible : " + vis);
+
         index = in;
-        isVisible = vis;
-        System.out.println(toString());
+        name = nameStr;
+        
+        if(vis)
+        {
+        	type = Type.Background;
+        }
+        else
+        {
+        	createNonVisibleLayer();
+        }
+    }
+    
+    private void extractTiles(TiledMap map, int in)
+    {
+    	tiles = new ArrayList<Tile>();
+    	
+    	for(int x = 0; x < map.getWidth(); ++x)
+        {
+            for(int y = 0; y < map.getHeight(); ++y)
+            {
+                if(map.getTileId(x, y, index) != TILE_NOT_PRESENT)
+                {
+                    tiles.add(new Tile(map, x, y, index));
+                }
+            }
+        }
+    	assert !tiles.isEmpty();
+	}
+
+    /*
+     * Extracts the layer's content from the TiledMap.
+     */
+	private void createNonVisibleLayer() 
+    {
+    	if(name.equalsIgnoreCase("collision"))
+    	{
+    		type = Type.Collision;
+    	}
+    	else if(name.equalsIgnoreCase("elevator"))
+    	{
+    		type = Type.Elevator;
+    		createElevators();
+    	}
+    	else if(name.equalsIgnoreCase("player"))
+    	{
+    		type = Type.Player;
+    	}
+	}
+	
+
+
+	
+	/*
+	 * For Elevator MapLayers. Iterates over the layer Tiles creating Elevators
+	 * for each one.
+	 */
+	private void createElevators()
+	{
+		for(Tile t : tiles)
+		{
+			
+		}
+	}
+
+	public void draw(int x, int y, Graphics g)
+    {
+    	
     }
     
     /**
@@ -59,9 +154,24 @@ public class MapLayer
         return false;
     }
     
+    /*
+     * Returns the Tile at the given coordinates, or null.
+     */
+    public Tile getTileAt(int x, int y)
+    {
+		  for(Tile t : tiles)
+		  {
+			  if(t.xCoord == x && t.yCoord == y)
+			  {
+				  return t;
+			  }
+		  }
+		  return null;
+    }
+    
     public String toString()
     {
         return "MapLayer: tileCount " + tiles.size() + ", index " 
-                + index + ", visible: " + isVisible;
+                + index + ", type : " + type;
     }
 }

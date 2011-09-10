@@ -121,7 +121,7 @@ public class Player extends Object implements Actor, InputProviderListener
   		"data/player_images/standing.png"        
     };
     
-    private MaskedAnimation leftWalk, 
+    private /*Masked*/Animation leftWalk, 
     						rightWalk, 
     						leftStand, 
     						rightStand,
@@ -214,14 +214,12 @@ public class Player extends Object implements Actor, InputProviderListener
                            " at position x: " + xPos + ", y: " + yPos);              
     }
     
-    
     private void initBow()
     {
           bowLeft = AnimCreator.loadImage(bowLeftPath);
           bowRight = bowLeft.getFlippedCopy(true, false);
           currentBow = bowLeft;
     }    
-    
     
     public Shape getZone()
     {
@@ -854,22 +852,22 @@ public class Player extends Object implements Actor, InputProviderListener
     	
     	boolean autoUpdate = true;
     	
-    	leftWalk = new MaskedAnimation(
+    	leftWalk = new /*Masked*/Animation(
 						 leftWalkImgs, 
 						 Actor.ANIM_DURATION, 
 						 autoUpdate);
 
-    	rightWalk = new MaskedAnimation(
+    	rightWalk = new /*Masked*/Animation(
     						rightWalkImgs, 
     						Actor.ANIM_DURATION, 
 				            autoUpdate);
     	
-    	leftStand = new MaskedAnimation(
+    	leftStand = new /*Masked*/Animation(
     						leftStandImgs, 
 							Actor.ANIM_DURATION, 
 							autoUpdate);
     	
-    	rightStand = new MaskedAnimation(
+    	rightStand = new /*Masked*/Animation(
     						rightStandImgs, 
     						Actor.ANIM_DURATION,
     						autoUpdate);

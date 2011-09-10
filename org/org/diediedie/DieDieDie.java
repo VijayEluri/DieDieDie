@@ -101,14 +101,10 @@ public class DieDieDie extends BasicGame
 		level1 = loadLevel(
 				"Factory", 
 				"data/levels/Factory_1_R1024x768_T32x32.tmx",
-				"data",
-				Direction.RIGHT,
-				GRAVITY);
+				"data");
 		//arrowBounceTest = loadLevel("Arrow One Name", 
 			//	"data/Bouncy_Arrows_1024x768x16x16.tmx",
 				//TILE_SETS_PATH, Direction.RIGHT, GRAVITY);
-				
-
 	}
 
 	/*
@@ -117,14 +113,17 @@ public class DieDieDie extends BasicGame
 	 */
 	private Level loadLevel(String name,
 			                String levelPath, 
-			                String tileSetsPath,
-							Direction startDir, 
-							float grav)
+			                String tileSetsPath)
 	{
+		/*assert name != null;
+		assert levelPath != null;
+		assert tileSetsPath != null;*/
+		
 		try
 		{
 			FileInputStream in = new FileInputStream(new File(levelPath));
-			return new Level(name, in, tileSetsPath, startDir, grav);
+			assert in != null;
+			return new Level(name, in, tileSetsPath);
 		} 
 		catch(Exception e) 
 		{
