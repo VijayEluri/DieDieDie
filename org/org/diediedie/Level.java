@@ -387,7 +387,8 @@ public class Level extends TiledMap
 		return playerLayer;
 	}
 
-	public void setPlayerLayer(PlayerLayer playerLayer) {
+	public void setPlayerLayer(PlayerLayer playerLayer)
+	{
 		this.playerLayer = playerLayer;
 	}
 	
