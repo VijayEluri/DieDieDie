@@ -465,6 +465,13 @@ public class NavMesh implements Drawable
 		private static void createWalkableZones()
         {   
             ledgeTiles = getLedgeTiles(l);
+
+            if(ledgeTiles.isEmpty())
+            {
+            	System.out.println("No ledge tiles found on this level!");
+            	System.exit(-1);
+            }
+            
             //Set<Tile> checked = new HashSet<Tile>();
             walkableZones = new HashSet<Shape>();
             List<List<Tile>> walkableTileList = new ArrayList<List<Tile>>();
@@ -841,7 +848,11 @@ public class NavMesh implements Drawable
          */ 
         private static List<Tile> getLedgeTiles(Level l)
         {
-            MapLayer colls = l.getCollisionLayer();
+        	MapLayer colls = l.getCollisionLayer();
+            
+        	System.out.println("getLedgeTiles : collision layer has " 
+        			+ colls.tiles.size() + " tiles");
+        	
             List<Tile> ledgeTiles = new ArrayList<Tile>();
             
             for(Tile t : colls.tiles)
@@ -869,8 +880,8 @@ public class NavMesh implements Drawable
         {
             if(!colls.containsTile(test.xCoord, test.yCoord - 1))
             {
-                /*System.out.println("Tile " + test.xCoord + ", "
-                             + test.yCoord + " is ledge tile");*/
+                //System.out.println("Tile " + test.xCoord + ", "
+                  //           + test.yCoord + " is ledge tile");
                 return true;
             }
             return false;

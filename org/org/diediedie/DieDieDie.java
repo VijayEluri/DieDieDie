@@ -85,7 +85,7 @@ public class DieDieDie extends BasicGame
 		currentLevel = level1;/*arrowBounceTest;level1*/;
 			
 		// load player and associate with the level data
-		player = new Player(level1);
+		player = level1.getPlayer();
 
 		// hook up the player to the input provider
 		player.associateInputProvider(inputProv, container.getInput());
@@ -102,6 +102,7 @@ public class DieDieDie extends BasicGame
 				"Factory", 
 				"data/levels/Factory_1_R1024x768_T32x32.tmx",
 				"data");
+		assert level1 != null;
 		//arrowBounceTest = loadLevel("Arrow One Name", 
 			//	"data/Bouncy_Arrows_1024x768x16x16.tmx",
 				//TILE_SETS_PATH, Direction.RIGHT, GRAVITY);
@@ -115,14 +116,9 @@ public class DieDieDie extends BasicGame
 			                String levelPath, 
 			                String tileSetsPath)
 	{
-		/*assert name != null;
-		assert levelPath != null;
-		assert tileSetsPath != null;*/
-		
 		try
 		{
 			FileInputStream in = new FileInputStream(new File(levelPath));
-			assert in != null;
 			return new Level(name, in, tileSetsPath);
 		} 
 		catch(Exception e) 
@@ -168,7 +164,7 @@ public class DieDieDie extends BasicGame
 	 */
 	public void render(GameContainer container, Graphics g)
 	{
-		currentLevel.draw(g);
+		currentLevel.render(0, 0, g);
 		//player.draw(g);
 	}
 

@@ -55,8 +55,6 @@ public class Level extends TiledMap
     
     // smaller number == more friction. xSpeed is multiplied by this number
     public static final float FRICTION = 0.91f;
-
-	private static final int ILLEGAL_PLAYER_LAYER = -1;
     
     // other way with gravity because gravity is added to the Actors' 
     // ySpeed
@@ -64,30 +62,17 @@ public class Level extends TiledMap
     
     // initial direction player faces 
     public final Direction playerFacing;
-    
-    
-    
     private String name;
     private NavMesh navMesh;
     private final String VIS_STR = "isvisible", TRUE_STR = "true";
-    
     private MapLayer collisionLayer;
+    private List<DrawableLayer> drawableLevelLayers;
+    //private List<ArrowBouncer> bouncers;    
+    private PlayerLayer playerLayer;
     
-    private List<MapLayer> mapLayersDrawable;  
-    
-    //private List<ArrowBouncer> bouncers;
-    private List<Elevator> elevators;
-
-    private Player player;
-    private List<Enemy> enemiesLiving;
-    //private List<Enemy> enemiesDead;
     private Tile playerTile = null;
-    
 	private int levelHeight;
 	private int levelWidth;
-
-	private int playerLayer = ILLEGAL_PLAYER_LAYER;
-
 	private List<ArrowBouncer> bouncers;
 
     /**
@@ -104,11 +89,10 @@ public class Level extends TiledMap
         
         System.out.println("Level " + name + " has " + getLayerCount() +
                            " tile layers. Mapsize " + this.levelWidth + " by "
-                           + this.levelHeight);
-        enemiesLiving = new ArrayList<Enemy>();
+                           + this.levelHeight + " gravity " + gravity);
         createLayers();
-        
         createNavMesh();
+        bouncers = new ArrayList<ArrowBouncer>();
     }   
     
     /*
@@ -128,12 +112,7 @@ public class Level extends TiledMap
     	return Direction.convertToDirection(
     				getMapProperty("playerdirection", null));
     }
-    
-    /*public CollideMask getCollisionTileMask()
-    {
-    	return collisionTileMask;
-    }*/
-    
+        
     /*
      * Creates layers from the Tiled Map.
      */
@@ -141,62 +120,43 @@ public class Level extends TiledMap
     {
     	int collisionLayerIndex = getLayerIndex("collision");
     	collisionLayer = createMapLayer(collisionLayerIndex);
-    	mapLayersDrawable = new ArrayList<MapLayer>();
+    	drawableLevelLayers = new ArrayList<DrawableLayer>();
     	
     	/*
-    	 * All but the collision layer will have a drawable
+    	 * All layers except collision will have a drawable
     	 * element.
     	 */
     	for(int i = 0; i < getLayerCount(); ++i)
     	{
     		if(i != collisionLayerIndex)
     		{
-    			mapLayersDrawable.add(createMapLayer(i));
+    			drawableLevelLayers.add(
+    				(DrawableLayer)createLevelLayer(createMapLayer(i)));
     		}
     	}
     }
-    
-   /* 
-    private void createCollisionTileMask()
-    {
-    	collisionTileMask = new CollideMask(
-        	getTileImage(collisionLayer.tiles.get(0).xCoord, 
-        			     collisionLayer.tiles.get(0).yCoord,
-        			     getLayerIndex("collision")));
-    }
-    */
     
     /*
-     * Finds the "player" layer.
-     *
-    private void addPlayerLayer() 
-    {	
-    	playerLayer = getLayerIndex("player");    	
-    	System.out.println("addPlayerLayer :" + playerLayer);
-    	MapLayer playerLayerTiles = createMapLayer(playerLayer);
-    	
-    	sortObjectLayer(playerLayerTiles);
-	}*/
-
-	/*
-     * Creates a list of the integers for those layers
-     * in the map that are backgrounds.
+     * Extracts the layer's content from the TiledMap.
      */
-    /*private void createBackgroundLayers()
+	private LevelLayer createLevelLayer(MapLayer ml) 
     {
-    	backgroundLayersInts = new ArrayList<Integer>();
-    	final int LAYERS = getLayerCount();
-    	
-    	for(int i = 0; i < LAYERS; ++i)
+		if(ml.visible)
+		{
+			return new StaticSceneryLayer(ml);
+		}
+		else if(ml.name.equalsIgnoreCase("elevator"))
     	{
-    		if(isVisible(i))
-    		{
-    			backgroundLayers.add(i);
-    		}
+    		return new ActiveSceneryLayer(ml);
     	}
-    }
-    */
-    
+    	else if(ml.name.equalsIgnoreCase("player"))
+    	{
+    		setPlayerLayer(new PlayerLayer(ml));
+    		return getPlayerLayer();
+    	}
+		return null;
+	}
+      
     private void calculateLevelDimensions()
     {
     	 levelHeight = this.height * this.tileHeight;
@@ -218,14 +178,9 @@ public class Level extends TiledMap
         navMesh = MeshMaker.generateMesh(this);
     }
     
-    public void associatePlayer(Player p)
-    {
-        player = p;        
-    }
-    
     public List<Enemy> getEnemies()
     {
-        return enemiesLiving;
+        return getPlayerLayer().getLivingEnemies();
     }
     
     /**
@@ -243,34 +198,12 @@ public class Level extends TiledMap
                 return s;
             }
         }
-        // find current negative space
-        /*NegativeSpace n = getNavMesh().getNegativeSpaceFromPoint(
-        	new Point(a.getX(), a.getY()));
-        
-        if(n != null)
-        {
-        	// look up the walkable from the negative space
-        	
-        	for(Map.Entry<Shape, List<Shape>> entry
-        					: 
-        		navMesh.getWalkSpaceMap().entrySet())
-        	{
-        		for(Shape n2 : entry.getValue())
-        		{
-        			if(n.getShape() == n2)
-        			{
-        				return entry.getKey();
-        			}
-        		}
-        	}
-        }*/
-        
         return null;
     }
     
     public Player getPlayer()
     {
-        return player;
+        return playerLayer.player;
     }
     
     public MapLayer getCollisionLayer()
@@ -293,8 +226,7 @@ public class Level extends TiledMap
     public List<Actor> getActors()
     {
         List<Actor> actors = new ArrayList<Actor>();
-        actors.addAll(enemiesLiving);
-        actors.add(player);
+                
         return actors;
     }
     
@@ -303,32 +235,10 @@ public class Level extends TiledMap
      */ 
     public void update()
     {
-        updateEnemies();
+    	
     }
 
-    /**
-     * Updates the behaviour and position etc of all enemiesLiving on the
-     * level
-     */ 
-    private void updateEnemies()
-    {
-        ListIterator<Enemy> lit = enemiesLiving.listIterator();
-        
-        while(lit.hasNext())
-        {
-            Enemy e = lit.next();
-            if(e.getHealth() <= 0 || e.isOutOfBounds())
-            {
-                e.die();
-                System.out.println("Removing " + e);
-                lit.remove();
-            }
-            else
-            {
-                e.update();
-            }
-        }
-    }
+    
     
     /*
      * Returns true if the Projectile P is in a collision with
@@ -348,81 +258,7 @@ public class Level extends TiledMap
     	return null;
     }
     
-    /*
-     * Sorts the object layer into separate structures
-     */ 
-    private void sortObjectLayer(MapLayer ml)
-    {
-    	
-    	boolean foundPlayerStart = false;
-    	
-        for(Tile t : ml.tiles)
-        {
-            try
-            {                
-                if(t.properties.get("type").equalsIgnoreCase("exit"))
-                {
-                    exitX = t.xPos;
-                    exitY = t.yPos;
-                }
-                else if(t.properties.get("type").equalsIgnoreCase("start"))
-                {
-                    playerTile = t;
-                    foundPlayerStart = true;
-                }
-                else if(t.properties.get("type").equalsIgnoreCase("enemy"))
-                {
-                    System.out.print("read enemy... ");
-                    System.out.println(" name: " 
-                                       + t.properties.get("name"));
-                    
-                    if(t.properties.get("name").equalsIgnoreCase("bluey"))
-                    {
-                        enemiesLiving.add(new Bluey(this, t));
-                    }
-                }
-                else if(t.properties.get("type").equalsIgnoreCase("bouncer"))
-               	{	
-                	System.out.println(
-                		"found bouncer at "	+ t.xPos + ", " + t.yPos);
-
-                	System.out.println(t.properties);
-                
-                	if(t.properties.get("direction").equalsIgnoreCase("left"))
-                	{
-                		bouncers.add(new ArrowBouncer(t, this, Direction.LEFT));
-                	}
-                	else if (
-                		t.properties.get("direction").equalsIgnoreCase("right"))
-                	{
-                		bouncers.add(new ArrowBouncer(t, this, Direction.RIGHT));
-                	}
-                	else
-                	{
-                		System.out.println("Bouncer has no direction!");
-                		System.exit(-1);
-                	}
-                	
-               	}
-            }
-            catch(NullPointerException e)
-            {
-                //System.out.println("sortObjects: ignoring np exception");
-                e.printStackTrace();
-            }
-        }
-        if(!foundPlayerStart)
-        {
-        	System.out.println(
-        		"did not find player start position." +
-        		"Cannot continue.");
-        	System.exit(-1);
-        }
-        if(enemiesLiving != null)
-        {
-        	System.out.println("level has " + enemiesLiving.size() + " enemiesLiving");
-        }
-    }
+    
     
     /**
      * Returns the name of this Level.
@@ -469,54 +305,10 @@ public class Level extends TiledMap
      */
 	public void render(int x, int y, Graphics g)
     {
-        // ordering matters!
-    	/*for(int i = 0; i < playerLayer; ++i)
-    	{
-    		render(x, y, i);
-    	}
-    	drawPlayerLayer(g);
-    	for(int i = playerLayer+1; i < backgroundLayers.size(); ++i)
-    	{
-    		render(x, y, i);
-    	}
-        navMesh.draw(g);*/
-		//for(MapLayer m : this.)
-		
-    }
-    
-    private void drawPlayerLayer(Graphics g)
-    {
-    	drawEnemies(g);
-    	player.draw(g);
-    	drawObjects(g);
-    }
-    
-    /**
-     * Draw using Graphics object g this Level at 0,0 plus 
-     * the player, enemies, objects..... 
-     */ 
-    public void draw(Graphics g)
-    {
-        render(0, 0, g);
-    }
-    
-    private void drawObjects(Graphics g)
-    {
-    	for(ArrowBouncer ab : bouncers)
-        {
-        	ab.draw(g);
-        }
-    }
-    
-	/**
-     * Draw using Graphics object g any visible enemiesLiving. 
-     */ 
-    private void drawEnemies(Graphics g)
-    {
-        for(Actor a : enemiesLiving)
-        {
-            a.draw(g);
-        }
+       for(DrawableLayer l : drawableLevelLayers)
+       {
+    	   l.draw(x, y, g);
+       }
     }
     
     /**
@@ -530,12 +322,6 @@ public class Level extends TiledMap
         {
             if(t.getRect().intersects(p))
             {
-            	/*System.out.println("[Shape [origin " + 
-                                    new Throwable().fillInStackTrace()
-                                    .getStackTrace()[3].getFileName()
-                                      + "] collision with Tile " +
-                                    t.xCoord + ", " + t.yCoord
-                                    + "]"); */
                 return true;
             }
         }
@@ -580,7 +366,7 @@ public class Level extends TiledMap
 	public List<Tile> getTileCollisions(Actor m) 
 	{
 		List<Tile> colls = new ArrayList<Tile>();
-		// TODO Auto-generated method stub
+		
 		final Shape rect = m.getCollisionBox();//AnimCreator.getCurrentFrameRect(m);
 		
 		for(Map.Entry<Shape, List<Tile>> e 
@@ -596,4 +382,14 @@ public class Level extends TiledMap
 			//"getTileCollisions : " + colls.size() + " tiles");
 		return colls;
 	}
+
+	public PlayerLayer getPlayerLayer() {
+		return playerLayer;
+	}
+
+	public void setPlayerLayer(PlayerLayer playerLayer) {
+		this.playerLayer = playerLayer;
+	}
+	
+	
 }

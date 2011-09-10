@@ -30,52 +30,35 @@ import org.newdawn.slick.tiled.TiledMap;
  */ 
 public class MapLayer
 {
-	public enum Type
-	{
-		Background, Collision, Elevator, Player
-	}
-
-	private static final int TILE_NOT_PRESENT = 0;;
+	public static final int TILE_NOT_PRESENT = 0;
 	
     protected List<Tile> tiles;
-    protected int index;
-    
-    protected TiledMap map;
-    // the parent map which holds this layer
-    
-    protected Type type;
+    protected int index = -1;
+    protected boolean visible;
+    protected Level level;
     protected String name;
-    
-    protected List<LevelObject> levelContent;
     
     /**
      * Constructs a new map layer from a List of Tiles.  
      */
-    public MapLayer(TiledMap map, 
+    public MapLayer(Level map, 
     				String nameStr,
     				final int in, 
     				final boolean vis)
     {
-    	extractTiles(map, in);
-        System.out.println("MapLayer : Index " + in 
-        		+ "\n\tName " + nameStr
-        		+ "\n\tTile count : " + tiles.size()
-        		+ "\n\tVisible : " + vis);
-
-        index = in;
+    	assert map != null;
+    	
+    	index = in;
         name = nameStr;
-        
-        if(vis)
-        {
-        	type = Type.Background;
-        }
-        else
-        {
-        	createNonVisibleLayer();
-        }
+        extractTiles(map);
+        level = map;
+        visible = vis;
+        System.out.println("MapLayer : \n\tIndex " + index
+        		+ "\n\tName " + name
+        		+ "\n\tTile count : " + tiles.size());
     }
     
-    private void extractTiles(TiledMap map, int in)
+    private void extractTiles(Level map)
     {
     	tiles = new ArrayList<Tile>();
     	
@@ -91,46 +74,6 @@ public class MapLayer
         }
     	assert !tiles.isEmpty();
 	}
-
-    /*
-     * Extracts the layer's content from the TiledMap.
-     */
-	private void createNonVisibleLayer() 
-    {
-    	if(name.equalsIgnoreCase("collision"))
-    	{
-    		type = Type.Collision;
-    	}
-    	else if(name.equalsIgnoreCase("elevator"))
-    	{
-    		type = Type.Elevator;
-    		createElevators();
-    	}
-    	else if(name.equalsIgnoreCase("player"))
-    	{
-    		type = Type.Player;
-    	}
-	}
-	
-
-
-	
-	/*
-	 * For Elevator MapLayers. Iterates over the layer Tiles creating Elevators
-	 * for each one.
-	 */
-	private void createElevators()
-	{
-		for(Tile t : tiles)
-		{
-			
-		}
-	}
-
-	public void draw(int x, int y, Graphics g)
-    {
-    	
-    }
     
     /**
      * Returns true if a Tile with the given coordinates exists in the
@@ -140,14 +83,14 @@ public class MapLayer
     {
         if(x < 0 || y < 0)
         {
-            return false;
+            System.out.println(
+            	"MapLayer.containsTile : received invalid tile coords");
+            System.exit(-1);
         }
         for(Tile t : tiles)
         {
             if(t.xCoord == x && t.yCoord == y)
             {
-                /*System.out.println(this + "|\tContains " +
-                                xCoord + ", " + yCoord);*/
                 return true;
             }
         }
@@ -172,6 +115,7 @@ public class MapLayer
     public String toString()
     {
         return "MapLayer: tileCount " + tiles.size() + ", index " 
-                + index + ", type : " + type;
-    }
+                + index + ", type : ";
+    } 
 }
+

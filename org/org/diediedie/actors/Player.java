@@ -37,6 +37,7 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
 import org.diediedie.Level;
+import org.diediedie.PlayerLayer;
 import org.diediedie.Tile;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Arrow;
@@ -68,7 +69,6 @@ public class Player extends Object implements Actor, InputProviderListener
                        MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
                        ACCEL_RATE = 0.03f;
 
-                        
     private final int MAX_HEALTH = 20, 
                       BOW_AIM_UP_TRIGGER = 50,
                       BOW_AIM_DOWN_TRIGGER = 110, 
@@ -136,15 +136,17 @@ public class Player extends Object implements Actor, InputProviderListener
 	private boolean isJumping = false;
 	private boolean jumpKeyDown = false;
 	private boolean outOfBounds = false;
+    private Tile startTile;
     
     /**
      * Constructs the Player at the given position.
      */ 
-    public Player(Level l)
+    public Player(Level l, Tile t)
     {
-    	assert l != null;
-        setLevel(l);
+    	startTile = t;
+    	setLevel(l);
         setUpStartPosition();
+        
         if(!setUp)
         {            
             initAnim();   
@@ -152,7 +154,6 @@ public class Player extends Object implements Actor, InputProviderListener
             initBow();
             setUp = true;
         }
-        
     }    
     
     /*
@@ -191,13 +192,7 @@ public class Player extends Object implements Actor, InputProviderListener
         	isJumping = false;
         }
     }
-    
-    @Override
-    public void setLevel(Level l)
-    {
-        level = l;
-        level.associatePlayer(this);
-    }
+
 
     /*
      * Places the Player at the designated start position according to
@@ -205,9 +200,8 @@ public class Player extends Object implements Actor, InputProviderListener
      */ 
     private void setUpStartPosition()
     {
-        this.xPos = level.getPlayerTile().xPos;
-        this.yPos = level.getPlayerTile().yPos 
-                  - level.getPlayerTile().tileHeight;
+        this.xPos = startTile.xPos;
+        this.yPos = startTile.yPos - startTile.tileHeight;
         yPos--;
         
         System.out.println("Player is on level " + level + 
@@ -688,6 +682,7 @@ public class Player extends Object implements Actor, InputProviderListener
     public void startJump()
     {
     	System.out.println("calling Player.jump()");
+    	
     	if(canJump())
         {
             setYSpeed(INITIAL_JUMP_SPEED);
@@ -924,5 +919,12 @@ public class Player extends Object implements Actor, InputProviderListener
 		collisionBox.setY(yPos);
 		//System.out.println("getCollisionBox : returning " + collisionBox);
 		return collisionBox;
+	}
+
+	@Override
+	public void setLevel(Level l) 
+	{
+		level = l;
+		
 	}
 }
