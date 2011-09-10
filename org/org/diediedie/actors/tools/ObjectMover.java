@@ -28,7 +28,8 @@ import org.diediedie.actors.Projectile;
 public class ObjectMover
 {    
     static final int INTERVAL = 10;
-	private static long lastPrintTime = 0;
+	private static final float ALIGNMENT_INCR = 0.05f;
+	//private static long lastPrintTime = 0;
     
     /**
      * Attempts to move the Actor, a, according to its x / y speeds.
@@ -54,8 +55,12 @@ public class ObjectMover
             	 */
                 a.setCanJump(true);
             }
-            a.setYSpeed(0);
-            a.setY(oldY);            
+            a.setYSpeed(0);           
+            do
+            {
+            	a.setY(a.getY() - ALIGNMENT_INCR);
+            }
+            while(Collider.collidesLevel(a));
         } 
         
         // horizontal 

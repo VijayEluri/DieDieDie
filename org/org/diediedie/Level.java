@@ -20,29 +20,19 @@ import java.io.*;
 import org.diediedie.NavMesh;
 import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.Bluey;
 import org.diediedie.actors.Enemy;
-import org.diediedie.actors.LevelObject;
-import org.diediedie.actors.MovableObject;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.Projectile;
-import org.diediedie.actors.statemachine.BlueyFSM;
-import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.AnimCreator;
-import org.diediedie.actors.tools.CollideMask;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.tiled.Layer;
 import org.newdawn.slick.tiled.TiledMap;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.Graphics;
-
-import java.util.BitSet;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -54,7 +44,7 @@ public class Level extends TiledMap
     public float exitX, exitY;
     
     // smaller number == more friction. xSpeed is multiplied by this number
-    public static final float FRICTION = 0.91f;
+    public static final float FRICTION = 0.7f;
     
     // other way with gravity because gravity is added to the Actors' 
     // ySpeed
@@ -128,7 +118,7 @@ public class Level extends TiledMap
     	 */
     	for(int i = 0; i < getLayerCount(); ++i)
     	{
-    		if(i != collisionLayerIndex)
+    		if(true)//i != collisionLayerIndex)
     		{
     			drawableLevelLayers.add(
     				(DrawableLayer)createLevelLayer(createMapLayer(i)));
@@ -370,8 +360,7 @@ public class Level extends TiledMap
 		final Shape rect = m.getCollisionBox();//AnimCreator.getCurrentFrameRect(m);
 		
 		for(Map.Entry<Shape, List<Tile>> e 
-						: 
-			navMesh.getWalkableTilesMap().entrySet())
+				: navMesh.getWalkableTilesMap().entrySet())
 			{
 				if(e.getKey().intersects(rect))
 				{
@@ -383,7 +372,8 @@ public class Level extends TiledMap
 		return colls;
 	}
 
-	public PlayerLayer getPlayerLayer() {
+	public PlayerLayer getPlayerLayer()
+	{
 		return playerLayer;
 	}
 

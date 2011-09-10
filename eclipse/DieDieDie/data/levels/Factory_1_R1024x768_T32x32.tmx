@@ -112,7 +112,7 @@
  </layer>
  <layer name="collision" width="64" height="48" visible="0">
   <properties>
-   <property name="isvisible" value="false"/>
+   <property name="isvisible" value="true"/>
   </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+3aUQ6CMBCEYVpFPVTvfy7XRJONiYAxdqDzbzIvferHJlAWSpumEqmRU+QcWarSjpc5Ja/XtH6JXCO3Ff/cjpdsy9egbjSPWN/0fMRy7z9+/Pi9/cXc79x/9+c/fm//q/Djx6/eha7w9/fnGZS68Hv6lef/PfrVM+pfsub8lOz/9wxa5V/az9ZvHiMWfvz1aXf3O55/8ePn/off9f0fP378+PHjx6/eTf/Cj9/Z//7/g3qGrUjP+fce8+j/HcvFPPoAMAAA

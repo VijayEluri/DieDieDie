@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collections;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -81,7 +82,8 @@ public class Player extends Object implements Actor, InputProviderListener
                 mouseX, 
                 mouseY,
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON,
-                xOffsetCollisionBox;
+                xLeftOffsetCollisionBox,
+                xRightOffsetCollisionBox;
                     
     // Movement
     private Command jump;
@@ -122,10 +124,10 @@ public class Player extends Object implements Actor, InputProviderListener
     };
     
     private /*Masked*/Animation leftWalk, 
-    						rightWalk, 
-    						leftStand, 
-    						rightStand,
-    						currentAnim;
+    							rightWalk, 
+    							leftStand, 
+    							rightStand,
+    							currentAnim;
     
     private Image bowLeft, 
     			  bowRight, 
@@ -137,6 +139,8 @@ public class Player extends Object implements Actor, InputProviderListener
 	private boolean jumpKeyDown = false;
 	private boolean outOfBounds = false;
     private Tile startTile;
+	private final int COLLISION_BOX_H_OFFSET = 3;
+	private int collisionBoxHeight;
     
     /**
      * Constructs the Player at the given position.
@@ -163,13 +167,15 @@ public class Player extends Object implements Actor, InputProviderListener
      */
     private void setUpCollisionBox()
     {
-    	xOffsetCollisionBox = width/COLLISION_WIDTH_DIV;
-    	
+    	xLeftOffsetCollisionBox = width/COLLISION_WIDTH_DIV;
+    	xRightOffsetCollisionBox = -xLeftOffsetCollisionBox;
+    	collisionBoxHeight = height - COLLISION_BOX_H_OFFSET;
+ 
     	collisionBox = new Rectangle(
-			    		0, 
-			    		0, 
-			    		width - (width/COLLISION_WIDTH_DIV),
-			    		currentAnim.getHeight());
+			    		xPos, 
+			    		yPos, 
+			    		width /2,
+			    		collisionBoxHeight);
     }
     
     @Override
@@ -177,6 +183,7 @@ public class Player extends Object implements Actor, InputProviderListener
 	{
 		return width;
 	}
+    
 	@Override
 	public int getHeight()
 	{
@@ -193,14 +200,13 @@ public class Player extends Object implements Actor, InputProviderListener
         }
     }
 
-
     /*
      * Places the Player at the designated start position according to
      * the Level associated with it. 
      */ 
     private void setUpStartPosition()
     {
-        this.xPos = startTile.xPos;
+    	this.xPos = startTile.xPos;
         this.yPos = startTile.yPos - startTile.tileHeight;
         yPos--;
         
@@ -210,9 +216,9 @@ public class Player extends Object implements Actor, InputProviderListener
     
     private void initBow()
     {
-          bowLeft = AnimCreator.loadImage(bowLeftPath);
-          bowRight = bowLeft.getFlippedCopy(true, false);
-          currentBow = bowLeft;
+        bowLeft = AnimCreator.loadImage(bowLeftPath);
+        bowRight = bowLeft.getFlippedCopy(true, false);
+        currentBow = bowLeft;
     }    
     
     public Shape getZone()
@@ -797,11 +803,9 @@ public class Player extends Object implements Actor, InputProviderListener
             g.drawImage(currentBow, bowX, bowY);
         }
         
-        Image curr = this.currentAnim.getCurrentFrame();
-        g.draw((Shape) new Rectangle(
-				getX(), getY(), 
-		        curr.getWidth(), 
-		        curr.getHeight()));
+        //g.draw(getCurrentAnim().getCurrentFrame()
+        //g.setColor(Color.black);
+        //g.draw(getCollisionBox());
     }
     
     /*
@@ -915,8 +919,16 @@ public class Player extends Object implements Actor, InputProviderListener
 		 * A box slightly thinner than the current frame
 		 * for more believable collision detection.
 		 */
-		collisionBox.setX(xPos+xOffsetCollisionBox);
+		//if(getFacing() == Direction.LEFT)
+		//{
+		collisionBox.setX(xPos + xLeftOffsetCollisionBox);
+		/*}
+		else
+		{
+			collisionBox.setX(xPos + xRightOffsetCollisionBox);
+		}*/
 		collisionBox.setY(yPos);
+		//collisionBox.setHeight(height);
 		//System.out.println("getCollisionBox : returning " + collisionBox);
 		return collisionBox;
 	}
