@@ -16,12 +16,13 @@
  */
 package org.diediedie;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.diediedie.actors.LevelObject;
-import org.diediedie.actors.Player;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.tiled.TiledMap;
+import java.util.Map;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.tiled.TileSet;
 
 
 /**
@@ -37,7 +38,8 @@ public class MapLayer
     protected boolean visible;
     protected Level level;
     protected String name;
-    
+    protected SpriteSheet spriteSheet;
+    protected TileSet tileSet;
     /**
      * Constructs a new map layer from a List of Tiles.  
      */
@@ -47,12 +49,13 @@ public class MapLayer
     				final boolean vis)
     {
     	assert map != null;
-    	
     	index = in;
         name = nameStr;
         extractTiles(map);
         level = map;
         visible = vis;
+        tileSet = map.getTileSet(index);
+        
         System.out.println("MapLayer : \n\tIndex " + index
         		+ "\n\tName " + name
         		+ "\n\tTile count : " + tiles.size());
@@ -69,6 +72,7 @@ public class MapLayer
                 if(map.getTileId(x, y, index) != TILE_NOT_PRESENT)
                 {
                     tiles.add(new Tile(map, x, y, index));
+                    
                 }
             }
         }

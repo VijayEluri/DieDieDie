@@ -45,6 +45,10 @@ public class Level extends TiledMap
     
     // smaller number == more friction. xSpeed is multiplied by this number
     public static final float FRICTION = 0.7f;
+
+    // number of pixels from the player's current position to check a
+    // tile for possible collision
+	private static final int TILE_COLLISION_CHECK_DIST = 20;
     
     // other way with gravity because gravity is added to the Actors' 
     // ySpeed
@@ -57,6 +61,7 @@ public class Level extends TiledMap
     private final String VIS_STR = "isvisible", TRUE_STR = "true";
     private MapLayer collisionLayer;
     private List<DrawableLayer> drawableLevelLayers;
+    private List<UpdatableLayer> updatableLayers;
     //private List<ArrowBouncer> bouncers;    
     private PlayerLayer playerLayer;
     
@@ -106,11 +111,12 @@ public class Level extends TiledMap
     /*
      * Creates layers from the Tiled Map.
      */
-    private void createLayers()
+    private void createLayers() throws SlickException
     {
     	int collisionLayerIndex = getLayerIndex("collision");
     	collisionLayer = createMapLayer(collisionLayerIndex);
     	drawableLevelLayers = new ArrayList<DrawableLayer>();
+    	updatableLayers =  new ArrayList<UpdatableLayer>();
     	
     	/*
     	 * All layers except collision will have a drawable
@@ -118,7 +124,7 @@ public class Level extends TiledMap
     	 */
     	for(int i = 0; i < getLayerCount(); ++i)
     	{
-    		if(true)//i != collisionLayerIndex)
+    		if(i != collisionLayerIndex)
     		{
     			drawableLevelLayers.add(
     				(DrawableLayer)createLevelLayer(createMapLayer(i)));
@@ -129,7 +135,7 @@ public class Level extends TiledMap
     /*
      * Extracts the layer's content from the TiledMap.
      */
-	private LevelLayer createLevelLayer(MapLayer ml) 
+	private LevelLayer createLevelLayer(MapLayer ml) throws SlickException 
     {
 		if(ml.visible)
 		{
@@ -137,11 +143,15 @@ public class Level extends TiledMap
 		}
 		else if(ml.name.equalsIgnoreCase("elevator"))
     	{
-    		return new ActiveSceneryLayer(ml);
+			UpdatableLayer ul = new ActiveSceneryLayer(ml);
+    		updatableLayers.add(ul);
+    		return ul;
     	}
     	else if(ml.name.equalsIgnoreCase("player"))
     	{
-    		setPlayerLayer(new PlayerLayer(ml));
+    		PlayerLayer pl = new PlayerLayer(ml);
+    		setPlayerLayer(pl);
+    		updatableLayers.add(pl);
     		return getPlayerLayer();
     	}
 		return null;
@@ -293,11 +303,11 @@ public class Level extends TiledMap
      * the background layers.  Not including a player layour
      * will cause the game to exit at init stage.
      */
-	public void render(int x, int y, Graphics g)
+	public void render(int x, int y, Graphics g) throws SlickException
     {
        for(DrawableLayer l : drawableLevelLayers)
        {
-    	   l.draw(x, y, g);
+    	   l.draw(/*x, y,*/ g);
        }
     }
     
@@ -357,21 +367,68 @@ public class Level extends TiledMap
 	{
 		List<Tile> colls = new ArrayList<Tile>();
 		
-		final Shape rect = m.getCollisionBox();//AnimCreator.getCurrentFrameRect(m);
+		final Shape rect = m.getCollisionBox();
 		
-		for(Map.Entry<Shape, List<Tile>> e 
-				: navMesh.getWalkableTilesMap().entrySet())
+
+		for(Tile t : collisionLayer.tiles)
+		{
+			boolean closeX = false;
+			boolean closeY = false;
+			
+			if(t.yPos < rect.getY())
 			{
-				if(e.getKey().intersects(rect))
+				// tile start is above the actor
+				if(rect.getY() - t.endY <= TILE_COLLISION_CHECK_DIST)
 				{
-					colls.addAll(e.getValue());
+					closeY = true;
 				}
 			}
-		//System.out.println(
-			//"getTileCollisions : " + colls.size() + " tiles");
+			else if(t.yPos > rect.getY())
+			{
+				// tile start is below the actor
+				if(t.yPos - rect.getMaxY() <= TILE_COLLISION_CHECK_DIST)
+				{
+					closeY = true;
+				}
+			}
+			else
+			{
+				// same vertical position
+				closeY = true;
+			}
+			if(t.xPos < rect.getX())
+			{
+				// tile start is to the left of the actor
+				if(rect.getX() - t.endX <= TILE_COLLISION_CHECK_DIST)
+				{
+					closeX = true;
+				}
+			}
+			else if(t.xPos > rect.getX())
+			{
+				// tile start is to the right of the actor
+				if(t.xPos - rect.getMaxX() <= TILE_COLLISION_CHECK_DIST)
+				{
+					closeX = true;
+				}
+			}
+			else
+			{
+				// same horizontal position
+				closeX = true;
+			}
+			if(closeX && closeY)
+			{
+				if(rect.intersects(t.getRect()))
+				{
+					colls.add(t);
+				}
+			}
+		}
 		return colls;
 	}
-
+	
+	
 	public PlayerLayer getPlayerLayer()
 	{
 		return playerLayer;

@@ -58,7 +58,7 @@ public class Player extends Object implements Actor, InputProviderListener
     private int height, width, minReleaseCharge = 7;
     
     public final float MAX_CHARGE = 20.34f, 
-                       CHARGE_INCR = 0.3f, 
+                       CHARGE_INCR = 0.4f, 
                        BOW_Y_OFFSET_NORMAL = -2f, 
                        BOW_Y_OFFSET_AIM_UP = -10, 
                        MAX_Y_SPEED = 20.5f,
@@ -66,7 +66,8 @@ public class Player extends Object implements Actor, InputProviderListener
                        JUMP_INCR = 0.8f,
                        INITIAL_JUMP_SPEED = -0.2f,
                        MAX_JUMP_SPEED = -5.6f,
-                       BOW_Y_OFFSET_AIM_DOWN = 6, ARROW_Y_OFFSET = 15,
+                       BOW_Y_OFFSET_AIM_DOWN = 6, 
+                       ARROW_Y_OFFSET = 15,
                        MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
                        ACCEL_RATE = 0.03f;
 
@@ -78,12 +79,10 @@ public class Player extends Object implements Actor, InputProviderListener
                       COLLISION_WIDTH_DIV = 4;
                       
     private int health = MAX_HEALTH, 
-               //arrowCount = 0, 
                 mouseX, 
                 mouseY,
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON,
-                xLeftOffsetCollisionBox,
-                xRightOffsetCollisionBox;
+                xLeftOffsetCollisionBox;
                     
     // Movement
     private Command jump;
@@ -123,11 +122,11 @@ public class Player extends Object implements Actor, InputProviderListener
   		"data/player_images/standing.png"        
     };
     
-    private /*Masked*/Animation leftWalk, 
-    							rightWalk, 
-    							leftStand, 
-    							rightStand,
-    							currentAnim;
+    private Animation leftWalk, 
+    				  rightWalk,
+    				  leftStand,
+    				  rightStand,
+    				  currentAnim;
     
     private Image bowLeft, 
     			  bowRight, 
@@ -139,7 +138,7 @@ public class Player extends Object implements Actor, InputProviderListener
 	private boolean jumpKeyDown = false;
 	private boolean outOfBounds = false;
     private Tile startTile;
-	private final int COLLISION_BOX_H_OFFSET = 3;
+	private final int COLLISION_BOX_H_OFFSET = 1;
 	private int collisionBoxHeight;
     
     /**
@@ -168,7 +167,6 @@ public class Player extends Object implements Actor, InputProviderListener
     private void setUpCollisionBox()
     {
     	xLeftOffsetCollisionBox = width/COLLISION_WIDTH_DIV;
-    	xRightOffsetCollisionBox = -xLeftOffsetCollisionBox;
     	collisionBoxHeight = height - COLLISION_BOX_H_OFFSET;
  
     	collisionBox = new Rectangle(

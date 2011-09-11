@@ -63,7 +63,7 @@ public class PlayerLayer implements DrawableLayer, UpdatableLayer
 	}
 
 	@Override
-	public void draw(int x, int y, Graphics g) 
+	public void draw(/*int x, int y,*/ Graphics g) 
 	{
 		drawEnemies(g);
 		drawPlayer(g);

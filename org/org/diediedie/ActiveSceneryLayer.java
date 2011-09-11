@@ -5,25 +5,27 @@ import java.util.List;
 
 import org.diediedie.actors.MovableObject;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 /*
  * Comprised of switches, elevators, arrow bouncers, and anything else
  *  that can be interacted with that is drawn underneath the PlayerLayer.
  */
-public class ActiveSceneryLayer implements UpdatableLayer, DrawableLayer
+public class ActiveSceneryLayer extends BaseSceneryLayer implements UpdatableLayer
 {
 	MapLayer mapLayer;
 	
 	List<MovableObject> objects;
 	
-	public ActiveSceneryLayer(MapLayer ml)
+	public ActiveSceneryLayer(MapLayer ml) throws SlickException
 	{
+		super(ml);
 		mapLayer = ml;
 		parseObjects();
 	}
 	
 	@Override
-	public void draw(int x, int y, Graphics g)
+	public void draw(/*int x, int y,*/ Graphics g)
 	{
 		for(MovableObject o : objects)
 		{
