@@ -235,12 +235,18 @@ public class Level extends TiledMap
      */ 
     public void update()
     {
-    	
+    	updateLayers();
     }
+    
+    private void updateLayers() 
+    {
+    	for(UpdatableLayer ul : updatableLayers)
+    	{
+    		ul.update();
+    	}
+	}
 
-    
-    
-    /*
+	/*
      * Returns true if the Projectile P is in a collision with
      * an ArrowBouncer on this level.
      */
@@ -280,7 +286,12 @@ public class Level extends TiledMap
      */ 
     private MapLayer createMapLayer(int index)
     {
-        Layer l = (Layer)layers.get(index);
+    	assert index < getLayerCount();
+    	System.out.println("creating map layer " + index);
+        Layer l = null;
+        l = (Layer)layers.get(index);
+        assert l != null;
+        
         return new MapLayer(this, l.name, index, isVisible(index));
     }
     
@@ -307,7 +318,7 @@ public class Level extends TiledMap
     {
        for(DrawableLayer l : drawableLevelLayers)
        {
-    	   l.draw(/*x, y,*/ g);
+    	   l.draw(g);
        }
     }
     

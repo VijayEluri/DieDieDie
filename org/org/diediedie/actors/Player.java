@@ -47,7 +47,8 @@ import org.diediedie.actors.tools.Direction;
 /**
  * The main Player Character. 
  */ 
-public class Player extends Object implements Actor, InputProviderListener 
+public class Player extends BaseLevelObject implements Actor, 
+													   InputProviderListener 
 {    
 	private boolean setUp = false, canJump = false;
     final boolean autoUpdate = true;
@@ -96,7 +97,7 @@ public class Player extends Object implements Actor, InputProviderListener
                                                     ArrayList<Arrow>());
     private boolean isChargingArrow = false;
     
-    private float xPos, yPos, xSpeed, ySpeed;
+    private float xSpeed, ySpeed;
     private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
         
     // running: indicates the user is holding a directional button
@@ -133,7 +134,6 @@ public class Player extends Object implements Actor, InputProviderListener
     			  currentBow;
     
     // associated level for collision / item collection reference
-    private Level level = null;
 	private boolean isJumping = false;
 	private boolean jumpKeyDown = false;
 	private boolean outOfBounds = false;
@@ -146,6 +146,7 @@ public class Player extends Object implements Actor, InputProviderListener
      */ 
     public Player(Level l, Tile t)
     {
+    	super(l, t);
     	startTile = t;
     	setLevel(l);
         setUpStartPosition();
@@ -170,10 +171,10 @@ public class Player extends Object implements Actor, InputProviderListener
     	collisionBoxHeight = height - COLLISION_BOX_H_OFFSET;
  
     	collisionBox = new Rectangle(
-			    		xPos, 
-			    		yPos, 
-			    		width /2,
-			    		collisionBoxHeight);
+				    		xPos, 
+				    		yPos, 
+				    		width / 2,
+				    		collisionBoxHeight);
     }
     
     @Override
@@ -527,20 +528,7 @@ public class Player extends Object implements Actor, InputProviderListener
         //System.out.println("setMovingDir: " + dir);
     }
     
-    /**
-     * Returns the x position
-     */ 
-    public float getX() 
-    { 
-    	return xPos; 
-    }
-    /**
-     * Returns the y position
-     */ 
-    public float getY()
-    { 
-    	return yPos; 
-    } 
+  
     
     
     /**
@@ -929,12 +917,5 @@ public class Player extends Object implements Actor, InputProviderListener
 		//collisionBox.setHeight(height);
 		//System.out.println("getCollisionBox : returning " + collisionBox);
 		return collisionBox;
-	}
-
-	@Override
-	public void setLevel(Level l) 
-	{
-		level = l;
-		
 	}
 }

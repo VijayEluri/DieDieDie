@@ -102,7 +102,6 @@ public class ArrowBouncer implements LevelObject, Bounded
 	public void draw(Graphics g) 
 	{
 		g.drawImage(image, tile.xPos, tile.yPos);
-		//g.draw((Shape)rect);
 	}
 
 	@Override

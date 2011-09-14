@@ -29,5 +29,4 @@ public interface Action
     void update();
     void draw(Graphics g);
     void reset();
-    
 }

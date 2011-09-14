@@ -15,7 +15,6 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
-import org.newdawn.slick.Graphics;
 import org.diediedie.Drawable;
 import org.diediedie.Level;
 
@@ -25,7 +24,7 @@ import org.diediedie.Level;
 public interface LevelObject extends Drawable
 {
     void update();
-    void draw(Graphics g);
+    void setLevel(Level l);
     Level getLevel();
     float getX();
     float getY();     

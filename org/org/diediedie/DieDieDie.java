@@ -143,9 +143,6 @@ public class DieDieDie extends BasicGame
 			 */
 			gameStartTime = System.currentTimeMillis();
 		}
-		//updateCurrentTime();
-		
-		player.update();
 		currentLevel.update();
 	}
 	

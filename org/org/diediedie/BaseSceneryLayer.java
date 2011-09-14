@@ -1,13 +1,12 @@
 package org.diediedie;
-import java.util.Map;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.opengl.renderer.Renderer;
-import org.newdawn.slick.opengl.renderer.SGL;
 
+
+/*
+ * Optional base class that implements basic
+ * routines most sub-classes will need. 
+ */
 public abstract class BaseSceneryLayer implements DrawableLayer
 {
 	protected Graphics graphics;

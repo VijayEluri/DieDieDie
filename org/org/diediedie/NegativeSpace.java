@@ -161,10 +161,4 @@ public class NegativeSpace implements Drawable
 	{
 		centre = new Point(shape.getCenterX(), shape.getCenterY());
 	}
-
-	@Override
-	public void setLevel(Level l)
-	{
-		//this.level = l;
-	}
 }

@@ -24,5 +24,4 @@ import org.diediedie.Level;
 public interface Drawable
 {
     void draw(Graphics g);
-    void setLevel(Level l);
 }
