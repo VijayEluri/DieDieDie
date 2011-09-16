@@ -47,10 +47,16 @@ public abstract class BaseLevelObject implements LevelObject
 	{
 		return xPos;
 	}
-
+	
 	@Override
 	public float getY()
 	{
 		return yPos;
+	}
+	
+	@Override
+	public void setY(float y) 
+	{
+		yPos = y;		
 	}
 }

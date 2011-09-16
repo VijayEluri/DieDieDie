@@ -28,10 +28,12 @@ public enum Direction
 	 */
 	public static Direction convertToDirection(String s)
     {
+		System.out.println("convertToDirection : " + s);
     	for(Direction  d : Direction.values())
     	{
-    		if(s.equalsIgnoreCase(s))
+    		if(s.equalsIgnoreCase(d.toString()))
     		{
+    			
     			return d;
     		}
     	}

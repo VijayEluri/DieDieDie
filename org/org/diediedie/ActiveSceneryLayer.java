@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.diediedie.actors.Elevator;
+import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.MovableObject;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -13,11 +14,10 @@ import org.newdawn.slick.SlickException;
  * that can be interacted with AND drawn underneath the PlayerLayer.
  */
 public class ActiveSceneryLayer extends BaseSceneryLayer 
-											implements UpdatableLayer
+								implements UpdatableLayer
 {
 	MapLayer mapLayer;
-	
-	List<MovableObject> objects;
+	List<LevelObject> objects;
 	
 	public ActiveSceneryLayer(MapLayer ml) throws SlickException
 	{
@@ -29,7 +29,7 @@ public class ActiveSceneryLayer extends BaseSceneryLayer
 	@Override
 	public void draw(Graphics g)
 	{
-		for(MovableObject o : objects)
+		for(LevelObject o : objects)
 		{
 			o.draw(g);
 		}
@@ -38,7 +38,7 @@ public class ActiveSceneryLayer extends BaseSceneryLayer
 	@Override
 	public void update()
 	{
-		for(MovableObject o : objects)
+		for(LevelObject o : objects)
 		{
 			o.update();
 		}
@@ -49,7 +49,7 @@ public class ActiveSceneryLayer extends BaseSceneryLayer
 	 */
 	private void parseObjects()
 	{
-		objects = new ArrayList<MovableObject>();
+		objects = new ArrayList<LevelObject>();
 		
 		for(Tile t : mapLayer.tiles)
         {

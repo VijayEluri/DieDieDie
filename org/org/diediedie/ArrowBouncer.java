@@ -113,7 +113,6 @@ public class ArrowBouncer implements LevelObject, Bounded
 	@Override
 	public float getX() 
 	{
-		
 		return tile.xPos;
 	}
 
@@ -129,8 +128,18 @@ public class ArrowBouncer implements LevelObject, Bounded
 		return rect;
 	}
 
+	/*
+	 * Returns the amount of speed applied to 
+	 * Arrows on colliding with this ArrowBouncer.
+	 */
 	public int getSpeedBoost()
 	{
 		return SPEED_BOOST;
 	}
+
+	@Override
+	public void setX(float x) {}
+
+	@Override
+	public void setY(float y) {}
 }
