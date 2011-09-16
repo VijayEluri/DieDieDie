@@ -31,13 +31,11 @@ public interface Actor extends MovableObject
     Animation getCurrentAnim();
     Direction getFacing();
     float getHealth();    
-    //float getJumpSpeed();
     void setCanJump(boolean b);
     void startJump();
     void setFacing(Direction d);
 	void resetAccelX();
 	int getWidth();
     int getHeight();
-   // CollideMask getCollideMask();
     public Rectangle getCollisionBox();
 }  

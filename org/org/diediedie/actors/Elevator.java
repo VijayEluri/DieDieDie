@@ -19,10 +19,11 @@ import org.newdawn.slick.tiled.TiledMap;
  * property.
  * 
  */
-public class Elevator extends BaseLevelObject
+public class Elevator extends BaseLevelObject implements Callable
 {
+	// Tile tile << SUPERCLASS
 	/*
-	 *  the Tile in the map on which the elevator starts
+	 *  the Tile (in the superclass) in the map on which the elevator starts
 	 *  (this is parsed from the map)
 	 */
 
@@ -39,8 +40,6 @@ public class Elevator extends BaseLevelObject
 	final float DOWN_MAX_SPEED = 5.2f,
 				UP_MAX_SPEED = -4.9f;
 
-	// position away from the startTile 
-	protected float destY;
 	
 	// the direction the elevator moves from its starting tile
 	// with distance, this is used to work out where it ends up
@@ -87,30 +86,27 @@ public class Elevator extends BaseLevelObject
 		String dirStr = (String)map.getTileProperty(
 				t.id, "direction", null);
 		
-		
-		
 		System.out.println("direction tile string : " + dirStr);
 		
-    	direction = Direction.convertToDirection(
-    			dirStr);
+    	direction = Direction.convertToDirection(dirStr);
+    	
     	assert direction != null;
     	String distanceStr = map.getTileProperty(
     							t.id, "distance", null);
     	
     	distance = Integer.parseInt(distanceStr);
-    	
     	String speedStr = map.getTileProperty(t.id, "speed", null);
-    	
     	speed = Float.parseFloat(speedStr);
-    	
     	image = map.getTileImage(t.xCoord, t.yCoord, t.layer);
-    	assert image != null;    	
+    	assert image != null;
     	imageTile = t;
     	findPositions();
     	
-    	System.out.println("Elevator at \n\t" + t);
-    	System.out.println("\tDistance " + (destY - t.yPos));
+    	System.out.println(
+    			"Elevator at " + t.xCoord + ", " + t.yCoord);
 	}
+	
+	
 	
 	private void findPositions()
 	{
@@ -120,22 +116,24 @@ public class Elevator extends BaseLevelObject
 		 */
 		if(direction == Direction.DOWN)
 		{
-			yTop = imageTile.yPos;
-			yBottom = yTop + imageTile.tileHeight * distance;
+			yTop = tile.yPos - tile.tileHeight;
+			yBottom = yTop + (tile.tileHeight * distance);
 		}
 		else if(direction == Direction.UP)
 		{	
-			yBottom = imageTile.yPos;
-			yTop = yBottom - imageTile.tileHeight * distance;
+			yBottom =  tile.yPos - tile.tileHeight;
+			yTop = yBottom - (tile.tileHeight * distance);
 		}
 		else
 		{
-			System.out.println("Elevator.findPositions() : bad direction "
-					+ direction);	
+			System.out.println(
+						"Elevator.findPositions() : bad direction " 
+						+ direction);	
 			System.exit(-1);
 		}
 		// xPos won't change (probably)
 		xPos = tile.xPos;
+		yPos = tile.yPos - tile.tileHeight;;
 	}
 	
 	/*
@@ -149,7 +147,6 @@ public class Elevator extends BaseLevelObject
 	public void update() 
 	{
 		// TODO Check if we should change the state
-				
 		
 		if(currentState == StateType.ACTIVE)
 		{
@@ -247,5 +244,12 @@ public class Elevator extends BaseLevelObject
 			xPos = x;
 			xPosSet = true;
 		}
+	}
+
+	@Override
+	public void call(Caller c) 
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
