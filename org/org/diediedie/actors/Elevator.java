@@ -2,13 +2,12 @@ package org.diediedie.actors;
 
 import org.diediedie.Level;
 import org.diediedie.Tile;
-import org.diediedie.actors.statemachine.State;
-import org.diediedie.actors.statemachine.StateMachine;
+
 import org.diediedie.actors.statemachine.StateType;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.tiled.TiledMap;
+
 
 /*
  * A movable and collidable object that can move
@@ -18,39 +17,39 @@ import org.newdawn.slick.tiled.TiledMap;
  * (in Tiles) to travel supplied from the TiledMap tile
  * property.
  * 
+ * Doesn't use StateMachine here, as it's unnecessarily 
+ * heavyweight.
+ * 
+ * Uses the original map Tile id to hook it up to a Switch.
+ * 
  */
 public class Elevator extends BaseLevelObject implements Callable
 {
-	// Tile tile << SUPERCLASS
-	/*
-	 *  the Tile (in the superclass) in the map on which the elevator starts
-	 *  (this is parsed from the map)
-	 */
-
-	protected int distance,
-				  /*
-	 			   * the number of tiles travelled 
-	 			   * from the start tile
-	               */
-				  layerIndex;
-				  /*
-				   * the layer in the tmx map file it was found on
-				   */
-					
+	//the number of tiles travelled from the start tile
+	protected int distance;
+	
+	//the layer in the tmx map file it was found on
+	protected int layerIndex;
+			
+	
+	// maximum speeds, for each possible direction.
 	final float DOWN_MAX_SPEED = 5.2f,
 				UP_MAX_SPEED = -4.9f;
-
 	
 	// the direction the elevator moves from its starting tile
 	// with distance, this is used to work out where it ends up
 	protected Direction direction = null;
 	
-	// how fast the elevator moves.
+	// the current speed of the Elevator
 	protected float speed;
 	
+	// the image from the tiled map
 	protected Image image;
 	
-	protected Level level; 
+	
+	protected Level level;
+	
+
 	
 	// states
 	//protected Idle idle;
@@ -70,8 +69,6 @@ public class Elevator extends BaseLevelObject implements Callable
 	private float yTop, yBottom;
 
 	private boolean xPosSet = false;
-
-	private Tile imageTile;
 	
 	/*
 	 * An Elevator
@@ -83,11 +80,11 @@ public class Elevator extends BaseLevelObject implements Callable
     	 * Get the elevator speed, distance and direction to travel 
     	 * from the elevator tile. 
     	 */
+		
 		String dirStr = (String)map.getTileProperty(
 				t.id, "direction", null);
 		
 		System.out.println("direction tile string : " + dirStr);
-		
     	direction = Direction.convertToDirection(dirStr);
     	
     	assert direction != null;
@@ -99,14 +96,17 @@ public class Elevator extends BaseLevelObject implements Callable
     	speed = Float.parseFloat(speedStr);
     	image = map.getTileImage(t.xCoord, t.yCoord, t.layer);
     	assert image != null;
-    	imageTile = t;
+
     	findPositions();
     	
     	System.out.println(
     			"Elevator at " + t.xCoord + ", " + t.yCoord);
 	}
 	
-	
+	public final int getID()
+	{
+		return tile.id;
+	}
 	
 	private void findPositions()
 	{
@@ -131,9 +131,8 @@ public class Elevator extends BaseLevelObject implements Callable
 						+ direction);	
 			System.exit(-1);
 		}
-		// xPos won't change (probably)
 		xPos = tile.xPos;
-		yPos = tile.yPos - tile.tileHeight;;
+		yPos = tile.yPos - tile.tileHeight;
 	}
 	
 	/*
@@ -154,7 +153,6 @@ public class Elevator extends BaseLevelObject implements Callable
 		}
 	}
 
-	
 	@Override
 	public void draw(Graphics g) 
 	{
@@ -216,7 +214,6 @@ public class Elevator extends BaseLevelObject implements Callable
 	private void setIdle()
 	{
 		assert currentState == StateType.ACTIVE;
-		// TODO Auto-generated method stub
 		currentState = StateType.IDLE;
 		speed = 0f;
 	}
@@ -226,8 +223,8 @@ public class Elevator extends BaseLevelObject implements Callable
 	 */
 	private void alignElevator()
 	{
-		
-		
+		// TODO this!
+		System.out.println("alignElevator not implemented");
 	}
 
 	/*

@@ -40,6 +40,7 @@ public class MapLayer
     protected String name;
     protected SpriteSheet spriteSheet;
     protected TileSet tileSet;
+    
     /**
      * Constructs a new map layer from a List of Tiles.  
      */

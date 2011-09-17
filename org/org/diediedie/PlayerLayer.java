@@ -21,6 +21,7 @@ public class PlayerLayer implements DrawableLayer, UpdatableLayer
 {
 	protected MapLayer mapLayer;
 	
+	protected List<ObjectLayer> objectLayers;
 	protected List<Enemy> enemiesLiving;
 	protected List<Actor> npcs;
 	protected List<ArrowBouncer> bouncers;
@@ -38,7 +39,11 @@ public class PlayerLayer implements DrawableLayer, UpdatableLayer
 		parsePlayerLayerTiles();
 	}
 	
-
+	public void setObjectLayers(List<ObjectLayer> objLayers)
+	{
+		objectLayers = objLayers;
+	}
+	
 	/**
      * Draw using Graphics object g any visible enemiesLiving. 
      */ 
@@ -53,8 +58,17 @@ public class PlayerLayer implements DrawableLayer, UpdatableLayer
 	@Override
 	public void update() 
 	{
+		updateObjects();
 		player.update();	
 		updateEnemies();
+	}
+
+	private void updateObjects() 
+	{
+		for(ObjectLayer o : objectLayers)
+		{
+			o.update();
+		}
 	}
 
 	private void drawPlayer(Graphics g)
@@ -65,10 +79,20 @@ public class PlayerLayer implements DrawableLayer, UpdatableLayer
 	@Override
 	public void draw(/*int x, int y,*/ Graphics g) 
 	{
+		drawObjectLayers(g);
 		drawEnemies(g);
 		drawPlayer(g);
 	}
 	
+	private void drawObjectLayers(Graphics g)
+	{
+		for(ObjectLayer o : objectLayers)
+		{
+			o.draw(g);
+		}
+	}
+
+
 	/*
 	 * Returns only the enemies still living on this layer.
 	 */

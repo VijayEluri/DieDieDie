@@ -16,11 +16,13 @@
  */
 package org.diediedie;
 
+import java.util.Properties;
 import java.io.*;
 import org.diediedie.NavMesh;
 import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Enemy;
+import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.Projectile;
 import org.diediedie.actors.tools.AnimCreator;
@@ -62,6 +64,8 @@ public class Level extends TiledMap
     private MapLayer collisionLayer;
     private List<DrawableLayer> drawableLevelLayers;
     private List<UpdatableLayer> updatableLayers;
+    private List<ObjectLayer> objectLayers;
+    
     //private List<ArrowBouncer> bouncers;    
     private PlayerLayer playerLayer;
     
@@ -72,9 +76,10 @@ public class Level extends TiledMap
 
     /**
      * Create a Level
+     * @throws IllegalAccessException 
      */ 
     public Level(String levelName, InputStream in, String tileSetsPath) 
-    		     throws SlickException
+    		     throws SlickException, IllegalAccessException
     {
         super(in, tileSetsPath);
         this.name = levelName;
@@ -87,10 +92,63 @@ public class Level extends TiledMap
                            + this.levelHeight + " gravity " + gravity);
         createLayers();
         createNavMesh();
+        
         bouncers = new ArrayList<ArrowBouncer>();
+        parseObjectLayers();
+        
     }   
     
     /*
+     * Parses only the object layers from the map
+     */
+    private void parseObjectLayers() throws IllegalAccessException 
+    {
+    	objectLayers = new ArrayList<ObjectLayer>();
+    	
+    	for(Object o : objectGroups)
+        {
+    		ObjectGroup og = (ObjectGroup) o;
+        	ObjectLayer ol = createObjectLayer(og);
+        	objectLayers.add(ol);	
+        }
+    	System.out.println("adding " + objectLayers.size() + " objectLayer[s]"
+    			+ " to the player layer");
+    	playerLayer.setObjectLayers(objectLayers);
+	}
+    
+    /*
+     * Creates an ObjectLayer from a TiledMap.ObjectGroup,
+     * including the internal GroupObjects.
+     */
+    private ObjectLayer createObjectLayer(ObjectGroup og) 
+    {
+    	System.out.println("ObjectGroup : index " + og.index +" : " + og.name);
+    	
+    	// adjust the properties file - add name, index and type
+    	List<LevelObject> objs = new ArrayList<LevelObject>();
+    	
+    	for(Object o2 : og.objects)
+    	{
+    		GroupObject go = (GroupObject) o2;
+    		go.props.put("type", go.type);
+    		go.props.put("index", go.index);
+    		go.props.put("name", go.name);
+    		go.props.put("width", og.width);
+    		go.props.put("height", og.height);
+    		go.props.put("x", go.x);
+    		go.props.put("y", go.y);
+    		
+    		LevelObject lo = LevelObjectFactory.createObject(go.props);
+    		assert lo != null;
+    		objs.add(lo);
+    	}
+		return new ObjectLayer(og.index, og.name, objs);
+    }
+    
+  
+    
+    
+	/*
      * Parses the gravity from the TiledMap file.
      */
     private float getMapGravity()
@@ -109,7 +167,7 @@ public class Level extends TiledMap
     }
         
     /*
-     * Creates layers from the Tiled Map.
+     * Creates Tile layers (not object layers) from the Tiled Map.
      */
     private void createLayers() throws SlickException
     {
@@ -122,8 +180,13 @@ public class Level extends TiledMap
     	 * All layers except collision will have a drawable
     	 * element.
     	 */
-    	for(int i = 0; i < getLayerCount(); ++i)
+    	for(int i= 0; i < getLayerCount(); ++i)
     	{
+    		if(i < objectGroups.size())
+    		{
+    			// parse the object groups at the same time, 
+    			// so they are added to the 
+    		}
     		if(i != collisionLayerIndex)
     		{
     			drawableLevelLayers.add(
@@ -141,7 +204,7 @@ public class Level extends TiledMap
 		{
 			return new StaticSceneryLayer(ml);
 		}
-		else if(ml.name.equalsIgnoreCase("elevator"))
+		else if(ml.name.startsWith("elevator"))
     	{
 			UpdatableLayer ul = new ActiveSceneryLayer(ml);
     		updatableLayers.add(ul);

@@ -1,5 +1,11 @@
 package org.diediedie.actors;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
 import org.diediedie.Level;
 import org.diediedie.Tile;
 import org.newdawn.slick.Graphics;
@@ -12,6 +18,9 @@ public abstract class BaseLevelObject implements LevelObject
 	
 	protected Tile tile;
 	
+	/*
+	 * Basic constructor (read: old)
+	 */
 	public BaseLevelObject(Level l, Tile t)
 	{
 		setLevel(l);
@@ -20,8 +29,7 @@ public abstract class BaseLevelObject implements LevelObject
 	
 	@Override
 	public void update() 
-	{
-		// implemented in subclass
+	{// implemented in subclass	
 	}
 
 	@Override
@@ -58,5 +66,11 @@ public abstract class BaseLevelObject implements LevelObject
 	public void setY(float y) 
 	{
 		yPos = y;		
+	}
+	
+	@Override
+	public void setX(float x)
+	{
+		xPos = x;
 	}
 }

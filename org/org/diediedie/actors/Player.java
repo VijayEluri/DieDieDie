@@ -708,18 +708,6 @@ public class Player extends BaseLevelObject implements Actor,
 		}
 	}
     
-    @Override
-    public void setX(float x)
-    {
-        xPos = x;
-    }
-    
-    @Override
-    public void setY(float y)
-    {
-        yPos = y;
-    }
-    
     private void decelerate()
     {
         accelX -= ACCEL_RATE;
