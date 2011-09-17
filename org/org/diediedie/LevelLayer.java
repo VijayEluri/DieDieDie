@@ -1,9 +1,13 @@
 package org.diediedie;
 
+import java.util.List;
+
+import org.diediedie.actors.LevelObject;
+import org.newdawn.slick.Graphics;
+
 public interface LevelLayer
 {
-	/*
-	 * Meant to be empty. This is just a handle into the layer
-	 * classes on a level so they can be iterated.
-	 */
+	public String getName();
+	void draw(Graphics g);
+	public void setLevelObjects(List<LevelObject> l);
 }

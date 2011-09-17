@@ -61,10 +61,11 @@ public class Level extends TiledMap
     private String name;
     private NavMesh navMesh;
     private final String VIS_STR = "isvisible", TRUE_STR = "true";
-    private MapLayer collisionLayer;
-    private List<DrawableLayer> drawableLevelLayers;
+    
+    private List<LevelLayer> drawableLayers;
     private List<UpdatableLayer> updatableLayers;
-    private List<ObjectLayer> objectLayers;
+    private MapLayer collisionLayer;
+    
     
     //private List<ArrowBouncer> bouncers;    
     private PlayerLayer playerLayer;
@@ -95,32 +96,51 @@ public class Level extends TiledMap
         
         bouncers = new ArrayList<ArrowBouncer>();
         parseObjectLayers();
-        
     }   
     
     /*
      * Parses only the object layers from the map
      */
-    private void parseObjectLayers() throws IllegalAccessException 
+    private void parseObjectLayers()
     {
-    	objectLayers = new ArrayList<ObjectLayer>();
-    	
+    	List<LevelObject> objs;
     	for(Object o : objectGroups)
         {
     		ObjectGroup og = (ObjectGroup) o;
-        	ObjectLayer ol = createObjectLayer(og);
-        	objectLayers.add(ol);	
+    		
+    		System.out.println(
+    			"\nProperties of group : "
+    			+ og.props + "\n");
+    		
+    		assert og.props.containsKey("preceeds");
+    		objs = createLayerObjects(og);	
+    		assert objs != null;
+    		attachObjectsToLayer(objs, (String)og.props.get("preceeds"));
         }
-    	System.out.println("adding " + objectLayers.size() + " objectLayer[s]"
-    			+ " to the player layer");
-    	playerLayer.setObjectLayers(objectLayers);
 	}
     
-    /*
-     * Creates an ObjectLayer from a TiledMap.ObjectGroup,
-     * including the internal GroupObjects.
+    private void attachObjectsToLayer(List<LevelObject> objs, 
+    								  String layerName) 
+    {
+    	assert layerName != null;
+    	System.out.println("attached objects to layer :" 
+    			+ objs + " -> " + layerName);
+		for(LevelLayer l : drawableLayers)
+		{
+			
+			if(l.getName().equals(layerName))
+			{
+				l.setLevelObjects(objs);
+				return;
+			}
+		}
+	}
+
+	/*
+     * Creates LevelObjects from a TiledMap.ObjectGroup,
+     * and attaches them to a Drawable layer.
      */
-    private ObjectLayer createObjectLayer(ObjectGroup og) 
+    private List<LevelObject> createLayerObjects(ObjectGroup og) 
     {
     	System.out.println("ObjectGroup : index " + og.index +" : " + og.name);
     	
@@ -129,7 +149,8 @@ public class Level extends TiledMap
     	
     	for(Object o2 : og.objects)
     	{
-    		GroupObject go = (GroupObject) o2;
+    		GroupObject go = (GroupObject)o2;
+    		
     		go.props.put("type", go.type);
     		go.props.put("index", go.index);
     		go.props.put("name", go.name);
@@ -138,15 +159,16 @@ public class Level extends TiledMap
     		go.props.put("x", go.x);
     		go.props.put("y", go.y);
     		
+    		// Add all layer-level properties as well
+    		go.props.putAll(og.props);
+    	
+    		System.out.println("\nProperties : " + go.props);
     		LevelObject lo = LevelObjectFactory.createObject(go.props);
     		assert lo != null;
     		objs.add(lo);
     	}
-		return new ObjectLayer(og.index, og.name, objs);
+		return objs;
     }
-    
-  
-    
     
 	/*
      * Parses the gravity from the TiledMap file.
@@ -173,7 +195,7 @@ public class Level extends TiledMap
     {
     	int collisionLayerIndex = getLayerIndex("collision");
     	collisionLayer = createMapLayer(collisionLayerIndex);
-    	drawableLevelLayers = new ArrayList<DrawableLayer>();
+    	drawableLayers = new ArrayList<LevelLayer>();
     	updatableLayers =  new ArrayList<UpdatableLayer>();
     	
     	/*
@@ -182,17 +204,21 @@ public class Level extends TiledMap
     	 */
     	for(int i= 0; i < getLayerCount(); ++i)
     	{
-    		if(i < objectGroups.size())
-    		{
-    			// parse the object groups at the same time, 
-    			// so they are added to the 
-    		}
     		if(i != collisionLayerIndex)
     		{
-    			drawableLevelLayers.add(
-    				(DrawableLayer)createLevelLayer(createMapLayer(i)));
+    			drawableLayers.add(createLevelLayer(
+    								 createMapLayer(i)));
     		}
     	}
+
+		System.out.println("\nDrawing Order");
+		
+    	for(LevelLayer d : drawableLayers)
+    	{
+    		System.out.println("  " + d.getName());
+        	
+    	}
+		System.out.println("\n");
     }
     
     /*
@@ -327,8 +353,6 @@ public class Level extends TiledMap
     	return null;
     }
     
-    
-    
     /**
      * Returns the name of this Level.
      */ 
@@ -379,7 +403,7 @@ public class Level extends TiledMap
      */
 	public void render(int x, int y, Graphics g) throws SlickException
     {
-       for(DrawableLayer l : drawableLevelLayers)
+       for(LevelLayer l : drawableLayers)
        {
     	   l.draw(g);
        }

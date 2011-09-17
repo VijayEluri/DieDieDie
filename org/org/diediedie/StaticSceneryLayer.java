@@ -1,19 +1,17 @@
 package org.diediedie;
 
-import org.newdawn.slick.SlickException;
 
 /*
  * Drawable layer that does not move or change.
  * 
- * Drawing implementation is in BaseSceneryLayer.
+ * The implementation for drawing is in BaseLayer.
+ * 
+ * This is a holder class for now, awaiting development :)
  */
-public class StaticSceneryLayer extends BaseSceneryLayer
+public class StaticSceneryLayer extends BaseLayer
 {
-	MapLayer mapLayer;
-	
-	public StaticSceneryLayer(MapLayer ml) throws SlickException
+	public StaticSceneryLayer(MapLayer ml) 
 	{
 		super(ml);
-		mapLayer = ml;
 	}
 }

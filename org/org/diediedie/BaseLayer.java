@@ -1,5 +1,9 @@
 package org.diediedie;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.diediedie.actors.LevelObject;
 import org.newdawn.slick.Graphics;
 
 
@@ -7,20 +11,48 @@ import org.newdawn.slick.Graphics;
  * Optional base class that implements basic
  * routines most sub-classes will need. 
  */
-public abstract class BaseSceneryLayer implements DrawableLayer
+public abstract class BaseLayer implements LevelLayer
 {
 	protected Graphics graphics;
 	protected MapLayer mapLayer;
 	protected int drawMode;
-	protected final String DRAW_MODE_STRING = "drawmode";	
+	protected final String DRAW_MODE_STRING = "drawmode";
+	private List<LevelObject> objects;	
 	
-	public BaseSceneryLayer(MapLayer ml) 
+	public BaseLayer(MapLayer ml) 
 	{
 		mapLayer = ml;
 		parseGraphicsMode();
+		objects = new ArrayList<LevelObject>();
 	}
 	
-	protected void parseGraphicsMode() 
+	@Override
+	public String getName()
+	{
+		return mapLayer.name;
+	}
+	
+	protected void drawObjects(Graphics g)
+	{
+		for(LevelObject l : objects)
+		{
+			l.draw(g);
+		}
+	}
+	
+	public void draw(Graphics g)
+	{
+		drawScenery(g);
+		drawObjects(g);
+	}
+	
+	public void setLevelObjects(List<LevelObject> l)
+	{
+		objects = l;
+		//assert objects != null;
+	}
+	
+	private void parseGraphicsMode() 
 	{
 		assert mapLayer != null;
 		String drawStr = mapLayer.level.getLayerProperty(
@@ -61,7 +93,11 @@ public abstract class BaseSceneryLayer implements DrawableLayer
 		}	
 	}
 	
-	public void draw(Graphics g) 
+	/*
+	 * Draws the content of the TiledMap Layer
+	 * in the draw mode parsed from the map.
+	 */
+	protected void drawScenery(Graphics g) 
 	{
 		g.setDrawMode(drawMode);
 		mapLayer.level.render(0, 0, mapLayer.index);

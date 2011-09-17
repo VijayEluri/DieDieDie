@@ -61,18 +61,21 @@
   <object name="radio2" type="Radio" x="240" y="672" width="48" height="64">
    <properties>
     <property name="imagepath" value="radio.png"/>
+    <property name="range" value="8"/>
     <property name="visColor" value="red"/>
    </properties>
   </object>
   <object name="radio1" type="Radio" x="464" y="304" width="48" height="64">
    <properties>
     <property name="imagepath" value="radio.png"/>
+    <property name="range" value="8"/>
     <property name="visColor" value="blue"/>
    </properties>
   </object>
   <object name="radio3" type="Radio" x="640" y="672" width="48" height="64">
    <properties>
     <property name="imagepath" value="radio.png"/>
+    <property name="range" value="8"/>
     <property name="visColor" value="green"/>
    </properties>
   </object>

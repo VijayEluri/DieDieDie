@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Bluey;
 import org.diediedie.actors.Enemy;
+import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Graphics;
@@ -17,58 +18,27 @@ import org.newdawn.slick.Graphics;
  * 
  * (Doesn't include 'interactable scenery' such as Elevators.
  */
-public class PlayerLayer implements DrawableLayer, UpdatableLayer
+public class PlayerLayer extends UpdatableLayer
 {
-	protected MapLayer mapLayer;
-	
-	protected List<ObjectLayer> objectLayers;
 	protected List<Enemy> enemiesLiving;
 	protected List<Actor> npcs;
 	protected List<ArrowBouncer> bouncers;
-
 	protected Tile startTile;
-
 	protected List<Tile> exitTiles; 
-
 	protected Player player;
 	
 	public PlayerLayer(MapLayer ml)
 	{
-		mapLayer = ml;
+		super(ml);
 		assert !mapLayer.visible;
 		parsePlayerLayerTiles();
 	}
 	
-	public void setObjectLayers(List<ObjectLayer> objLayers)
-	{
-		objectLayers = objLayers;
-	}
-	
-	/**
-     * Draw using Graphics object g any visible enemiesLiving. 
-     */ 
-    private void drawEnemies(Graphics g)
-    {
-        for(Enemy e : enemiesLiving)
-        {
-            e.draw(g);
-        }
-    }
-    
 	@Override
 	public void update() 
 	{
 		updateObjects();
 		player.update();	
-		updateEnemies();
-	}
-
-	private void updateObjects() 
-	{
-		for(ObjectLayer o : objectLayers)
-		{
-			o.update();
-		}
 	}
 
 	private void drawPlayer(Graphics g)
@@ -77,22 +47,18 @@ public class PlayerLayer implements DrawableLayer, UpdatableLayer
 	}
 
 	@Override
-	public void draw(/*int x, int y,*/ Graphics g) 
+	public void draw(Graphics g) 
 	{
-		drawObjectLayers(g);
-		drawEnemies(g);
+		super.draw(g);
 		drawPlayer(g);
+		// TODO drawEnemies...
 	}
 	
-	private void drawObjectLayers(Graphics g)
+	@Override
+	public String getName()
 	{
-		for(ObjectLayer o : objectLayers)
-		{
-			o.draw(g);
-		}
+		return "player";
 	}
-
-
 	/*
 	 * Returns only the enemies still living on this layer.
 	 */
@@ -147,4 +113,6 @@ public class PlayerLayer implements DrawableLayer, UpdatableLayer
             }
         }
     }
+
+
 }

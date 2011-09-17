@@ -76,11 +76,11 @@ public class Elevator extends BaseLevelObject implements Callable
 	public Elevator(Level map, Tile t)
 	{
 		super(map, t);
+		
 		/*
     	 * Get the elevator speed, distance and direction to travel 
     	 * from the elevator tile. 
     	 */
-		
 		String dirStr = (String)map.getTileProperty(
 				t.id, "direction", null);
 		
