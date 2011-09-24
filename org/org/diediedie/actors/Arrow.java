@@ -97,11 +97,11 @@ public class Arrow extends Object implements Projectile
     }
     
  
-    @Override
+   /*
     public float getMoveSpeed()
     {
     	return -1.0f;
-    }
+    }*/
     
     
     /**
@@ -556,6 +556,12 @@ public class Arrow extends Object implements Projectile
 	public void setOutOfBounds(boolean b) 
 	{
 		outOfBounds = b;
+	}
+
+	@Override
+	public String getName() 
+	{
+		return "Arrow : " + getX() + " , " + getY();
 	}
 }
 

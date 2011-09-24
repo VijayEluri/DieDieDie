@@ -9,5 +9,6 @@ public interface LevelLayer
 {
 	public String getName();
 	void draw(Graphics g);
-	public void setLevelObjects(List<LevelObject> l);
+	public void setObjects(List<LevelObject> l);
+	public List<LevelObject> getObjects();
 }

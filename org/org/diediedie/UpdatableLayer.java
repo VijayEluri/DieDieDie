@@ -9,7 +9,7 @@ import org.newdawn.slick.Graphics;
 /*
  * Contains objects that can be updated and drawn.
  */
-public abstract class UpdatableLayer extends BaseLayer
+public class UpdatableLayer extends BaseLayer
 {
 	protected List<LevelObject> objects;
 	
@@ -30,5 +30,8 @@ public abstract class UpdatableLayer extends BaseLayer
 		{
 			l.update();
 		}
-	}	
+	}
+
+
+	
 }

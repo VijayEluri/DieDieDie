@@ -161,4 +161,11 @@ public class NegativeSpace implements Drawable
 	{
 		centre = new Point(shape.getCenterX(), shape.getCenterY());
 	}
+
+	@Override
+	public String getName() 
+	{
+		return "NegativeSpace : " + tiles;
+	}
 }
+	

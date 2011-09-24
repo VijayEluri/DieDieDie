@@ -146,7 +146,6 @@ public class Player extends BaseLevelObject implements Actor,
      */ 
     public Player(Level l, Tile t)
     {
-    	super(l, t);
     	startTile = t;
     	setLevel(l);
         setUpStartPosition();
@@ -225,11 +224,11 @@ public class Player extends BaseLevelObject implements Actor,
         return getLevel().getActorZone(this);
     }
     
-    @Override
+    /*@Override
     public float getMoveSpeed()
     {
         return MOVE_SPEED;
-    }
+    }*/
     
     /**
      * Links the game's InputProvider to the Player obkect

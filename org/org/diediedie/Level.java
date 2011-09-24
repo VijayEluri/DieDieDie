@@ -21,10 +21,15 @@ import java.io.*;
 import org.diediedie.NavMesh;
 import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Actor;
+import org.diediedie.actors.Elevator;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.Player;
 import org.diediedie.actors.Projectile;
+import org.diediedie.actors.Radio;
+import org.diediedie.actors.SignalReceiver;
+import org.diediedie.actors.Switch;
+import org.diediedie.actors.Transmitter;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.tiled.Layer;
@@ -37,11 +42,19 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.sound.midi.Receiver;
+
 /**
  * A single level...
  */ 
 public class Level extends TiledMap
 {
+	enum ObjectType 
+	{
+		Radio, 
+		Elevator, 
+		Switch,
+	}
     // where the exit of the level is
     public float exitX, exitY;
     
@@ -51,6 +64,8 @@ public class Level extends TiledMap
     // number of pixels from the player's current position to check a
     // tile for possible collision
 	private static final int TILE_COLLISION_CHECK_DIST = 20;
+
+	private static final String LevelObjectFactory = null;
     
     // other way with gravity because gravity is added to the Actors' 
     // ySpeed
@@ -58,22 +73,40 @@ public class Level extends TiledMap
     
     // initial direction player faces 
     public final Direction playerFacing;
+    
+    // the name of this level
     private String name;
+    
+    // a navigable mesh for AI-controlled actors.
     private NavMesh navMesh;
     private final String VIS_STR = "isvisible", TRUE_STR = "true";
     
-    private List<LevelLayer> drawableLayers;
-    private List<UpdatableLayer> updatableLayers;
+    /*
+     * Level Layers
+     */
+    //private List<LevelLayer> drawableLayers;
+    //private List<UpdatableLayer> updatableLayers;
+    private List<UpdatableLayer> levelLayers;
     private MapLayer collisionLayer;
-    
     
     //private List<ArrowBouncer> bouncers;    
     private PlayerLayer playerLayer;
     
     private Tile playerTile = null;
-	private int levelHeight;
+    
+    private int levelHeight;
 	private int levelWidth;
+	
+	/*
+	 * Some objects are added to lists of their type
+	 * as well as their parent UpdatableLayer for fast access
+	 * during play.
+	 */
 	private List<ArrowBouncer> bouncers;
+	private ArrayList<Transmitter> transmitters;
+	private ArrayList<SignalReceiver> signalReceivers;
+
+
 
     /**
      * Create a Level
@@ -93,17 +126,18 @@ public class Level extends TiledMap
                            + this.levelHeight + " gravity " + gravity);
         createLayers();
         createNavMesh();
-        
         bouncers = new ArrayList<ArrowBouncer>();
         parseObjectLayers();
     }   
     
     /*
-     * Parses only the object layers from the map
+     * Parses only the object layers from the map and
+     * adds them to their parent layers.
      */
     private void parseObjectLayers()
     {
     	List<LevelObject> objs;
+    	
     	for(Object o : objectGroups)
         {
     		ObjectGroup og = (ObjectGroup) o;
@@ -112,25 +146,99 @@ public class Level extends TiledMap
     			"\nProperties of group : "
     			+ og.props + "\n");
     		
-    		assert og.props.containsKey("preceeds");
+    		assert og.props.containsKey("parent");
     		objs = createLayerObjects(og);	
     		assert objs != null;
-    		attachObjectsToLayer(objs, (String)og.props.get("preceeds"));
+    		attachObjectsToLayer(objs, (String)og.props.get("parent"));
         }
+    	sortAndConnectObjects();
 	}
     
-    private void attachObjectsToLayer(List<LevelObject> objs, 
+    /*
+     * Sorts the LevelObjects in all layers on this Level 
+     * into Lists based on their exact type for ease of
+     * access during game execution.
+     * 
+     * Hooks up Transmitters and SignalReceivers after all
+     * objects have been parsed from the TiledMap.
+     * 
+     * (This can't be done during initial parsing because
+     * the order of object creation is unknown)
+     */
+    private void sortAndConnectObjects() 
+    {
+    	System.out.println(
+    			"sorting and connecting objects");
+    	for(LevelLayer ll : levelLayers)
+    	{
+    		for(LevelObject lo : ll.getObjects())
+    		{
+    			System.out.println("\t" + lo.getName());
+    			
+    			if(lo instanceof Transmitter)
+    			{
+    				System.out.println("found a Transmitter");
+    				
+    				
+    				
+    				for(String name  :  ( (Transmitter) lo).getTargetNames())
+    				{
+    					assert name != null;
+    					SignalReceiver sr = findSignalReceiver(name);
+    					
+    					assert sr != null;
+    					signalReceivers.add(sr);
+    					
+    					
+    					System.out.println("found SignalReiver '" + 
+    							sr.getName() + "', attaching to " + lo.getName());
+    				}
+     			}
+    		}
+    	}
+	}
+    
+    
+    /*
+     * Attempts to return the SignalReceiver object on the Level
+     * from the object's name.
+     */
+    private SignalReceiver findSignalReceiver(String name)
+    {
+    	System.out.println(
+				"findSignalReceiver: looking for " + name);
+    	for(SignalReceiver sr : signalReceivers)
+    	{
+    		if(name.equals(sr.getName()))
+    		{
+    			return sr;
+    		}
+    	}
+    	System.out.println("Failed to find " + name);
+    	return null;
+    }
+    
+	private void attachObjectsToLayer(List<LevelObject> objs, 
     								  String layerName) 
     {
+		assert objs != null;
     	assert layerName != null;
     	System.out.println("attached objects to layer :" 
     			+ objs + " -> " + layerName);
-		for(LevelLayer l : drawableLayers)
+    	
+		for(LevelLayer l : levelLayers)
 		{
-			
 			if(l.getName().equals(layerName))
 			{
-				l.setLevelObjects(objs);
+				System.out.println(
+					"attaching layer " + layerName + "'s " +
+					+ objs.size() + " objects");
+				for(LevelObject o : objs)
+				{
+					System.out.println(
+						"    LevelObject : " + o.getName());
+				}
+				l.setObjects(objs);
 				return;
 			}
 		}
@@ -163,10 +271,12 @@ public class Level extends TiledMap
     		go.props.putAll(og.props);
     	
     		System.out.println("\nProperties : " + go.props);
-    		LevelObject lo = LevelObjectFactory.createObject(go.props);
+    		LevelObject lo = createObject(go.props);
     		assert lo != null;
+    		lo.setLevel(this);
     		objs.add(lo);
     	}
+    	
 		return objs;
     }
     
@@ -195,8 +305,8 @@ public class Level extends TiledMap
     {
     	int collisionLayerIndex = getLayerIndex("collision");
     	collisionLayer = createMapLayer(collisionLayerIndex);
-    	drawableLayers = new ArrayList<LevelLayer>();
-    	updatableLayers =  new ArrayList<UpdatableLayer>();
+    	
+    	levelLayers =  new ArrayList<UpdatableLayer>();
     	
     	/*
     	 * All layers except collision will have a drawable
@@ -206,14 +316,13 @@ public class Level extends TiledMap
     	{
     		if(i != collisionLayerIndex)
     		{
-    			drawableLayers.add(createLevelLayer(
-    								 createMapLayer(i)));
+    			createLevelLayer(createMapLayer(i));
     		}
     	}
 
 		System.out.println("\nDrawing Order");
 		
-    	for(LevelLayer d : drawableLayers)
+    	for(LevelLayer d : levelLayers)
     	{
     		System.out.println("  " + d.getName());
         	
@@ -223,27 +332,27 @@ public class Level extends TiledMap
     
     /*
      * Extracts the layer's content from the TiledMap.
+     * 
+     * Adds to the drawable / updatable layers lists.
      */
-	private LevelLayer createLevelLayer(MapLayer ml) throws SlickException 
+	private void createLevelLayer(MapLayer ml) throws SlickException 
     {
-		if(ml.visible)
+		/*if(ml.visible)
 		{
 			return new StaticSceneryLayer(ml);
 		}
-		else if(ml.name.startsWith("elevator"))
-    	{
-			UpdatableLayer ul = new ActiveSceneryLayer(ml);
-    		updatableLayers.add(ul);
-    		return ul;
-    	}
-    	else if(ml.name.equalsIgnoreCase("player"))
+		else*/ 
+		
+    	if(ml.name.equalsIgnoreCase("player"))
     	{
     		PlayerLayer pl = new PlayerLayer(ml);
     		setPlayerLayer(pl);
-    		updatableLayers.add(pl);
-    		return getPlayerLayer();
+    		levelLayers.add(pl);
     	}
-		return null;
+    	else
+    	{
+    		levelLayers.add(new UpdatableLayer(ml));
+    	}
 	}
       
     private void calculateLevelDimensions()
@@ -329,7 +438,7 @@ public class Level extends TiledMap
     
     private void updateLayers() 
     {
-    	for(UpdatableLayer ul : updatableLayers)
+    	for(UpdatableLayer ul : levelLayers)
     	{
     		ul.update();
     	}
@@ -395,15 +504,10 @@ public class Level extends TiledMap
     
     /*
      * Draws the Level map, the Player, Enemies and objects. 
-     * 
-     * To use transparency the Level's TiledMap layout must 
-     * include a 'player' layer which is rendered in between 
-     * the background layers.  Not including a player layour
-     * will cause the game to exit at init stage.
      */
 	public void render(int x, int y, Graphics g) throws SlickException
     {
-       for(LevelLayer l : drawableLayers)
+       for(LevelLayer l : levelLayers)
        {
     	   l.draw(g);
        }
@@ -467,7 +571,6 @@ public class Level extends TiledMap
 		
 		final Shape rect = m.getCollisionBox();
 		
-
 		for(Tile t : collisionLayer.tiles)
 		{
 			boolean closeX = false;
@@ -536,6 +639,51 @@ public class Level extends TiledMap
 	{
 		this.playerLayer = playerLayer;
 	}
-	
+
+	/*
+	 * Creates a LevelObject based on the properties object.
+	 * 
+	 * Some objects are added to specific lists so they can
+	 * be queried quickly during the game.
+	 */
+	public LevelObject createObject(Properties props) 
+	{
+		if(transmitters == null)
+		{
+			transmitters = new ArrayList<Transmitter>();
+			signalReceivers = new ArrayList<SignalReceiver>();
+		}
+		if(signalReceivers == null)
+		{
+			
+		}
+		
+		System.out.println("\nLOF.createObject -> " + props);
+		
+		if(props.get("type").equals(ObjectType.Radio.name()))
+		{
+			Radio r = new Radio(props);
+			System.out.println("\t^ LevelObjectFactory found a radio");
+			transmitters.add(r);
+			signalReceivers.add(r);
+			return r; 
+		}
+		else if(props.get("type").equals(ObjectType.Elevator.name()))
+		{
+			Elevator e = new Elevator(props);
+			signalReceivers.add(e);
+			return e;
+		}
+		else if(props.get("type").equals(ObjectType.Switch.name()))
+		{
+			Switch s = new Switch(props);
+			transmitters.add(s);
+			return s;
+		}
+		System.out.println(
+			"Couldn't determine type of LevelObject.");
+		return null;
+	}
+
 	
 }

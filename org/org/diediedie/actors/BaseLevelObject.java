@@ -1,43 +1,75 @@
 package org.diediedie.actors;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
-
 import org.diediedie.Level;
-import org.diediedie.Tile;
+import org.diediedie.actors.tools.AnimCreator;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
+/*
+ * An optional LevelObjet implementation which extracts the position,
+ * image and name.
+ */
 public abstract class BaseLevelObject implements LevelObject 
 {
 	protected Level level;
 	protected float xPos,
 					yPos;
-	
-	protected Tile tile;
-	
+	protected Image image;
+	protected String name;
+	protected Properties props;
 	/*
-	 * Basic constructor (read: old)
+	 * Extracts basic properties from the Properties 
+	 * object parsed form the TiledMap's LayerObject
 	 */
-	public BaseLevelObject(Level l, Tile t)
+	protected void parseBaseObject(Properties p)
 	{
-		setLevel(l);
-		tile = t;
+		props = p;
+		xPos = (Integer) props.get("x");
+		yPos = (Integer) props.get("y");
+		getImage(props);
+		assert image != null;
+		name = (String) props.get("name");
+		assert name != null;
+		System.out.println("parseBaseObject : name : " + name);
+	}
+	
+	@Override
+	public String getName()
+	{
+		return name;
 	}
 	
 	@Override
 	public void update() 
-	{// implemented in subclass	
+	{
+		// subclass
 	}
 
+	
+	/*
+	 * Very basic 'draw the image' method
+	 */
 	@Override
 	public void draw(Graphics g) 
 	{
-		// implemented in subclass
+		g.drawImage(image, getX(), getY());
 	}
-
+	
+	/*
+	 * Convenience function for extracting the image
+	 * from the parsed imagepth. 
+	 * 
+	 * NOTE! No good for animated objects!
+	 */
+	protected void getImage(Properties p)
+	{
+		image = AnimCreator.loadImage(
+				"data/" + (String)p.get("imagepath"));
+		assert image != null;
+	}
+	
 	@Override
 	public void setLevel(Level l) 
 	{

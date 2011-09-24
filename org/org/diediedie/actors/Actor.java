@@ -34,7 +34,7 @@ public interface Actor extends MovableObject
     void setCanJump(boolean b);
     void startJump();
     void setFacing(Direction d);
-	void resetAccelX();
+
 	int getWidth();
     int getHeight();
     public Rectangle getCollisionBox();

@@ -6,14 +6,11 @@ import org.newdawn.slick.util.pathfinding.Mover;
 /**
  * Super-interface for all movable LevelObjects.
  */
-public interface MovableObject extends LevelObject, Mover
+public interface MovableObject extends LevelObject
 {
 	boolean isOutOfBounds();
 	void setOutOfBounds(boolean b);
 	
-	
-	
-    float getMoveSpeed();    
 	float getXSpeed();
 	float getYSpeed();
   

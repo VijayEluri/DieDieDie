@@ -142,4 +142,11 @@ public class ArrowBouncer implements LevelObject, Bounded
 
 	@Override
 	public void setY(float y) {}
+
+	@Override
+	public String getName()
+	{
+		
+		return "ArrowBouncer : " + rect;
+	}
 }

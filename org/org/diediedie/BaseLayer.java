@@ -27,6 +27,11 @@ public abstract class BaseLayer implements LevelLayer
 	}
 	
 	@Override
+	public List<LevelObject> getObjects()
+	{
+		return objects;
+	}	
+	@Override
 	public String getName()
 	{
 		return mapLayer.name;
@@ -46,10 +51,10 @@ public abstract class BaseLayer implements LevelLayer
 		drawObjects(g);
 	}
 	
-	public void setLevelObjects(List<LevelObject> l)
+	public void setObjects(List<LevelObject> l)
 	{
 		objects = l;
-		//assert objects != null;
+		assert objects != null;
 	}
 	
 	private void parseGraphicsMode() 

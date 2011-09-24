@@ -270,42 +270,18 @@ public class Bluey extends Object implements Enemy, Observer
 	{
 		// do nothing for now
 	}
-
+/*
 	@Override
 	public float getMoveSpeed()
 	{
 		return moveSpeed;
 	}
-
+*/
 	
 
 	@Override
 	public void setYSpeed(float f) 
 	{
-		/*if(f == 0)
-		{
-			System.out.println(
-				"\n" + "setYSpeed() was sent JUMP_SPEED");
-			System.out.println("stack trace follows:");
-			StackTraceElement[] stackTraceElements = 
-				Thread.currentThread().getStackTrace();
-			
-			int i = 0;
-			
-			for(StackTraceElement s : stackTraceElements)
-			{
-				if(i > 0)
-				{
-					System.out.println("\t" + s);
-				}
-				else
-				{
-					i++;
-				}
-			}
-			//System.exit(-1);
-			
-		}*/
 		ySpeed = f;
 	}
 	
@@ -761,6 +737,15 @@ public class Bluey extends Object implements Enemy, Observer
 	{
 		outOfBounds = b;
 		
+	}
+
+
+	@Override
+	public String getName() 
+	{
+		
+		return "Bluey " + hashCode() +
+			" : " + getX() + ", " + getY();
 	}
 
 }

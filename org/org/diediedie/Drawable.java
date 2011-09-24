@@ -24,4 +24,5 @@ import org.diediedie.Level;
 public interface Drawable
 {
     void draw(Graphics g);
+    String getName();
 }

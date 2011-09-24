@@ -1,5 +1,8 @@
 package org.diediedie.actors;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.diediedie.Level;
@@ -13,38 +16,40 @@ import org.newdawn.slick.Image;
  * A Radio used for two-way communication. Both
  * transmissions occur simultaneously
  */
-public class Radio implements LevelObject, Transmitter		   
+public class Radio extends BaseLevelObject implements Transmitter, 
+													   SignalReceiver	   
 {
 	public enum Color
 	{
 		Red, Blue, Green
 	}
 	
-	protected Image image = null;
-	
-	protected float x, y;
-	
-	protected Level level;
-	
 	protected Radio.Color visColor;
-	
-	
+
+	protected Transmitter source;
+	protected List<SignalReceiver> receivers;
+	protected List<String> targetNames;
 	
 	public Radio(Properties p) 
 	{
 		// perhaps refactor some of this into BaseLevelObject
-		System.out.println("Creating Radio " + p);
-		x = (Integer) p.get("x");
-		y = (Integer) p.get("y");
-		
-		System.out.println("position : " + x + ", " + y);
+		System.out.println("Creating Radio "/*+ p*/);
+		parseBaseObject(p);
+		System.out.println("position : " + getX() + ", " + getY());
 		visColor = getVisColor((String)p.get("visColor"));
 		System.out.println("Radio.Color : " + visColor);
-		image = AnimCreator.loadImage("data/" + (String)p.get("imagepath"));
-		assert image != null;
-		
+		receivers = new ArrayList<SignalReceiver>();
+		getTargetString();
 	}
 	
+	private void getTargetString()
+	{
+		String[] names = ((String) props.get("targets")).split(" ");
+		assert names != null;
+		targetNames = Arrays.asList(names);
+		assert targetNames != null;
+	}
+
 	private Radio.Color getVisColor(String s)
 	{
 		for(Radio.Color c: Radio.Color.values())
@@ -60,29 +65,8 @@ public class Radio implements LevelObject, Transmitter
 	@Override
 	public void draw(Graphics g)
 	{
-		//System.out.println("draw radio " + visColor);
-		g.drawImage(image, x, y);
-	}
-
-	@Override
-	public void transmit(Signal s) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void receiveTransmission(Signal s) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void connect(Transmitter t) 
-	{
-		// TODO Auto-generated method stub
-		
+		super.draw(g);
+		// draw visColor on top?
 	}
 
 	@Override
@@ -92,39 +76,31 @@ public class Radio implements LevelObject, Transmitter
 		
 	}
 
+
 	@Override
-	public void setLevel(Level l)
+	public void receive(Signal s) 
 	{
-		level = l;
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public Level getLevel()
+	public void transmit(Signal s, List<SignalReceiver> srs) 
 	{
-		return level;
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public float getX() 
+	public List<String> getTargetNames()
 	{
-		return x;
+		return targetNames;
 	}
-
+	
 	@Override
-	public float getY() 
+	public void addTarget(SignalReceiver sr)
 	{
-		return y;
+		receivers.add(sr);
 	}
-
-	@Override
-	public void setX(float x) 
-	{
-		this.x = x;
-	}
-
-	@Override
-	public void setY(float y) 
-	{
-		this.y = y;
-	}
+	
 }

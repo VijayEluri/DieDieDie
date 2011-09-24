@@ -1,8 +1,6 @@
 package org.diediedie.actors;
 
-public interface Signal 
+public enum Signal 
 {
-	// TODO 
-	
-	SignalType getType();
+	Up, Down, Incinerate;
 }

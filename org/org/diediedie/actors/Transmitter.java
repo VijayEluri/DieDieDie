@@ -1,18 +1,12 @@
 package org.diediedie.actors;
 
+import java.util.List;
+
 /*
- * A LevelObject that can send and receive Signals.
- * 
- * Must be connected to at least one other Transmitter 
- * to be functional.
+ * A LevelObject that can send Signals to one or more
+ * SignalReceivers.
  */
-public interface Transmitter extends LevelObject
+public interface Transmitter extends Targetable
 {
-	void transmit(Signal s);
-	void receiveTransmission(Signal s);
-	
-	/*
-	 * Connects two transmitters together
-	 */
-	void connect(Transmitter t);
+	void transmit(Signal s, List<SignalReceiver> srs);
 }
