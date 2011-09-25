@@ -65,6 +65,7 @@ public class Radio extends BaseLevelObject implements Transmitter,
 	@Override
 	public void draw(Graphics g)
 	{
+		//System.out.println("drawing radio :" + name);
 		super.draw(g);
 		// draw visColor on top?
 	}

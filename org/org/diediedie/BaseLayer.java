@@ -39,6 +39,7 @@ public abstract class BaseLayer implements LevelLayer
 	
 	protected void drawObjects(Graphics g)
 	{
+		//System.out.println("BaseLayer: drawing objects for " + getName());
 		for(LevelObject l : objects)
 		{
 			l.draw(g);
@@ -62,6 +63,7 @@ public abstract class BaseLayer implements LevelLayer
 		assert mapLayer != null;
 		String drawStr = mapLayer.level.getLayerProperty(
 				mapLayer.index, DRAW_MODE_STRING, null);
+		
 		System.out.println("parseGraphicsMode layer " 
 				+ mapLayer.index + ", " + drawStr);
 		

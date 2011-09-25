@@ -177,21 +177,18 @@ public class Level extends TiledMap
     			
     			if(lo instanceof Transmitter)
     			{
-    				System.out.println("found a Transmitter");
-    				
-    				
+    				System.out.println("  found a Transmitter");
     				
     				for(String name  :  ( (Transmitter) lo).getTargetNames())
     				{
     					assert name != null;
     					SignalReceiver sr = findSignalReceiver(name);
-    					
     					assert sr != null;
-    					signalReceivers.add(sr);
     					
     					
-    					System.out.println("found SignalReiver '" + 
+    					System.out.println("    found SignalReceiver '" + 
     							sr.getName() + "', attaching to " + lo.getName());
+    					((Transmitter) lo).addTarget(sr);
     				}
      			}
     		}
@@ -223,9 +220,9 @@ public class Level extends TiledMap
     {
 		assert objs != null;
     	assert layerName != null;
-    	System.out.println("attached objects to layer :" 
+    	/*System.out.println("attaching objects to layer :" 
     			+ objs + " -> " + layerName);
-    	
+    	*/
 		for(LevelLayer l : levelLayers)
 		{
 			if(l.getName().equals(layerName))
@@ -238,10 +235,12 @@ public class Level extends TiledMap
 					System.out.println(
 						"    LevelObject : " + o.getName());
 				}
-				l.setObjects(objs);
+				l.getObjects().addAll(objs);
 				return;
 			}
 		}
+		System.out.println("Failed to find layer " + layerName);
+		System.exit(-1);
 	}
 
 	/*
@@ -270,7 +269,6 @@ public class Level extends TiledMap
     		// Add all layer-level properties as well
     		go.props.putAll(og.props);
     	
-    		System.out.println("\nProperties : " + go.props);
     		LevelObject lo = createObject(go.props);
     		assert lo != null;
     		lo.setLevel(this);
@@ -651,11 +649,10 @@ public class Level extends TiledMap
 		if(transmitters == null)
 		{
 			transmitters = new ArrayList<Transmitter>();
-			signalReceivers = new ArrayList<SignalReceiver>();
 		}
 		if(signalReceivers == null)
 		{
-			
+			signalReceivers = new ArrayList<SignalReceiver>();
 		}
 		
 		System.out.println("\nLOF.createObject -> " + props);
@@ -682,6 +679,7 @@ public class Level extends TiledMap
 		}
 		System.out.println(
 			"Couldn't determine type of LevelObject.");
+		
 		return null;
 	}
 

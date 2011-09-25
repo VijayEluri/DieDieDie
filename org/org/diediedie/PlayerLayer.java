@@ -38,6 +38,7 @@ public class PlayerLayer extends UpdatableLayer
 	public void update() 
 	{
 		updateObjects();
+		updateEnemies();
 		player.update();	
 	}
 
