@@ -49,7 +49,7 @@ import org.diediedie.actors.tools.Direction;
  */ 
 public class Player extends BaseLevelObject implements Actor, 
 													   InputProviderListener 
-{    
+{
 	private boolean setUp = false, canJump = false;
     final boolean autoUpdate = true;
      
@@ -89,6 +89,7 @@ public class Player extends BaseLevelObject implements Actor,
     private Command jump;
     private Command left; 
     private Command right;    
+    private Command playNote1;
     
     private Rectangle collisionBox;
     
@@ -134,12 +135,17 @@ public class Player extends BaseLevelObject implements Actor,
     			  currentBow;
     
     // associated level for collision / item collection reference
-	private boolean isJumping = false;
-	private boolean jumpKeyDown = false;
-	private boolean outOfBounds = false;
+	private boolean isJumping = false,
+				    jumpKeyDown = false,
+					outOfBounds = false,
+					playNote1KeyDown = false;
+	
     private Tile startTile;
 	private final int COLLISION_BOX_H_OFFSET = 1;
 	private int collisionBoxHeight;
+	
+	private boolean hasInstrument;
+    private Instrument currentInstrument = null;
     
     /**
      * Constructs the Player at the given position.
@@ -158,6 +164,8 @@ public class Player extends BaseLevelObject implements Actor,
             setUp = true;
         }
     }    
+    
+    
     
     /*
      * Set the width and height and initial
@@ -240,11 +248,13 @@ public class Player extends BaseLevelObject implements Actor,
         jump = new BasicCommand("jump");
         left = new BasicCommand("left");
         right = new BasicCommand("right");
+        playNote1 = new BasicCommand("playNote1");
         
         prov.bindCommand(new KeyControl(Input.KEY_A), left);
         prov.bindCommand(new KeyControl(Input.KEY_D), right);
         prov.bindCommand(new KeyControl(Input.KEY_W), jump);
-        
+        prov.bindCommand(new KeyControl(Input.KEY_1), playNote1);
+        		
         in.addMouseListener(new MouseListener()
         {
             public void	mousePressed(int button, int x, int y) 
@@ -337,6 +347,11 @@ public class Player extends BaseLevelObject implements Actor,
         	jumpKeyDown = false;
         	isJumping = false;
         }
+        else if(com.equals(playNote1))
+        {
+        	System.out.println("playNote1 key released");
+        	playNote1KeyDown = false;
+        }
     }
     
     /**
@@ -365,7 +380,25 @@ public class Player extends BaseLevelObject implements Actor,
         		startJump();
         	}
         }
+        else if(com.equals(playNote1))
+        {
+        	System.out.println("playNote1 key pressed");
+        	playNote1KeyDown = true;
+        	
+        	if(hasInstrument)
+        	{
+        		Note note = currentInstrument.getNoteAt(0);
+        		assert note != null;
+        		currentInstrument.play(note);
+        	}
+        }
     }
+    
+    private void pickUpObject(PlayerItem pi)
+    {
+    	
+    }
+    
     
     /*
      * Starts the player aiming an arrow towards the
@@ -526,9 +559,6 @@ public class Player extends BaseLevelObject implements Actor,
         setFacing(dir);
         //System.out.println("setMovingDir: " + dir);
     }
-    
-  
-    
     
     /**
      * Sets the Player's current Animation var to 'standing'. 
@@ -775,8 +805,6 @@ public class Player extends BaseLevelObject implements Actor,
         {
             g.drawImage(currentBow, bowX, bowY);
         }
-        
-        //g.draw(getCurrentAnim().getCurrentFrame()
         //g.setColor(Color.black);
         //g.draw(getCollisionBox());
     }

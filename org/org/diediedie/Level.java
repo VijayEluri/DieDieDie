@@ -169,6 +169,7 @@ public class Level extends TiledMap
     {
     	System.out.println(
     			"sorting and connecting objects");
+    	
     	for(LevelLayer ll : levelLayers)
     	{
     		for(LevelObject lo : ll.getObjects())
@@ -184,8 +185,7 @@ public class Level extends TiledMap
     					assert name != null;
     					SignalReceiver sr = findSignalReceiver(name);
     					assert sr != null;
-    					
-    					
+
     					System.out.println("    found SignalReceiver '" + 
     							sr.getName() + "', attaching to " + lo.getName());
     					((Transmitter) lo).addTarget(sr);
@@ -220,9 +220,7 @@ public class Level extends TiledMap
     {
 		assert objs != null;
     	assert layerName != null;
-    	/*System.out.println("attaching objects to layer :" 
-    			+ objs + " -> " + layerName);
-    	*/
+    
 		for(LevelLayer l : levelLayers)
 		{
 			if(l.getName().equals(layerName))

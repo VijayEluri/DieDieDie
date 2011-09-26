@@ -18,7 +18,7 @@ public class Switch extends BaseTargetableObject implements Transmitter
 {
 	protected SignalReceiver target;
 	protected List<Signal> signals;
-	private List<String> targetNames = null;
+
 	
 	public Switch(Properties p)
 	{
@@ -52,7 +52,7 @@ public class Switch extends BaseTargetableObject implements Transmitter
 	}
 	
 	
-
+	
 	private boolean isValidSignal(Signal s) 
 	{
 		if(signals.contains(s))
