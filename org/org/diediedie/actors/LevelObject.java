@@ -21,7 +21,7 @@ import org.diediedie.Level;
 /**
  * Super-interface for any interactive thing that exists on a Level. 
  */ 
-public interface LevelObject extends Drawable
+public interface LevelObject extends Drawable 
 {
     void update();
     void setLevel(Level l);

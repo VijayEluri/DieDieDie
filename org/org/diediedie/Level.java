@@ -38,12 +38,14 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.Graphics;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
 import javax.sound.midi.Receiver;
-
+import java.util.regex.*;
 /**
  * A single level...
  */ 
@@ -69,7 +71,7 @@ public class Level extends TiledMap
     
     // other way with gravity because gravity is added to the Actors' 
     // ySpeed
-    public float gravity;
+    private float gravity;
     
     // initial direction player faces 
     public final Direction playerFacing;
@@ -129,6 +131,11 @@ public class Level extends TiledMap
         bouncers = new ArrayList<ArrowBouncer>();
         parseObjectLayers();
     }   
+    
+    public float getGravity()
+    {
+    	return gravity;
+    }
     
     /*
      * Parses only the object layers from the map and
@@ -198,12 +205,14 @@ public class Level extends TiledMap
     
     /*
      * Attempts to return the SignalReceiver object on the Level
-     * from the object's name.
+     * from the object's name. This should only be used during
+     * initialization as it it's slow. 
      */
     private SignalReceiver findSignalReceiver(String name)
     {
     	System.out.println(
 				"findSignalReceiver: looking for " + name);
+    	
     	for(SignalReceiver sr : signalReceivers)
     	{
     		if(name.equals(sr.getName()))
@@ -215,32 +224,104 @@ public class Level extends TiledMap
     	return null;
     }
     
+    /*
+     * Attempts to locate a LevelLayer via it's name String.
+     */
+    public LevelLayer getLevelLayerByName(String name)
+    {
+    	for(LevelLayer l : levelLayers)
+		{
+    		if(l.getName().equals(name))
+			{
+    			System.out.println("getLevelLayerByName : found " 
+    								+ name);
+    			return l;
+			}
+		}
+    	return null;
+    }
+    
+    /*
+     * Attempts to add 
+     */
 	private void attachObjectsToLayer(List<LevelObject> objs, 
     								  String layerName) 
     {
 		assert objs != null;
     	assert layerName != null;
-    
+    		
+    	LevelLayer l = getLevelLayerByName(layerName);
+    	
+		System.out.println(
+			"attaching layer " + layerName + "'s " +
+			+ objs.size() + " objects");
+    	
+		for(LevelObject o : objs)
+		{
+			System.out.println(
+				"    LevelObject : " + o.getName());
+		}
+		
+		l.getObjects().addAll(objs);
+	}
+	
+	/*
+	 * Debugging method
+	 */
+	public void printLevelSummary()
+	{
+		System.out.println("Summary of Level :" + this.name);
+		System.out.println("=================");
+		
 		for(LevelLayer l : levelLayers)
 		{
-			if(l.getName().equals(layerName))
+			System.out.println("  Layer " + l.getName());
+			
+			for(LevelObject lo : l.getObjects())
 			{
 				System.out.println(
-					"attaching layer " + layerName + "'s " +
-					+ objs.size() + " objects");
-				for(LevelObject o : objs)
-				{
-					System.out.println(
-						"    LevelObject : " + o.getName());
-				}
-				l.getObjects().addAll(objs);
-				return;
+				    "   Type: " + getObjectTypeName(lo)	
+				    + " ("
+				    + Arrays.deepToString(getObjectInterfaceNames(
+				    		lo).toArray())
+					+ ") '" + lo.getName() + "' ");
 			}
 		}
-		System.out.println("Failed to find layer " + layerName);
-		System.exit(-1);
 	}
-
+	
+	/*
+	 * Returns a List of the names of an object's interfaces
+	 */
+	public List<String> getObjectInterfaceNames(Object o)
+	{
+		List<String> names = new ArrayList<String>();
+		
+		for(Class<?> c : o.getClass().getInterfaces())
+		{
+			String[] strs = splitClassName(c.getName());
+			names.add(strs[strs.length-1]);
+		}
+		
+		return names;
+	}
+	
+	public String getObjectTypeName(Object o)
+	{
+		Class<? extends Object> ocls = o.getClass();
+		String[] namespaces = splitClassName(ocls.getName());
+		return namespaces[namespaces.length - 1];
+	}
+	
+	/*
+	 * Splits a classname into an array.
+	 * 
+	 * e.g. 'org.diediedie.SomeThing' -> ['org', 'diediedie', 'SomeThing']
+	 */
+	public String[] splitClassName(String className)
+	{
+		return className.split("\\.");
+	}
+	
 	/*
      * Creates LevelObjects from a TiledMap.ObjectGroup,
      * and attaches them to a Drawable layer.
@@ -321,7 +402,6 @@ public class Level extends TiledMap
     	for(LevelLayer d : levelLayers)
     	{
     		System.out.println("  " + d.getName());
-        	
     	}
 		System.out.println("\n");
     }

@@ -13,6 +13,5 @@ public class LevelSound extends Sound
 	public LevelSound(String path) throws SlickException
 	{
 		super(path);
-		// TODO get sound from path
 	}	
 }

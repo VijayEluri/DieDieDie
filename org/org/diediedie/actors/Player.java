@@ -46,6 +46,9 @@ import org.diediedie.actors.tools.Direction;
 
 /**
  * The main Player Character. 
+ * 
+ * Unlike most LevelObjects, (s)he exists on a separate
+ * Tiled Layer (not an ObjectLayer)
  */ 
 public class Player extends BaseLevelObject implements Actor, 
 													   InputProviderListener 
@@ -84,8 +87,7 @@ public class Player extends BaseLevelObject implements Actor,
                 mouseY,
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON,
                 xLeftOffsetCollisionBox;
-                    
-    // Movement
+    
     private Command jump;
     private Command left; 
     private Command right;    
@@ -231,13 +233,7 @@ public class Player extends BaseLevelObject implements Actor,
     {
         return getLevel().getActorZone(this);
     }
-    
-    /*@Override
-    public float getMoveSpeed()
-    {
-        return MOVE_SPEED;
-    }*/
-    
+
     /**
      * Links the game's InputProvider to the Player obkect
      */ 
@@ -250,6 +246,8 @@ public class Player extends BaseLevelObject implements Actor,
         right = new BasicCommand("right");
         playNote1 = new BasicCommand("playNote1");
         
+        
+        // here we connect a keyboard key to each player command.
         prov.bindCommand(new KeyControl(Input.KEY_A), left);
         prov.bindCommand(new KeyControl(Input.KEY_D), right);
         prov.bindCommand(new KeyControl(Input.KEY_W), jump);
@@ -387,16 +385,15 @@ public class Player extends BaseLevelObject implements Actor,
         	
         	if(hasInstrument)
         	{
-        		Note note = currentInstrument.getNoteAt(0);
-        		assert note != null;
-        		currentInstrument.play(note);
+        		currentInstrument.play(0); 
+        		// TODO
         	}
         }
     }
     
-    private void pickUpObject(PlayerItem pi)
+    private void pickUp(PlayerItem pi)
     {
-    	
+    	// TODO
     }
     
     
@@ -423,13 +420,14 @@ public class Player extends BaseLevelObject implements Actor,
         //System.out.println("bowCharge " + bowCharge);
         currentArrow.updateAiming(mouseX, mouseY);
 
+        
         if(currentArrow.getMovementAngle() >= 0)
         {
             currentBow = bowRight;   
             setFacing(Direction.RIGHT);
             bowX = xPos + BOW_X_OFFSET + (getCurrentFrameWidth() / 2);
             currentBow.setRotation(currentArrow.getMovementAngle() 
-                                   - BOW_ANGLE_OFFSET);
+                                    - BOW_ANGLE_OFFSET);
         }
         else
         {
@@ -615,10 +613,9 @@ public class Player extends BaseLevelObject implements Actor,
         while(it.hasNext())
         {
             Arrow a = it.next();
-            if(a.getCollidedWithEnemy() ||
-               a.isOutOfBounds())
+            if(a.isOutOfBounds() || a.getCollidedWithEnemy())
             {
-                // damage already done in Enemy.doCollision
+				// damage already done in Enemy.doCollision
                 // we can safely remove the arrow here
                 System.out.println("removing arrow" + a);
                 it.remove();

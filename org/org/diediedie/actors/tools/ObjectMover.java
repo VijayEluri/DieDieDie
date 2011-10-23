@@ -84,7 +84,7 @@ public class ObjectMover
     {
         if(m.getYSpeed() < m.getMaxFallSpeed())
         {
-            m.setYSpeed(m.getYSpeed() + m.getLevel().gravity);  
+            m.setYSpeed(m.getYSpeed() + m.getLevel().getGravity());  
         }        
     }
     

@@ -5,12 +5,8 @@ import java.util.List;
 /*
  * 
  */
-public interface Instrument
+public interface Instrument 
 {
-	public void play(Note note);
-	public Note getNoteAt(int index);
+	public void play(int noteIndex);
 	public List<Note> getNotes();
-	
-	public void hold();
-	public void putAway();
 }

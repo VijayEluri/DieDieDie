@@ -227,27 +227,13 @@ public class Arrow extends Object implements Projectile
 
         final float xChange = Math.abs(getOldStartX() - getX());
         final float yChange = Math.abs(getOldStartY() - getY());
-        /*
-            System.out.println("\tARROW DAMAGE");
-            System.out.println("\tSpeed :");
-            System.out.println("\t\t" + "x change : " + xChange);
-            System.out.println("\t\t" + "y change : " + yChange);
-            
-            System.out.println(
-                "\t trying damage equation " +
-                "d = abs(xChange+yChange) * 3");
-            final float damage = Math.abs(xChange + yChange) * 3;
-            System.out.print("== " + damage);
-            return damage;
-            
-            System.out.println("\t damage == " + damage);
-        */
-        System.out.println("Speed changes (last frame, this frame):");
+        
+        /*System.out.println("Speed changes (last frame, this frame):");
         System.out.println("--------------------------------------");
         System.out.println(
             "\t x : " + xChange + "\n" +
             "\t y : " + yChange + "\n");
-        
+        */
         final float MULT = 3.3f;
         
         float bigger;

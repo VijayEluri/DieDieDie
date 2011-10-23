@@ -1,5 +1,7 @@
 package org.diediedie.actors;
 
+import org.newdawn.slick.SlickException;
+
 
 enum Name
 {
@@ -15,28 +17,50 @@ enum Type
 /*
  * A note played by an Instrument.
  */
-public class Note
+public class Note extends LevelSound
 {
-	private LevelSound sound;
 	public final Name name;
 	public final Type type;
 	public final int octave;
 	
-	public Note(Name n, Type t, int oct, LevelSound s)
+	public Note(Name n, Type t, int oct, String path) throws SlickException
 	{
+		super(path);
 		name = n;
 		type = t;
-		sound = s;
 		octave = oct;
 	}
 	
-	public LevelSound getLevelSound()
+	/*
+	 * Two Notes are the same if they have the same
+	 * pitch name and type (e.g. they are both C sharp,
+	 * despite possibly being different objects and having
+	 * different slick.Sound objects)
+	 */
+	@Override
+	public boolean equals(Object other)
 	{
-		return sound;
+		Note n = (Note)other;
+		if(this.name == n.name 
+				&& 
+		   this.type == n.type)
+		{
+			return true;
+		}
+		return false;
 	}
 	
-	public void play()
+	/*
+	 * A more picky version of equals() that demands
+	 * matching octaves as well.
+	 */
+	public boolean equalSameOctave(Object other)
 	{
-		sound.play();
+		Note n = (Note)other;
+		if(equals(n))
+		{
+			return n.octave == octave;
+		}
+		return false;
 	}
 }

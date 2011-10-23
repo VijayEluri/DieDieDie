@@ -14,14 +14,19 @@ import org.newdawn.slick.Image;
 public abstract class BaseLevelObject implements LevelObject 
 {
 	protected Level level;
+	
 	protected float xPos,
 					yPos;
+	
 	protected Image image;
 	protected String name;
 	protected Properties props;
+	
 	/*
 	 * Extracts basic properties from the Properties 
 	 * object parsed form the TiledMap's LayerObject
+	 * 
+	 * (type is extracted before this in the Level object)
 	 */
 	protected void parseBaseObject(Properties p)
 	{
@@ -66,7 +71,7 @@ public abstract class BaseLevelObject implements LevelObject
 	protected void getImage(Properties p)
 	{
 		image = AnimCreator.loadImage(
-				"data/" + (String)p.get("imagepath"));
+					"data/" + (String)p.get("imagepath"));
 		assert image != null;
 	}
 	

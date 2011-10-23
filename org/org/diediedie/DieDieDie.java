@@ -83,7 +83,7 @@ public class DieDieDie extends BasicGame
 		// set up levels
 		createLevels();
 		currentLevel = level1;/*arrowBounceTest;level1*/;
-			
+		currentLevel.printLevelSummary();
 		// load player and associate with the level data
 		player = level1.getPlayer();
 
