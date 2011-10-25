@@ -210,8 +210,8 @@ public class Level extends TiledMap
      */
     private SignalReceiver findSignalReceiver(String name)
     {
-    	System.out.println(
-				"findSignalReceiver: looking for " + name);
+    	/*System.out.println(
+				"findSignalReceiver: looking for " + name);*/
     	
     	for(SignalReceiver sr : signalReceivers)
     	{
@@ -220,7 +220,7 @@ public class Level extends TiledMap
     			return sr;
     		}
     	}
-    	System.out.println("Failed to find " + name);
+    	/*System.out.println("Failed to find " + name);*/
     	return null;
     }
     
@@ -233,8 +233,8 @@ public class Level extends TiledMap
 		{
     		if(l.getName().equals(name))
 			{
-    			System.out.println("getLevelLayerByName : found " 
-    								+ name);
+    			/*System.out.println("getLevelLayerByName : found " 
+    								+ name);*/
     			return l;
 			}
 		}
@@ -270,7 +270,7 @@ public class Level extends TiledMap
 	 */
 	public void printLevelSummary()
 	{
-		System.out.println("Summary of Level :" + this.name);
+		System.out.println("Summary of Level : " + this.name);
 		System.out.println("=================");
 		
 		for(LevelLayer l : levelLayers)

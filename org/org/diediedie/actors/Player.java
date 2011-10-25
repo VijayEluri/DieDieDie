@@ -53,27 +53,45 @@ import org.diediedie.actors.tools.Direction;
 public class Player extends BaseLevelObject implements Actor, 
 													   InputProviderListener 
 {
-	private boolean setUp = false, canJump = false;
-    final boolean autoUpdate = true;
-     
-    private float accelX = 0f, bowCharge = 0, bowX, bowY, 
-                  bowYCurrentOffset;
-                  
-    private int height, width, minReleaseCharge = 7;
+	// The following constants are to be interpreted as
+    // serving the purpose 'how much to <mult/div> X by' and
+    // are used for player speed creation
+	private static final float HEIGHT_WALK_DIVIDER = 4,
+	                           ACCEL_WALK_SPEED_DIVIDER = 10,
+	                           MAX_RUN_WALK_MULTIPLIER = 2,
+	                           ACCEL_MAX_RATE_MULTIPLIER = 2,
+					           INIT_JUMP_WALK_SPEED_MULTIPLIER = 0.2f,
+					           MAX_JUMP_INIT_JUMP_MULTIPLIER = 2,
+							   MAX_FALL_MAX_JUMP_MULTIPLIER = 2.5f,
+							   MAX_CHARGE = 20.34f, 
+		                       CHARGE_INCR = 0.4f, 
+		                       BOW_Y_OFFSET_NORMAL = -2f, 
+		                       BOW_Y_OFFSET_AIM_UP = -10, 
+		                       BOW_Y_OFFSET_AIM_DOWN = 6, 
+		                       ARROW_Y_OFFSET = 15;;
+	
+	private boolean setUp = false, 
+			        canJump = false,
+                    userHoldingLeftXOrRight = false,
+	        	    isChargingArrow = false,
+	        	    isJumping = false,
+	    			jumpKeyDown = false,
+	    			outOfBounds = false;
     
-    public final float MAX_CHARGE = 20.34f, 
-                       CHARGE_INCR = 0.4f, 
-                       BOW_Y_OFFSET_NORMAL = -2f, 
-                       BOW_Y_OFFSET_AIM_UP = -10, 
-                       MAX_Y_SPEED = 20.5f,
-                       MAX_X_SPEED = 2.5f, 
-                       JUMP_INCR = 0.8f,
-                       INITIAL_JUMP_SPEED = -0.2f,
-                       MAX_JUMP_SPEED = -5.6f,
-                       BOW_Y_OFFSET_AIM_DOWN = 6, 
-                       ARROW_Y_OFFSET = 15,
-                       MOVE_SPEED = 0.9f, MAX_ACCEL = 4f, 
-                       ACCEL_RATE = 0.03f;
+   /*
+    * Player speed is calculated based upon the player's
+    * size (and then adjusted during the game where necessary)
+    */
+    private float xSpeed, 
+    			  ySpeed,
+                  accelX = 0f, 
+    		      bowCharge = 0, 
+    		      bowX, 
+    		      bowY, 
+                  bowYCurrentOffset,
+                  accelerationRate, 
+				  maxAccelRate, 
+				  initialJumpSpeed;
 
     private final int MAX_HEALTH = 20, 
                       BOW_AIM_UP_TRIGGER = 50,
@@ -86,28 +104,33 @@ public class Player extends BaseLevelObject implements Actor,
                 mouseX, 
                 mouseY,
                 BOW_BUTTON = Input.MOUSE_LEFT_BUTTON,
-                xLeftOffsetCollisionBox;
-    
-    private Command jump;
-    private Command left; 
-    private Command right;    
-    private Command playNote1;
+                xLeftOffsetCollisionBox,
+                height, 
+                width, 
+                minReleaseCharge = 7;
+     
+    private Command jump,
+                    left,
+                    right, 
+                    playNote1, 
+                    run;
     
     private Rectangle collisionBox;
     
     private Arrow currentArrow = null; 
     private List<Arrow> firedArrows = Collections.synchronizedList(new
                                                     ArrayList<Arrow>());
-    private boolean isChargingArrow = false;
+
+    // walk speed and max run speeds are calculated using the
+    // character's height
+    private float walkSpeed;
+	private float maxRunSpeed;
     
-    private float xSpeed, ySpeed;
-    private Direction facing = Direction.LEFT, moving = Direction.LEFT; 
+    private Direction facing = Direction.LEFT, 
+    		          moving = Direction.LEFT; 
         
-    // running: indicates the user is holding a directional button
-    private boolean running = false;
         
-    private final String bowLeftPath = 
-    	"data/player_images/STICKMAN_BOW_LEFT.png";
+    private final String bowLeftPath = "data/player_images/STICKMAN_BOW_LEFT.png";
     
     private final String[] leftWalkPaths = {
     	"data/player_images/1.png",	
@@ -136,19 +159,18 @@ public class Player extends BaseLevelObject implements Actor,
     			  bowRight, 
     			  currentBow;
     
-    // associated level for collision / item collection reference
-	private boolean isJumping = false,
-				    jumpKeyDown = false,
-					outOfBounds = false,
-					playNote1KeyDown = false;
-	
     private Tile startTile;
 	private final int COLLISION_BOX_H_OFFSET = 1;
 	private int collisionBoxHeight;
 	
 	private boolean hasInstrument;
     private Instrument currentInstrument = null;
-    
+	private float maxJumpSpeed, jumpIncr, maxFallSpeed;
+	
+	private boolean playNote1KeyDown = false,
+					fastMoveMode = false;
+
+        
     /**
      * Constructs the Player at the given position.
      */ 
@@ -163,13 +185,64 @@ public class Player extends BaseLevelObject implements Actor,
             initAnim();   
             setUpCollisionBox();
             initBow();
+            setUpPlayerSpeed();
             setUp = true;
         }
+        
     }    
     
     
-    
     /*
+     * The Player's size may change dynamically between or,
+     * possibly during, a level. 
+     * 
+     * This method can be used to recalibrate the Player's 
+     * possible top speed and movement rates after a speed
+     * change.
+     */
+    private void setUpPlayerSpeed() 
+    {
+    	calculateMovementSpeeds();
+    	
+    	System.out.println("height : " + height);
+    	System.out.println("\nsetupPlayerSpeed");
+    	System.out.println("==============");
+    	System.out.println("  walkSpeed        : " + walkSpeed);
+    	System.out.println("  maxRunSpeed      : " + maxRunSpeed);
+    	System.out.println("  accelerationRate : " + accelerationRate);
+    	System.out.println("  maxAccelRate     : " + maxAccelRate);
+    	System.out.println("  initialJumpSpeed : " + initialJumpSpeed);
+    	System.out.println("  maxJumpSpeed     : " + maxJumpSpeed);
+    	System.out.println("  jumpIncr         : " + jumpIncr);
+    	System.out.println("  maxFallSpeed     : " + maxFallSpeed);
+    	
+    	//System.exit(-1);
+	}
+
+    private void calculateMovementSpeeds()
+    {
+    	walkSpeed = height / HEIGHT_WALK_DIVIDER;
+    	maxRunSpeed = walkSpeed * MAX_RUN_WALK_MULTIPLIER;
+    	accelerationRate = walkSpeed / ACCEL_WALK_SPEED_DIVIDER;
+    	maxAccelRate = accelerationRate * ACCEL_MAX_RATE_MULTIPLIER;
+    	initialJumpSpeed = -(walkSpeed * INIT_JUMP_WALK_SPEED_MULTIPLIER);
+    	maxJumpSpeed = (initialJumpSpeed * MAX_JUMP_INIT_JUMP_MULTIPLIER);
+    	jumpIncr = (maxJumpSpeed - initialJumpSpeed) / 10; 
+    	maxFallSpeed = -maxJumpSpeed * MAX_FALL_MAX_JUMP_MULTIPLIER;
+    }
+
+    /*
+     * Increases walk speed, if possible.
+     */ 
+    private void accelerate()
+    {
+        if(accelX < maxAccelRate)
+        {
+            accelX += accelerationRate;
+        }
+    }
+    
+	/*
      * Set the width and height and initial
      * values for the collision box. 
      * The only thing that will change
@@ -198,14 +271,15 @@ public class Player extends BaseLevelObject implements Actor,
 		return height;
 	}
     
+	
+	/*
+	 * NOTE: This sets isJumping to the inverse of b. 
+	 */
     @Override
     public void setCanJump(boolean b)
     {
         canJump = b;
-        if(b == true)
-        {
-        	isJumping = false;
-        }
+        isJumping = !b;
     }
 
     /*
@@ -222,6 +296,9 @@ public class Player extends BaseLevelObject implements Actor,
                            " at position x: " + xPos + ", y: " + yPos);              
     }
     
+    /*
+     * Initialises the Player's Bow (if he has one)
+     */
     private void initBow()
     {
         bowLeft = AnimCreator.loadImage(bowLeftPath);
@@ -245,14 +322,15 @@ public class Player extends BaseLevelObject implements Actor,
         left = new BasicCommand("left");
         right = new BasicCommand("right");
         playNote1 = new BasicCommand("playNote1");
-        
+        run = new BasicCommand("run");
         
         // here we connect a keyboard key to each player command.
         prov.bindCommand(new KeyControl(Input.KEY_A), left);
         prov.bindCommand(new KeyControl(Input.KEY_D), right);
         prov.bindCommand(new KeyControl(Input.KEY_W), jump);
         prov.bindCommand(new KeyControl(Input.KEY_1), playNote1);
-        		
+        prov.bindCommand(new KeyControl(Input.KEY_LSHIFT), run);
+        
         in.addMouseListener(new MouseListener()
         {
             public void	mousePressed(int button, int x, int y) 
@@ -328,7 +406,7 @@ public class Player extends BaseLevelObject implements Actor,
             //leftMoveDown = false;
             if(moving.equals(Direction.LEFT))
             {
-                running = false;   
+            	userHoldingLeftXOrRight = false;   
             }
         }
         else if(com.equals(right))
@@ -336,19 +414,23 @@ public class Player extends BaseLevelObject implements Actor,
             //rightMoveDown = false;
             if(moving.equals(Direction.RIGHT))
             {
-                running = false;   
+            	userHoldingLeftXOrRight = false;   
             }
         }
         else if(com.equals(jump))
         {
         	System.out.println("jump key released");
         	jumpKeyDown = false;
-        	isJumping = false;
         }
         else if(com.equals(playNote1))
         {
         	System.out.println("playNote1 key released");
         	playNote1KeyDown = false;
+        }
+        else if(com.equals(run))
+        {
+        	System.out.println("-- Shift released");
+        	fastMoveMode = false;
         }
     }
     
@@ -361,18 +443,19 @@ public class Player extends BaseLevelObject implements Actor,
                 
         if(com.equals(left))
         {
-            //leftMoveDown = true;
             setMovingDir(Direction.LEFT);
-            running = true;
+            userHoldingLeftXOrRight = true;
         }
         else if(com.equals(right))
         {
-            //rightMoveDown = true; 
             setMovingDir(Direction.RIGHT);
-            running = true;
+            userHoldingLeftXOrRight = true;
         }
         else if(com.equals(jump))
         {
+        	/*
+        	 * If the jump key hasn't already been pressed 
+        	 */
         	if(!jumpKeyDown)
         	{
         		startJump();
@@ -388,6 +471,11 @@ public class Player extends BaseLevelObject implements Actor,
         		currentInstrument.play(0); 
         		// TODO
         	}
+        }
+        else if(com.equals(run))
+        {
+        	System.out.println("-- Shift is down");
+        	fastMoveMode = true;
         }
     }
     
@@ -538,7 +626,7 @@ public class Player extends BaseLevelObject implements Actor,
     public void setFacing(Direction dir)
     {
         facing = dir;
-        if(!running)
+        if(!userHoldingLeftXOrRight)
         {
             setStandingAnim();
         }
@@ -578,30 +666,21 @@ public class Player extends BaseLevelObject implements Actor,
     @Override
     public void applySpeed(Direction dir)
     {
+    	accelerate();
+    	
         if(dir.equals(Direction.RIGHT))
         {
-            accelerate();
             currentAnim = rightWalk;
-            xSpeed = (MOVE_SPEED + accelX);
+            xSpeed = accelX;
         }
         else if(dir.equals(Direction.LEFT))
         {
-            accelerate();
             currentAnim = leftWalk;
-            xSpeed = -(MOVE_SPEED + accelX);
+            xSpeed = -accelX;
         }          
     }
     
-    /*
-     * Increases walk speed.
-     */ 
-    private void accelerate()
-    {
-        if(accelX < MAX_ACCEL)
-        {
-            accelX += ACCEL_RATE;
-        }
-    }
+   
     
     /*
      * Updates the position / existence of previously fired Arrows. 
@@ -641,7 +720,7 @@ public class Player extends BaseLevelObject implements Actor,
     	ObjectMover.applyGravity(this);
         applyFriction();
                 
-        if(running)
+        if(userHoldingLeftXOrRight)
         {
             applySpeed(moving);
         }
@@ -653,16 +732,21 @@ public class Player extends BaseLevelObject implements Actor,
         {
         	updateJump();
         }
+        
         // Update Arrow information depending on state
         if(isChargingArrow)
         {
             chargeArrow();
         }
+        
         updateFiredArrows();
         ObjectMover.move(this);
+        
+       
+        //System.out.printf("xSpeed : %.3f | accelX : %.3f\n", xSpeed, accelX);
     }
-    
-    @Override
+
+	@Override
     public Level getLevel()
     {
         return level;
@@ -700,13 +784,12 @@ public class Player extends BaseLevelObject implements Actor,
     public void startJump()
     {
     	System.out.println("calling Player.jump()");
+    	//assert canJump()
     	
-    	if(canJump())
-        {
-            setYSpeed(INITIAL_JUMP_SPEED);
-            canJump = false;
-            isJumping = true;
-        }
+        setYSpeed(initialJumpSpeed);
+        /*canJump = false;
+        isJumping = true;*/
+        setCanJump(false);
     }
     
     /*
@@ -718,17 +801,17 @@ public class Player extends BaseLevelObject implements Actor,
      */
     private void updateJump()
     {
-		if(!canJump)
+		if(!isJumping && jumpKeyDown)
 		{
-			if(ySpeed > MAX_JUMP_SPEED)
+			if(ySpeed > maxJumpSpeed)
 			{
-	    		ySpeed -= JUMP_INCR;
-	    		//System.out.println("Player.updateJump() : " + ySpeed);
+	    		ySpeed -= jumpIncr;
+	    		System.out.println("  Player.updateJump() : " + ySpeed);
 			}
 			else
 			{
-				/*System.out.println(
-    				"updateJump() --> MAX_JUMP_SPEED reached");*/
+				System.out.println(
+    				"updateJump() --> MAX_JUMP_SPEED reached : " + ySpeed);
 				isJumping = false;
 			}
 		}
@@ -736,7 +819,7 @@ public class Player extends BaseLevelObject implements Actor,
     
     private void decelerate()
     {
-        accelX -= ACCEL_RATE;
+        accelX -= accelerationRate;
         if(accelX < 0)
         {
             resetAccelX();
@@ -789,7 +872,7 @@ public class Player extends BaseLevelObject implements Actor,
     @Override
     public float getMaxFallSpeed()
     {
-        return MAX_Y_SPEED;
+        return maxFallSpeed;
     }
     
     @Override
@@ -828,15 +911,19 @@ public class Player extends BaseLevelObject implements Actor,
     {
     	
         //leftWalk = AnimCreator.createAnimFromPaths(Actor.ANIM_DURATION, 
-          //                          autoUpdate, leftWalkPaths);
+          //                          AUTO_UPDATE, leftWalkPaths);
         // get the images for leftWalk so we can flip them to use as right.#
     	Image[] leftWalkImgs = new Image[leftWalkPaths.length];
     	Image[] rightWalkImgs = new Image[leftWalkPaths.length];
     	Image[] leftStandImgs = new Image[leftStandPaths.length];
     	Image[] rightStandImgs = new Image[leftStandPaths.length];
     	
+    	
+    	
     	leftWalkImgs = AnimCreator.getImagesFromPaths(
     			leftWalkPaths).toArray(leftWalkImgs);
+    	
+    	height = leftWalkImgs[0].getHeight();
     	
     	rightWalkImgs = AnimCreator.getHorizontallyFlippedCopy(
     			leftWalkImgs).toArray(rightWalkImgs);
