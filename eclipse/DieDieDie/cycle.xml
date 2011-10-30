@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ASCII"?>
+<options:CycleExplorerData xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:options="options.xmi" level="package">
+  <options interactive="false" level="-1" showScope="InDiagram" properties="ModelFrozen=true;wireOptions=4;Product=eDepend;ComputedContent=true;dependencyFilter=Standard::Derive,Soyatec::Implement,Standard::Instantiate,Standard::Create,Standard::Call,Standard::Send,Soyatec::Access,Soyatec::Import,;displayOptions=1"/>
+  <cycleSets>
+    <groups name="Cycle-1  (2 elements)" size="2">
+      <ids>org.diediedie.actors-Soyatec::Access->org.diediedie.actors.statemachine</ids>
+      <ids>org.diediedie.actors-Standard::Instantiate->org.diediedie.actors.statemachine</ids>
+      <ids>org.diediedie.actors-Standard::Call->org.diediedie.actors.statemachine</ids>
+      <ids>org.diediedie.actors-Soyatec::Import->org.diediedie.actors.statemachine</ids>
+      <ids>org.diediedie.actors.statemachine-Soyatec::Import->org.diediedie.actors</ids>
+      <ids>org.diediedie.actors.statemachine-Standard::Call->org.diediedie.actors</ids>
+    </groups>
+    <groups name="Cycle-2  (3 elements and 3 sub cycles)" size="3">
+      <ids>org.diediedie-Soyatec::Access->org.diediedie.actors.tools</ids>
+      <ids>org.diediedie-Soyatec::Import->org.diediedie.actors.tools</ids>
+      <ids>org.diediedie-Standard::Call->org.diediedie.actors.tools</ids>
+      <ids>org.diediedie.actors.tools-Soyatec::Import->org.diediedie.actors</ids>
+      <ids>org.diediedie.actors.tools-Standard::Call->org.diediedie.actors</ids>
+      <ids>org.diediedie.actors-Soyatec::Import->org.diediedie</ids>
+      <ids>org.diediedie.actors-Soyatec::Access->org.diediedie</ids>
+      <ids>org.diediedie.actors-Standard::Call->org.diediedie</ids>
+      <ids>org.diediedie.actors-Standard::Derive->org.diediedie</ids>
+      <subGroups name="Cycle-2.1  (2 elements)" size="2">
+        <ids>org.diediedie-Soyatec::Access->org.diediedie.actors.tools</ids>
+        <ids>org.diediedie-Soyatec::Import->org.diediedie.actors.tools</ids>
+        <ids>org.diediedie-Standard::Call->org.diediedie.actors.tools</ids>
+        <ids>org.diediedie.actors.tools-Soyatec::Import->org.diediedie</ids>
+        <ids>org.diediedie.actors.tools-Standard::Call->org.diediedie</ids>
+      </subGroups>
+      <subGroups name="Cycle-2.2  (2 elements)" size="2">
+        <ids>org.diediedie.actors.tools-Soyatec::Import->org.diediedie.actors</ids>
+        <ids>org.diediedie.actors.tools-Standard::Call->org.diediedie.actors</ids>
+        <ids>org.diediedie.actors-Standard::Call->org.diediedie.actors.tools</ids>
+        <ids>org.diediedie.actors-Soyatec::Access->org.diediedie.actors.tools</ids>
+        <ids>org.diediedie.actors-Soyatec::Import->org.diediedie.actors.tools</ids>
+      </subGroups>
+      <subGroups name="Cycle-2.3  (2 elements)" size="2">
+        <ids>org.diediedie-Standard::Instantiate->org.diediedie.actors</ids>
+        <ids>org.diediedie-Soyatec::Implement->org.diediedie.actors</ids>
+        <ids>org.diediedie-Soyatec::Import->org.diediedie.actors</ids>
+        <ids>org.diediedie-Standard::Call->org.diediedie.actors</ids>
+        <ids>org.diediedie.actors-Soyatec::Import->org.diediedie</ids>
+        <ids>org.diediedie.actors-Soyatec::Access->org.diediedie</ids>
+        <ids>org.diediedie.actors-Standard::Call->org.diediedie</ids>
+        <ids>org.diediedie.actors-Standard::Derive->org.diediedie</ids>
+      </subGroups>
+    </groups>
+  </cycleSets>
+</options:CycleExplorerData>

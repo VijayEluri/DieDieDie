@@ -246,7 +246,7 @@ public class BlueyFSM implements StateMachine
 					 * Check whether or not we should stop (i.e. if there is
 					 * a sudden drop or obstacle ahead).
 					 */
-					Direction facing = host.getFacing();
+					//Direction facing = host.getFacing();
 					System.out.println("NOT IMPLEMENTED!");
 					System.exit(-1);
 					//boolean cont = GroundChecker.canContinueMoving(

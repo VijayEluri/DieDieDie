@@ -17,13 +17,14 @@
  
 package org.diediedie.actors;
 
+import org.diediedie.MovableObject;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.geom.Rectangle;
 
 
 public interface Actor extends MovableObject
-{            
+{
     public static int ANIM_DURATION = 100;
     void applySpeed(Direction d);
     boolean canJump();

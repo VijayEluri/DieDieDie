@@ -1,5 +1,6 @@
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
+import org.diediedie.actors.LevelSound;
 import org.newdawn.slick.SlickException;
 
 

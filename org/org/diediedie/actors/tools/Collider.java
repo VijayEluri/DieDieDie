@@ -15,14 +15,16 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors.tools;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.diediedie.ArrowBouncer;
 import org.diediedie.Tile;
+import org.diediedie.actors.objects.ArrowBouncer;
+import org.diediedie.actors.objects.Projectile;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Enemy;
-import org.diediedie.actors.Projectile;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 /**
@@ -31,15 +33,86 @@ import org.newdawn.slick.geom.Shape;
  */ 
 public class Collider
 {
-	
+    // number of pixels from the player's current position to check a
+    // tile for possible collision
+    public static final int TILE_COLLISION_CHECK_DIST = 20;
+    
     public static boolean collidesLevel(Actor m)
     {
-    	List<Tile> tilesHit = m.getLevel().getTileCollisions(m);
+    	List<Tile> tilesHit = getTileCollisions(
+    	       m.getCollisionBox(),  
+    	       m.getLevel().getCollisionLayer().getTiles());
+    	
     	if(!tilesHit.isEmpty())
         {
             return true;
         }
         return false;
+    }
+    
+    /*
+     * Return all Tiles that a Rectangle is intersecting.
+     */
+    public static List<Tile> getTileCollisions(Rectangle rect, List<Tile> tiles) 
+    {
+        List<Tile> colls = new ArrayList<Tile>();
+        
+        for(Tile t : tiles)
+        {
+            boolean closeX = false;
+            boolean closeY = false;
+            
+            if(t.yPos < rect.getY())
+            {
+                // tile start is above the actor
+                if(rect.getY() - t.endY <= TILE_COLLISION_CHECK_DIST)
+                {
+                    closeY = true;
+                }
+            }
+            else if(t.yPos > rect.getY())
+            {
+                // tile start is below the actor
+                if(t.yPos - rect.getMaxY() <= TILE_COLLISION_CHECK_DIST)
+                {
+                    closeY = true;
+                }
+            }
+            else
+            {
+                // same vertical position
+                closeY = true;
+            }
+            if(t.xPos < rect.getX())
+            {
+                // tile start is to the left of the actor
+                if(rect.getX() - t.endX <= TILE_COLLISION_CHECK_DIST)
+                {
+                    closeX = true;
+                }
+            }
+            else if(t.xPos > rect.getX())
+            {
+                // tile start is to the right of the actor
+                if(t.xPos - rect.getMaxX() <= TILE_COLLISION_CHECK_DIST)
+                {
+                    closeX = true;
+                }
+            }
+            else
+            {
+                // same horizontal position
+                closeX = true;
+            }
+            if(closeX && closeY)
+            {
+                if(rect.intersects(t.getRect()))
+                {
+                    colls.add(t);
+                }
+            }
+        }
+        return colls;
     }
     
     /*

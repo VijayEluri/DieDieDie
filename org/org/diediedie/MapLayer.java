@@ -67,6 +67,11 @@ public class MapLayer
         		+ "\n\tTile count : " + tiles.size());
     }
     
+    public List<Tile> getTiles()
+    {
+        return tiles;
+    }
+    
     private void extractTiles(Level map)
     {
     	tiles = new ArrayList<Tile>();

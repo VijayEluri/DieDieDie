@@ -1,10 +1,11 @@
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import org.diediedie.Level;
+import org.diediedie.actors.BaseLevelObject;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 

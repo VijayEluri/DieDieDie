@@ -15,6 +15,10 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+import org.diediedie.actors.objects.Arrow;
+import org.diediedie.actors.objects.Instrument;
+import org.diediedie.actors.objects.PlayerItem;
+import org.diediedie.actors.objects.Projectile;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.tools.CollideMask;
 import org.diediedie.actors.tools.MaskedAnimation;
@@ -41,7 +45,6 @@ import org.diediedie.Level;
 import org.diediedie.PlayerLayer;
 import org.diediedie.Tile;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.Arrow;
 import org.diediedie.actors.tools.Direction;
 
 /**
@@ -54,9 +57,9 @@ public class Player extends BaseLevelObject implements Actor,
 													   InputProviderListener 
 {
 	// The following constants are to be interpreted as
-    // serving the purpose 'how much to <mult/div> X by' and
+    // serving the purpose of 'how much to <mult/div> X by' and
     // are used for player speed creation
-	private static final float HEIGHT_WALK_DIVIDER = 4,
+	private static final float HEIGHT_WALK_DIVIDER = 5f,
 	                           ACCEL_WALK_SPEED_DIVIDER = 10,
 	                           MAX_RUN_WALK_MULTIPLIER = 2,
 	                           ACCEL_MAX_RATE_MULTIPLIER = 2,
@@ -84,21 +87,28 @@ public class Player extends BaseLevelObject implements Actor,
     */
     private float xSpeed, 
     			  ySpeed,
-                  accelX = 0f, 
-    		      bowCharge = 0, 
+    			  prevXSpeed,
+    			  prevYSpeed,
+                  accelX, 
+    		      bowCharge, 
     		      bowX, 
     		      bowY, 
                   bowYCurrentOffset,
                   accelerationRate, 
 				  maxAccelRate, 
-				  initialJumpSpeed;
+				  initialJumpSpeed,
+				  maxJumpSpeed, 
+				  jumpIncr,
+				  maxFallSpeed,
+				  walkSpeed,
+				  maxRunSpeed;
 
-    private final int MAX_HEALTH = 20, 
-                      BOW_AIM_UP_TRIGGER = 50,
-                      BOW_AIM_DOWN_TRIGGER = 110, 
-                      BOW_X_OFFSET = 5,
-                      BOW_ANGLE_OFFSET = 90,
-                      COLLISION_WIDTH_DIV = 4;
+    private static final int MAX_HEALTH = 20, 
+    						 BOW_AIM_UP_TRIGGER = 50,
+    						 BOW_AIM_DOWN_TRIGGER = 110, 
+    						 BOW_X_OFFSET = 5,
+    						 BOW_ANGLE_OFFSET = 90,
+    						 COLLISION_WIDTH_DIV = 4;
                       
     private int health = MAX_HEALTH, 
                 mouseX, 
@@ -121,14 +131,9 @@ public class Player extends BaseLevelObject implements Actor,
     private List<Arrow> firedArrows = Collections.synchronizedList(new
                                                     ArrayList<Arrow>());
 
-    // walk speed and max run speeds are calculated using the
-    // character's height
-    private float walkSpeed;
-	private float maxRunSpeed;
     
     private Direction facing = Direction.LEFT, 
     		          moving = Direction.LEFT; 
-        
         
     private final String bowLeftPath = "data/player_images/STICKMAN_BOW_LEFT.png";
     
@@ -142,7 +147,6 @@ public class Player extends BaseLevelObject implements Actor,
     	"data/player_images/7.png",
     	"data/player_images/8.png",
     };
-    
     
     private String[] leftStandPaths =
     {
@@ -163,13 +167,14 @@ public class Player extends BaseLevelObject implements Actor,
 	private final int COLLISION_BOX_H_OFFSET = 1;
 	private int collisionBoxHeight;
 	
-	private boolean hasInstrument;
     private Instrument currentInstrument = null;
-	private float maxJumpSpeed, jumpIncr, maxFallSpeed;
 	
-	private boolean playNote1KeyDown = false,
-					fastMoveMode = false;
+	private boolean playNote1KeyDown,
+					fastMoveMode,
+					hasInstrument;
 
+    private boolean hasInput;
+ 
         
     /**
      * Constructs the Player at the given position.
@@ -180,6 +185,8 @@ public class Player extends BaseLevelObject implements Actor,
     	setLevel(l);
         setUpStartPosition();
         
+        System.out.println("----------> new Player");
+        
         if(!setUp)
         {            
             initAnim();   
@@ -188,7 +195,6 @@ public class Player extends BaseLevelObject implements Actor,
             setUpPlayerSpeed();
             setUp = true;
         }
-        
     }    
     
     
@@ -227,7 +233,7 @@ public class Player extends BaseLevelObject implements Actor,
     	maxAccelRate = accelerationRate * ACCEL_MAX_RATE_MULTIPLIER;
     	initialJumpSpeed = -(walkSpeed * INIT_JUMP_WALK_SPEED_MULTIPLIER);
     	maxJumpSpeed = (initialJumpSpeed * MAX_JUMP_INIT_JUMP_MULTIPLIER);
-    	jumpIncr = (maxJumpSpeed - initialJumpSpeed) / 10; 
+    	jumpIncr = -(maxJumpSpeed - initialJumpSpeed) / 10.3f; 
     	maxFallSpeed = -maxJumpSpeed * MAX_FALL_MAX_JUMP_MULTIPLIER;
     }
 
@@ -255,7 +261,7 @@ public class Player extends BaseLevelObject implements Actor,
     	collisionBox = new Rectangle(
 				    		xPos, 
 				    		yPos, 
-				    		width / 2,
+				    		(int)width / 2,
 				    		collisionBoxHeight);
     }
     
@@ -273,7 +279,11 @@ public class Player extends BaseLevelObject implements Actor,
     
 	
 	/*
-	 * NOTE: This sets isJumping to the inverse of b. 
+	 * Sets theh Player's 'canJump' boolean which is used, 
+	 * unsurprisingly, to signify that the Player can or
+	 * cannot jump.
+	 * 
+	 * NOTE: This also sets isJumping to the inverse of b. 
 	 */
     @Override
     public void setCanJump(boolean b)
@@ -306,6 +316,10 @@ public class Player extends BaseLevelObject implements Actor,
         currentBow = bowLeft;
     }    
     
+    /*
+     * Returns the 'zone' (walkable ledges) that this
+     * Player is on, or null if none.
+     */
     public Shape getZone()
     {
         return getLevel().getActorZone(this);
@@ -316,6 +330,11 @@ public class Player extends BaseLevelObject implements Actor,
      */ 
     public void associateInputProvider(InputProvider prov, Input in)
     {
+        if(hasInput)
+        {
+            System.out.println("Already associated an input provider");
+            return;
+        }
         prov.addListener(this); 
         
         jump = new BasicCommand("jump");
@@ -391,6 +410,7 @@ public class Player extends BaseLevelObject implements Actor,
             public void	inputStarted(){} 
             public void setInput(Input input) {} 
         });
+        hasInput = true;
     }
     
     /**
@@ -453,10 +473,8 @@ public class Player extends BaseLevelObject implements Actor,
         }
         else if(com.equals(jump))
         {
-        	/*
-        	 * If the jump key hasn't already been pressed 
-        	 */
-        	if(!jumpKeyDown)
+        	jumpKeyDown = true;
+        	if(canJump)
         	{
         		startJump();
         	}
@@ -482,6 +500,8 @@ public class Player extends BaseLevelObject implements Actor,
     private void pickUp(PlayerItem pi)
     {
     	// TODO
+    	
+    	System.out.println("Player.pickUp() " + pi);
     }
     
     
@@ -620,7 +640,7 @@ public class Player extends BaseLevelObject implements Actor,
     }
     
     /*
-     * Sets the direction the Player is facing
+     * Sets the direction the Player is facing.
      */ 
     @Override
     public void setFacing(Direction dir)
@@ -633,12 +653,18 @@ public class Player extends BaseLevelObject implements Actor,
     }
     
     /*
-     * Sets the direction the Player is moving
+     * Sets the direction the Player is moving.
+     * 
+     * This resets horizontal acceleration.
      */ 
     private void setMovingDir(Direction dir)
     {
         if(moving != dir)
         {
+        	xSpeed = 0;
+        	
+        	System.out.println("xSpeed = 0");
+        	
             resetAccelX();
         }
         moving = dir;
@@ -659,8 +685,9 @@ public class Player extends BaseLevelObject implements Actor,
         {
             currentAnim = leftStand;   
         }
-        else throw new IllegalStateException(
-                            "standing dir neither left or right");
+        else 
+        	throw new IllegalStateException(
+                "standing dir neither left or right");
     }
     
     @Override
@@ -682,29 +709,7 @@ public class Player extends BaseLevelObject implements Actor,
     
    
     
-    /*
-     * Updates the position / existence of previously fired Arrows. 
-     */ 
-    private void updateFiredArrows()
-    {
-        Iterator<Arrow> it = firedArrows.iterator();
-        
-        while(it.hasNext())
-        {
-            Arrow a = it.next();
-            if(a.isOutOfBounds() || a.getCollidedWithEnemy())
-            {
-				// damage already done in Enemy.doCollision
-                // we can safely remove the arrow here
-                System.out.println("removing arrow" + a);
-                it.remove();
-            }
-            else if(a.isFlying())
-            {
-            	a.update();
-            }
-        }
-    }
+    
     
     /*
      * Applies friction to the player
@@ -728,8 +733,10 @@ public class Player extends BaseLevelObject implements Actor,
         {
             decelerate();
         }
+        
         if(isJumping)
         {
+        	//System.out.println("  --> updateJump()");
         	updateJump();
         }
         
@@ -739,19 +746,28 @@ public class Player extends BaseLevelObject implements Actor,
             chargeArrow();
         }
         
-        updateFiredArrows();
+        Arrow.updateFiredArrows(firedArrows);
         ObjectMover.move(this);
         
-       
-        //System.out.printf("xSpeed : %.3f | accelX : %.3f\n", xSpeed, accelX);
+
+        if(xSpeed > 1f && prevXSpeed != xSpeed)
+        {
+        	System.out.printf("xSpeed : %.3f | accelX : %.3f\n", xSpeed, accelX);
+        }
+        
+        if(ySpeed < -1 && prevYSpeed != ySpeed)
+        {
+        	
+        }
+        prevYSpeed = ySpeed;
+        prevXSpeed = xSpeed;
     }
 
 	@Override
     public Level getLevel()
     {
         return level;
-    }
-    
+    }    
     @Override
     public Animation getCurrentAnim()
     {
@@ -784,7 +800,7 @@ public class Player extends BaseLevelObject implements Actor,
     public void startJump()
     {
     	System.out.println("calling Player.jump()");
-    	//assert canJump()
+    	//assert canJump();
     	
         setYSpeed(initialJumpSpeed);
         /*canJump = false;
@@ -801,7 +817,7 @@ public class Player extends BaseLevelObject implements Actor,
      */
     private void updateJump()
     {
-		if(!isJumping && jumpKeyDown)
+		if(isJumping && jumpKeyDown)
 		{
 			if(ySpeed > maxJumpSpeed)
 			{
@@ -811,12 +827,19 @@ public class Player extends BaseLevelObject implements Actor,
 			else
 			{
 				System.out.println(
-    				"updateJump() --> MAX_JUMP_SPEED reached : " + ySpeed);
+    				"updateJump() --> maximum jump speed reached : " + ySpeed);
 				isJumping = false;
 			}
 		}
 	}
     
+    /*
+     * Decelerate by a small increment. 
+     * 
+     * This is used when the Player stops walking due
+     * to the user releasing left / right movement.
+     * 
+     */
     private void decelerate()
     {
         accelX -= accelerationRate;
@@ -963,9 +986,9 @@ public class Player extends BaseLevelObject implements Actor,
     {
     	// get the initial direction from the level and 
     	// select an animation based upon it.
-        facing = level.playerFacing;
+      
         
-        if(facing == Direction.LEFT)
+        if(level.playerFacing == Direction.LEFT)
         {	
         	currentAnim = leftWalk;
         }
@@ -997,24 +1020,15 @@ public class Player extends BaseLevelObject implements Actor,
 		
 		return currentAnim.getCurrentFrameMask();
 	}*/
-
+	
+	/*
+	 * Returns a box slightly thinner than the current frame
+	 * for more 'believable' collision detection.
+	 */
 	public Rectangle getCollisionBox()
 	{
-		/*
-		 * A box slightly thinner than the current frame
-		 * for more believable collision detection.
-		 */
-		//if(getFacing() == Direction.LEFT)
-		//{
 		collisionBox.setX(xPos + xLeftOffsetCollisionBox);
-		/*}
-		else
-		{
-			collisionBox.setX(xPos + xRightOffsetCollisionBox);
-		}*/
 		collisionBox.setY(yPos);
-		//collisionBox.setHeight(height);
-		//System.out.println("getCollisionBox : returning " + collisionBox);
 		return collisionBox;
 	}
 }

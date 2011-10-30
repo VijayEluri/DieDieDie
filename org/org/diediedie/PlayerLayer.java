@@ -7,8 +7,8 @@ import java.util.ListIterator;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.Bluey;
 import org.diediedie.actors.Enemy;
-import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.Player;
+import org.diediedie.actors.objects.ArrowBouncer;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Graphics;
 

@@ -1,6 +1,9 @@
-package org.diediedie;
+package org.diediedie.actors.objects;
 
-import org.diediedie.actors.LevelObject;
+import org.diediedie.Bounded;
+import org.diediedie.Entity;
+import org.diediedie.Level;
+import org.diediedie.Tile;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.Graphics;
@@ -8,7 +11,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
 
-public class ArrowBouncer implements LevelObject, Bounded
+public class ArrowBouncer implements Entity, Bounded
 {
 	public static final int SPEED_BOOST = 1;
 	final String IMAGE_PATH_RIGHT = "data/bouncer_right_debug.png",

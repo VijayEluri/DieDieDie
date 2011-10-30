@@ -2,6 +2,8 @@ package org.diediedie.actors;
 
 
 import java.util.Properties;
+
+import org.diediedie.Entity;
 import org.diediedie.Level;
 import org.diediedie.actors.tools.AnimCreator;
 import org.newdawn.slick.Graphics;
@@ -11,7 +13,7 @@ import org.newdawn.slick.Image;
  * An optional LevelObjet implementation which extracts the position,
  * image and name.
  */
-public abstract class BaseLevelObject implements LevelObject 
+public abstract class BaseLevelObject implements Entity 
 {
 	protected Level level;
 	
@@ -49,7 +51,7 @@ public abstract class BaseLevelObject implements LevelObject
 	@Override
 	public void update() 
 	{
-		// subclass
+		// implemented in subclass 
 	}
 
 	
@@ -64,9 +66,7 @@ public abstract class BaseLevelObject implements LevelObject
 	
 	/*
 	 * Convenience function for extracting the image
-	 * from the parsed imagepth. 
-	 * 
-	 * NOTE! No good for animated objects!
+	 * from the parsed imagepth in the Properties object. 
 	 */
 	protected void getImage(Properties p)
 	{

@@ -1,4 +1,4 @@
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
 import org.diediedie.Drawable;
 

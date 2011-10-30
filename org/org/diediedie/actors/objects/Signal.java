@@ -1,4 +1,4 @@
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
 /*
  * Enumeration of the different signals that Transmitters and

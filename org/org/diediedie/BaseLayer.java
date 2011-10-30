@@ -3,7 +3,6 @@ package org.diediedie;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.diediedie.actors.LevelObject;
 import org.newdawn.slick.Graphics;
 
 
@@ -17,17 +16,17 @@ public abstract class BaseLayer implements LevelLayer
 	protected MapLayer mapLayer;
 	protected int drawMode;
 	protected final String DRAW_MODE_STRING = "drawmode";
-	private List<LevelObject> objects;	
+	private List<Entity> objects;	
 	
 	public BaseLayer(MapLayer ml) 
 	{
 		mapLayer = ml;
 		parseGraphicsMode();
-		objects = new ArrayList<LevelObject>();
+		objects = new ArrayList<Entity>();
 	}
 	
 	@Override
-	public List<LevelObject> getObjects()
+	public List<Entity> getObjects()
 	{
 		return objects;
 	}	
@@ -40,7 +39,7 @@ public abstract class BaseLayer implements LevelLayer
 	protected void drawObjects(Graphics g)
 	{
 		//System.out.println("BaseLayer: drawing objects for " + getName());
-		for(LevelObject l : objects)
+		for(Entity l : objects)
 		{
 			l.draw(g);
 		}
@@ -52,7 +51,7 @@ public abstract class BaseLayer implements LevelLayer
 		drawObjects(g);
 	}
 	
-	public void setObjects(List<LevelObject> l)
+	public void setObjects(List<Entity> l)
 	{
 		objects = l;
 		assert objects != null;

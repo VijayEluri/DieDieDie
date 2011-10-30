@@ -1,11 +1,13 @@
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-public abstract class BaseTargetableObject extends BaseLevelObject 
-										   implements Targetable
+import org.diediedie.actors.BaseLevelObject;
+
+public abstract class BaseTransmitter extends BaseLevelObject 
+										   implements Transmitter
 {
 	/*
 	 * targetNames - names of the targets that this
@@ -19,7 +21,7 @@ public abstract class BaseTargetableObject extends BaseLevelObject
 	 */
 	List<String> targetNames;
 	
-	public BaseTargetableObject(Properties p)
+	public BaseTransmitter(Properties p)
 	{
 		parseBaseObject(p);
 		getTargetStrings();

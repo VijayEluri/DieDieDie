@@ -3,7 +3,6 @@ package org.diediedie;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.diediedie.actors.LevelObject;
 import org.newdawn.slick.Graphics;
 
 /*
@@ -11,12 +10,12 @@ import org.newdawn.slick.Graphics;
  */
 public class UpdatableLayer extends BaseLayer
 {
-	protected List<LevelObject> objects;
+	protected List<Entity> objects;
 	
 	public UpdatableLayer(MapLayer ml) 
 	{
 		super(ml);		
-		objects = new ArrayList<LevelObject>();
+		objects = new ArrayList<Entity>();
 	}
 	
 	public void update()
@@ -26,7 +25,7 @@ public class UpdatableLayer extends BaseLayer
 	
 	protected void updateObjects()
 	{
-		for(LevelObject l : objects)
+		for(Entity l : objects)
 		{
 			l.update();
 		}

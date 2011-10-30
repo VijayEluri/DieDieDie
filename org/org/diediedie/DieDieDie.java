@@ -161,16 +161,7 @@ public class DieDieDie extends BasicGame
 	 */
 	public void render(GameContainer container, Graphics g)
 	{
-		try 
-		{
-			currentLevel.render(0, 0, g);
-		} 
-		catch (SlickException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//player.draw(g);
+		currentLevel.render(0, 0, g);
 	}
 
 	/**

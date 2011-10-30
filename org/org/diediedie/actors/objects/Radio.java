@@ -1,4 +1,4 @@
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.diediedie.Level;
 import org.diediedie.Tile;
+import org.diediedie.actors.BaseLevelObject;
 import org.diediedie.actors.tools.AnimCreator;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -42,17 +43,20 @@ public class Radio extends BaseLevelObject implements Transmitter,
 		getTargetString();
 	}
 	
-	private void getTargetString()
+	public void getTargetString()
 	{
 		String[] names = ((String) props.get("targets")).split(" ");
 		assert names != null;
 		targetNames = Arrays.asList(names);
 		assert targetNames != null;
 	}
-
-	private Radio.Color getVisColor(String s)
+	
+	/*
+	 * 
+	 */
+	public Radio.Color getVisColor(String s)
 	{
-		for(Radio.Color c: Radio.Color.values())
+		for(Radio.Color c : Radio.Color.values())
 		{
 			if(s.equalsIgnoreCase(c.toString()))
 			{

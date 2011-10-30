@@ -18,9 +18,9 @@
 
 package org.diediedie.actors.tools;
 
-import org.diediedie.ArrowBouncer;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.Projectile;
+import org.diediedie.actors.objects.ArrowBouncer;
+import org.diediedie.actors.objects.Projectile;
 import org.newdawn.slick.geom.Shape;
 
 /**

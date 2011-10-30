@@ -1,4 +1,4 @@
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import org.newdawn.slick.Image;
  * 
  * A switch moves an object between two states.
  */
-public class Switch extends BaseTargetableObject implements Transmitter
+public class Switch extends BaseTransmitter 
 {
 	protected SignalReceiver target;
 	protected List<Signal> signals;

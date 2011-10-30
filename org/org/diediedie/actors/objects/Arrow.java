@@ -14,11 +14,12 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie.actors;
+package org.diediedie.actors.objects;
 
-import org.diediedie.ArrowBouncer;
+import java.util.Iterator;
+import java.util.List;
+
 import org.diediedie.Level;
-import org.diediedie.actors.Projectile;
 import org.diediedie.actors.Enemy;
 import org.diediedie.actors.tools.Collider;
 import org.diediedie.actors.tools.Direction;
@@ -103,6 +104,31 @@ public class Arrow extends Object implements Projectile
     	return -1.0f;
     }*/
     
+    /**
+     * Convenience class method. Updates all of the
+     * arrows in the list that are moving. 
+     */
+    public static void updateFiredArrows(List<Arrow> arrows)
+    {
+        
+        Iterator<Arrow> it = arrows.iterator();
+        
+        while(it.hasNext())
+        {
+            Arrow a = it.next();
+            if(a.isOutOfBounds() || a.getCollidedWithEnemy())
+            {
+                // damage already done in Enemy.doCollision
+                // we can safely remove the arrow here
+                System.out.println("removing arrow" + a);
+                it.remove();
+            }
+            else if(a.isFlying())
+            {
+                a.update();
+            }
+        }
+    }
     
     /**
      * Returns the previous y position of the start of the arrow
@@ -172,7 +198,7 @@ public class Arrow extends Object implements Projectile
     /**
      * Sets the x/y coordinate position of the Arrow
      */ 
-    protected void setPosition(float x, float y)
+    public void setPosition(float x, float y)
     {
         startX = x;
         startY = y;

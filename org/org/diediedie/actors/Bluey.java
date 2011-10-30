@@ -17,11 +17,14 @@
 package org.diediedie.actors;
 
 import java.util.Date;
+
+import org.diediedie.Entity;
 import org.diediedie.Level;
 import org.diediedie.NegativeSpace;
 import org.diediedie.Point;
 import org.diediedie.actors.Actor;
 import org.diediedie.actors.actions.Look;
+import org.diediedie.actors.objects.Projectile;
 import org.diediedie.actors.statemachine.BlueyFSM;
 import org.diediedie.actors.statemachine.StateMachine;
 import org.diediedie.actors.tools.CollideMask;
@@ -51,6 +54,7 @@ public class Bluey extends Object implements Enemy, Observer
 	public final String leftStandPath = "data/bluey_standing_left.png";
 	private Graphics g;
 	private Date date;
+	
 	public final String[] leftWalkPaths =  {
 			"data/bluey_walk_left_1.png",
 			"data/bluey_walk_left_2.png", 
@@ -83,7 +87,7 @@ public class Bluey extends Object implements Enemy, Observer
 	private long lastInfoCallTime = 0;
 	// ^ used to store the time of the last call to printInfo()
 
-	private Set<LevelObject> visibleObjects;
+	private Set<Entity> visibleObjects;
 
 	private float xPos, 
 				  yPos, 
@@ -133,7 +137,7 @@ public class Bluey extends Object implements Enemy, Observer
 		hasSeenPlayer = false;
         outOfBounds = false;
 		stateMachine = new BlueyFSM(this);
-		visibleObjects = new HashSet<LevelObject>();
+		visibleObjects = new HashSet<Entity>();
 		setLevel(l);
 		xPos = t.xPos;
 		yPos = t.yPos;
@@ -156,7 +160,7 @@ public class Bluey extends Object implements Enemy, Observer
 	}
 
 	@Override
-	public Set<LevelObject> getVisibleObjects()
+	public Set<Entity> getVisibleObjects()
 	{
 		return visibleObjects;
 	}
@@ -185,7 +189,7 @@ public class Bluey extends Object implements Enemy, Observer
 		return hitByPlayer;
 	}
 
-	public void setAsVisibleObject(LevelObject lo) 
+	public void setAsVisibleObject(Entity lo) 
 	{
 		visibleObjects.add(lo);
 	}

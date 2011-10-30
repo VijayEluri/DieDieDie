@@ -15,23 +15,34 @@
  *      MA 02110-1301, USA.
  */
 package org.diediedie.actors;
+
 import org.diediedie.Point;
+import org.diediedie.actors.objects.Projectile;
 import org.diediedie.actors.statemachine.StateMachine;
 import org.newdawn.slick.Graphics;
 
 /**
  * Enemy. Actors with a few methods related to 'AI'.
- */ 
+ */
 public interface Enemy extends Actor, Observer
 {
     float getViewSize();
-    boolean isMoving();  
+
+    boolean isMoving();
+
     float getWalkSpeed();
+
     float getRunSpeed();
-    void doCollision(Projectile p); 
+
+    void doCollision(Projectile p);
+
     Graphics getGraphics();
+
     StateMachine getFSM();
+
     boolean hitByPlayer();
+
     void setGoto(Point p);
-	Point getGoto();
+
+    Point getGoto();
 }

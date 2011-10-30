@@ -14,14 +14,12 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie.actors;
-import org.diediedie.Drawable;
-import org.diediedie.Level;
+package org.diediedie;
 
 /**
  * Super-interface for any interactive thing that exists on a Level. 
  */ 
-public interface LevelObject extends Drawable 
+public interface Entity extends Drawable 
 {
     void update();
     void setLevel(Level l);

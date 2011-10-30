@@ -21,15 +21,15 @@ import java.io.*;
 import org.diediedie.NavMesh;
 import org.diediedie.NavMesh.MeshMaker;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.Elevator;
 import org.diediedie.actors.Enemy;
-import org.diediedie.actors.LevelObject;
 import org.diediedie.actors.Player;
-import org.diediedie.actors.Projectile;
-import org.diediedie.actors.Radio;
-import org.diediedie.actors.SignalReceiver;
-import org.diediedie.actors.Switch;
-import org.diediedie.actors.Transmitter;
+import org.diediedie.actors.objects.ArrowBouncer;
+import org.diediedie.actors.objects.Radio;
+import org.diediedie.actors.objects.Elevator;
+import org.diediedie.actors.objects.Projectile;
+import org.diediedie.actors.objects.SignalReceiver;
+import org.diediedie.actors.objects.Switch;
+import org.diediedie.actors.objects.Transmitter;
 import org.diediedie.actors.tools.AnimCreator;
 import org.diediedie.actors.tools.Direction;
 import org.newdawn.slick.tiled.Layer;
@@ -51,21 +51,21 @@ import java.util.regex.*;
  */ 
 public class Level extends TiledMap
 {
+	
 	enum ObjectType 
 	{
 		Radio, 
 		Elevator, 
 		Switch,
 	}
+	
     // where the exit of the level is
     public float exitX, exitY;
     
     // smaller number == more friction. xSpeed is multiplied by this number
     public static final float FRICTION = 0.7f;
 
-    // number of pixels from the player's current position to check a
-    // tile for possible collision
-	private static final int TILE_COLLISION_CHECK_DIST = 20;
+   
 
 	private static final String LevelObjectFactory = null;
     
@@ -86,8 +86,6 @@ public class Level extends TiledMap
     /*
      * Level Layers
      */
-    //private List<LevelLayer> drawableLayers;
-    //private List<UpdatableLayer> updatableLayers;
     private List<UpdatableLayer> levelLayers;
     private MapLayer collisionLayer;
     
@@ -107,8 +105,6 @@ public class Level extends TiledMap
 	private List<ArrowBouncer> bouncers;
 	private ArrayList<Transmitter> transmitters;
 	private ArrayList<SignalReceiver> signalReceivers;
-
-
 
     /**
      * Create a Level
@@ -143,7 +139,9 @@ public class Level extends TiledMap
      */
     private void parseObjectLayers()
     {
-    	List<LevelObject> objs;
+    	List<Entity> objs;
+    	transmitters = new ArrayList<Transmitter>();
+    	signalReceivers = new ArrayList<SignalReceiver>();
     	
     	for(Object o : objectGroups)
         {
@@ -179,7 +177,7 @@ public class Level extends TiledMap
     	
     	for(LevelLayer ll : levelLayers)
     	{
-    		for(LevelObject lo : ll.getObjects())
+    		for(Entity lo : ll.getObjects())
     		{
     			System.out.println("\t" + lo.getName());
     			
@@ -244,7 +242,7 @@ public class Level extends TiledMap
     /*
      * Attempts to add 
      */
-	private void attachObjectsToLayer(List<LevelObject> objs, 
+	private void attachObjectsToLayer(List<Entity> objs, 
     								  String layerName) 
     {
 		assert objs != null;
@@ -256,7 +254,7 @@ public class Level extends TiledMap
 			"attaching layer " + layerName + "'s " +
 			+ objs.size() + " objects");
     	
-		for(LevelObject o : objs)
+		for(Entity o : objs)
 		{
 			System.out.println(
 				"    LevelObject : " + o.getName());
@@ -277,7 +275,7 @@ public class Level extends TiledMap
 		{
 			System.out.println("  Layer " + l.getName());
 			
-			for(LevelObject lo : l.getObjects())
+			for(Entity lo : l.getObjects())
 			{
 				System.out.println(
 				    "   Type: " + getObjectTypeName(lo)	
@@ -290,7 +288,7 @@ public class Level extends TiledMap
 	}
 	
 	/*
-	 * Returns a List of the names of an object's interfaces
+	 * Returns a List of the names that an Object implements.
 	 */
 	public List<String> getObjectInterfaceNames(Object o)
 	{
@@ -326,12 +324,12 @@ public class Level extends TiledMap
      * Creates LevelObjects from a TiledMap.ObjectGroup,
      * and attaches them to a Drawable layer.
      */
-    private List<LevelObject> createLayerObjects(ObjectGroup og) 
+    private List<Entity> createLayerObjects(ObjectGroup og) 
     {
     	System.out.println("ObjectGroup : index " + og.index +" : " + og.name);
     	
     	// adjust the properties file - add name, index and type
-    	List<LevelObject> objs = new ArrayList<LevelObject>();
+    	List<Entity> objs = new ArrayList<Entity>();
     	
     	for(Object o2 : og.objects)
     	{
@@ -348,7 +346,7 @@ public class Level extends TiledMap
     		// Add all layer-level properties as well
     		go.props.putAll(og.props);
     	
-    		LevelObject lo = createObject(go.props);
+    		Entity lo = createObject(go.props);
     		assert lo != null;
     		lo.setLevel(this);
     		objs.add(lo);
@@ -452,6 +450,9 @@ public class Level extends TiledMap
         navMesh = MeshMaker.generateMesh(this);
     }
     
+    /*
+     * Returns all living enemies on the Level.
+     */
     public List<Enemy> getEnemies()
     {
         return getPlayerLayer().getLivingEnemies();
@@ -581,7 +582,7 @@ public class Level extends TiledMap
     /*
      * Draws the Level map, the Player, Enemies and objects. 
      */
-	public void render(int x, int y, Graphics g) throws SlickException
+	public void render(int x, int y, Graphics g) //throws SlickException
     {
        for(LevelLayer l : levelLayers)
        {
@@ -590,7 +591,6 @@ public class Level extends TiledMap
     }
     
     /**
-
      * Returns true if Shape p intersects with a collision tile on the
      * Level.
      */ 
@@ -605,7 +605,6 @@ public class Level extends TiledMap
         }
         return false;
     }
-    
 
     /**
      * Returns true if the x / y coordinate position supplied is inside
@@ -638,79 +637,14 @@ public class Level extends TiledMap
         return null;
     }
 
-    /*
-     * Return all Tiles that an Actor is intersecting.
-     */
-	public List<Tile> getTileCollisions(Actor m) 
-	{
-		List<Tile> colls = new ArrayList<Tile>();
-		
-		final Shape rect = m.getCollisionBox();
-		
-		for(Tile t : collisionLayer.tiles)
-		{
-			boolean closeX = false;
-			boolean closeY = false;
-			
-			if(t.yPos < rect.getY())
-			{
-				// tile start is above the actor
-				if(rect.getY() - t.endY <= TILE_COLLISION_CHECK_DIST)
-				{
-					closeY = true;
-				}
-			}
-			else if(t.yPos > rect.getY())
-			{
-				// tile start is below the actor
-				if(t.yPos - rect.getMaxY() <= TILE_COLLISION_CHECK_DIST)
-				{
-					closeY = true;
-				}
-			}
-			else
-			{
-				// same vertical position
-				closeY = true;
-			}
-			if(t.xPos < rect.getX())
-			{
-				// tile start is to the left of the actor
-				if(rect.getX() - t.endX <= TILE_COLLISION_CHECK_DIST)
-				{
-					closeX = true;
-				}
-			}
-			else if(t.xPos > rect.getX())
-			{
-				// tile start is to the right of the actor
-				if(t.xPos - rect.getMaxX() <= TILE_COLLISION_CHECK_DIST)
-				{
-					closeX = true;
-				}
-			}
-			else
-			{
-				// same horizontal position
-				closeX = true;
-			}
-			if(closeX && closeY)
-			{
-				if(rect.intersects(t.getRect()))
-				{
-					colls.add(t);
-				}
-			}
-		}
-		return colls;
-	}
-	
+    
 	
 	public PlayerLayer getPlayerLayer()
 	{
 		return playerLayer;
 	}
 
+	
 	public void setPlayerLayer(PlayerLayer playerLayer)
 	{
 		this.playerLayer = playerLayer;
@@ -721,17 +655,14 @@ public class Level extends TiledMap
 	 * 
 	 * Some objects are added to specific lists so they can
 	 * be queried quickly during the game.
+	 * 
+	 * Fuck Yeah Polymorphism.
 	 */
-	public LevelObject createObject(Properties props) 
+	public Entity createObject(Properties props) 
 	{
-		if(transmitters == null)
-		{
-			transmitters = new ArrayList<Transmitter>();
-		}
-		if(signalReceivers == null)
-		{
-			signalReceivers = new ArrayList<SignalReceiver>();
-		}
+		
+			
+		
 		
 		System.out.println("\nLOF.createObject -> " + props);
 		
@@ -755,11 +686,8 @@ public class Level extends TiledMap
 			transmitters.add(s);
 			return s;
 		}
-		System.out.println(
-			"Couldn't determine type of LevelObject.");
+		System.out.println("Couldn't determine type of LevelObject.");
 		
 		return null;
 	}
-
-	
 }

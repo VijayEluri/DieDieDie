@@ -20,7 +20,7 @@ import java.lang.Math;
 import org.newdawn.slick.util.FastTrig;
 import org.diediedie.Level;
 import org.diediedie.actors.Actor;
-import org.diediedie.actors.Projectile;
+import org.diediedie.actors.objects.Projectile;
 
 /**
  * Class used to Actors and Projectile(s) around a Level. 

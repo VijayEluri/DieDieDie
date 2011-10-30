@@ -1,5 +1,6 @@
-package org.diediedie.actors;
-import org.diediedie.ArrowBouncer;
+package org.diediedie.actors.objects;
+import org.diediedie.MovableObject;
+import org.diediedie.actors.Enemy;
 import org.newdawn.slick.geom.*;
 
 /**
