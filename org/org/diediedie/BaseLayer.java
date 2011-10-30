@@ -3,6 +3,7 @@ package org.diediedie;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.diediedie.level.MapLayer;
 import org.newdawn.slick.Graphics;
 
 
@@ -33,7 +34,7 @@ public abstract class BaseLayer implements LevelLayer
 	@Override
 	public String getName()
 	{
-		return mapLayer.name;
+		return mapLayer.getName();
 	}
 	
 	protected void drawObjects(Graphics g)
@@ -60,11 +61,11 @@ public abstract class BaseLayer implements LevelLayer
 	private void parseGraphicsMode() 
 	{
 		assert mapLayer != null;
-		String drawStr = mapLayer.level.getLayerProperty(
-				mapLayer.index, DRAW_MODE_STRING, null);
+		String drawStr = mapLayer.getLevel().getLayerProperty(
+				mapLayer.getIndex(), DRAW_MODE_STRING, null);
 		
 		System.out.println("parseGraphicsMode layer " 
-				+ mapLayer.index + ", " + drawStr);
+				+ mapLayer.getIndex() + ", " + drawStr);
 		
 		if(drawStr == null)
 		{
@@ -106,7 +107,7 @@ public abstract class BaseLayer implements LevelLayer
 	protected void drawScenery(Graphics g) 
 	{
 		g.setDrawMode(drawMode);
-		mapLayer.level.render(0, 0, mapLayer.index);
+		mapLayer.getLevel().render(0, 0, mapLayer.getIndex());
 		g.setDrawMode(Graphics.MODE_NORMAL);
 	}
 }

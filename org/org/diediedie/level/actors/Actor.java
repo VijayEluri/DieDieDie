@@ -14,20 +14,29 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie;
+ 
+package org.diediedie.level.actors;
 
-import org.diediedie.level.Level;
+import org.diediedie.MovableObject;
+import org.diediedie.level.actors.tools.Direction;
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.geom.Rectangle;
 
-/**
- * Super-interface for any interactive thing that exists on a Level. 
- */ 
-public interface Entity extends Drawable 
+
+public interface Actor extends MovableObject
 {
-    void update();
-    void setLevel(Level l);
-    Level getLevel();
-    float getX();
-    float getY();  
-    void setX(float x);
-    void setY(float y);
-}
+    public static int ANIM_DURATION = 100;
+    void applySpeed(Direction d);
+    boolean canJump();
+    void die();
+    Animation getCurrentAnim();
+    Direction getFacing();
+    float getHealth();    
+    void setCanJump(boolean b);
+    void startJump();
+    void setFacing(Direction d);
+
+	int getWidth();
+    int getHeight();
+    public Rectangle getCollisionBox();
+}  

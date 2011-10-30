@@ -14,20 +14,30 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie;
 
-import org.diediedie.level.Level;
+package org.diediedie.level.actors.tools;
 
-/**
- * Super-interface for any interactive thing that exists on a Level. 
- */ 
-public interface Entity extends Drawable 
+public enum Direction
 {
-    void update();
-    void setLevel(Level l);
-    Level getLevel();
-    float getX();
-    float getY();  
-    void setX(float x);
-    void setY(float y);
+    LEFT, RIGHT, UP, DOWN;
+    
+    
+    /*
+	 * Converts a string in a Direction object, or null
+	 * if invalid.
+	 */
+	public static Direction convertToDirection(String s)
+    {
+		System.out.println("convertToDirection : " + s);
+    	for(Direction  d : Direction.values())
+    	{
+    		if(s.equalsIgnoreCase(d.toString()))
+    		{
+    			
+    			return d;
+    		}
+    	}
+    	return null;
+    
+    }
 }

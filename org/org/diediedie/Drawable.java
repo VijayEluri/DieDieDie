@@ -16,7 +16,7 @@
  */
 package org.diediedie;
 import org.newdawn.slick.Graphics;
-import org.diediedie.Level;
+import org.diediedie.level.Level;
 
 /**
  * Something drawable on a Level.

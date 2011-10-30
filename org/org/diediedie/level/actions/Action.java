@@ -14,20 +14,19 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie;
-
-import org.diediedie.level.Level;
+package org.diediedie.level.actions;
+import org.diediedie.Entity;
+import org.newdawn.slick.Graphics;
 
 /**
- * Super-interface for any interactive thing that exists on a Level. 
- */ 
-public interface Entity extends Drawable 
+ * An Action performed by a LevelObject when in a certain State.
+ */
+public interface Action
 {
+    void perform();
+    boolean hasStarted();
+    boolean hasFinished();
     void update();
-    void setLevel(Level l);
-    Level getLevel();
-    float getX();
-    float getY();  
-    void setX(float x);
-    void setY(float y);
+    void draw(Graphics g);
+    void reset();
 }

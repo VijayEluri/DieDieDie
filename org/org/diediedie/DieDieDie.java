@@ -16,9 +16,11 @@
  */
 package org.diediedie;
 
-import org.diediedie.actors.Enemy;
-import org.diediedie.actors.Player;
-import org.diediedie.actors.tools.Direction;
+import org.diediedie.level.Level;
+import org.diediedie.level.actors.Enemy;
+import org.diediedie.level.actors.Player;
+import org.diediedie.level.actors.tools.Direction;
+
 import java.io.FileInputStream;
 import java.io.File;
 import java.util.Date;

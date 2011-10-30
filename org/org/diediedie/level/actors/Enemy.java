@@ -14,20 +14,35 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  */
-package org.diediedie;
+package org.diediedie.level.actors;
 
-import org.diediedie.level.Level;
+import org.diediedie.level.Point;
+import org.diediedie.level.actors.statemachine.StateMachine;
+import org.diediedie.level.objects.Projectile;
+import org.newdawn.slick.Graphics;
 
 /**
- * Super-interface for any interactive thing that exists on a Level. 
- */ 
-public interface Entity extends Drawable 
+ * Enemy. Actors with a few methods related to 'AI'.
+ */
+public interface Enemy extends Actor, Observer
 {
-    void update();
-    void setLevel(Level l);
-    Level getLevel();
-    float getX();
-    float getY();  
-    void setX(float x);
-    void setY(float y);
+    float getViewSize();
+
+    boolean isMoving();
+
+    float getWalkSpeed();
+
+    float getRunSpeed();
+
+    void doCollision(Projectile p);
+
+    Graphics getGraphics();
+
+    StateMachine getFSM();
+
+    boolean hitByPlayer();
+
+    void setGoto(Point p);
+
+    Point getGoto();
 }
