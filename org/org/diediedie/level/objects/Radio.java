@@ -52,6 +52,7 @@ public class Radio extends BaseLevelObject implements Transmitter,
 	}
 	
 	/*
+	 * Get the visible colour of this Radio.
 	 * 
 	 */
 	public Radio.Color getVisColor(String s)
@@ -65,6 +66,7 @@ public class Radio extends BaseLevelObject implements Transmitter,
 		}
 		return null;
 	}
+	
 	
 	@Override
 	public void draw(Graphics g)
@@ -81,7 +83,12 @@ public class Radio extends BaseLevelObject implements Transmitter,
 		
 	}
 
-
+	/*
+	 * Receive a signal. 
+	 * 
+	 * This will only do something if it's the 
+	 * correct type of Signal for this Radio.
+	 */
 	@Override
 	public void receive(Signal s) 
 	{
@@ -89,6 +96,7 @@ public class Radio extends BaseLevelObject implements Transmitter,
 		
 	}
 
+	
 	@Override
 	public void transmit(Signal s, List<SignalReceiver> srs) 
 	{
@@ -102,6 +110,9 @@ public class Radio extends BaseLevelObject implements Transmitter,
 		return targetNames;
 	}
 	
+	/*
+	 * 
+	 */
 	@Override
 	public void addTarget(SignalReceiver sr)
 	{

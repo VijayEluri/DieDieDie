@@ -72,7 +72,9 @@ public class Elevator extends BaseLevelObject implements SignalReceiver
         System.out.println("\tposition : " + xPos + ", " + yPos);
         height = (Integer) p.get("height");
         width = (Integer) p.get("width");
-        direction = Direction.convertToDirection((String) p.get("direction"));
+        direction = Direction.convertToDirection(
+            (String)p.get("direction"));
+        
         assert direction != null;
         distance = Integer.parseInt((String) p.get("distance"));
         assert distance > 0;
@@ -80,22 +82,26 @@ public class Elevator extends BaseLevelObject implements SignalReceiver
 
         findPositions();
     }
-
+    
+    /*
+     * Works out the top / bottom travel-positions 
+     * based on the Direction and distance parsed from 
+     * the map tile.
+     */
     private void findPositions()
     {
-        /*
-         * work out where the top / bottom travel-positions for the elevator are
-         * based on the Direction parsed from the map tile
-         */
+        
         if(direction == Direction.DOWN)
         {
             yTop = yPos;
             yBottom = yTop + (height * distance);
-        } else if(direction == Direction.UP)
+        } 
+        else if(direction == Direction.UP)
         {
             yBottom = yPos;
             yTop = yBottom - (height * distance);
-        } else
+        } 
+        else
         {
             System.out.println("Elevator.findPositions() : bad direction "
                     + direction);
@@ -143,12 +149,14 @@ public class Elevator extends BaseLevelObject implements SignalReceiver
             if(yPos < yBottom)
             {
                 setY(yPos + speed);
-            } else
+            }
+            else
             {
                 alignElevator();
                 setIdle();
             }
-        } else if(direction == Direction.UP)
+        } 
+        else if(direction == Direction.UP)
         {
             if(speed > UP_MAX_SPEED)
             {
@@ -158,12 +166,14 @@ public class Elevator extends BaseLevelObject implements SignalReceiver
             {
                 setY(yPos + speed);
                 // ^ speed is negative, so we use addition
-            } else
+            } 
+            else
             {
                 alignElevator();
                 setIdle();
             }
-        } else
+        } 
+        else
         {
             System.out.println("Elevator.updatePosition() - bad direction");
             System.exit(-1);

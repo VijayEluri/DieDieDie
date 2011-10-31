@@ -51,7 +51,7 @@ public abstract class BaseLevelObject implements Entity
 	@Override
 	public void update() 
 	{
-		// implemented in subclass 
+		// This must be implemented in a subclass.
 	}
 
 	
@@ -70,8 +70,7 @@ public abstract class BaseLevelObject implements Entity
 	 */
 	protected void getImage(Properties p)
 	{
-		image = AnimCreator.loadImage(
-					"data/" + (String)p.get("imagepath"));
+		image = AnimCreator.loadImage("data/" + (String)p.get("imagepath"));
 		assert image != null;
 	}
 	

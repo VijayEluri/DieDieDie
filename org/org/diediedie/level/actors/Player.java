@@ -736,8 +736,20 @@ public class Player extends BaseLevelObject implements Actor,
         
         if(isJumping)
         {
+            if(!jumpKeyDown)
+            {
+                /*
+                 * If the jump key has been released during a
+                 * jump, holding it down again won't make any
+                 * difference to the jump height.
+                 */
+                isJumping = false;
+            }
         	//System.out.println("  --> updateJump()");
-        	updateJump();
+            else
+            {
+                updateJump();
+            }
         }
         
         // Update Arrow information depending on state
