@@ -19,6 +19,7 @@ package org.diediedie.level;
 import java.util.Properties;
 import java.io.*;
 
+import org.diediedie.Drawable;
 import org.diediedie.Entity;
 import org.diediedie.LevelLayer;
 import org.diediedie.level.NavMesh;
@@ -60,6 +61,7 @@ public class Level extends TiledMap
 		Radio, 
 		Elevator, 
 		Switch,
+		Drone,
 	}
 	
     // where the exit of the level is
@@ -67,10 +69,6 @@ public class Level extends TiledMap
     
     // smaller number == more friction. xSpeed is multiplied by this number
     public static final float FRICTION = 0.7f;
-
-   
-
-	private static final String LevelObjectFactory = null;
     
     // other way with gravity because gravity is added to the Actors' 
     // ySpeed
@@ -187,22 +185,45 @@ public class Level extends TiledMap
     			if(lo instanceof Transmitter)
     			{
     				System.out.println("  found a Transmitter");
-    				
-    				for(String name  :  ( (Transmitter) lo).getTargetNames())
-    				{
-    					assert name != null;
-    					SignalReceiver sr = findSignalReceiver(name);
-    					assert sr != null;
-
-    					System.out.println("    found SignalReceiver '" + 
-    							sr.getName() + "', attaching to " + lo.getName());
-    					((Transmitter) lo).addTarget(sr);
-    				}
+    				transmitters.add((Transmitter) lo);
      			}
+    			if(lo instanceof SignalReceiver)
+    			{
+    			    signalReceivers.add((SignalReceiver)lo);
+    			    System.out.println(
+    			           "Found a SignalReceive " + lo.getName());
+    			}
     		}
     	}
+    	
+    	/*
+    	 * 
+    	 */
+    	connectTransmittersToReceivers();
 	}
     
+    /*
+     * Attaches all the Transmitters in the transmitters
+     * list for this Level to those returned by 
+     * a_transmitter.getTargetNames().
+     */
+    private void connectTransmittersToReceivers()
+    {
+        for(Transmitter t : transmitters)
+        {
+            for(String name  :  t.getTargetNames())
+            {
+                assert name != null;
+                SignalReceiver sr = findSignalReceiver(name);
+                assert sr != null;
+
+                System.out.println("    found SignalReceiver '" + 
+                        sr.getName() + "', attaching to " 
+                        + ((Drawable) t).getName());
+                t.addTarget(sr);
+            }
+        }
+    }
     
     /*
      * Attempts to return the SignalReceiver object on the Level
@@ -302,7 +323,6 @@ public class Level extends TiledMap
 			String[] strs = splitClassName(c.getName());
 			names.add(strs[strs.length-1]);
 		}
-		
 		return names;
 	}
 	
@@ -329,7 +349,8 @@ public class Level extends TiledMap
      */
     private List<Entity> createLayerObjects(ObjectGroup og) 
     {
-    	System.out.println("ObjectGroup : index " + og.index +" : " + og.name);
+    	System.out.println(
+    	    "ObjectGroup : index " + og.index + " : " + og.name);
     	
     	// adjust the properties file - add name, index and type
     	List<Entity> objs = new ArrayList<Entity>();
@@ -349,7 +370,7 @@ public class Level extends TiledMap
     		// Add all layer-level properties as well
     		go.props.putAll(og.props);
     	
-    		Entity lo = createObject(go.props);
+    		Entity lo = LevelObjectFactory.createObject(go.props);
     		assert lo != null;
     		lo.setLevel(this);
     		objs.add(lo);
@@ -357,6 +378,8 @@ public class Level extends TiledMap
     	
 		return objs;
     }
+    
+
     
 	/*
      * Parses the gravity from the TiledMap file.
@@ -653,44 +676,5 @@ public class Level extends TiledMap
 		this.playerLayer = playerLayer;
 	}
 
-	/*
-	 * Creates a LevelObject based on the properties object.
-	 * 
-	 * Some objects are added to specific lists so they can
-	 * be queried quickly during the game.
-	 * 
-	 * Fuck Yeah Polymorphism.
-	 */
-	public Entity createObject(Properties props) 
-	{
-		
-			
-		
-		
-		System.out.println("\nLOF.createObject -> " + props);
-		
-		if(props.get("type").equals(ObjectType.Radio.name()))
-		{
-			Radio r = new Radio(props);
-			System.out.println("\t^ LevelObjectFactory found a radio");
-			transmitters.add(r);
-			signalReceivers.add(r);
-			return r; 
-		}
-		else if(props.get("type").equals(ObjectType.Elevator.name()))
-		{
-			Elevator e = new Elevator(props);
-			signalReceivers.add(e);
-			return e;
-		}
-		else if(props.get("type").equals(ObjectType.Switch.name()))
-		{
-			Switch s = new Switch(props);
-			transmitters.add(s);
-			return s;
-		}
-		System.out.println("Couldn't determine type of LevelObject.");
-		
-		return null;
-	}
+	
 }

@@ -13,6 +13,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+/*
+ * A grunt on a Factory Level that does some inane, repetitive 
+ * task.
+ */
 public class FactoryGrunt extends BaseLevelObject implements Enemy
 {
     
@@ -98,7 +102,7 @@ public class FactoryGrunt extends BaseLevelObject implements Enemy
         // TODO Auto-generated method stub
         return 0;
     }
-
+    
     @Override
     public Rectangle getCollisionBox()
     {
