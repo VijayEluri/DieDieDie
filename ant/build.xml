@@ -22,7 +22,8 @@
         <javac srcdir="${src.dir}"
                destdir="${build.dir}"
                debug="true"
-               optimize="on">
+               optimize="on"
+               includeantruntime="false">
             <classpath refid="build-classpath"/>
         </javac>
             
